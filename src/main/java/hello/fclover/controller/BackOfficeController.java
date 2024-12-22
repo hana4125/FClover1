@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value="/bo")
 public class BackOfficeController {
 
+
+    //아 또왜 롬복 에러나냐
+
     private final BackOfficeService backOfficeService;
 
     BackOfficeController(BackOfficeService backOfficeService) {
