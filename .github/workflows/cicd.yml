@@ -38,7 +38,7 @@ jobs:
 
       # 4 빈스토크 배포
       - name: Beanstalk Deploy
-        uses: einaregilsson/beanstalk-deploy@v20
+        uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -47,4 +47,4 @@ jobs:
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: ./target/${{env.artifact}}
-          wait_for_environment_recovery: 300
+          wait_for_environment_recovery: 180
