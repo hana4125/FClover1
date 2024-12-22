@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>home</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <script th:inline="javascript">
+      $(function () {
+          $("#logo").click(function () {
+              location.href = "/";
+          })
+
+          $("#cart").click(function() {
+              location.href="/cart";
+          })
+
+          $("#myPage").click(function() {
+              location.href="/myPage";
+          })
+      })
+  </script>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div style="background-color: forestgreen">
+  <div class="container w-75">
+    <div class="header-menu mt-4">
+      <a href="#" class="ps-5 pe-5">국내도서</a>
+      <a href="#" class="ps-5 pe-5">서양도서</a>
+      <a href="#" class="ps-5 pe-5">일본도서</a>
+      <a href="#" class="ps-5 pe-5">베스트</a>
+      <a href="#" class="ps-5 pe-5">신상품</a>
+      <a href="#" class="ps-5 pe-5">이벤트</a>
+    </div>
+  </div>
+</div>
+<div class="container w-75 d-flex">
+  <div class="banner mt-3 m-auto">
+    <div id="carouselExample" class="carousel slide carousel-height" style="width: 890px; height: 380px">
+      <div class="carousel-inner rounded-4">
+        <div class="carousel-item active" id="item1">
+          <img src="/img/user/carousel/page1.jpg" class="d-block w-100" alt="item1">
+        </div>
+        <div class="carousel-item" id="item2">
+          <img src="/img/user/carousel/page2.jpg" class="d-block w-100" alt="item2">
+        </div>
+        <div class="carousel-item" id="item3">
+          <img src="/img/user/carousel/page3.jpg" class="d-block w-100" alt="item3">
+        </div>
+        <div class="carousel-item" id="item4">
+          <img src="/img/user/carousel/page4.jpg" class="d-block w-100" alt="item4">
+        </div>
+        <div class="carousel-item" id="item5">
+          <img src="/img/user/carousel/page5.jpg" class="d-block w-100" alt="item5">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

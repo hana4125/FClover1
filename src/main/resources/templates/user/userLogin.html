@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/css/user/login.css">
+  <script th:inline="javascript">
+      $(function() {
+          $("#logo").click(function() {
+              location.href = "/";
+          })
+
+          $("form").submit(function() {
+              const id = $("#id");
+              const password = $("#password");
+
+              if (id.val().trim() === '') {
+                  alert("아이디를 입력하세요");
+              } else if (password.val().trim() === '') {
+                  alert("비밀번호를 입력하세요");
+              }
+          })
+
+          let cookie = /*[[${cookie}]]*/ null;
+
+          if (cookie != null) {
+              $("#id").val(cookie);
+          }
+      })
+  </script>
+</head>
+<body>
+<div class="container w-25 text-center">
+  <div class="mt-5">
+    <img id="logo" src="/img/user/kybo.png" alt="교보" width="300px" height="80px" class="mb-3">
+    <form action="/loginProcess" method="post">
+      <input type="text" class="form-control mb-3" id="id" name="id" placeholder="아이디">
+      <input type="password" class="form-control mb-5" id="password" name="password" placeholder="비밀번호">
+      <input type="submit" class="form-control btn btn-success" value="로그인">
+    </form>
+  </div>
+  <div class="social-icon mt-5">
+    <img src="/img/user/social/naver.png" alt="naver" class="ms-2 me-2">
+    <img src="/img/user/social/kakao.png" alt="kakao" class="ms-2 me-2">
+    <img src="/img/user/social/google.png" alt="google" class="ms-2 me-2">
+  </div>
+</div>
+</body>
+</html>

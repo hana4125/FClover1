@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <script th:inline="javascript">
+      $(function () {
+          $("#logo").click(function () {
+              location.href = "/";
+          })
+
+          $("#cart").click(function () {
+              location.href = "/cart";
+          })
+
+          $("#myPage").click(function () {
+              location.href = "/myPage";
+          })
+      })
+  </script>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="container w-50 mt-5">
+  <h3 style="font-weight: bold">장바구니(0)</h3>
+  <hr>
+  <div style="height: 300px;" class="text-center">
+    <img src="/img/user/warning.png" alt="경고" class="mt-5">
+    <div style="font-weight: bold" class="mt-2">장바구니에 담긴 상품이 없습니다.</div>
+    <div class="mt-2">마음에 드는 상품을 담아보세요!</div>
+    <button class="btn btn-success mt-2">계속 쇼핑하기</button>
+  </div>
+  <hr>
+</div>
+</body>
+</html>
