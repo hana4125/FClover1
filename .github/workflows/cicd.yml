@@ -2,7 +2,7 @@ name: CI/CD # 1 깃허브 액션 이름 변경
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -40,8 +40,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: FClover
-          environment_name: FClover-env
+          application_name: FClover4
+          environment_name: FClover4-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: ./target/${{env.artifact}}
