@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v3
         with:
@@ -32,7 +32,7 @@ jobs:
 
       # 3 배포용 패키지 경로 저장
       - name: Set artifact
-        run: echo "artifact=$(ls ./target | sed 's/\n/ /g')" >> $GITHUB_ENV
+        run: echo "artifact=$(ls ./target | head -n 1)" >> $GITHUB_ENV
 
 #        echo "artifact=$(ls ./target)" >> $GITHUB_ENV
 
