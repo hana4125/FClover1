@@ -1,46 +1,82 @@
 package hello.fclover.controller;
 
+import hello.fclover.domain.Member;
 import hello.fclover.service.MemberService;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.security.Principal;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Slf4j
 @Controller
-@RequestMapping(value="/member")
+@RequiredArgsConstructor
 public class MemberController {
-    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
-    MemberController(MemberService memberService) {
-        this.memberService = memberService;
+    @GetMapping("/signup")
+    public String signup() {
+        return "user/userSignup";
+    }
+
+    @PostMapping("/signupProcess")
+    public String signupProcess(@ModelAttribute Member member,
+                                RedirectAttributes rattr,
+                                Model model,
+                                HttpServletRequest request) {
+
+        log.info("auth={}", member.getAuth());
+        String encPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encPassword);
+
+        int result = memberService.signup(member);
+
+        if (result == 1) {
+            log.info("회원가입 완료");
+            return "redirect:/";
+        } else {
+            log.info("회원가입 실패");
+            return "error/error";
+        }
     }
 
     @GetMapping("/login")
-    public ModelAndView login(ModelAndView mv, @CookieValue(value="remember-me", required = false) Cookie readCookie,
-                              HttpSession session, Principal userPrincipal) {
-        if(readCookie != null) {
-            logger.info("저장된 아이디 :" + userPrincipal.getName());
-            mv.setViewName("redirect:/bo/main");
-        }else{
-            mv.setViewName("user/userLogin");
-            mv.addObject("message",session.getAttribute("loginfail"));
-            session.removeAttribute("loginfail");
-        }
-        return mv;
+    public String login(@CookieValue(required = false) String rememberId, HttpSession session, Model model) {
 
+        if (rememberId != null) {
+            log.info("rememberId={}", rememberId);
+            model.addAttribute("rememberId", rememberId);
+        }
+
+        model.addAttribute("message", session.getAttribute("loginfail"));
+        session.removeAttribute("loginfail");
+
+        return "user/userLogin";
     }
 
+    @GetMapping("/myPage")
+    public String myPage() {
+        return "user/userMyPage";
+    }
+
+    @GetMapping("/cart")
+    public String cart() {
+        return "/user/userCart";
+    }
+
+    @GetMapping("/sellerSignup")
+    public String sellerSignup() {
+        return "seller/sellerSignup";
+    }
+
+    @GetMapping("/sellerLogin")
+    public String sellerLogin() {
+        return "seller/sellerLogin";
+    }
 }

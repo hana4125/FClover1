@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -8,7 +9,16 @@
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
-  <link rel="stylesheet" href="/css/user/myPage.css">
+  <style>
+      .profile {
+          cursor: pointer;
+      }
+
+      div ul li:hover {
+          cursor: pointer;
+          text-decoration: underline;
+      }
+  </style>
   <script th:inline="javascript">
       $(function () {
           $("#logo").click(function () {
@@ -27,30 +37,33 @@
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
-<div class="myPage-bg mt-4">
+<div class="mt-4 border-top">
   <div class="container w-75 pt-5">
     <div class="d-flex">
-      <div class="d-flex flex-column" style="width: 25%; height: 200vh;">
-        <table class="ms-3">
-          <tr>
-            <td><img src="/img/user/profile.png" alt="프로필"></td>
-          </tr>
-          <tr>
-            <td>
-              <span id="name" th:text="|${session.id}님|" class="ms-2"></span>
-            </td>
-          </tr>
-        </table>
-
-        <div class="container mt-13">
+      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+        <div class="bg-success rounded-3 p-5">
+          <table class="ms-3">
+            <tr>
+              <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
+            </tr>
+            <tr>
+              <td>
+                <th:block sec:authorize-expr="isAuthenticated()">
+                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
+                </th:block>
+                <th:block sec:authorize-expr="not isAuthenticated()">
+                  <span class="ms-2 fs-4 text-white fw-bold">null님</span>
+                </th:block>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="container mt-5">
           <!-- 쇼핑내역 -->
           <div class="mb-4">
             <h5 class="fw-bold">쇼핑내역</h5>
             <ul class="list-unstyled">
               <li>주문/배송목록</li>
-              <li>선물함</li>
-              <li>매장 구매 내역</li>
-              <li>영수증 조회 / 후 적립</li>
             </ul>
           </div>
 
@@ -58,39 +71,7 @@
           <div class="mb-4">
             <h5 class="fw-bold">라이브러리</h5>
             <ul class="list-unstyled">
-              <li>메인</li>
-              <li>리스트</li>
-              <li>코멘트</li>
-              <li>Klover 리뷰</li>
-              <li>문장수집</li>
               <li>찜</li>
-              <li>구독</li>
-              <li>e-라이브러리</li>
-            </ul>
-          </div>
-
-          <!-- 활동내역 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">활동내역</h5>
-            <ul class="list-unstyled">
-              <li>커뮤니티 활동 내역</li>
-              <li>이벤트 참여 내역</li>
-              <li>문화공간 이용 내역</li>
-            </ul>
-          </div>
-
-          <!-- 나의 통장 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">나의 통장</h5>
-            <ul class="list-unstyled">
-              <li>통합포인트</li>
-              <li>e교환권</li>
-              <li>기프트카드</li>
-              <li>교보캐시</li>
-              <li>쿠폰</li>
-              <li>교보e캐시</li>
-              <li>예치금</li>
-              <li>마일리지</li>
             </ul>
           </div>
 
@@ -99,8 +80,6 @@
             <h5 class="fw-bold">문의내역</h5>
             <ul class="list-unstyled">
               <li>1:1문의</li>
-              <li>핫트랙스 상품 문의내역</li>
-              <li>업체배송 문의내역</li>
             </ul>
           </div>
 
@@ -109,41 +88,13 @@
             <h5 class="fw-bold">회원정보</h5>
             <ul class="list-unstyled">
               <li>배송주소록</li>
-              <li>MY매장</li>
               <li>회원정보관리</li>
-              <li>교보북클럽 카드 관리</li>
-              <li>나의 회원등급</li>
-            </ul>
-          </div>
-
-          <!--알림센터-->
-          <div class="mb-4">
-            <h5 class="fw-bold">알림센터</h5>
-            <ul class="list-unstyled">
-              <li>알림함</li>
-              <li>알림신청내역</li>
             </ul>
           </div>
         </div>
       </div>
-      <div style="width: 75%; height: 200vh;" class="text-center">
-        <img src="/img/user/warning.png" alt="경고" class="mb-2">
-        <div style="color: white; font-weight: bold" class="mb-4">지난 7일간 맞춤 소식이 없습니다</div>
-        <button class="btn btn-primary rounded-2">맞춤 추천 보기</button>
-        <div class="d-flex">
-          <div class="mt-13 me-4 rounded-2 box">
-            <img src="/img/user/coupon.png" alt=""> 쿠폰
-          </div>
-          <div class="mt-13 me-4 rounded-2 box">
-            <img src="/img/user/point.png" alt=""> 통합포인트
-          </div>
-          <div class="mt-13 me-4 rounded-2 box">
-            <img src="/img/user/change.png" alt=""> e교환권
-          </div>
-          <div class="mt-13 me-4 rounded-2 box">
-            <img src="/img/user/cash.png" alt=""> 교보캐시
-          </div>
-        </div>
+      <div style="width: 80%; height: 100vh;" class="text-center">
+
       </div>
     </div>
   </div>

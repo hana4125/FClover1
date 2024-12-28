@@ -57,12 +57,14 @@
 <div class="container w-25 text-center">
   <div class="mt-5">
     <img id="logo" src="/img/user/kybo.png" alt="교보" width="300px" height="80px" class="mb-3">
-    <form action="/signupProcess" method="post">
-      <input type="text" class="form-control mb-3" id="id" name="id" placeholder="아이디">
+    <form th:action="@{/signupProcess}" method="post">
+      <div class="d-flex fw-bold mt-3 mb-3">회원 정보를 입력해 주세요</div>
+      <input type="text" class="form-control mb-3" id="member_id" name="member_id" placeholder="아이디">
       <input type="password" class="form-control mb-3" id="password" name="password" placeholder="비밀번호">
       <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름">
       <input type="text" class="form-control mb-3" id="email" name="email" placeholder="이메일">
       <input type="text" class="form-control mb-5" id="phone" name="phone" placeholder="휴대폰 번호">
+      <input type="hidden" id="auth" name="auth" value="ROLE_MEMBER">
       <input type="submit" class="form-control btn btn-success" value="회원가입">
     </form>
   </div>

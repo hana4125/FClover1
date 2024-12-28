@@ -4,10 +4,10 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.MemberMapper">
     <insert id="insert">
-        INSERT INTO USERS (id, password, name, email, phone) VALUES (#{id}, #{password}, #{name}, #{email}, #{phone});
+        INSERT INTO member (member_id, password, name, email, phone, auth) VALUES (#{member_id}, #{password}, #{name}, #{email}, #{phone}, #{auth});
     </insert>
 
     <select id="isId">
-        SELECT * FROM users WHERE id = #{id} AND password = #{password}
+        SELECT * FROM member WHERE member_id = #{id}
     </select>
 </mapper>

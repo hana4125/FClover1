@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper {
 
-    int insert(Member user);
+    int insert(Member member);
 
-    public Member isId(String id);
+    Member isId(String id);
 }

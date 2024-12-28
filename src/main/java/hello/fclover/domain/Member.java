@@ -1,77 +1,14 @@
 package hello.fclover.domain;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import lombok.Data;
 
-import java.util.Collection;
-
+@Data
 public class Member {
-    private String id;
 
-    //member_joinForm.jsp에서 비밀번호 name속성 값을 확인해주세요.
+    private String member_id;
     private String password;
     private String name;
-    private int age;
-    private String gender;
     private String email;
-    private String auth="ROLE_MEMBER";
-
-    public Member(String username, String password, Collection<SimpleGrantedAuthority> roles) {
-    }
-
-
-    public String getAuth() {
-        return auth;
-    }
-
-    public void setAuth(String auth) {
-        this.auth = auth;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private String phone;
+    private String auth;
 }

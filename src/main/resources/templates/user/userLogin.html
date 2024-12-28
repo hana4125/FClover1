@@ -13,22 +13,12 @@
               location.href = "/";
           })
 
-          $("form").submit(function() {
-              const id = $("#id");
-              const password = $("#password");
+          let rememberId = /*[[${rememberId}]]*/ null;
 
-              if (id.val().trim() === '') {
-                  alert("아이디를 입력하세요");
-              } else if (password.val().trim() === '') {
-                  alert("비밀번호를 입력하세요");
-              }
-          })
-
-          let cookie = /*[[${cookie}]]*/ null;
-
-          if (cookie != null) {
-              $("#id").val(cookie);
+          if (rememberId !== null) {
+              $("#remember-me").prop("checked", true);
           }
+
       })
   </script>
 </head>
@@ -36,10 +26,20 @@
 <div class="container w-25 text-center">
   <div class="mt-5">
     <img id="logo" src="/img/user/kybo.png" alt="교보" width="300px" height="80px" class="mb-3">
-    <form action="/loginProcess" method="post">
-      <input type="text" class="form-control mb-3" id="id" name="id" placeholder="아이디">
-      <input type="password" class="form-control mb-5" id="password" name="password" placeholder="비밀번호">
+    <form th:action="@{/loginProcess}" method="post">
+      <input type="text" class="form-control mb-3" id="member_id" name="member_id" th:value="${rememberId}" placeholder="아이디">
+      <input type="password" class="form-control mb-4" id="password" name="password" placeholder="비밀번호">
+      <div id="message" style="color: red" th:text="${message}" class="text-start"></div>
       <input type="submit" class="form-control btn btn-success" value="로그인">
+      <div class="d-flex mt-2">
+        <div>
+          <input type="checkbox" id="remember-me" name="remember-me">
+          <label for="remember-me">아이디 저장</label>
+        </div>
+        <div class="ms-auto">
+          <a href="#" class="text-decoration-none text-dark">아이디 찾기</a> | <a href="#" class="text-decoration-none text-dark">비밀번호 찾기</a>
+        </div>
+      </div>
     </form>
   </div>
   <div class="social-icon mt-5">
