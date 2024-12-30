@@ -2,18 +2,13 @@ package hello.fclover.controller;
 
 import hello.fclover.domain.Member;
 import hello.fclover.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.security.Principal;
-
 
 @Slf4j
 @Controller
@@ -28,10 +23,7 @@ public class MemberController {
     }
 
     @PostMapping("/signupProcess")
-    public String signupProcess(@ModelAttribute Member member,
-                                RedirectAttributes rattr,
-                                Model model,
-                                HttpServletRequest request) {
+    public String signupProcess(@ModelAttribute Member member) {
 
         log.info("auth={}", member.getAuth());
         String encPassword = passwordEncoder.encode(member.getPassword());
@@ -63,9 +55,7 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPage(Principal principal) {
-        String id = principal.getName();
-        log.info("id={}", id);
+    public String myPage() {
         return "user/userMyPage";
     }
 
