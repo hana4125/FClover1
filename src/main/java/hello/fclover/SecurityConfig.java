@@ -1,5 +1,6 @@
 package hello.fclover;
 
+import hello.fclover.oauth.CustomOAuth2UserService;
 import hello.fclover.security.CustomAccessDeniedHandler;
 import hello.fclover.security.CustomUserDetailsService;
 import hello.fclover.security.LoginFailHandler;
@@ -26,6 +27,9 @@ public class SecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    //OAuth2
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

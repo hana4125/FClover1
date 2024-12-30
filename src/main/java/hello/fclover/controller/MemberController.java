@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.Principal;
+
 
 @Slf4j
 @Controller
@@ -61,7 +63,9 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPage() {
+    public String myPage(Principal principal) {
+        String id = principal.getName();
+        log.info("id={}", id);
         return "user/userMyPage";
     }
 
