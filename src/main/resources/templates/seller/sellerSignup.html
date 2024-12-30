@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="webjars/bootstrap/5.3.3/css/bootstrap.css">
+  <script src="/js/jquery-3.7.1.js"></script>
+  <style>
+      img {
+          cursor: pointer;
+      }
+
+      .w-45 {
+          width: 45%;
+      }
+
+      form {
+          border: 1px solid gray;
+      }
+  </style>
+  <script>
+      $(function() {
+          $("img").click(function() {
+              location.href = "/";
+          })
+
+          $("#login").click(function() {
+              location.href = "/sellerLogin";
+          })
+      })
+  </script>
+</head>
+<body>
+<div class="d-flex align-items-center mt-1 border-bottom">
+  <img class="mb-3" src="/img/user/kybo.png" alt="로고" width="300px" height="66px">
+  <div class="ms-auto">
+    <button id="login" class="btn btn-outline-success me-3">판매자 로그인</button>
+  </div>
+</div>
+<div class="container w-50">
+  <div class="text-center mt-5">
+    <h1>네잎클로버와 함께 비즈니스를 시작하세요!</h1>
+  </div>
+  <div class="mt-5 w-45 m-auto">
+    <form th:action="@{/sellerSignupProcess}" method="post" class="p-5 rounded-3">
+      <input type="text" class="form-control mb-3" id="id" name="id" placeholder="아이디">
+      <input type="password" class="form-control mb-3" id="password" name="password" placeholder="비밀번호">
+      <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름">
+      <input type="text" class="form-control mb-3" id="email" name="email" placeholder="이메일">
+      <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="휴대폰 번호">
+      <input type="text" class="form-control mb-5" id="seller" name="seller" placeholder="사업자 번호">
+      <input type="submit" class="form-control btn btn-success" value="판매자 가입">
+    </form>
+  </div>
+</div>
+</body>
+</html>

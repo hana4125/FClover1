@@ -1,33 +1,48 @@
 <th:block th:fragment="header">
-  <div class="bg-light mb-3">
-    <div class="container w-75 text-end">
-      <div class="top-menu">
-        <th:block th:if="${session.id == null}">
-          <a href="/login" class="pe-2">로그인</a>
-          <a href="/signup" class="pe-2">회원가입</a>
-        </th:block>
-        <th:block th:if="${session.id != null}">
-          <a href="#" class="pe-2" th:text="|${session.id}님|"></a>
-          <a href="/logout" class="pe-2">로그아웃</a>
-        </th:block>
-        <a href="#" class="pe-2">고객센터</a>
-        <a href="#" class="pe-2">판매자 가입</a>
+  <div xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <style>
+        button[type=submit] {
+            all: unset;
+            cursor: pointer;
+        }
+    </style>
+    <div class="bg-light mb-3">
+      <div class="container w-75">
+        <div class="top-menu d-flex justify-content-end">
+          <th:block sec:authorize-expr="not isAuthenticated()">
+            <a href="/login" class="pe-2">로그인</a>
+            <a href="/signup" class="pe-2">회원가입</a>
+          </th:block>
+          <th:block sec:authorize-expr="isAuthenticated()">
+            <a href="/myPage" class="pe-2"><span sec:authentication="name"></span>님</a>
+            <form th:action="@{/logout}" method="post">
+              <button type="submit" class="pe-2">로그아웃</button>
+            </form>
+          </th:block>
+          <a href="#" class="pe-2">고객센터</a>
+          <th:block sec:authorize-expr="not isAuthenticated()">
+            <a href="/sellerLogin" class="pe-2">판매자 로그인</a>
+            <a href="/sellerSignup" class="pe-2">판매자 가입</a>
+          </th:block>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container w-75 header d-flex align-items-center">
-    <img id="logo" class="me-3" src="/img/user/kybo.png" alt="메인 로고">
-    <div class="search-bar">
-      <form class="d-flex search-box">
-        <input class="form-control me-2 search-text border-0" type="text" placeholder="찾고 싶은 도서를 검색해 보세요!"
-               aria-label="Search">
-        <button class="btn p-0 m-0 search-btn" type="submit"><img src="/img/user/search.png" width="36" height="36" alt="검색">
-        </button>
-      </form>
-    </div>
-    <div class="icon ms-auto d-flex">
-      <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
-      <img src="/img/user/myPage.png" id="myPage" class="me-15" width="36" height="36" alt="마이페이지">
+    <div class="container w-75 header d-flex align-items-center">
+      <img id="logo" class="me-3" src="/img/user/kybo.png" alt="메인 로고">
+      <div class="search-bar">
+        <form class="d-flex search-box">
+          <input class="form-control me-2 search-text border-0" type="text" placeholder="찾고 싶은 도서를 검색해 보세요!"
+                 aria-label="Search">
+          <button class="btn p-0 m-0 search-btn" type="submit">
+            <img src="/img/user/search.png" width="36" height="36" alt="검색">
+          </button>
+        </form>
+      </div>
+      <div class="icon ms-auto d-flex">
+        <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
+        <img src="/img/user/myPage.png" id="myPage" class="me-15" width="36" height="36" alt="마이페이지">
+      </div>
     </div>
   </div>
 </th:block>
