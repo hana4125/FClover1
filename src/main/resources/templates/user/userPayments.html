@@ -2,10 +2,18 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Title</title>
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
+  <!-- 포트원 결제 -->
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+  <!-- jQuery -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!-- iamport.payment.js -->
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+  <!-- 포트원 결제 -->
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <style>
@@ -72,7 +80,8 @@
           <p>최종 결제 금액</p>
           <span>0원</span>
         </div>
-        <button class="btn btn-primary form-control mt-3">결제하기</button>
+        <button class="btn btn-primary form-control mt-3" id="payment-button">결제하기</button>
+        <script type="text/javascript" th:src="@{/js/payment.js}"></script>
       </div>
 
       <div class="d-flex justify-content-between">
