@@ -79,4 +79,9 @@ public class MemberController {
     public String sellerLogin() {
         return "seller/sellerLogin";
     }
+
+    @GetMapping("/memberPay")
+    public String sellerPay() {
+        return "user/userPayments";
+    }
 }
