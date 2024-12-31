@@ -79,4 +79,14 @@ public class MemberController {
     public String sellerLogin() {
         return "seller/sellerLogin";
     }
+
+    @GetMapping("/notice")
+    public String notice() {
+        return "user/userNotice";
+    }
+
+    @GetMapping("/faq")
+    public String question() {
+        return "user/userQNA";
+    }
 }
