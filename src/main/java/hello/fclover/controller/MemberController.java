@@ -122,7 +122,7 @@ public class MemberController {
         member.setPassword(encPassword);
         memberService.updateMember(member);
         return "redirect:/myPage/info";
-
+    }
     @GetMapping("/memberPay")
     public String sellerPay() {
         return "user/userPayments";
