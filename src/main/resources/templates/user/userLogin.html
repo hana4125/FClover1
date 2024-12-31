@@ -29,7 +29,7 @@
     <form th:action="@{/loginProcess}" method="post">
       <input type="text" class="form-control mb-3" id="member_id" name="member_id" th:value="${rememberId}" placeholder="아이디">
       <input type="password" class="form-control mb-4" id="password" name="password" placeholder="비밀번호">
-      <div id="message" style="color: red" th:text="${message}" class="text-start"></div>
+      <div id="message" style="color: red" th:text="${message}" class="text-start mb-1"></div>
       <input type="submit" class="form-control btn btn-success" value="로그인">
       <div class="d-flex mt-2">
         <div>

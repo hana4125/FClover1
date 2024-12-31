@@ -114,4 +114,12 @@ public class MemberController {
     public String sellerLogin() {
         return "seller/sellerLogin";
     }
+
+    @PostMapping("/memberUpdate")
+    public String memberUpdate(@ModelAttribute Member member) {
+        String encPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encPassword);
+        memberService.updateMember(member);
+        return "redirect:/myPage/info";
+    }
 }

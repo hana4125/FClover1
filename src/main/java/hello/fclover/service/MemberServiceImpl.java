@@ -42,4 +42,9 @@ public class MemberServiceImpl implements MemberService {
     public Member getMember(String id) {
         return dao.isId(id);
     }
+
+    @Override
+    public int updateMember(Member member) {
+        return dao.memberUpdate(member);
+    }
 }

@@ -4,12 +4,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/myPage.css">
+  <script>
+      $(function() {
+          $("#addressBtn").click(function() {
+              new daum.Postcode({
+                  oncomplete: function(data) {
+                      console.log(data.zonecode);
+                      console.log(data.address);
+                  }
+              }).open();
+          })
+      })
+  </script>
   <script th:inline="javascript">
       $(function () {
           $("#logo").click(function () {
@@ -41,9 +54,6 @@
               <td>
                 <th:block sec:authorize-expr="isAuthenticated()">
                   <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
-                </th:block>
-                <th:block sec:authorize-expr="not isAuthenticated()">
-                  <span class="ms-2 fs-4 text-white fw-bold">null님</span>
                 </th:block>
               </td>
             </tr>
@@ -86,35 +96,36 @@
           <button id="shopping" class="btn btn-success mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">+ 새 배송지 등록</button>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">배송지 추가</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="container">
-                  <form action="">
-                    <div class="fw-bold mb-2">배송지명</div>
-                    <input type="text" placeholder="최대 7글자까지 자유롭게 수정가능" class="form-control">
-                    <br>
-                    <div class="fw-bold mb-2">받는분</div>
-                    <input type="text" placeholder="이름을 입력해 주세요." class="form-control mb-2">
-                    <input type="text" placeholder="휴대폰번호를 - 없이 입력해주세요." class="form-control">
-                    <br>
-                    <div class="fw-bold mb-2">주소</div>
-                    <button class="btn btn-outline-secondary form-control mb-5">주소 찾기</button>
-                  </form>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <button class="btn btn-primary ps-5 pe-5 pt-1 pb-1">저장</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <hr class="ms-5 mb-5">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">배송지 추가</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form action="">
+            <div class="fw-bold mb-2">배송지명</div>
+            <input type="text" placeholder="최대 7글자까지 자유롭게 수정가능" class="form-control">
+            <br>
+            <div class="fw-bold mb-2">받는분</div>
+            <input type="text" placeholder="이름을 입력해 주세요." class="form-control mb-2">
+            <input type="text" placeholder="휴대폰번호를 - 없이 입력해주세요." class="form-control">
+            <br>
+            <div class="fw-bold mb-2">주소</div>
+            <button id="addressBtn" class="btn btn-outline-secondary form-control mb-5">주소 찾기</button>
+          </form>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-primary ps-5 pe-5 pt-2 pb-2">저장</button>
+        </div>
       </div>
     </div>
   </div>
