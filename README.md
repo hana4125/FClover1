@@ -11,3 +11,4 @@ GOOGLE_CLIENT_SECRET=받아온 시크릿
 NAVER_CLIENT_ID=받아온 아이디
 NAVER_CLIENT_SECRET=받아온 시크릿
 ```
+env 파일에 내용 넣기
