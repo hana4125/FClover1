@@ -107,3 +107,6 @@ gradle-app.setting
 
 # Client ID & Client Secret
 .env
+
+# intellij
+.idea
