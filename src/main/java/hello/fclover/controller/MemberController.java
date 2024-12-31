@@ -115,11 +115,22 @@ public class MemberController {
         return "seller/sellerLogin";
     }
 
+
     @PostMapping("/memberUpdate")
     public String memberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
         memberService.updateMember(member);
         return "redirect:/myPage/info";
+
+    @GetMapping("/memberPay")
+    public String sellerPay() {
+        return "user/userPayments";
+    }
+
+    @GetMapping("/memberPayDone")
+    public String sellerPayDone() {
+        return "user/userPaymentsDone";
+
     }
 }
