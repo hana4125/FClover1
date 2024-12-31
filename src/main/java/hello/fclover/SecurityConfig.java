@@ -1,5 +1,6 @@
 package hello.fclover;
 
+import hello.fclover.oauth.CustomOAuth2UserService;
 import hello.fclover.security.CustomAccessDeniedHandler;
 import hello.fclover.security.CustomUserDetailsService;
 import hello.fclover.security.LoginFailHandler;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    //OAuth2
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin((formLogin) -> formLogin.loginPage("/login")
@@ -36,9 +40,21 @@ public class SecurityConfig {
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler));
 
-        http.logout((lo) -> lo.logoutSuccessUrl("/")
-                .logoutUrl("/logout")
-                .invalidateHttpSession(true));
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/**").permitAll() // 모든 경로에 대해 인증 없이 접근 허용
+                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/google")
+                        .defaultSuccessUrl("/")
+                );
+
+        http.logout((lo) -> lo.logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+        );
 
         return http.build();
     }
