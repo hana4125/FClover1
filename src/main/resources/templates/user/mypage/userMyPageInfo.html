@@ -9,16 +9,7 @@
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
-  <style>
-      .profile {
-          cursor: pointer;
-      }
-
-      div ul li:hover {
-          cursor: pointer;
-          text-decoration: underline;
-      }
-  </style>
+  <link rel="stylesheet" href="/css/user/myPage.css">
   <script th:inline="javascript">
       $(function () {
           $("#logo").click(function () {
@@ -63,7 +54,8 @@
           <div class="mb-4">
             <h5 class="fw-bold">쇼핑내역</h5>
             <ul class="list-unstyled">
-              <li>주문/배송목록</li>
+              <li><a href="/myPage/orderDelivery">주문/배송</a></li>
+              <li><a href="/myPage/purchaseHistory">구매 내역</a></li>
             </ul>
           </div>
 
@@ -71,15 +63,7 @@
           <div class="mb-4">
             <h5 class="fw-bold">라이브러리</h5>
             <ul class="list-unstyled">
-              <li>찜</li>
-            </ul>
-          </div>
-
-          <!-- 문의 내역 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">문의내역</h5>
-            <ul class="list-unstyled">
-              <li>1:1문의</li>
+              <li><a href="/myPage/wishlist">찜 목록</a></li>
             </ul>
           </div>
 
@@ -87,14 +71,14 @@
           <div class="mb-4">
             <h5 class="fw-bold">회원정보</h5>
             <ul class="list-unstyled">
-              <li>배송주소록</li>
-              <li>회원정보관리</li>
+              <li><a href="/myPage/deliveryAddressBook">배송주소록</a></li>
+              <li><a href="/myPage/info">회원정보관리</a></li>
             </ul>
           </div>
         </div>
       </div>
       <div style="width: 80%; height: 100vh;" class="text-center">
-
+        <h1>회원정보관리</h1>
       </div>
     </div>
   </div>

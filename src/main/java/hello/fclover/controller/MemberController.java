@@ -55,8 +55,33 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPage() {
-        return "user/userMyPage";
+    public String myPageMain() {
+        return "/user/mypage/userMyPageMain";
+    }
+
+    @GetMapping("/myPage/deliveryAddressBook")
+    public String myPageDeliveryAddressBook() {
+        return "/user/mypage/userMyPageDeliveryAddressBook";
+    }
+
+    @GetMapping("/myPage/info")
+    public String myPageInfo() {
+        return "/user/mypage/userMyPageInfo";
+    }
+
+    @GetMapping("/myPage/orderDelivery")
+    public String myPageOrderDelivery() {
+        return "/user/mypage/userMyPageOrderDelivery";
+    }
+
+    @GetMapping("/myPage/purchaseHistory")
+    public String myPagePurchaseHistory() {
+        return "/user/mypage/userMyPagePurchaseHistory";
+    }
+
+    @GetMapping("/myPage/wishlist")
+    public String myPageWishlist() {
+        return "/user/mypage/userMyPageWishlist";
     }
 
     @GetMapping("/cart")
