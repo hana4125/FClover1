@@ -9,4 +9,6 @@ public interface MemberService {
     int isId(String id);
 
     int isId(String id, String password);
+
+    Member getMember(String id);
 }

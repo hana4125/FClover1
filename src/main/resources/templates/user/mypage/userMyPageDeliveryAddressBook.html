@@ -77,11 +77,19 @@
           </div>
         </div>
       </div>
-      <div style="width: 80%; height: 100vh;" class="text-center">
-        <h1>배송주소록</h1>
+      <div style="width: 80%; height: 100vh;">
+        <h5 class="ms-5 fw-bold">배송 주소록</h5>
+        <hr class="ms-5 mb-5">
+        <div style="height: 300px;" class="text-center">
+          <img src="/img/user/warning.png" alt="경고" class="mt-5">
+          <div style="font-weight: bold" class="mt-2">등록된 배송지가 없습니다.</div>
+          <button id="shopping" class="btn btn-success mt-5">+ 새 배송지 등록</button>
+        </div>
+        <hr class="ms-5 mb-5">
       </div>
     </div>
   </div>
 </div>
+<div th:replace="~{fragment/footer :: footer}"></div>
 </body>
 </html>

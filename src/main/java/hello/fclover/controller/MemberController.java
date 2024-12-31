@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.Principal;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -55,7 +57,17 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPageMain() {
+    public String myPageMain(Principal principal, Model model) {
+
+        log.info("principal={}", principal);
+
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String member_id = principal.getName();
+
+
         return "/user/mypage/userMyPageMain";
     }
 
@@ -65,7 +77,11 @@ public class MemberController {
     }
 
     @GetMapping("/myPage/info")
-    public String myPageInfo() {
+    public String myPageInfo(Principal principal, Model model) {
+        String id = principal.getName();
+        Member member = memberService.getMember(id);
+        model.addAttribute("member", member);
+
         return "/user/mypage/userMyPageInfo";
     }
 
