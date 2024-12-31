@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,7 +21,7 @@ public class Payment {
     private Long userId;           // 사용자 ID
     private Long orderId;          // 주문 ID
     private BigDecimal paymentAmount; // 결제 금액
-    private LocalDateTime paymentDate; // 결제 일자
+    private LocalDate paymentDate; // 결제 일자
     private String impUid;         // 결제 고유 ID (nullable)
     private String paymentMethod;  // 결제 방식 (nullable)
     private String merchantUid;    // 가맹점 고유 ID (nullable)
@@ -40,6 +41,7 @@ public class Payment {
                 .userId(paymentReq.getUserId())
                 .orderId(paymentReq.getOrderId())
                 .impUid(paymentReq.getImpUid())
+                .paymentDate(paymentReq.getPaymentDate())
                 .paymentMethod(paymentReq.getPayMethod())
                 .merchantUid(paymentReq.getMerchantUid())
                 .paymentAmount(BigDecimal.valueOf(paymentReq.getPaidAmount()))
