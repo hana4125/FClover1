@@ -11,18 +11,6 @@
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/myPage.css">
-  <script>
-      $(function() {
-          $("#addressBtn").click(function() {
-              new daum.Postcode({
-                  oncomplete: function(data) {
-                      console.log(data.zonecode);
-                      console.log(data.address);
-                  }
-              }).open();
-          })
-      })
-  </script>
   <script th:inline="javascript">
       $(function () {
           $("#logo").click(function () {
@@ -120,7 +108,7 @@
             <input type="text" placeholder="휴대폰번호를 - 없이 입력해주세요." class="form-control">
             <br>
             <div class="fw-bold mb-2">주소</div>
-            <button id="addressBtn" class="btn btn-outline-secondary form-control mb-5">주소 찾기</button>
+            <input type="text" placeholder="상세주소 입력하세요." class="form-control mb-5">
           </form>
         </div>
         <div class="d-flex justify-content-center">
