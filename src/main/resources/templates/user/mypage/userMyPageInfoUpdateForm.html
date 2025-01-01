@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
@@ -43,6 +42,9 @@
                 <th:block sec:authorize-expr="isAuthenticated()">
                   <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
                 </th:block>
+                <th:block sec:authorize-expr="not isAuthenticated()">
+                  <span class="ms-2 fs-4 text-white fw-bold">null님</span>
+                </th:block>
               </td>
             </tr>
           </table>
@@ -76,45 +78,37 @@
         </div>
       </div>
       <div style="width: 80%; height: 100vh;">
-        <h5 class="ms-5 fw-bold">배송 주소록</h5>
+        <h3 class="ms-5 fw-bold">회원정보수정</h3>
+        <br>
+        <h5 class="ms-5 fw-bold">기본 정보</h5>
         <hr class="ms-5 mb-5">
-        <div style="height: 300px;" class="text-center">
-          <img src="/img/user/warning.png" alt="경고" class="mt-5">
-          <div style="font-weight: bold" class="mt-2">등록된 배송지가 없습니다.</div>
-          <button id="shopping" class="btn btn-success mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">+ 새 배송지 등록</button>
-        </div>
-        <!-- Modal -->
-        <hr class="ms-5 mb-5">
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">배송지 추가</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <form th:action="@{/addDeliveryAddress}" method="post">
-            <input type="hidden" name="member_id" th:value="${member.member_id}">
-            <div class="fw-bold mb-2">배송지명</div>
-            <input type="text" name="shipping_address_name" placeholder="최대 7글자까지 자유롭게 수정가능" class="form-control">
-            <br>
-            <div class="fw-bold mb-2">받는분</div>
-            <input type="text" name="receiver" placeholder="이름을 입력해 주세요." class="form-control mb-2">
-            <input type="text" name="phone" placeholder="휴대폰번호를 - 없이 입력해주세요." class="form-control">
-            <br>
-            <div class="fw-bold mb-2">주소</div>
-            <input type="text" name="address" placeholder="상세주소 입력하세요." class="form-control mb-5">
-            <div class="d-flex justify-content-center">
-              <input type="submit" class="btn btn-primary ps-5 pe-5 pt-2 pb-2" value="저장">
-            </div>
-          </form>
-        </div>
+        <form th:action="@{/memberUpdate}" method="post" class="w-75 ms-5">
+          <div class="d-flex">
+            <span class="w-50 fw-bold" style="line-height: 36px">아이디</span>
+            <input type="text" name="member_id" readonly class="form-control mb-3 bg-light" th:value="${member.member_id}">
+          </div>
+          <div class="d-flex">
+            <span class="w-50 fw-bold" style="line-height: 36px">비밀번호</span>
+            <input type="password" name="password"  class="form-control mb-3" th:value="${member.password}">
+          </div>
+          <div class="d-flex">
+            <span class="w-50 fw-bold" style="line-height: 36px">이름</span>
+            <input type="text" name="name"  class="form-control mb-3" th:value="${member.name}">
+          </div>
+          <div class="d-flex">
+            <span class="w-50 fw-bold" style="line-height: 36px">이메일</span>
+            <input type="text" name="email"  class="form-control mb-3" th:value="${member.email}">
+          </div>
+          <div class="d-flex">
+            <span class="w-50 fw-bold" style="line-height: 36px">휴대폰 번호</span>
+            <input type="text" name="phone"  class="form-control mb-5" th:value="${member.phone}">
+          </div>
+          <div class="d-flex justify-content-end">
+            <input type="reset" class="btn btn-secondary ps-5 pe-5 me-2" value="취소">
+            <input type="submit" class="btn btn-primary ps-5 pe-5" value="확인">
+          </div>
+        </form>
+        <hr class="ms-5 mt-5">
       </div>
     </div>
   </div>

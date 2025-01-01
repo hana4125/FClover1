@@ -1,5 +1,6 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int updateMember(Member member) {
         return dao.memberUpdate(member);
+    }
+
+    @Override
+    public int addDeliveryAddress(Delivery delivery) {
+        return dao.insertDeliveryAddress(delivery);
     }
 }

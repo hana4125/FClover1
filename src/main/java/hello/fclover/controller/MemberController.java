@@ -1,5 +1,6 @@
 package hello.fclover.controller;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import hello.fclover.service.MemberService;
 import jakarta.servlet.http.HttpSession;
@@ -72,8 +73,17 @@ public class MemberController {
     }
 
     @GetMapping("/myPage/deliveryAddressBook")
-    public String myPageDeliveryAddressBook() {
+    public String myPageDeliveryAddressBook(Principal principal, Model model) {
+        String id = principal.getName();
+        Member member = memberService.getMember(id);
+        model.addAttribute("member", member);
         return "/user/mypage/userMyPageDeliveryAddressBook";
+    }
+
+    @PostMapping("/addDeliveryAddress")
+    public String addDeliveryAddress(@ModelAttribute Delivery delivery) {
+        memberService.addDeliveryAddress(delivery);
+        return "redirect:/myPage/deliveryAddressBook";
     }
 
     @GetMapping("/myPage/info")
@@ -83,6 +93,15 @@ public class MemberController {
         model.addAttribute("member", member);
 
         return "/user/mypage/userMyPageInfo";
+    }
+
+    @GetMapping("/myPage/info/modify")
+    public String memberUpdateForm(Principal principal, Model model) {
+        String id = principal.getName();
+        Member member = memberService.getMember(id);
+        model.addAttribute("member", member);
+
+        return "/user/mypage/userMyPageInfoUpdateForm";
     }
 
     @GetMapping("/myPage/orderDelivery")
@@ -123,6 +142,7 @@ public class MemberController {
         memberService.updateMember(member);
         return "redirect:/myPage/info";
     }
+
 
     @GetMapping("/memberPay")
     public String sellerPay() {

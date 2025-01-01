@@ -14,4 +14,9 @@
     <update id="memberUpdate">
         UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone} WHERE member_id = #{member_id}
     </update>
+
+    <insert id="insertDeliveryAddress">
+        INSERT INTO delivery (member_id, shipping_address_name, receiver, phone, address)
+        VALUES (#{member_id}, #{shipping_address_name},#{receiver}, #{phone}, #{address})
+    </insert>
 </mapper>

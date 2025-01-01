@@ -1,5 +1,6 @@
 package hello.fclover.mybatis.mapper;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,4 +12,6 @@ public interface MemberMapper {
     Member isId(String id);
 
     int memberUpdate(Member member);
+
+    int insertDeliveryAddress(Delivery delivery);
 }
