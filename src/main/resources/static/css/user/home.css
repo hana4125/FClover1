@@ -57,3 +57,52 @@
 .me-15 {
     margin-right: 15rem !important;
 }
+
+/* 베스트 스테디 셀러 */
+
+/* 기본 스타일 */
+
+.best-title,
+.steady-title {
+    cursor: pointer;
+    color: gray;
+}
+
+/* 선택된 제목 스타일 */
+.best-title.active,
+.steady-title.active {
+    color: black;
+    font-weight: bold;
+}
+
+/* 카테고리 버튼 스타일 */
+#category {
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.bar {
+    width: 25px; /* 모든 막대의 동일한 길이 */
+    height: 4px; /* 모든 막대의 동일한 굵기 */
+    background-color: black; /* 막대 색상 */
+    margin-bottom: 4px; /* 모든 막대 간의 동일한 간격 */
+    box-sizing: border-box; /* 크기 계산 안정화 */
+}
+
+.bar:last-child {
+    margin-bottom: 1px;
+}
+
+.close-icon {
+    font-size: 36px; /* X 크기 */
+    font-weight: bold;
+    color: white; /* 흰색 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* 상대 위치 지정 */
+    top: -16px; /* 위로 16px 이동 */
+    transition: all 0.3s ease;
+}

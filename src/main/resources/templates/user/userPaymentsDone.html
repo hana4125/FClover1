@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <style>
+    .mt-6 {
+      margin-top: 6rem;
+    }
+  </style>
+  <script th:inline="javascript">
+    $(function () {
+      $("#logo").click(function () {
+        location.href = "/";
+      })
+
+      $("#cart").click(function () {
+        location.href = "/cart";
+      })
+
+      $("#myPage").click(function () {
+        location.href = "/myPage";
+      })
+
+      $("#shopping").click(function() {
+        location.href = "/";
+      })
+    })
+  </script>
+</head>
+
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="mt-4 border-top">
+  <div class="container w-75 mt-5 d-flex">
+    <div style="width: 75%; height: 300vh">
+      <h3 style="font-weight: bold">주문 / 결제</h3>
+
+      <hr>
+      <div style="height: 300px;" class="text-center">
+        <div style="font-weight: bold" class="mt-2"> 결제하신 상품의 주문이 완료되었습니다. </div>
+        <button id="shopping" class="btn btn-success mt-2">계속 쇼핑하기</button>
+      </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
