@@ -27,6 +27,10 @@
           $("#updateInfo").click(function() {
               location.href = "/myPage/info/modify";
           })
+
+          $("#deleteBtn").click(function() {
+              location.href = "/myPage/info/delete";
+          })
       })
   </script>
 </head>
@@ -76,7 +80,7 @@
             <h5 class="fw-bold">회원정보</h5>
             <ul class="list-unstyled">
               <li><a href="/myPage/deliveryAddressBook">배송주소록</a></li>
-              <li><a href="/myPage/info">회원정보관리</a></li>
+              <li><a href="/myPage/info-check">회원정보관리</a></li>
             </ul>
           </div>
         </div>
@@ -112,7 +116,7 @@
           </div>
         </div>
         <hr class="ms-5 mt-5">
-        <button class="btn-sm btn btn-danger ms-5 ps-2 pe-2 me-2" id="delete">탈퇴</button>
+        <button class="btn-sm btn btn-danger ms-5 ps-2 pe-2 me-2" id="deleteBtn">탈퇴</button>
       </div>
     </div>
   </div>

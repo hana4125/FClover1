@@ -23,4 +23,16 @@
     <select id="selectDeliveryAddress">
         SELECT * FROM delivery WHERE member_id = #{member_id}
     </select>
+
+    <select id="selectMember">
+        SELECT * FROM member WHERE member_id = #{member_id} AND password = #{password}
+    </select>
+
+    <select id="selectPassword">
+        SELECT password FROM member WHERE member_id = #{member_id}
+    </select>
+
+    <delete id="deleteMember">
+        DELETE FROM member WHERE member_id = #{member_id}
+    </delete>
 </mapper>

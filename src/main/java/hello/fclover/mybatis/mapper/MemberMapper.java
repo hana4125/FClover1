@@ -18,4 +18,10 @@ public interface MemberMapper {
     int insertDeliveryAddress(Delivery delivery);
 
     List<Delivery> selectDeliveryAddress(String member_id);
+
+    Member selectMember(String member_id, String password);
+
+    String selectPassword(String member_id);
+
+    void deleteMember(String member_id);
 }

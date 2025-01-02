@@ -60,4 +60,19 @@ public class MemberServiceImpl implements MemberService {
     public List<Delivery> getDeliveryAddress(String member_id) {
         return dao.selectDeliveryAddress(member_id);
     }
+
+    @Override
+    public Member isMemberExists(String member_id, String password) {
+        return dao.selectMember(member_id, password);
+    }
+
+    @Override
+    public String getEncryptedPassword(String member_id) {
+        return dao.selectPassword(member_id);
+    }
+
+    @Override
+    public void removeAccount(String member_id) {
+        dao.deleteMember(member_id);
+    }
 }

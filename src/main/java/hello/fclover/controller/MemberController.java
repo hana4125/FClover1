@@ -3,9 +3,13 @@ package hello.fclover.controller;
 import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import hello.fclover.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,6 +87,28 @@ public class MemberController {
         return "redirect:/myPage/deliveryAddressBook";
     }
 
+    @GetMapping("/myPage/info-check")
+    public String temp(Model model, HttpSession session) {
+        model.addAttribute("message", session.getAttribute("idCheckFail"));
+        session.removeAttribute("idCheckFail");
+        return "user/mypage/userMyPageInfoPasswordCheck";
+    }
+
+    @PostMapping("/myPage/info-check")
+    public String passwordCheck(@RequestParam String password, Principal principal, HttpSession session) {
+        String member_id = principal.getName();
+        String encryptedPassword = memberService.getEncryptedPassword(member_id);
+
+        boolean matches = passwordEncoder.matches(password, encryptedPassword);
+
+        if (!matches) {
+            session.setAttribute("idCheckFail", "입력하신 정보가 일치하지 않습니다. 다시 확인해 주세요.");
+            return "redirect:/myPage/info-check";
+        }
+
+        return "redirect:/myPage/info";
+    }
+
     @GetMapping("/myPage/info")
     public String myPageInfo(Principal principal, Model model) {
         String id = principal.getName();
@@ -99,6 +125,19 @@ public class MemberController {
         model.addAttribute("member", member);
 
         return "/user/mypage/userMyPageInfoUpdateForm";
+    }
+
+    @GetMapping("/myPage/info/delete")
+    public String deleteAccountForm() {
+        return "user/mypage/userMyPageDeleteAccount";
+    }
+
+    @GetMapping("/myPage/info/deleteProgress")
+    public String deleteAccount(Principal principal, HttpServletRequest request, HttpServletResponse response) {
+        String member_id = principal.getName();
+        memberService.removeAccount(member_id);
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        return "redirect:/";
     }
 
     @GetMapping("/myPage/orderDelivery")
