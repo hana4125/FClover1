@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -28,7 +29,6 @@ public class MemberController {
     @PostMapping("/signupProcess")
     public String signupProcess(@ModelAttribute Member member) {
 
-        log.info("auth={}", member.getAuth());
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
 
@@ -47,7 +47,6 @@ public class MemberController {
     public String login(@CookieValue(required = false) String rememberId, HttpSession session, Model model) {
 
         if (rememberId != null) {
-            log.info("rememberId={}", rememberId);
             model.addAttribute("rememberId", rememberId);
         }
 
@@ -60,23 +59,21 @@ public class MemberController {
     @GetMapping("/myPage")
     public String myPageMain(Principal principal, Model model) {
 
-        log.info("principal={}", principal);
-
         if (principal == null) {
             return "redirect:/login";
         }
-
-        String member_id = principal.getName();
-
 
         return "/user/mypage/userMyPageMain";
     }
 
     @GetMapping("/myPage/deliveryAddressBook")
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
+        String member_id = principal.getName();
+        Member member = memberService.getMember(member_id);
+        memberService.getDeliveryAddress(member_id);
+        List<Delivery> deliveryAddressList = memberService.getDeliveryAddress(member_id);
         model.addAttribute("member", member);
+        model.addAttribute("deliveryAddressList", deliveryAddressList);
         return "/user/mypage/userMyPageDeliveryAddressBook";
     }
 

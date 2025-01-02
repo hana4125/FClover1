@@ -19,4 +19,8 @@
         INSERT INTO delivery (member_id, shipping_address_name, receiver, phone, address)
         VALUES (#{member_id}, #{shipping_address_name},#{receiver}, #{phone}, #{address})
     </insert>
+
+    <select id="selectDeliveryAddress">
+        SELECT * FROM delivery WHERE member_id = #{member_id}
+    </select>
 </mapper>

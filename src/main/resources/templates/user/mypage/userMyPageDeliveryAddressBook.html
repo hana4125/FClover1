@@ -41,7 +41,8 @@
             <tr>
               <td>
                 <th:block sec:authorize-expr="isAuthenticated()">
-                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
+                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span
+                        class="text-white fw-bold">님</span>
                 </th:block>
               </td>
             </tr>
@@ -76,15 +77,47 @@
         </div>
       </div>
       <div style="width: 80%; height: 100vh;">
-        <h5 class="ms-5 fw-bold">배송 주소록</h5>
-        <hr class="ms-5 mb-5">
-        <div style="height: 300px;" class="text-center">
-          <img src="/img/user/warning.png" alt="경고" class="mt-5">
-          <div style="font-weight: bold" class="mt-2">등록된 배송지가 없습니다.</div>
-          <button id="shopping" class="btn btn-success mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">+ 새 배송지 등록</button>
+        <div>
+          <h5 class="ms-5 fw-bold">배송 주소록</h5>
         </div>
-        <!-- Modal -->
+        <th:block th:unless="${deliveryAddressList.size() == 0}">
+          <div class="container bg-light rounded-4 p-3 mt-3 ms-5 mb-5 me-5 text-center" style="height: 200px;">
+            <h3>기본 배송지를 설정해주세요.</h3>
+          </div>
+        </th:block>
+        <div class="d-flex justify-content-end">
+          <button id="shopping" class="btn btn-success ms-auto" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            + 새 배송지 등록
+          </button>
+        </div>
         <hr class="ms-5 mb-5">
+        <th:block th:if="${deliveryAddressList.size() == 0}">
+          <div class="text-center" style="height: 200px;">
+            <img src="/img/user/warning.png" alt="경고" class="mt-5">
+            <div style="font-weight: bold" class="mt-2 mb-5">등록된 배송지가 없습니다.</div>
+            <hr class="ms-5 mb-5">
+          </div>
+        </th:block>
+        <th:block th:unless="${deliveryAddressList.size() == 0}">
+          <div class="ms-5" th:each="deliveryAddress : ${deliveryAddressList}">
+            <table>
+              <tr>
+                <td class="p-3" rowspan="3"><input type="radio" name="defaultAddress"></td>
+                <td><div class="fw-bold" th:text="${deliveryAddress.shipping_address_name}"></div></td>
+              </tr>
+              <tr class="fw-bold">
+                <td><span th:text="${deliveryAddress.receiver}"></span> / <span th:text="${deliveryAddress.phone}"></span></td>
+              </tr>
+              <tr>
+                <td><span th:text="${deliveryAddress.address}"></span></td>
+              </tr>
+            </table>
+            <hr class="mt-5 mb-5">
+          </div>
+          <div class="ms-5">
+            <button class="btn btn-primary mb-5">기본 배송지로 설정</button>
+          </div>
+        </th:block>
       </div>
     </div>
   </div>
@@ -95,8 +128,9 @@
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">배송지 추가</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
       </div>
+
+      <!-- Modal -->
       <div class="modal-body">
         <div class="container">
           <form th:action="@{/addDeliveryAddress}" method="post">
@@ -119,6 +153,5 @@
     </div>
   </div>
 </div>
-<div th:replace="~{fragment/footer :: footer}"></div>
 </body>
 </html>

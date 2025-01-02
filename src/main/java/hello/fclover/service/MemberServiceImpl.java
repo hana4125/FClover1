@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -52,5 +54,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int addDeliveryAddress(Delivery delivery) {
         return dao.insertDeliveryAddress(delivery);
+    }
+
+    @Override
+    public List<Delivery> getDeliveryAddress(String member_id) {
+        return dao.selectDeliveryAddress(member_id);
     }
 }

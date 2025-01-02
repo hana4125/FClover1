@@ -3,6 +3,8 @@ package hello.fclover.service;
 import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 
+import java.util.List;
+
 public interface MemberService {
 
     int signup(Member member);
@@ -16,4 +18,6 @@ public interface MemberService {
     int updateMember(Member member);
 
     int addDeliveryAddress(Delivery delivery);
+
+    List<Delivery> getDeliveryAddress(String member_id);
 }

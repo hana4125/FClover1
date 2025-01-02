@@ -4,6 +4,8 @@ import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface MemberMapper {
 
@@ -14,4 +16,6 @@ public interface MemberMapper {
     int memberUpdate(Member member);
 
     int insertDeliveryAddress(Delivery delivery);
+
+    List<Delivery> selectDeliveryAddress(String member_id);
 }
