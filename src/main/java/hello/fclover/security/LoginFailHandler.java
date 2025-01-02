@@ -24,7 +24,7 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
         log.info("로그인 실패");
 
         session.setAttribute("loginfail", "입력하신 아이디나 비밀번호를 확인해 주세요");
-        String url = request.getContextPath() + "/login";
+        String url = request.getContextPath() + "/member/login";
         response.sendRedirect(url);
     }
 }
