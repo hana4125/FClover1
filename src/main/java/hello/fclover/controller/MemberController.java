@@ -1,14 +1,19 @@
 package hello.fclover.controller;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
 import hello.fclover.service.MemberService;
-import hello.fclover.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import hello.fclover.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -37,7 +43,6 @@ public class MemberController {
     @PostMapping("/signupProcess")
     public String signupProcess(@ModelAttribute Member member) {
 
-        log.info("auth={}", member.getAuth());
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
 
@@ -56,7 +61,6 @@ public class MemberController {
     public String login(@CookieValue(required = false) String rememberId, HttpSession session, Model model) {
 
         if (rememberId != null) {
-            log.info("rememberId={}", rememberId);
             model.addAttribute("rememberId", rememberId);
         }
 
@@ -69,21 +73,50 @@ public class MemberController {
     @GetMapping("/myPage")
     public String myPageMain(Principal principal, Model model) {
 
-        log.info("principal={}", principal);
-
         if (principal == null) {
             return "redirect:/login";
         }
-
-        String member_id = principal.getName();
-
 
         return "/user/mypage/userMyPageMain";
     }
 
     @GetMapping("/myPage/deliveryAddressBook")
-    public String myPageDeliveryAddressBook() {
+    public String myPageDeliveryAddressBook(Principal principal, Model model) {
+        String member_id = principal.getName();
+        Member member = memberService.getMember(member_id);
+        memberService.getDeliveryAddress(member_id);
+        List<Delivery> deliveryAddressList = memberService.getDeliveryAddress(member_id);
+        model.addAttribute("member", member);
+        model.addAttribute("deliveryAddressList", deliveryAddressList);
         return "/user/mypage/userMyPageDeliveryAddressBook";
+    }
+
+    @PostMapping("/addDeliveryAddress")
+    public String addDeliveryAddress(@ModelAttribute Delivery delivery) {
+        memberService.addDeliveryAddress(delivery);
+        return "redirect:/myPage/deliveryAddressBook";
+    }
+
+    @GetMapping("/myPage/info-check")
+    public String temp(Model model, HttpSession session) {
+        model.addAttribute("message", session.getAttribute("idCheckFail"));
+        session.removeAttribute("idCheckFail");
+        return "user/mypage/userMyPageInfoPasswordCheck";
+    }
+
+    @PostMapping("/myPage/info-check")
+    public String passwordCheck(@RequestParam String password, Principal principal, HttpSession session) {
+        String member_id = principal.getName();
+        String encryptedPassword = memberService.getEncryptedPassword(member_id);
+
+        boolean matches = passwordEncoder.matches(password, encryptedPassword);
+
+        if (!matches) {
+            session.setAttribute("idCheckFail", "입력하신 정보가 일치하지 않습니다. 다시 확인해 주세요.");
+            return "redirect:/myPage/info-check";
+        }
+
+        return "redirect:/myPage/info";
     }
 
     @GetMapping("/myPage/info")
@@ -93,6 +126,28 @@ public class MemberController {
         model.addAttribute("member", member);
 
         return "/user/mypage/userMyPageInfo";
+    }
+
+    @GetMapping("/myPage/info/modify")
+    public String memberUpdateForm(Principal principal, Model model) {
+        String id = principal.getName();
+        Member member = memberService.getMember(id);
+        model.addAttribute("member", member);
+
+        return "/user/mypage/userMyPageInfoUpdateForm";
+    }
+
+    @GetMapping("/myPage/info/delete")
+    public String deleteAccountForm() {
+        return "user/mypage/userMyPageDeleteAccount";
+    }
+
+    @GetMapping("/myPage/info/deleteProgress")
+    public String deleteAccount(Principal principal, HttpServletRequest request, HttpServletResponse response) {
+        String member_id = principal.getName();
+        memberService.removeAccount(member_id);
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        return "redirect:/";
     }
 
     @GetMapping("/myPage/orderDelivery")
@@ -133,6 +188,7 @@ public class MemberController {
         memberService.updateMember(member);
         return "redirect:/myPage/info";
     }
+
     @GetMapping("/memberPay")
     public String sellerPay() {
         return "user/userPayments";
@@ -141,7 +197,6 @@ public class MemberController {
     @GetMapping("/memberPayDone")
     public String sellerPayDone() {
         return "user/userPaymentsDone";
-
     }
 
     @GetMapping("/memberOrderList")
@@ -195,3 +250,4 @@ public class MemberController {
 //    }
 
 }
+
