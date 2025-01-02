@@ -23,6 +23,14 @@
           $("#myPage").click(function () {
               location.href = "/myPage";
           })
+
+          $("#updateInfo").click(function() {
+              location.href = "/myPage/info/modify";
+          })
+
+          $("#deleteBtn").click(function() {
+              location.href = "/myPage/info/delete";
+          })
       })
   </script>
 </head>
@@ -72,7 +80,7 @@
             <h5 class="fw-bold">회원정보</h5>
             <ul class="list-unstyled">
               <li><a href="/myPage/deliveryAddressBook">배송주소록</a></li>
-              <li><a href="/myPage/info">회원정보관리</a></li>
+              <li><a href="/myPage/info-check">회원정보관리</a></li>
             </ul>
           </div>
         </div>
@@ -82,33 +90,33 @@
         <br>
         <h5 class="ms-5 fw-bold">기본 정보</h5>
         <hr class="ms-5 mb-5">
-        <form th:action="@{/memberUpdate}" method="post" class="w-75 ms-5">
+        <div class="w-75 ms-5">
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">아이디</span>
-            <input type="text" name="member_id" readonly class="form-control mb-3" th:value="${member.member_id}">
+            <input type="text" name="member_id" readonly class="form-control mb-3 bg-light" th:value="${member.member_id}">
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">비밀번호</span>
-            <input type="password" name="password" class="form-control mb-3" th:value="${member.password}">
+            <input type="password" name="password" readonly class="form-control mb-3 bg-light" th:value="${member.password}">
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">이름</span>
-            <input type="text" name="name" class="form-control mb-3" th:value="${member.name}">
+            <input type="text" name="name" readonly class="form-control mb-3 bg-light" th:value="${member.name}">
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">이메일</span>
-            <input type="text" name="email" class="form-control mb-3" th:value="${member.email}">
+            <input type="text" name="email" readonly class="form-control mb-3 bg-light" th:value="${member.email}">
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">휴대폰 번호</span>
-            <input type="text" name="phone" class="form-control mb-5" th:value="${member.phone}">
+            <input type="text" name="phone" readonly class="form-control mb-5 bg-light" th:value="${member.phone}">
           </div>
           <div class="d-flex justify-content-end">
-            <input type="reset" class="btn btn-secondary me-2 ps-5 pe-5" value="취소">
-            <input type="submit" class="btn btn-primary ps-5 pe-5" value="수정">
+            <button class="btn btn-success ps-5 pe-5" id="updateInfo">수정</button>
           </div>
-        </form>
+        </div>
         <hr class="ms-5 mt-5">
+        <button class="btn-sm btn btn-danger ms-5 ps-2 pe-2 me-2" id="deleteBtn">탈퇴</button>
       </div>
     </div>
   </div>
