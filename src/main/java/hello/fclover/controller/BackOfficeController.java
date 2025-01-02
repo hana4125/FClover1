@@ -31,7 +31,7 @@ public class BackOfficeController {
 
     @GetMapping("/delivery")
     public String deliver(Model model) {
-        return "boDelivery";
+        return "backOffice/boDeliveryOrder";
     }
 
 
