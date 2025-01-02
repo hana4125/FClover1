@@ -8,6 +8,7 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/seller/addSingleProduct}"></script>
     <th:block th:replace="~{fragment/header :: header}"/>
     <title>상품 단일 등록</title>
     <style>
@@ -37,7 +38,7 @@
     <h2 class="text mb-4">상품 단일 등록</h2>
 
     <!-- 상품 등록 폼 시작 -->
-    <form th:action="@{/seller/addSingleProductProcess}" method="POST" enctype="multipart/form-data">
+    <form th:action="@{/seller/addSingleProductProcess}" method="POST" enctype="multipart/form-data" name="addSingleProductForm">
         <div class="row">
             <!-- 상품 이름 -->
             <div class="col-md-4">
@@ -56,7 +57,7 @@
         </div>
 
         <div class="row">
-            <!-- 상품 가격, 상품 수량, 책 카테고리 (같은 줄) -->
+            <!-- 상품 가격, 상품 수량, 책 카테고리 -->
             <div class="col-md-2">
                 <div class="mb-3">
                     <label for="productPrice" class="form-label" >상품 가격</label>
