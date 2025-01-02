@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.fclover.mybatis.mapper.PaymentMapper">
+
+    <insert id="save">
+
+    </insert>
+    <insert id="savePayment">
+        INSERT INTO payments (partner_id, user_id, order_id, payment_amount, payment_date, imp_uid, payment_method, merchant_uid, pg_provider, pg_type, pg_tid, status, card_name, card_number, created_at, updated_at)
+        VALUES (#{partnerId}, #{userId}, #{orderId}, #{paymentAmount}, #{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
+    </insert>
+
+
+    <select id="findByImpUid" resultType="hello.fclover.domain.Payment">
+        SELECT * FROM payments WHERE imp_uid = #{impUid}
+    </select>
+</mapper>
