@@ -22,6 +22,7 @@ import java.security.Principal;
 
 @Slf4j
 @Controller
+@RequestMapping(value="/member")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;

@@ -22,6 +22,9 @@ public class SellerController {
     }
 
 
-
+    @GetMapping("/main")
+    public String signup() {
+        return "seller/sellerMypage";
+    }
 
 }
