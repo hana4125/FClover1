@@ -74,7 +74,7 @@ public class MemberController {
     public String myPageMain(Principal principal, Model model) {
 
         if (principal == null) {
-            return "redirect:/login";
+            return "redirect:/member/login";
         }
 
         return "/user/mypage/userMyPageMain";
@@ -94,7 +94,7 @@ public class MemberController {
     @PostMapping("/addDeliveryAddress")
     public String addDeliveryAddress(@ModelAttribute Delivery delivery) {
         memberService.addDeliveryAddress(delivery);
-        return "redirect:/myPage/deliveryAddressBook";
+        return "redirect:/member/myPage/deliveryAddressBook";
     }
 
     @GetMapping("/myPage/info-check")
@@ -113,10 +113,10 @@ public class MemberController {
 
         if (!matches) {
             session.setAttribute("idCheckFail", "입력하신 정보가 일치하지 않습니다. 다시 확인해 주세요.");
-            return "redirect:/myPage/info-check";
+            return "redirect:/member/myPage/info-check";
         }
 
-        return "redirect:/myPage/info";
+        return "redirect:/member/myPage/info";
     }
 
     @GetMapping("/myPage/info")
@@ -170,23 +170,12 @@ public class MemberController {
         return "/user/userCart";
     }
 
-    @GetMapping("/sellerSignup")
-    public String sellerSignup() {
-        return "seller/sellerSignup";
-    }
-
-    @GetMapping("/sellerLogin")
-    public String sellerLogin() {
-        return "seller/sellerLogin";
-    }
-
-
     @PostMapping("/memberUpdate")
     public String memberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
         memberService.updateMember(member);
-        return "redirect:/myPage/info";
+        return "redirect:/member/myPage/info";
     }
 
     @GetMapping("/memberPay")

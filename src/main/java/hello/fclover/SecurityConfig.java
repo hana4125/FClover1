@@ -33,8 +33,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin((formLogin) -> formLogin.loginPage("/login")
-                .loginProcessingUrl("/loginProcess")
+        http.formLogin((formLogin) -> formLogin.loginPage("/member/login")
+                .loginProcessingUrl("/member/loginProcess")
                 .usernameParameter("member_id")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                 );
 
-        http.logout((lo) -> lo.logoutUrl("/logout")
+        http.logout((lo) -> lo.logoutUrl("/member/logout")
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
