@@ -149,6 +149,13 @@ public class MemberController {
 
         return "user/userOrderList";
     }
+    @GetMapping("/memberOrderListDetail")
+    public String OrderListDetail( Model model) {
+//        @RequestParam String impUid,
+//        model.addAttribute("impUid", impUid);
+
+        return "user/userOrderListDetail";
+    }
 
 
     @PostMapping("/portone")
@@ -158,11 +165,11 @@ public class MemberController {
 
         try {
             System.out.println("========>controller의 try문 안의 paymentRequest : " + paymentRequest);
-            System.out.println("========>controller의 try문 안의 paymentService.savePayment(Payment.save(paymentRequest)) : " + paymentService.savePayment(Payment.save(paymentRequest)));
+//            System.out.println("========>controller의 try문 안의 paymentService.savePayment(Payment.save(paymentRequest)) : " + paymentService.savePayment(Payment.save(paymentRequest)));
 
             paymentService.savePayment(Payment.save(paymentRequest));
 
-            System.out.println("========Controller====>Payment.save(paymentRequest)" + Payment.save(paymentRequest));
+//            System.out.println("========Controller====>Payment.save(paymentRequest)" + Payment.save(paymentRequest));
             response.put("message", "Payment processed successfully.");
 
             return ResponseEntity.ok(response);
@@ -172,5 +179,19 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    @GetMapping("/OrderCancel/{uid}")
+    public ResponseEntity<String> OrderCancel(@PathVariable("uid")String uid) {
+        paymentService.cancelPayment(uid);
+
+        return ResponseEntity.ok("Payment cancel processed successfully.");
+    }
+
+//    @GetMapping("/OrderCancelProcess")
+//    public ResponseEntity<String> OrderCancelProcess() {
+//        paymentService.cancelPayment(uid);
+//
+//        return ResponseEntity.ok("Payment cancel processed successfully.");
+//    }
 
 }
