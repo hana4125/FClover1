@@ -20,7 +20,7 @@
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
-          <a href="#" class="pe-2">고객센터</a>
+          <a href="/notice" class="pe-2">고객센터</a>
           <th:block sec:authorize-expr="not isAuthenticated()">
             <a href="/sellerLogin" class="pe-2">판매자 로그인</a>
             <a href="/sellerSignup" class="pe-2">판매자 가입</a>

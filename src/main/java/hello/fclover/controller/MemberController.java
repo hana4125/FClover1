@@ -15,11 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.security.Principal;
+import hello.fclover.domain.PaginationResult;
 
 @Slf4j
 @Controller
@@ -175,8 +178,24 @@ public class MemberController {
 
 
     @GetMapping("/notice")
-    public String notice() {
-        return "user/userNotice";
+    public String notice(
+        @RequestParam(defaultValue = "1") int page, Model m) {
+
+            int limit = 10;
+            int listcount = memberService.getListCount();
+            List<Member> list = memberService.getBoardList(page, limit);
+
+            PaginationResult result = new PaginationResult(page, limit, listcount);
+
+            m.addAttribute("page", page);
+            m.addAttribute("maxpage", result.getMaxpage());
+            m.addAttribute("startpage", result.getStartpage());
+            m.addAttribute("endpage", result.getEndpage());
+            m.addAttribute("listcount", listcount);
+            m.addAttribute("boardlist", list);
+            m.addAttribute("limit", limit);
+
+            return "user/userNotice";
     }
 
     @GetMapping("/faq")

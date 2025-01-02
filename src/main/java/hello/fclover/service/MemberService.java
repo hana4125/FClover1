@@ -2,6 +2,8 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Member;
 
+import java.util.List;
+
 public interface MemberService {
 
     int signup(Member member);
@@ -13,4 +15,10 @@ public interface MemberService {
     Member getMember(String id);
 
     int updateMember(Member member);
+
+    int getListCount();
+
+    List<Member> getBoardList(int page, int limit);
+
+
 }

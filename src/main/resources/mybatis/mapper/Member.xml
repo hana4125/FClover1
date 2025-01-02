@@ -4,7 +4,8 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.MemberMapper">
     <insert id="insert">
-        INSERT INTO member (member_id, password, name, email, phone, auth) VALUES (#{member_id}, #{password}, #{name}, #{email}, #{phone}, #{auth});
+        INSERT INTO member (member_id, password, name, email, phone, auth)
+        VALUES (#{member_id}, #{password}, #{name}, #{email}, #{phone}, #{auth});
     </insert>
 
     <select id="isId">
@@ -12,6 +13,38 @@
     </select>
 
     <update id="memberUpdate">
-        UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone} WHERE member_id = #{member_id}
+        UPDATE member
+        SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone}
+        WHERE member_id = #{member_id}
     </update>
+
+    <select id="getListCount" resultType="int">
+        select count(*) from NOTICE
+    </select>
+
+<!--    <select id="getBoardList" resultType="Member">-->
+<!--        SELECT *-->
+<!--        FROM (SELECT n.*, IFNULL(c.cnt, 0) AS cnt-->
+
+<!--              FROM NOTICE n-->
+<!--              LEFT OUTER JOIN (-->
+<!--                                SELECT NOTI_NUM, COUNT(*) AS cnt-->
+<!--                                FROM COMMENTS-->
+<!--                                GROUP BY NOTI_NUM)-->
+<!--                                c ON n.NOTI_NUM = c.NOTI_NUM-->
+<!--            ORDER BY n.NOTI_RE_REF DESC, n.NOTI_RE_SEQ ASC-->
+<!--        ) b-->
+<!--        where rnum >= #{start} and rnum <= #{end}-->
+<!--    </select>-->
+
+    <select id="getBoardList" resultType="Member">
+    select *,  IFNULL(cnt,0) cnt
+    from   NOTICE   left outer join (select NOTI_NUM, count(*) cnt
+    from COMMENTS
+    group by NOTI_NUM) c
+    on NOTICE.NOTI_NUM = c.NOTI_NUM
+    order by NOTI_RE_REF desc,
+    NOTI_RE_SEQ asc
+    limit #{start}, #{limit}
+    </select>
 </mapper>

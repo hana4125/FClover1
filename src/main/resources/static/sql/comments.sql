@@ -1,0 +1,11 @@
+CREATE TABLE comments (
+num INT AUTO_INCREMENT PRIMARY KEY,
+id VARCHAR(30),
+content VARCHAR(200),
+reg_date DATE,
+NOTI_NUM INT,
+FOREIGN KEY (id) REFERENCES member(mem_id),
+FOREIGN KEY (num) REFERENCES NOTICE(NOTI_NUM) ON DELETE CASCADE
+);
+
+drop table comments;
