@@ -1,5 +1,6 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 
 import java.util.List;
@@ -16,9 +17,24 @@ public interface MemberService {
 
     int updateMember(Member member);
 
-    int getListCount();
+    public int getListCount();
+
 
     List<Member> getBoardList(int page, int limit);
 
 
+
+    int addDeliveryAddress(Delivery delivery);
+
+    List<Delivery> getDeliveryAddress(String member_id);
+
+    Member isMemberExists(String member_id, String password);
+
+    String getEncryptedPassword(String member_id);
+
+    void removeAccount(String member_id);
+
+    void setReadCountUpdate(int num);
+
+    Member getDetail(int num);
 }

@@ -1,20 +1,17 @@
 
--- 임시 회원 테이블
+-- 회원 테이블
 CREATE TABLE member
 (
-    #num int auto_increment not null,
-    mem_id varchar(20) not null,
-    mem_pass varchar(50) not null,
-    mem_name varchar(100) not null,
-    mem_email varchar(100) not null,
-    mem_phone varchar(20) not null,
-    mem_profile varchar(255),
-    mem_address varchar(200),
-    mem_birth varchar(8),
-    mem_gender varchar(1),
-    created_at date,
-    updated_at date,
-    primary key(mem_id)
+    mem_num         INT AUTO_INCREMENT PRIMARY KEY,
+    member_id       VARCHAR(20)  NOT NULL UNIQUE,
+    password        VARCHAR(100) NOT NULL,
+    name            VARCHAR(20)  NOT NULL,
+    email           VARCHAR(20)  NOT NULL,
+    phone_number    VARCHAR(20)  NOT NULL,
+    auth            VARCHAR(20)  NOT NULL,
+    profile_picture VARCHAR(255) DEFAULT NULL,
+    created_at      DATETIME     DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME
 );
 
 CREATE DATABASE FClover default CHARACTER SET UTF8;
@@ -23,3 +20,6 @@ SHOW DATABASES;
 
 select * from member;
 drop table member;
+
+SHOW CREATE TABLE comments;
+ALTER TABLE comments DROP FOREIGN KEY comments_ibfk_1;

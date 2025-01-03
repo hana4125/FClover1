@@ -24,7 +24,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 84px;
+    height: 100px;
     background-color: rgba(80, 85, 177, 0.06);
     border-radius: 5px;
 }
@@ -85,6 +85,7 @@ button.btn-primary:hover {
 .list_result_wrap{
     position: relative;
     display: flex;
+    margin-top: 10px;
 }
 
 .list_result_wrap .result_count{

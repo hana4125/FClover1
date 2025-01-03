@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- search box -->
-        <div class="info_search-box" style="height: 84px;">
+        <div class="info_search-box" style="height: 100px;">
           <div class="input_btn_box">
             <input name="search_word" type="text" class="form-control"
                    placeholder="제목을 입력하세요" th:value="${search_word}" style="width: 408px; height: 44px;">
@@ -82,10 +82,7 @@
 
         <!-- list_result_wrap -->
         <div>
-          <div class="list_result_wrap">
-            <p class="result_count">
-              <span class="ct_green">[[${listcount}]]</span>건
-            </p>
+          <div class="list_result_wrap mt-3">
             <div class="right_area">
               <div class="form_sel" style="width: 120px;"></div>
             </div>
@@ -94,6 +91,9 @@
 
         <!-- table wrap -->
         <div class="mt-5 tbl_col_wrap">
+          <p class="result_count">
+            <span class="ct_green">[[${listcount}]]</span>건
+          </p>
           <table class="table">
             <colgroup>
               <col style="width: 75px;">
@@ -110,43 +110,43 @@
             </tr>
             </thead>
             <tbody>
+            <th:block th:with="num=${listcount - (page - 1) * limit}">
+              <th:block th:each="b, iterStat : ${boardlist}">
             <tr>
-              <td>1</td>
+              <td><span th:text="${num - (iterStat.index)}"></span></td>
               <td>
-                [공지] 2025 교보문고 Prestige 회원 제도 개정 안내
+                <div class="ntitle">
+                  <th:block th:each="i : ${#numbers.sequence(1, b.NOTI_RE_LEV * 2, 1)}">&nbsp;</th:block>
+                  <a th:href="@{'detail?num=' + ${b.NOTI_NUM}}">
+                  <span th:text="${b.NOTI_TITLE}"></span>
+                  </a>
+                </div>
               </td>
-              <td>고객센터</td>
-              <td>2024.12.31</td>
+              <td><div th:text="${b.NOTI_NAME}"></div></td>
+              <td><div th:text="${b.NOTI_DATE.substring(0,10)}"></div></td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                폭설로 인한 배송지연 우려 지역 안내 (12/2~)
-              </td>
-              <td>고객센터</td>
-              <td>2024.12.24</td>
-            </tr>
+              </th:block>
+            </th:block>
             </tbody>
           </table>
         </div>
 
         <!--pagination-->
         <div class="pagination">
-          <button class="btn_page prev" disabled="disabled">
-            <span class="hidden"></span>
-          </button>
-          <div class="page_num">
-
-          </div>
-          <button class="btn_page next">
-            <span class="hidden"></span>
-          </button>
+          <th:block th:replace="~{fragment/paging :: paging('list', '')}"/>
         </div>
 
+
+        <div>
+          <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+              <a th:href="@{/member/notice}">
+                <button type="button" class="btn btn-primary" style="height: 44px">글쓰기</button>
+              </a>
+              </th:block>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 </body>
 </html>
