@@ -1,108 +1,64 @@
 <th:block th:fragment="header">
-  <div xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-       xmlns:th="http://www.thymeleaf.org">
+  <div xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <style>
-      button[type=submit] {
-        all: unset;
-        cursor: pointer;
-      }
+        button[type=submit] {
+            all: unset;
+            cursor: pointer;
+        }
     </style>
+    <script>
+        $(function () {
+            $("#logo").click(function () {
+                location.href = "/";
+            })
+
+            $("#cart").click(function () {
+                location.href = "/member/cart";
+            })
+
+            $("#myPage").click(function () {
+                location.href = "/member/myPage";
+            })
+        })
+    </script>
     <script th:src="@{/js/headerSearch.js}"></script>
     <div class="bg-light mb-3">
       <div class="container w-75">
         <div class="top-menu d-flex justify-content-end">
           <th:block sec:authorize-expr="not isAuthenticated()">
-            <a class="pe-2" href="/login">로그인</a>
-            <a class="pe-2" href="/signup">회원가입</a>
+            <a href="/member/login" class="pe-2">로그인</a>
+            <a href="/member/signup" class="pe-2">회원가입</a>
           </th:block>
           <th:block sec:authorize-expr="isAuthenticated()">
-            <a class="pe-2" href="/myPage"><span sec:authentication="name"></span>님</a>
-            <form method="post" th:action="@{/logout}">
-              <button class="pe-2" type="submit">로그아웃</button>
+            <a href="/member/myPage" class="pe-2"><span sec:authentication="name"></span>님</a>
+            <form th:action="@{/member/logout}" method="post">
+              <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
-          <a class="pe-2" href="#">고객센터</a>
+          <a href="#" class="pe-2">고객센터</a>
           <th:block sec:authorize-expr="not isAuthenticated()">
-            <a class="pe-2" href="/sellerLogin">판매자 로그인</a>
-            <a class="pe-2" href="/sellerSignup">판매자 가입</a>
+            <a href="/seller/sellerLogin" class="pe-2">판매자 로그인</a>
+            <a href="/seller/sellerSignup" class="pe-2">판매자 가입</a>
           </th:block>
         </div>
       </div>
     </div>
     <div class="container w-75 header d-flex align-items-center">
-      <img alt="메인 로고" class="me-3" id="logo" src="/img/user/kybo.png">
+      <img id="logo" class="me-3" src="/img/user/kybo.png" alt="메인 로고">
       <div class="search-bar">
         <form class="d-flex search-box">
-          <input aria-label="Search" class="form-control me-2 search-text border-0" placeholder="찾고 싶은 도서를 검색해 보세요!"
-                 type="text">
+          <input class="form-control me-2 search-text border-0" type="text" placeholder="찾고 싶은 도서를 검색해 보세요!"
+                 aria-label="Search">
           <button class="btn p-0 m-0 search-btn" type="submit">
-            <img alt="검색" height="24" src="/img/user/search.png" width="24">
+            <img src="/img/user/search.png" width="36" height="36" alt="검색">
           </button>
         </form>
-        <!-- 검색어에 따라 다른 부분에 내용을 삽입하고 다른 부분은 보여주지 않는다. -->
-        <div class="dropdown-menu p-3" id="search-dropdown">
-          <!-- 검색어가 있을 시 삽입할 부분 -->
-          <div class="search_content_wrap inKeyword">
-            <div class="scroll_wrap">
-              <!-- 스크립트로 삽입 -->
-            </div>
-            <!-- util area 가 삽입될 부분 -->
-          </div>
-
-          <!-- 검색어가 없을 시 삽입할 부분 -->
-          <div class="search_content_wrap noKeyword">
-            <div class="scroll_wrap">
-              <div class="recommend_keyword_area">
-                <div class="title_wrap title_size_def">
-                  <p class="title_heading">추천 검색어</p>
-                </div>
-                <div class="tag_wrap" id="recommendKeywordBox">
-                  <!-- 스크립트로 이곳에 추천 검색어 삽입 -->
-                </div>
-              </div>
-              <div class="keyword_contents_area">
-                <div class="recent_keyword_box">
-                  <!-- 최근 검색어가 들어갈 자리 -->
-                </div>
-                <div class="hot_keyword_box" id="hotKeywordBox">
-                  <div class="title_wrap title_size_def">
-                    <p class="title_heading">실시간 인기 검색어</p>
-                    <div class="right_area"> <!-- form_sel --> <!--<div class="form_sel" data-class="type_arw auto_complete_maintain">
-                                <select title="연령기준 정렬" id="ageSel">
-                                    <option value="">전연령</option>
-                                    <option value="10">10대</option>
-                                    <option value="20">20대</option>
-                                    <option value="30">30대</option>
-                                    <option value="40">40대↑</option>
-                                </select>
-                            </div>--> <!-- //form_sel --> <!-- form_sel --> <!--<div class="form_sel" data-class="type_arw auto_complete_maintain">
-                                <select title="성별기준 정렬" id="genderSel">
-                                    <option value="">전성별</option>
-                                    <option value="1">남성</option>
-                                    <option value="2">여성</option>
-                                </select>
-                            </div>--> <!-- //form_sel -->
-                    </div>
-                  </div>
-                  <div class="hot_keyword_list_wrap">
-                    <!-- 실시간 인기 검색어가 들어갈 자리 -->
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="util_area">
-              <div class="util_button_area"> <a href="javascript:goCsCenter();" class="btn_xs"><span class="ico_link"></span><span class="text">도움말</span></a> <a href="javascript:goDetailSearch();" class="btn_xs"><span class="ico_search"></span><span class="text">상세검색</span></a>
-              </div> <button type="button" class="button_layer_close" id="close_search_auto"><span class="text">닫기</span></button>
-            </div>
-          </div>
-        </div>
       </div>
-
       <div class="icon ms-auto d-flex">
-        <img alt="장바구니" class="me-3" height="36" id="cart" src="/img/user/cart.png" width="36">
-        <img alt="마이페이지" class="me-15" height="36" id="myPage" src="/img/user/myPage.png" width="36">
+        <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
+        <img src="/img/user/myPage.png" id="myPage" class="me-15" width="36" height="36" alt="마이페이지">
       </div>
-
     </div>
   </div>
 </th:block>

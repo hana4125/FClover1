@@ -10,21 +10,6 @@
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/myPage.css">
-  <script th:inline="javascript">
-      $(function () {
-          $("#logo").click(function () {
-              location.href = "/";
-          })
-
-          $("#cart").click(function () {
-              location.href = "/cart";
-          })
-
-          $("#myPage").click(function () {
-              location.href = "/myPage";
-          })
-      })
-  </script>
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
@@ -54,8 +39,8 @@
           <div class="mb-4">
             <h5 class="fw-bold">쇼핑내역</h5>
             <ul class="list-unstyled">
-              <li><a href="/myPage/orderDelivery">주문/배송</a></li>
-              <li><a href="/myPage/purchaseHistory">구매 내역</a></li>
+              <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
+              <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
             </ul>
           </div>
 
@@ -63,7 +48,7 @@
           <div class="mb-4">
             <h5 class="fw-bold">라이브러리</h5>
             <ul class="list-unstyled">
-              <li><a href="/myPage/wishlist">찜 목록</a></li>
+              <li><a href="/member/myPage/wishlist">찜 목록</a></li>
             </ul>
           </div>
 
@@ -71,8 +56,8 @@
           <div class="mb-4">
             <h5 class="fw-bold">회원정보</h5>
             <ul class="list-unstyled">
-              <li><a href="/myPage/deliveryAddressBook">배송주소록</a></li>
-              <li><a href="/myPage/info">회원정보관리</a></li>
+              <li><a href="/member/myPage/addressBook">배송주소록</a></li>
+              <li><a href="/member/myPage/info-check">회원정보관리</a></li>
             </ul>
           </div>
         </div>

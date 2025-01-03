@@ -11,7 +11,7 @@
     -moz-box-align: start;
     -ms-flex-align: start;
     -webkit-align-items: flex-start;
-    align-items: flex-start;
+    /*align-items: flex-start;*/
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -moz-box-orient: horizontal;
@@ -287,4 +287,295 @@ div {
     letter-spacing: -0.01em;
     color: #767676;
     text-align: center;
+}
+
+.tbl_prod_wrap.type_myroom .tbl_order_info, .tbl_prod_wrap.type_notify .tbl_order_info {
+    height: 63px;
+    padding: 0 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    border-bottom: 1px solid #eaeaea;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
+    min-width: 1440px;
+    color: #000;
+}
+.tbl_prod_wrap.type_myroom .tbl_order_info .order_date, .tbl_prod_wrap.type_notify .tbl_order_info .order_date {
+    padding-top: 1px;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+}
+.tbl_prod_wrap.type_myroom .tbl_order_info .right_area, .tbl_prod_wrap.type_notify .tbl_order_info .right_area {
+    margin-left: auto;
+    font-size: 0;
+}
+.btn_delete_text.size_xxs {
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.btn_delete_text {
+    color: #767676;
+}
+button {
+    background-color: transparent;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+.btn_delete_text .ico_delete {
+    width: 13px;
+    height: 15px;
+    margin-top: 1px;
+    background:  0% 0% no-repeat;
+    background-size: 13px 15px;
+}
+.order_history_group + .tbl_prod_wrap {
+    margin-top: 30px;
+}
+
+.tbl_prod_wrap.type_myroom, .tbl_prod_wrap.type_notify {
+    border-top: 1px solid #000;
+}
+.tbl_prod_wrap.type_myroom .tbl_prod_inner .tbl_prod, .tbl_prod_wrap.type_notify .tbl_prod_inner .tbl_prod {
+    border-bottom: 1px solid #eaeaea;
+}
+.tbl_prod_wrap.type_myroom .tbl_prod:last-child, .tbl_prod_wrap.type_notify .tbl_prod:last-child {
+    border-bottom: 1px solid #eaeaea;
+}
+.tbl_prod_wrap.type_myroom .tbl_prod, .tbl_prod_wrap.type_notify .tbl_prod {
+    border: none;
+}
+.tbl_prod_wrap .tbl_prod {
+    width: 100%;
+    table-layout: fixed;
+    border-top: 1px solid #000;
+}
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 0;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+
+table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    unicode-bidi: isolate;
+    border-spacing: 2px;
+    border-color: gray;
+}
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 0;
+}
+
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+col {
+    display: table-column;
+    unicode-bidi: isolate;
+}
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
+}
+
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    font: 0 / 0 Arial;
+}
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+user agent stylesheet
+table {
+    border-collapse: separate;
+    text-indent: initial;
+    border-spacing: 2px;
+}
+body {
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
+    min-width: 1440px;
+    color: #000;
+}
+th, td {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
+}
+.order_history_group + .tbl_prod_wrap {
+    margin-top: 30px;
+}
+
+.tbl_prod_wrap.type_myroom, .tbl_prod_wrap.type_notify {
+    border-top: 1px solid #000;
+}
+user agent stylesheet
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.prod_area.horizontal .prod_thumb_box.size_sm .img_box img {
+    max-height: calc((84px - 2px)* 1.618 - 10px);
+}
+img {
+    vertical-align: middle;
+}
+img, fieldset {
+    border: 0;
+}
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+.prod_area.horizontal .prod_info_box.size_sm {
+    margin-left: 12px;
+}
+ol, ul {
+    list-style: none;
+}
+.prod_area .prod_info_box .prod_option_list {
+    margin-top: 12px;
+    font-size: 0;
+}
+.tbl_prod_wrap .tbl_prod tbody td.prod {
+    padding-left: 0;
+    text-align: left;
+    vertical-align: top;
+}
+.prod_area .prod_info_box.size_sm .prod_name:not(.ellipsis_single) {
+    max-height: calc(22px* 2);
+}
+.prod_area .prod_info_box.size_sm .prod_name {
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+.prod_area .prod_info_box .prod_name {
+    display: block;
+    display: -webkit-box;
+    overflow: hidden;
+    max-height: 46px;
+    line-height: 23px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /*text-overflow: -o-ellipsis-lastline;*/
+    white-space: normal;
+    word-break: break-all;
+    font-size: 15px;
+    line-height: 23px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+}
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 0;
+}
+.prod_area.horizontal .prod_info_box.size_sm {
+    margin-left: 12px;
+}
+
+.prod_area.horizontal .prod_info_box {
+    overflow: hidden;
+    margin-left: 16px;
+}
+.prod_area .prod_info_box {
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.tbl_prod_wrap .tbl_prod tbody td.prod {
+    padding-left: 0;
+    text-align: left;
+    vertical-align: top;
+}
+
+.tbl_prod_wrap .tbl_prod tbody td {
+    position: relative;
+    padding: 24px;
+    text-align: center;
+    border-bottom: 1px solid #eaeaea;
+}
+th, td {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+.prod_info_box {
+    display: flex;
+    align-items: center;
+}
+
+.prod_name {
+    text-decoration: none; /* 밑줄 없애기 */
+    margin-left: 10px; /* 이미지와 텍스트 사이의 간격을 주기 위해 */
+    white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 */
 }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <link rel="stylesheet" href="/css/user/myPage.css">
+  <style>
+    #issue th {
+        padding: 1rem;
+        border-left: none;
+    }
+
+    #issue td {
+        width: 200px;
+        padding: 1.5rem 1rem;
+        border-left: none;
+        border-right: none;
+    }
+  </style>
+  <script th:inline="javascript">
+      $(function () {
+          $("#cancelBtn").click(function() {
+              location.href = "/member/myPage/info";
+          })
+
+          $("#deleteBtn").click(function() {
+              let result = confirm("정말 탈퇴하시겠습니까?");
+              if (result) {
+                location.href = "/member/myPage/info/deleteProgress";
+              }
+          })
+      })
+  </script>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="mt-4 border-top">
+  <div class="container w-75 pt-5">
+    <div class="d-flex">
+      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+        <div class="bg-success rounded-3 p-5">
+          <table class="ms-3">
+            <tr>
+              <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
+            </tr>
+            <tr>
+              <td>
+                <th:block sec:authorize-expr="isAuthenticated()">
+                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span
+                        class="text-white fw-bold">님</span>
+                </th:block>
+                <th:block sec:authorize-expr="not isAuthenticated()">
+                  <span class="ms-2 fs-4 text-white fw-bold">null님</span>
+                </th:block>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="container mt-5">
+          <!-- 쇼핑내역 -->
+          <div class="mb-4">
+            <h5 class="fw-bold">쇼핑내역</h5>
+            <ul class="list-unstyled">
+              <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
+              <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
+            </ul>
+          </div>
+
+          <!-- 라이브러리 -->
+          <div class="mb-4">
+            <h5 class="fw-bold">라이브러리</h5>
+            <ul class="list-unstyled">
+              <li><a href="/member/myPage/wishlist">찜 목록</a></li>
+            </ul>
+          </div>
+
+          <!--회원정보-->
+          <div class="mb-4">
+            <h5 class="fw-bold">회원정보</h5>
+            <ul class="list-unstyled">
+              <li><a href="/member/myPage/addressBook">배송주소록</a></li>
+              <li><a href="/member/myPage/info-check">회원정보관리</a></li>
+              <li><a href="/member/deleteAccount">회원탈퇴</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div style="width: 80%; height: 100vh;">
+        <h3 class="ms-5 mb-3 fw-bold">회원탈퇴</h3>
+        <div class="bg-light ms-5 p-3 rounded-4" style="height: 100px">
+          <span class="fw-bold">회원탈퇴 시 유의사항</span><br>
+          <div>회원탈퇴 시 모든 회원정보와 <span class="text-danger fw-bold">할인쿠폰, 통합포인트, 마일리지, 교환권, 교보캐시, 교보 e캐시, 구매내역</span>이 자동으로 삭제 처리되며, 복구가 불가합니다.</div>
+        </div>
+        <br>
+        <h5 class="ms-5 fw-bold">탈퇴사유</h5>
+        <hr class="ms-5 mb-5">
+        <table id="issue" class="table-bordered ms-5">
+          <tr>
+            <th>상품</th>
+            <td><input type="radio" name="product" class="me-1" id="no_product_found"><label for="no_product_found">찾는상품 없음</label></td>
+            <td><input type="radio" name="product" class="me-1" id="insufficient_product_info"><label for="insufficient_product_info">상품정보 부족</label></td>
+            <td><input type="radio" name="product" class="me-1" id="product_quality_issue"><label for="product_quality_issue">상품품질 불만</label></td>
+            <td><input type="radio" name="product" class="me-1" id="price_issue"><label for="price_issue">가격 불만</label></td>
+          </tr>
+          <tr>
+            <th>서비스</th>
+            <td><input type="radio" name="service" class="me-1" id="delivery_issue"><label for="delivery_issue">배송 불만</label></td>
+            <td><input type="radio" name="service" class="me-1" id="site_usability_issue"><label for="site_usability_issue">사이트 이용 불편</label></td>
+            <td><input type="radio" name="service" class="me-1" id="payment_issue"><label for="payment_issue">결제 불편</label></td>
+            <td><input type="radio" name="service" class="me-1" id="return_exchange_refund_issue"><label for="return_exchange_refund_issue">반품/교환/환불 불만</label></td>
+          </tr>
+          <tr>
+            <th>시스템/기타</th>
+            <td><input type="radio" name="system" class="me-1" id="product_search_issue"><label for="product_search_issue">상품검색 불편</label></td>
+            <td colspan="3"><input type="radio" name="system" class="me-1" id="privacy_security_concern"><label for="privacy_security_concern">개인정보/보안 우려</label></td>
+          </tr>
+        </table>
+        <div class="d-flex justify-content-end mt-5">
+          <button id="cancelBtn" class="btn btn-secondary me-2">취소</button>
+          <button id="deleteBtn" class="btn btn-danger me-5">회원탈퇴</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="~{fragment/footer :: footer}"></div>
+</body>
+</html>
