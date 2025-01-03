@@ -11,3 +11,4 @@ CREATE TABLE member
     auth varchar(20) not null
 );
 
+commit;

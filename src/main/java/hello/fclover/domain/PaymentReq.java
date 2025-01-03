@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PaymentReq {
     private Long partnerId;
-    private Long userId;
+    private String userId;
     private Long orderId;
     private LocalDate paymentDate;
 
