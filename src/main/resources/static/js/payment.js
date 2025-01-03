@@ -63,7 +63,7 @@ function paymentProcess() {
                     //await fetch : 동기코드와 유사한 비동기 코드. 콜백지옥에서 탈출가능.
                     //요새는 ajax보다 fetch로 많이 처리한다고 함. fetch는 js sowkd api로 비동기 통신 네트워크를 가능하게 하는 기술.
                     //
-                    const response = await fetch('/portone', {
+                    const response = await fetch('/member/portone', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function paymentProcess() {
                     // if (rsp.status == 200) { // DB저장 성공시
                         alert('결제 완료!')
                         window.location.reload();
-                        location.href = "/memberPayDone";
+                        location.href = "/member/memberPayDone";
                     } else { // 결제완료 후 DB저장 실패시
                         alert(`error:[${rsp.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
                         // DB저장 실패시 status에 따라 추가적인 작업 가능성

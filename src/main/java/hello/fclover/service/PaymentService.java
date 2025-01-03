@@ -11,4 +11,9 @@ public interface PaymentService {
 
     Payment save(PaymentReq paymentReq);
     int savePayment(Payment Payment);
+
+    void cancelPayment(String uid);
+
+
+    void decrease(Long id, Long quantity);
 }

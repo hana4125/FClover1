@@ -26,7 +26,7 @@
 <div class="container w-25 text-center">
   <div class="mt-5">
     <img id="logo" src="/img/user/kybo.png" alt="교보" width="300px" height="80px" class="mb-3">
-    <form th:action="@{/loginProcess}" method="post">
+    <form th:action="@{/member/loginProcess}" method="post">
       <input type="text" class="form-control mb-3" id="member_id" name="member_id" th:value="${rememberId}" placeholder="아이디">
       <input type="password" class="form-control mb-4" id="password" name="password" placeholder="비밀번호">
       <div id="message" style="color: red" th:text="${message}" class="text-start mb-1"></div>
