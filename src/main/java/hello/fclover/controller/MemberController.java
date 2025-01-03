@@ -180,9 +180,14 @@ public class MemberController {
         return "/user/userBestseller";
     }
 
+    @GetMapping("/steadySeller")
+    public String steadySeller() {
+        return "/user/userSteadyseller";
+    }
+
     @GetMapping("/newItems")
     public String newItems() {
-        return "/user/usernewItems";
+        return "/user/userNewItems";
     }
 
     @GetMapping("/sellerSignup")
