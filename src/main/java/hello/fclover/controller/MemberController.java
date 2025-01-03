@@ -119,6 +119,16 @@ public class MemberController {
         return "/user/userCategory";
     }
 
+    @GetMapping("/bestSeller")
+    public String bestSeller() {
+        return "/user/userBestseller";
+    }
+
+    @GetMapping("/newItems")
+    public String newItems() {
+        return "/user/usernewItems";
+    }
+
     @GetMapping("/sellerSignup")
     public String sellerSignup() {
         return "seller/sellerSignup";

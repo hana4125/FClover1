@@ -1,10 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>home</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="/css/user/home.css">
+    <link rel="stylesheet" href="/css/user/searchBox.css">
+    <link rel="stylesheet" href="/css/user/category.css">
+    <script th:inline="javascript">
+        $(function () {
+            $("#logo").click(function () {
+                location.href = "/";
+            })
+
+            $("#cart").click(function () {
+                location.href = "/cart";
+            })
+
+            $("#myPage").click(function () {
+                location.href = "/myPage";
+            })
+
+            $("#categoryItem").click(function () {
+                location.href = "/category";
+            })
+
+            $(".show-plus").click(function () {
+                location.href = "/bestSeller";
+            })
+
+            $(".best-list").click(function () {
+                location.href = "/bestSeller";
+            })
+
+            $(".new-list").click(function () {
+                location.href = "/newItems";
+            })
+        })
+
+        $(document).ready(function () {
+            // 드롭다운 메뉴 클릭 이벤트
+            $(".dropdown-item").click(function () {
+                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
+                $("#dropdownMenu").text(selectedText); // 드롭다운 버튼 텍스트 변경
+            })
+            $(".dropdown-view").click(function () {
+                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
+                $("#dropdownView").text(selectedText); // 드롭다운 버튼 텍스트 변경
+            })
+
+            // 전체 선택 체크박스 제어
+            $("#selectAll").change(function () {
+                const isChecked = $(this).is(":checked"); // 전체 선택 체크박스의 상태
+                $(".item-checkbox").prop("checked", isChecked); // 모든 개별 체크박스의 상태를 변경
+            });
+
+            // 개별 체크박스 변경 시 전체 선택 체크박스 상태 업데이트
+            $(".item-checkbox").change(function () {
+                const totalCheckboxes = $(".item-checkbox").length; // 전체 체크박스 개수
+                const checkedCheckboxes = $(".item-checkbox:checked").length; // 체크된 체크박스 개수
+
+                // 모든 항목이 체크되었는지 확인
+                $("#selectAll").prop("checked", totalCheckboxes === checkedCheckboxes);
+            });
+        })
+
+        // 카테고리 버튼 동작
+        $(function () {
+            $("#category").click(function () {
+                const category = $(this).find(".category");
+                const closeIcon = $(this).find(".close-icon");
+
+                if (category.hasClass("open")) {
+                    // 햄버거 버튼으로 복귀
+                    category.removeClass("open");
+                    closeIcon.addClass("d-none");
+                    category.removeClass("d-none");
+                    $(this).css("background-color", "white");
+                    $("#categoryView").hide(); // 카테고리 전체보기 숨기기
+                } else {
+                    // X 버튼으로 전환
+                    category.addClass("open");
+                    closeIcon.removeClass("d-none");
+                    category.addClass("d-none");
+                    $(this).css("background-color", "black");
+                    $("#categoryView").show(); // 카테고리 전체보기 보이기
+                }
+            })
+        })
+
+        // 찜 버튼 동작
+        $(function () {
+            $(".heart").click(function () {
+                const checkedItems = $(".item-checkbox:checked").length; // 체크된 박스 개수 확인
+
+                if (checkedItems > 0) {
+                    // 체크된 상품이 1개 이상일 경우
+                    alert("찜 설정 되었어요.");
+                } else {
+                    // 체크된 상품이 없을 경우
+                    alert("선택된 상품이 없습니다.");
+                }
+            })
+        })
+
+        // 장바구니 버튼 동작
+        $(function () {
+            $(".cart").click(function () {
+                const checkedItems = $(".item-checkbox:checked").length; // 체크된 상품 수
+                const alreadyInCart = false; // 이미 장바구니에 담긴 상품 여부 (예제용: 실제로 서버와 통신하여 확인 필요)
+
+                if (checkedItems > 0) {
+                    if (alreadyInCart) {
+                        // 장바구니에 이미 담긴 상품이 있을 경우
+                        if (confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?")) {
+                            // 확인 버튼 클릭 시 장바구니 페이지로 이동
+                            location.href = "/cart";
+                        }
+                    } else {
+                        // 새로운 상품을 장바구니에 추가하는 경우
+                        if (confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+                            // 확인 버튼 클릭 시 장바구니 페이지로 이동
+                            location.href = "/cart";
+                        }
+                    }
+                } else {
+                    // 선택된 상품이 없을 경우
+                    alert("선택된 상품이 없습니다.");
+                }
+            })
+        })
+    </script>
 </head>
 <body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="bg-success">
+    <div class="container w-75">
+        <div class="header-menu mt-4 d-flex align-items-center">
+            <button class="btn btn-light me-3" id="category">
+        <span class="category d-flex flex-column justify-content-center align-items-center">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </span>
+                <span class="close-icon d-none">&times;</span>
+            </button>
+            <!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
+            <!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
+            <!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
+            <a href="#" class="best-list ps-5 pe-5">베스트</a>
+            <a href="#" class="new-list ps-5 pe-5">신상품</a>
+            <a href="#" class="ps-5 pe-5">이벤트</a>
+        </div>
+    </div>
+</div>
+<!-- 카테고리 전체보기 -->
+<div id="categoryView">
+    <h4 class="text-center mb-3">카테고리</h4><br>
+    <!-- 하위 카테고리 리스트 -->
+    <div class="category-list">
+        <div class="category-column">
+            <!--        <div class="category-column" th:each="categoryGroup : ${categoryGroups}">-->
+            <!--            <ul class="list-unstyled">-->
+            <!--                <li th:each="category : ${categoryGroup}">-->
+            <!--                    <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>-->
+            <!--                </li>-->
+            <!--            </ul>-->
+            <ul class="list-unstyled">
+                <li><a href="#" id="categoryItem">소설</a></li>
+                <li><a href="#">시/에세이</a></li>
+                <li><a href="#">인문</a></li>
+                <li><a href="#">가정/육아</a></li>
+                <li><a href="#">요리</a></li>
+                <li><a href="#">건강</a></li>
+                <li><a href="#">취미/스포츠</a></li>
+                <li><a href="#">경제/경영</a></li>
+                <li><a href="#">자기계발</a></li>
+                <li><a href="#">정치/사회</a></li>
+                <li><a href="#">역사/문화</a></li>
+            </ul>
+        </div>
+        <div class="category-column">
+            <ul class="list-unstyled">
+                <li><a href="#">종교</a></li>
+                <li><a href="#">예술/대중문화</a></li>
+                <li><a href="#">중/고등참고서</a></li>
+                <li><a href="#">기술/공학</a></li>
+                <li><a href="#">외국어</a></li>
+                <li><a href="#">과학</a></li>
+                <li><a href="#">취업/수험서</a></li>
+                <li><a href="#">여행</a></li>
+                <li><a href="#">컴퓨터/IT</a></li>
+                <li><a href="#">잡지</a></li>
+                <li><a href="#">청소년</a></li>
+            </ul>
+        </div>
+        <div class="category-column">
+            <ul class="list-unstyled">
+                <li><a href="#">초등참고서</a></li>
+                <li><a href="#">유아(0~7세)</a></li>
+                <li><a href="#">어린이(초등)</a></li>
+                <li><a href="#">만화</a></li>
+                <li><a href="#">대학교재</a></li>
+                <li><a href="#">한국소개도서</a></li>
+                <li><a href="#">교보오리지널</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
+<div class="container w-75 mt-5">
+    <div class="d-flex justify-content-end align-items-center mb-3">
+
+        <!-- 장바구니, 찜 버튼 -->
+        <div class="icon ms-auto d-flex">
+            <img src="/img/user/heart.png" class="heart me-2" width="36" height="36" alt="찜">
+            <img src="/img/user/cart.png" class="cart me-2" width="36" height="36" alt="장바구니">
+        </div>
+
+
+        <!-- 드롭다운 -->
+        <div class="dropdown me-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                최신순
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <li><a class="dropdown-item" href="#">최신순</a></li>
+                <li><a class="dropdown-item" href="#">판매량순</a></li>
+                <li><a class="dropdown-item" href="#">높은가격순</a></li>
+                <li><a class="dropdown-item" href="#">낮은가격순</a></li>
+            </ul>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView" data-bs-toggle="dropdown" aria-expanded="false">
+                20개씩 보기
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownView">
+                <li><a class="dropdown-view" href="#">20개씩 보기</a></li>
+                <li><a class="dropdown-view" href="#">50개씩 보기</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- 전체 선택 체크박스 -->
+    <input type="checkbox" id="selectAll" class="all-checkbox" style="width: 18px; height: 18px;">
+    <label for="selectAll">전체 선택</label>
+    <!--    <div class="best-items">-->
+    <!--        <ul class="list-unstyled">-->
+    <!--            <li th:each="book : ${bestBooks}">-->
+    <!--                <span class="item-lank" style="font-size : 18px;" th:text="${book.rank}"></span>-->
+    <!--                <div class="item-image">-->
+    <!--                    <a href="#" class="show-detail">-->
+    <!--                        <div class="img-box">-->
+    <!--                            <img th:src="@{/img/user/book/{image}(image=${book.image})}" style="width:200px; height:280px;" th:alt="${book.alt}">-->
+    <!--                        </div>-->
+    <!--                    </a>-->
+    <!--                </div>-->
+    <!--                <br>-->
+    <!--                <div class="item-info">-->
+    <!--                    <a href="#" class="show-detail">-->
+    <!--                        <span class="item_name" th:text="${book.name}"></span>-->
+    <!--                    </a><br>-->
+    <!--                    <span class="item_author" th:text="${book.author}"></span>-->
+    <!--                </div>-->
+    <!--            </li>-->
+    <!--        </ul>-->
+    <!--    </div>-->
+    <div class="best-items">
+        <ul class="best-list list-unstyled">
+            <li class="d-flex align-items-start">
+                <input type="checkbox" class="item-checkbox" style="margin-top: 5px;">
+                <div>
+                    <span class="item-lank" style="font-size : 18px;">1</span>
+                    <div class="item-image">
+                        <a href="#" class="show-detail">
+                            <div class="img-box">
+                                <img src="/img/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
+                            </div>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="item-info">
+                        <a href="#" class="show-detail">
+                            <span class="item_name">소년이 온다</span>
+                        </a><br>
+                        <span class="item_author">한강 · 창비</span>
+                    </div>
+                </div>
+            </li>
+            <li class="d-flex align-items-start">
+                <input type="checkbox" class="item-checkbox" style="margin-top: 5px;">
+                <div>
+                    <span class="item-lank" style="font-size : 18px;">2</span>
+                    <div class="item-image">
+                        <a href="#" class="show-detail">
+                            <div class="img-box">
+                                <img src="/img/user/book/bestItem2.png" style="width:200px; height:280px;" alt="bestItem2">
+                            </div>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="item-info">
+                        <a href="#" class="show-detail">
+                            <span class="item_name">채식주의자</span>
+                        </a><br>
+                        <span class="item_author">한강 · 문학동네</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>
