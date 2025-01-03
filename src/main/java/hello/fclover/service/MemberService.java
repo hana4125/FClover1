@@ -21,6 +21,8 @@ public interface MemberService {
 
     int addDeliveryAddress(AddressBook addressBook);
 
+    void setDefaultAddress(int addressId);
+
     List<AddressBook> getDeliveryAddress(int memNum);
 
     Member isMemberExists(String memberId, String password);
@@ -28,4 +30,6 @@ public interface MemberService {
     String getEncryptedPassword(String memberId);
 
     void removeAccount(String memberId);
+
+    AddressBook getDefaultAddress(int memNum);
 }

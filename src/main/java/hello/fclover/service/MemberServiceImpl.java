@@ -6,6 +6,7 @@ import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -62,8 +63,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
+    public void setDefaultAddress(int addressId) {
+        dao.updateDefaultAddress(addressId);
+    }
+
+    @Override
     public List<AddressBook> getDeliveryAddress(int memNum) {
-        return dao.selectDeliveryAddress(memNum);
+        return dao.selectAddressBook(memNum);
     }
 
     @Override
@@ -79,5 +86,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void removeAccount(String memberId) {
         dao.deleteMember(memberId);
+    }
+
+    @Override
+    public AddressBook getDefaultAddress(int memNum) {
+        return dao.selectDefaultAddress(memNum);
     }
 }

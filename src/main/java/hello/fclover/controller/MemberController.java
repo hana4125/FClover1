@@ -16,6 +16,7 @@ import hello.fclover.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,17 +86,29 @@ public class MemberController {
         String memberId = principal.getName();
         Member member = memberService.getMember(memberId);
         int memNum = member.getMemNum();
+
+        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
         List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
-        model.addAttribute("member", member);
+
+        model.addAttribute("defaultAddress", defaultAddress);
         model.addAttribute("addressBookList", addressBookList);
 
         return "user/mypage/userMyPageAddressBook";
     }
 
     @PostMapping("/addAddressBook")
-    public String addDeliveryAddress(@ModelAttribute AddressBook addressBook) {
-        log.info(addressBook.toString());
+    public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
+        String memberId = principal.getName();
+        int memNum = memberService.getMemNum(memberId);
+        addressBook.setMemNum(memNum);
         memberService.addDeliveryAddress(addressBook);
+        return "redirect:/member/myPage/addressBook";
+    }
+
+    @Transactional
+    @PostMapping("/defaultAddress")
+    public String defaultAddress(@RequestParam int addressNum) {
+        memberService.setDefaultAddress(addressNum);
         return "redirect:/member/myPage/addressBook";
     }
 

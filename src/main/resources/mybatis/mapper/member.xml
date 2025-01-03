@@ -36,7 +36,19 @@
         VALUES (#{memNum}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
     </insert>
 
-    <select id="selectDeliveryAddress">
+    <select id="selectAddressBook">
         SELECT * FROM address_book WHERE mem_num = #{memNum}
+    </select>
+
+    <update id="updateDefaultAddress">
+        UPDATE address_book
+        SET is_default = CASE
+                             WHEN address_num = #{addressNum} THEN 1
+                             ELSE 0
+            END
+    </update>
+
+    <select id="selectDefaultAddress">
+        SELECT * FROM address_book WHERE mem_num = #{mem_num} AND is_default = 1
     </select>
 </mapper>
