@@ -1,10 +1,13 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +49,30 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int updateMember(Member member) {
         return dao.memberUpdate(member);
+    }
+
+    @Override
+    public int addDeliveryAddress(Delivery delivery) {
+        return dao.insertDeliveryAddress(delivery);
+    }
+
+    @Override
+    public List<Delivery> getDeliveryAddress(String member_id) {
+        return dao.selectDeliveryAddress(member_id);
+    }
+
+    @Override
+    public Member isMemberExists(String member_id, String password) {
+        return dao.selectMember(member_id, password);
+    }
+
+    @Override
+    public String getEncryptedPassword(String member_id) {
+        return dao.selectPassword(member_id);
+    }
+
+    @Override
+    public void removeAccount(String member_id) {
+        dao.deleteMember(member_id);
     }
 }

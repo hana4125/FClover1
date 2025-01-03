@@ -21,7 +21,19 @@ public class SellerController {
         this.sellerService = sellerService;
     }
 
+    @GetMapping("/main")
+    public String signup() {
+        return "seller/sellerMypage";
+    }
 
+    @GetMapping("/sellerSignup")
+    public String sellerSignup() {
+        return "seller/sellerSignup";
+    }
 
+    @GetMapping("/sellerLogin")
+    public String sellerLogin() {
+        return "seller/sellerLogin";
+    }
 
 }
