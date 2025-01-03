@@ -170,6 +170,21 @@ public class MemberController {
         return "/user/userCart";
     }
 
+    @GetMapping("/category")
+    public String category() {
+        return "/user/userCategory";
+    }
+
+    @GetMapping("/sellerSignup")
+    public String sellerSignup() {
+        return "seller/sellerSignup";
+    }
+
+    @GetMapping("/sellerLogin")
+    public String sellerLogin() {
+        return "seller/sellerLogin";
+    }
+
     @PostMapping("/memberUpdate")
     public String memberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());

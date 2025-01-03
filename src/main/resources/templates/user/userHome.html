@@ -1,237 +1,307 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>home</title>
-  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
-  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/jquery-3.7.1.js"></script>
-  <link rel="stylesheet" href="/css/user/home.css">
-  <link rel="stylesheet" href="/css/user/searchBox.css">
-  <script th:inline="javascript">
-      $(function () {
-        // 카테고리 버튼 동작
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="/css/user/home.css">
+    <link rel="stylesheet" href="/css/user/searchBox.css">
+    <script th:inline="javascript">
         $(function () {
-          $("#category").click(function () {
-            const category = $(this).find(".category");
-            const closeIcon = $(this).find(".close-icon");
+            $("#logo").click(function () {
+                location.href = "/";
+            })
 
-            if (category.hasClass("open")) {
-              // 햄버거 버튼으로 복귀
-              category.removeClass("open");
-              closeIcon.addClass("d-none");
-              category.removeClass("d-none");
-              $(this).css("background-color", "white");
-              $("#categoryView").hide(); // 카테고리 전체보기 숨기기
-            } else {
-              // X 버튼으로 전환
-              category.addClass("open");
-              closeIcon.removeClass("d-none");
-              category.addClass("d-none");
-              $(this).css("background-color", "black");
-              $("#categoryView").show(); // 카테고리 전체보기 보이기
-            }
-          })
+            $("#cart").click(function () {
+                location.href = "/cart";
+            })
+
+            $("#myPage").click(function () {
+                location.href = "/myPage";
+            })
+
+            $("#categoryItem").click(function () {
+                location.href = "/category";
+            })
+
+            // 카테고리 버튼 동작
+            $(function () {
+                $("#category").click(function () {
+                    const category = $(this).find(".category");
+                    const closeIcon = $(this).find(".close-icon");
+
+                    if (category.hasClass("open")) {
+                        // 햄버거 버튼으로 복귀
+                        category.removeClass("open");
+                        closeIcon.addClass("d-none");
+                        category.removeClass("d-none");
+                        $(this).css("background-color", "white");
+                        $("#categoryView").hide(); // 카테고리 전체보기 숨기기
+                    } else {
+                        // X 버튼으로 전환
+                        category.addClass("open");
+                        closeIcon.removeClass("d-none");
+                        category.addClass("d-none");
+                        $(this).css("background-color", "black");
+                        $("#categoryView").show(); // 카테고리 전체보기 보이기
+                    }
+                })
+            })
+
+            // 베스트 및 스테디 클릭 이벤트 처리
+            $("#best").click(function () {
+                $(this).addClass("active").siblings(".steady-title").removeClass("active");
+                // 베스트 데이터 표시
+                $(".best-items").show();
+                $(".steady-items").hide();
+            })
+
+            $("#steady").click(function () {
+                $(this).addClass("active").siblings(".best-title").removeClass("active");
+                // 스테디 데이터 표시
+                $(".steady-items").show();
+                $(".best-items").hide();
+            })
         })
-
-          // 베스트 및 스테디 클릭 이벤트 처리
-          $("#best").click(function () {
-            $(this).addClass("active").siblings(".steady-title").removeClass("active");
-            // 베스트 데이터 표시
-            $(".best-items").show();
-            $(".steady-items").hide();
-          })
-
-          $("#steady").click(function () {
-            $(this).addClass("active").siblings(".best-title").removeClass("active");
-            // 스테디 데이터 표시
-            $(".steady-items").show();
-            $(".best-items").hide();
-          })
-      })
-  </script>
+    </script>
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success">
-  <div class="container w-75">
-    <div class="header-menu mt-4 d-flex align-items-center">
-      <button class="btn btn-light me-3" id="category">
+    <div class="container w-75">
+        <div class="header-menu mt-4 d-flex align-items-center">
+            <button class="btn btn-light me-3" id="category">
         <span class="category d-flex flex-column justify-content-center align-items-center">
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
         </span>
-        <span class="close-icon d-none">&times;</span>
-      </button>
-      <a href="#" class="ps-5 pe-5">국내도서</a>
-      <a href="#" class="ps-5 pe-5">서양도서</a>
-      <a href="#" class="ps-5 pe-5">일본도서</a>
-      <a href="#" class="ps-5 pe-5">베스트</a>
-      <a href="#" class="ps-5 pe-5">신상품</a>
-      <a href="#" class="ps-5 pe-5">이벤트</a>
+                <span class="close-icon d-none">&times;</span>
+            </button>
+<!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
+<!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
+<!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
+            <a href="#" class="ps-5 pe-5">베스트</a>
+            <a href="#" class="ps-5 pe-5">신상품</a>
+            <a href="#" class="ps-5 pe-5">이벤트</a>
+        </div>
     </div>
-  </div>
 </div>
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
-  <h4 class="text-center mb-3">카테고리</h4><br>
-  <!-- 하위 카테고리 리스트 -->
-  <div class="category-list">
-    <div class="category-column">
-      <ul class="list-unstyled">
-        <li><a href="#">소설</a></li>
-        <li><a href="#">시/에세이</a></li>
-        <li><a href="#">인문</a></li>
-        <li><a href="#">가정/육아</a></li>
-        <li><a href="#">요리</a></li>
-        <li><a href="#">건강</a></li>
-        <li><a href="#">취미/스포츠</a></li>
-        <li><a href="#">경제/경영</a></li>
-        <li><a href="#">자기계발</a></li>
-        <li><a href="#">정치/사회</a></li>
-        <li><a href="#">역사/문화</a></li>
-      </ul>
+    <h4 class="text-center mb-3">카테고리</h4><br>
+    <!-- 하위 카테고리 리스트 -->
+    <div class="category-list">
+        <div class="category-column">
+<!--        <div class="category-column" th:each="categoryGroup : ${categoryGroups}">-->
+<!--            <ul class="list-unstyled">-->
+<!--                <li th:each="category : ${categoryGroup}">-->
+<!--                    <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>-->
+<!--                </li>-->
+<!--            </ul>-->
+            <ul class="list-unstyled">
+                <li><a href="#" id="categoryItem">소설</a></li>
+                <li><a href="#">시/에세이</a></li>
+                <li><a href="#">인문</a></li>
+                <li><a href="#">가정/육아</a></li>
+                <li><a href="#">요리</a></li>
+                <li><a href="#">건강</a></li>
+                <li><a href="#">취미/스포츠</a></li>
+                <li><a href="#">경제/경영</a></li>
+                <li><a href="#">자기계발</a></li>
+                <li><a href="#">정치/사회</a></li>
+                <li><a href="#">역사/문화</a></li>
+            </ul>
+        </div>
+        <div class="category-column">
+            <ul class="list-unstyled">
+                <li><a href="#">종교</a></li>
+                <li><a href="#">예술/대중문화</a></li>
+                <li><a href="#">중/고등참고서</a></li>
+                <li><a href="#">기술/공학</a></li>
+                <li><a href="#">외국어</a></li>
+                <li><a href="#">과학</a></li>
+                <li><a href="#">취업/수험서</a></li>
+                <li><a href="#">여행</a></li>
+                <li><a href="#">컴퓨터/IT</a></li>
+                <li><a href="#">잡지</a></li>
+                <li><a href="#">청소년</a></li>
+            </ul>
+        </div>
+        <div class="category-column">
+            <ul class="list-unstyled">
+                <li><a href="#">초등참고서</a></li>
+                <li><a href="#">유아(0~7세)</a></li>
+                <li><a href="#">어린이(초등)</a></li>
+                <li><a href="#">만화</a></li>
+                <li><a href="#">대학교재</a></li>
+                <li><a href="#">한국소개도서</a></li>
+                <li><a href="#">교보오리지널</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="category-column">
-      <ul class="list-unstyled">
-        <li><a href="#">종교</a></li>
-        <li><a href="#">예술/대중문화</a></li>
-        <li><a href="#">중/고등참고서</a></li>
-        <li><a href="#">기술/공학</a></li>
-        <li><a href="#">외국어</a></li>
-        <li><a href="#">과학</a></li>
-        <li><a href="#">취업/수험서</a></li>
-        <li><a href="#">여행</a></li>
-        <li><a href="#">컴퓨터/IT</a></li>
-        <li><a href="#">잡지</a></li>
-        <li><a href="#">청소년</a></li>
-      </ul>
-    </div>
-    <div class="category-column">
-      <ul class="list-unstyled">
-        <li><a href="#">초등참고서</a></li>
-        <li><a href="#">유아(0~7세)</a></li>
-        <li><a href="#">어린이(초등)</a></li>
-        <li><a href="#">만화</a></li>
-        <li><a href="#">대학교재</a></li>
-        <li><a href="#">한국소개도서</a></li>
-        <li><a href="#">교보오리지널</a></li>
-      </ul>
-    </div>
-  </div>
 </div>
 
 <div class="container w-75 d-flex">
-  <div class="banner mt-3 m-auto">
-    <div id="carouselExample" class="carousel slide carousel-height" style="width: 890px; height: 380px">
-      <div class="carousel-inner rounded-4">
-        <div class="carousel-item active" id="item1">
-          <img src="/img/user/carousel/page1.jpg" class="d-block w-100" alt="item1">
+    <div class="banner mt-3 m-auto">
+        <div id="carouselExample" class="carousel slide carousel-height" style="width: 890px; height: 380px">
+            <div class="carousel-inner rounded-4">
+                <div class="carousel-item active" id="item1">
+                    <img src="/img/user/carousel/page1.jpg" class="d-block w-100" alt="item1">
+                </div>
+                <div class="carousel-item" id="item2">
+                    <img src="/img/user/carousel/page2.jpg" class="d-block w-100" alt="item2">
+                </div>
+                <div class="carousel-item" id="item3">
+                    <img src="/img/user/carousel/page3.jpg" class="d-block w-100" alt="item3">
+                </div>
+                <div class="carousel-item" id="item4">
+                    <img src="/img/user/carousel/page4.jpg" class="d-block w-100" alt="item4">
+                </div>
+                <div class="carousel-item" id="item5">
+                    <img src="/img/user/carousel/page5.jpg" class="d-block w-100" alt="item5">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-        <div class="carousel-item" id="item2">
-          <img src="/img/user/carousel/page2.jpg" class="d-block w-100" alt="item2">
-        </div>
-        <div class="carousel-item" id="item3">
-          <img src="/img/user/carousel/page3.jpg" class="d-block w-100" alt="item3">
-        </div>
-        <div class="carousel-item" id="item4">
-          <img src="/img/user/carousel/page4.jpg" class="d-block w-100" alt="item4">
-        </div>
-        <div class="carousel-item" id="item5">
-          <img src="/img/user/carousel/page5.jpg" class="d-block w-100" alt="item5">
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
     </div>
-  </div>
 </div>
 <!-- 베스트 스테디 샐러 -->
 <div class="container w-75 mt-5">
-  <div class="d-flex align-items-center justify-content-start">
-    <h3 class="mb-4 me-3 best-title active" id="best">베스트</h3>
-    <h3 class="mb-4 mx-3" style="color: gray; font-size:15px">|</h3>
-    <h3 class="mb-4 ms-3 steady-title" id="steady">스테디</h3>
-  </div>
-  <div class="best-items">
-    <ul class="best-list list-unstyled">
-      <li>
-        <span class="item-lank" style="font-size : 18px;">1</span>
-          <div class="item-image">
-            <a href="#" class="show-detail">
-              <div class="img-box">
-                <img src="/img/user/book/item1.png" style="width:200px" alt="item1">
-              </div>
-            </a>
-          </div><br>
-          <div class="item-info">
-            <a href="#" class="show-detail">
-              <span class="item_name">소년이 온다</span>
-            </a><br>
-            <span class="item_author">한강 · 창비</span>
-          </div>
-      </li>
-      <li>
-        <span class="item-lank" style="font-size : 18px;">2</span>
-          <div class="item-image">
-            <a href="#" class="show-detail">
-              <div class="img-box">
-                <img src="/img/user/book/bestItem2.png" style="width:200px" alt="bestItem2">
-              </div>
-            </a>
-          </div><br>
-          <div class="item-info">
-            <a href="#" class="show-detail">
-              <span class="item_name">채식주의자</span>
-            </a><br>
-            <span class="item_author">한강 · 문학동네</span>
-          </div>
-      </li>
-    </ul>
-  </div>
-  <div class="steady-items" style="display: none">
-    <ul class="steady-list list-unstyled">
-      <li>
-        <span class="item-lank" style="font-size : 18px;">1</span>
-        <div class="item-image">
-          <a href="#" class="show-detail">
-            <div class="img-box">
-              <img src="/img/user/book/item1.png" style="width:200px" alt="item1">
-            </div>
-          </a>
-        </div><br>
-        <div class="item-info">
-          <a href="#" class="show-detail">
-            <span class="item_name">소년이 온다</span>
-          </a><br>
-          <span class="item_author">한강 · 창비</span>
-        </div>
-      </li>
-      <li>
-        <span class="item-lank" style="font-size : 18px;">2</span>
-        <div class="item-image">
-          <a href="#" class="show-detail">
-            <div class="img-box">
-              <img src="/img/user/book/steadyItem2.png" style="width:200px" alt="steadyItem2">
-            </div>
-          </a>
-        </div><br>
-        <div class="item-info">
-          <a href="#" class="show-detail">
-            <span class="item_name">작별하지 않는다</span>
-          </a><br>
-          <span class="item_author">한강 · 문학동네</span>
-        </div>
-      </li>
-    </ul>
-  </div>
+    <div class="d-flex align-items-center justify-content-start">
+        <h3 class="mb-4 me-3 best-title active" id="best">베스트</h3>
+        <h3 class="mb-4 mx-3" style="color: gray; font-size:15px">|</h3>
+        <h3 class="mb-4 ms-3 steady-title" id="steady">스테디</h3>
+        <a href="#" class="show-plus">더보기 +</a>
+    </div>
+<!--    <div class="best-items">-->
+<!--        <ul class="list-unstyled">-->
+<!--            <li th:each="book : ${bestBooks}">-->
+<!--                <span class="item-lank" style="font-size : 18px;" th:text="${book.rank}"></span>-->
+<!--                <div class="item-image">-->
+<!--                    <a href="#" class="show-detail">-->
+<!--                        <div class="img-box">-->
+<!--                            <img th:src="@{/img/user/book/{image}(image=${book.image})}" style="width:200px; height:280px;" th:alt="${book.alt}">-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <br>-->
+<!--                <div class="item-info">-->
+<!--                    <a href="#" class="show-detail">-->
+<!--                        <span class="item_name" th:text="${book.name}"></span>-->
+<!--                    </a><br>-->
+<!--                    <span class="item_author" th:text="${book.author}"></span>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div class="steady-items" style="display: none">-->
+<!--        <ul class="list-unstyled">-->
+<!--            <li th:each="book : ${steadyBooks}">-->
+<!--                <span class="item-lank" style="font-size : 18px;" th:text="${book.rank}"></span>-->
+<!--                <div class="item-image">-->
+<!--                    <a href="#" class="show-detail">-->
+<!--                        <div class="img-box">-->
+<!--                            <img th:src="@{/img/user/book/{image}(image=${book.image})}" style="width:200px; height:280px;" th:alt="${book.alt}">-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <br>-->
+<!--                <div class="item-info">-->
+<!--                    <a href="#" class="show-detail">-->
+<!--                        <span class="item_name" th:text="${book.name}"></span>-->
+<!--                    </a><br>-->
+<!--                    <span class="item_author" th:text="${book.author}"></span>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+    <div class="best-items">
+        <ul class="best-list list-unstyled">
+            <li>
+                <span class="item-lank" style="font-size : 18px;">1</span>
+                <div class="item-image">
+                    <a href="#" class="show-detail">
+                        <div class="img-box">
+                            <img src="/img/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
+                        </div>
+                    </a>
+                </div>
+                <br>
+                <div class="item-info">
+                    <a href="#" class="show-detail">
+                        <span class="item_name">소년이 온다</span>
+                    </a><br>
+                    <span class="item_author">한강 · 창비</span>
+                </div>
+            </li>
+            <li>
+                <span class="item-lank" style="font-size : 18px;">2</span>
+                <div class="item-image">
+                    <a href="#" class="show-detail">
+                        <div class="img-box">
+                            <img src="/img/user/book/bestItem2.png" style="width:200px; height:280px;" alt="bestItem2">
+                        </div>
+                    </a>
+                </div>
+                <br>
+                <div class="item-info">
+                    <a href="#" class="show-detail">
+                        <span class="item_name">채식주의자</span>
+                    </a><br>
+                    <span class="item_author">한강 · 문학동네</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="steady-items" style="display: none">
+        <ul class="steady-list list-unstyled">
+            <li>
+                <span class="item-lank" style="font-size : 18px;">1</span>
+                <div class="item-image">
+                    <a href="#" class="show-detail">
+                        <div class="img-box">
+                            <img src="/img/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
+                        </div>
+                    </a>
+                </div>
+                <br>
+                <div class="item-info">
+                    <a href="#" class="show-detail">
+                        <span class="item_name">소년이 온다</span>
+                    </a><br>
+                    <span class="item_author">한강 · 창비</span>
+                </div>
+            </li>
+            <li>
+                <span class="item-lank" style="font-size : 18px;">2</span>
+                <div class="item-image">
+                    <a href="#" class="show-detail">
+                        <div class="img-box">
+                            <img src="/img/user/book/steadyItem2.png" style="width:200px; height:280px;"
+                                 alt="steadyItem2">
+                        </div>
+                    </a>
+                </div>
+                <br>
+                <div class="item-info">
+                    <a href="#" class="show-detail">
+                        <span class="item_name">작별하지 않는다</span>
+                    </a><br>
+                    <span class="item_author">한강 · 문학동네</span>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>
