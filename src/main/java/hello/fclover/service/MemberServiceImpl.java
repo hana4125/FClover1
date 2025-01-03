@@ -1,6 +1,6 @@
 package hello.fclover.service;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -42,37 +42,42 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public int getMemNum(String memberId) {
+        return dao.selectMemNum(memberId);
+    }
+
+    @Override
     public Member getMember(String id) {
         return dao.isId(id);
     }
 
     @Override
     public int updateMember(Member member) {
-        return dao.memberUpdate(member);
+        return dao.updateMember(member);
     }
 
     @Override
-    public int addDeliveryAddress(Delivery delivery) {
-        return dao.insertDeliveryAddress(delivery);
+    public int addDeliveryAddress(AddressBook addressBook) {
+        return dao.insertAddressBook(addressBook);
     }
 
     @Override
-    public List<Delivery> getDeliveryAddress(String member_id) {
-        return dao.selectDeliveryAddress(member_id);
+    public List<AddressBook> getDeliveryAddress(int memNum) {
+        return dao.selectDeliveryAddress(memNum);
     }
 
     @Override
-    public Member isMemberExists(String member_id, String password) {
-        return dao.selectMember(member_id, password);
+    public Member isMemberExists(String memberId, String password) {
+        return dao.selectMember(memberId, password);
     }
 
     @Override
-    public String getEncryptedPassword(String member_id) {
-        return dao.selectPassword(member_id);
+    public String getEncryptedPassword(String memberId) {
+        return dao.selectPassword(memberId);
     }
 
     @Override
-    public void removeAccount(String member_id) {
-        dao.deleteMember(member_id);
+    public void removeAccount(String memberId) {
+        dao.deleteMember(memberId);
     }
 }

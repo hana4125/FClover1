@@ -1,6 +1,6 @@
 package hello.fclover.mybatis.mapper;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,15 +13,17 @@ public interface MemberMapper {
 
     Member isId(String id);
 
-    int memberUpdate(Member member);
+    int updateMember(Member member);
 
-    int insertDeliveryAddress(Delivery delivery);
+    int insertAddressBook(AddressBook addressBook);
 
-    List<Delivery> selectDeliveryAddress(String member_id);
+    List<AddressBook> selectDeliveryAddress(int memNum);
 
-    Member selectMember(String member_id, String password);
+    Member selectMember(String memberId, String password);
 
-    String selectPassword(String member_id);
+    String selectPassword(String memberId);
 
-    void deleteMember(String member_id);
+    void deleteMember(String memberId);
+
+    int selectMemNum(String memberId);
 }

@@ -56,7 +56,7 @@
           <div class="mb-4">
             <h5 class="fw-bold">회원정보</h5>
             <ul class="list-unstyled">
-              <li><a href="/member/myPage/deliveryAddressBook">배송주소록</a></li>
+              <li><a href="/member/myPage/addressBook">배송주소록</a></li>
               <li><a href="/member/myPage/info-check">회원정보관리</a></li>
             </ul>
           </div>
@@ -70,7 +70,7 @@
         <form th:action="@{/member/memberUpdate}" method="post" class="w-75 ms-5">
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">아이디</span>
-            <input type="text" name="member_id" readonly class="form-control mb-3 bg-light" th:value="${member.member_id}">
+            <input type="text" name="member_id" readonly class="form-control mb-3 bg-light" th:value="${member.memberId}">
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">비밀번호</span>

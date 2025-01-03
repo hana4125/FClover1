@@ -5,17 +5,15 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class Member {
+public class AddressBook {
 
+    private int addressNum;
     private int memNum;
-    private String memberId;
-    private String password;
-    private String name;
-    private String email;
+    private String addressName;
+    private String recipientName;
     private String phoneNumber;
-    private String auth;
-    private String profilePicture;
+    private String address;
+    private boolean isDefault;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

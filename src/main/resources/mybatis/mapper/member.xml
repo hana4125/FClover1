@@ -4,35 +4,39 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.MemberMapper">
     <insert id="insert">
-        INSERT INTO member (member_id, password, name, email, phone, auth) VALUES (#{member_id}, #{password}, #{name}, #{email}, #{phone}, #{auth});
+        INSERT INTO member (member_id, password, name, email, phone_number, auth) VALUES (#{memberId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{auth});
     </insert>
 
     <select id="isId">
-        SELECT * FROM member WHERE member_id = #{id}
+        SELECT * FROM member WHERE member_id = #{memberId}
     </select>
 
-    <update id="memberUpdate">
-        UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone} WHERE member_id = #{member_id}
+    <update id="updateMember">
+        UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone_number = #{phoneNumber} WHERE member_id = #{memberId}
     </update>
 
-    <insert id="insertDeliveryAddress">
-        INSERT INTO delivery (member_id, shipping_address_name, receiver, phone, address)
-        VALUES (#{member_id}, #{shipping_address_name},#{receiver}, #{phone}, #{address})
-    </insert>
-
-    <select id="selectDeliveryAddress">
-        SELECT * FROM delivery WHERE member_id = #{member_id}
+    <select id="selectMemNum">
+        SELECT mem_num FROM member WHERE member_id = #{memberId}
     </select>
 
     <select id="selectMember">
-        SELECT * FROM member WHERE member_id = #{member_id} AND password = #{password}
+        SELECT * FROM member WHERE member_id = #{memberId} AND password = #{password}
     </select>
 
     <select id="selectPassword">
-        SELECT password FROM member WHERE member_id = #{member_id}
+        SELECT password FROM member WHERE member_id = #{memberId}
     </select>
 
     <delete id="deleteMember">
-        DELETE FROM member WHERE member_id = #{member_id}
+        DELETE FROM member WHERE member_id = #{memberId}
     </delete>
+
+    <insert id="insertAddressBook">
+        INSERT INTO address_book (mem_num, address_name, recipient_name, phone_number, address)
+        VALUES (#{memNum}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
+    </insert>
+
+    <select id="selectDeliveryAddress">
+        SELECT * FROM address_book WHERE mem_num = #{memNum}
+    </select>
 </mapper>

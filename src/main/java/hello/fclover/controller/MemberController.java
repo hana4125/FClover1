@@ -1,6 +1,6 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -42,6 +40,8 @@ public class MemberController {
 
     @PostMapping("/signupProcess")
     public String signupProcess(@ModelAttribute Member member) {
+
+        log.info("member: {}", member.toString());
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
@@ -80,21 +80,23 @@ public class MemberController {
         return "/user/mypage/userMyPageMain";
     }
 
-    @GetMapping("/myPage/deliveryAddressBook")
+    @GetMapping("/myPage/addressBook")
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
-        String member_id = principal.getName();
-        Member member = memberService.getMember(member_id);
-        memberService.getDeliveryAddress(member_id);
-        List<Delivery> deliveryAddressList = memberService.getDeliveryAddress(member_id);
+        String memberId = principal.getName();
+        Member member = memberService.getMember(memberId);
+        int memNum = member.getMemNum();
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
         model.addAttribute("member", member);
-        model.addAttribute("deliveryAddressList", deliveryAddressList);
-        return "/user/mypage/userMyPageDeliveryAddressBook";
+        model.addAttribute("addressBookList", addressBookList);
+
+        return "user/mypage/userMyPageAddressBook";
     }
 
-    @PostMapping("/addDeliveryAddress")
-    public String addDeliveryAddress(@ModelAttribute Delivery delivery) {
-        memberService.addDeliveryAddress(delivery);
-        return "redirect:/member/myPage/deliveryAddressBook";
+    @PostMapping("/addAddressBook")
+    public String addDeliveryAddress(@ModelAttribute AddressBook addressBook) {
+        log.info(addressBook.toString());
+        memberService.addDeliveryAddress(addressBook);
+        return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/myPage/info-check")
@@ -106,8 +108,8 @@ public class MemberController {
 
     @PostMapping("/myPage/info-check")
     public String passwordCheck(@RequestParam String password, Principal principal, HttpSession session) {
-        String member_id = principal.getName();
-        String encryptedPassword = memberService.getEncryptedPassword(member_id);
+        String memberId = principal.getName();
+        String encryptedPassword = memberService.getEncryptedPassword(memberId);
 
         boolean matches = passwordEncoder.matches(password, encryptedPassword);
 
@@ -121,8 +123,10 @@ public class MemberController {
 
     @GetMapping("/myPage/info")
     public String myPageInfo(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
+        String memberId = principal.getName();
+        log.info("member id = {}", memberId);
+        Member member = memberService.getMember(memberId);
+        log.info(member.toString());
         model.addAttribute("member", member);
 
         return "/user/mypage/userMyPageInfo";
@@ -130,8 +134,8 @@ public class MemberController {
 
     @GetMapping("/myPage/info/modify")
     public String memberUpdateForm(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
+        String memberId = principal.getName();
+        Member member = memberService.getMember(memberId);
         model.addAttribute("member", member);
 
         return "/user/mypage/userMyPageInfoUpdateForm";
@@ -144,8 +148,8 @@ public class MemberController {
 
     @GetMapping("/myPage/info/deleteProgress")
     public String deleteAccount(Principal principal, HttpServletRequest request, HttpServletResponse response) {
-        String member_id = principal.getName();
-        memberService.removeAccount(member_id);
+        String memberId = principal.getName();
+        memberService.removeAccount(memberId);
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/";
     }
