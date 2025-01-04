@@ -32,4 +32,8 @@ public interface MemberService {
     void removeAccount(String memberId);
 
     AddressBook getDefaultAddress(int memNum);
+
+    int checkDefaultAddress(int addressNum);
+
+    int removeAddressBook(int addressNum);
 }

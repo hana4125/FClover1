@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -41,8 +43,6 @@ public class MemberController {
 
     @PostMapping("/signupProcess")
     public String signupProcess(@ModelAttribute Member member) {
-
-        log.info("member: {}", member.toString());
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
@@ -105,6 +105,18 @@ public class MemberController {
         return "redirect:/member/myPage/addressBook";
     }
 
+    @GetMapping("/deleteAddressBook")
+    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNum);
+
+        if (result == 1) {
+            redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
+        } else {
+            memberService.removeAddressBook(addressNum);
+        }
+        return "redirect:/member/myPage/addressBook";
+    }
+
     @Transactional
     @PostMapping("/defaultAddress")
     public String defaultAddress(@RequestParam int addressNum) {
@@ -137,9 +149,7 @@ public class MemberController {
     @GetMapping("/myPage/info")
     public String myPageInfo(Principal principal, Model model) {
         String memberId = principal.getName();
-        log.info("member id = {}", memberId);
         Member member = memberService.getMember(memberId);
-        log.info(member.toString());
         model.addAttribute("member", member);
 
         return "/user/mypage/userMyPageInfo";

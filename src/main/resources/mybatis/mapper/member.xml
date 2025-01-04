@@ -51,4 +51,12 @@
     <select id="selectDefaultAddress">
         SELECT * FROM address_book WHERE mem_num = #{mem_num} AND is_default = 1
     </select>
+
+    <select id="selectIsDefault">
+        SELECT is_default FROM address_book WHERE address_num = #{addressNum}
+    </select>
+
+    <delete id="deleteAddressBook">
+        DELETE FROM address_book WHERE address_num = #{addressNum}
+    </delete>
 </mapper>

@@ -92,4 +92,14 @@ public class MemberServiceImpl implements MemberService {
     public AddressBook getDefaultAddress(int memNum) {
         return dao.selectDefaultAddress(memNum);
     }
+
+    @Override
+    public int checkDefaultAddress(int addressNum) {
+        return dao.selectIsDefault(addressNum);
+    }
+
+    @Override
+    public int removeAddressBook(int addressNum) {
+        return dao.deleteAddressBook(addressNum);
+    }
 }

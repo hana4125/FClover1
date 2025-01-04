@@ -30,4 +30,8 @@ public interface MemberMapper {
     AddressBook selectDefaultAddress(int memNum);
 
     int updateDefaultAddress(int addressId);
+
+    int selectIsDefault(int addressNum);
+
+    int deleteAddressBook(int addressNum);
 }
