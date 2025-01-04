@@ -47,50 +47,7 @@
 <div class="mt-4 border-top">
   <div class="container w-75 pt-5">
     <div class="d-flex">
-      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
-        <div class="bg-success rounded-3 p-5">
-          <table class="ms-3">
-            <tr>
-              <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
-            </tr>
-            <tr>
-              <td>
-                <th:block sec:authorize-expr="isAuthenticated()">
-                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span
-                        class="text-white fw-bold">님</span>
-                </th:block>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="container mt-5">
-          <!-- 쇼핑내역 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">쇼핑내역</h5>
-            <ul class="list-unstyled">
-              <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
-              <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
-            </ul>
-          </div>
-
-          <!-- 라이브러리 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">라이브러리</h5>
-            <ul class="list-unstyled">
-              <li><a href="/member/myPage/wishlist">찜 목록</a></li>
-            </ul>
-          </div>
-
-          <!--회원정보-->
-          <div class="mb-4">
-            <h5 class="fw-bold">회원정보</h5>
-            <ul class="list-unstyled">
-              <li><a href="/member/myPage/addressBook">배송주소록</a></li>
-              <li><a href="/member/myPage/info-check">회원정보관리</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <div th:replace="~{fragment/mypage :: sidebar}"></div>
       <div style="width: 80%; height: 100vh;">
         <div>
           <h5 class="ms-5 fw-bold">배송 주소록</h5>
