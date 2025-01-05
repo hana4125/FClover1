@@ -2,22 +2,25 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 public interface MemberService {
 
     int signup(Member member);
 
-    int isId(String memberId);
-
-    int isId(String memberId, String password);
-
     int getMemNum(String memberId);
 
-    Member getMember(String memberId);
+    Member findMemberById(String memberId);
 
     int updateMember(Member member);
+
+    int updateProfile(Member member);
+
+    int removeProfilePicture(String memberId);
 
     int addDeliveryAddress(AddressBook addressBook);
 
@@ -36,4 +39,6 @@ public interface MemberService {
     int checkDefaultAddress(int addressNum);
 
     int removeAddressBook(int addressNum);
+
+    String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
 }

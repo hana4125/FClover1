@@ -9,11 +9,15 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-    int insert(Member member);
+    int insertMember(Member member);
 
-    Member isId(String id);
+    Member selectMemberById(String id);
 
     int updateMember(Member member);
+
+    int updateProfile(Member member);
+
+    int deleteProfilePicture(String memberId);
 
     int insertAddressBook(AddressBook addressBook);
 
