@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
+//import org.springframework.retry.annotation.Backoff;
+//import org.springframework.retry.annotation.Recover;
+//import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -57,14 +57,12 @@ public class PaymentClient {
     }
 
 
-
-
-    @Retryable(
-            value = RestClientException.class,  // 재시도할 예외 지정
-            maxAttempts = 2,                    // 최초 호출 1회 + 재시도 1회
-            backoff = @Backoff(delay = 1000),    // 1초 대기 후 재시도
-            recover = "handlePaymentCancellationFailure"
-    )
+//    @Retryable(
+//            value = RestClientException.class,  // 재시도할 예외 지정
+//            maxAttempts = 2,                    // 최초 호출 1회 + 재시도 1회
+//            backoff = @Backoff(delay = 1000),    // 1초 대기 후 재시도
+//            recover = "handlePaymentCancellationFailure"
+//    )
 
     public String cancelPayment(String impUid) {
 
