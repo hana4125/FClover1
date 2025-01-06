@@ -30,7 +30,7 @@
             <a href="/member/signup" class="pe-2">회원가입</a>
           </th:block>
           <th:block sec:authorize-expr="isAuthenticated()">
-            <a href="/member/myPage" class="pe-2"><span sec:authentication="name"></span>님</a>
+            <a href="/member/myPage" class="pe-2"><span sec:authentication="name" id="username"></span>님</a>
             <form th:action="@{/member/logout}" method="post">
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
