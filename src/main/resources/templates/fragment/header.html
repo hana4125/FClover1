@@ -6,6 +6,36 @@
             all: unset;
             cursor: pointer;
         }
+
+        .header-profile {
+            cursor: pointer;
+        }
+
+        .icon {
+            position: relative; top: 15px;
+        }
+
+        .icon img {
+            cursor: pointer;
+        }
+
+        .thumb-box-header {
+            width: 36px; /* 프로필 이미지의 원형 크기 */
+            height: 36px; /* 프로필 이미지의 원형 크기 */
+            border-radius: 50%; /* 원형 모양으로 만들기 */
+            border: 1px solid white; /* 테두리 추가 */
+            overflow: hidden; /* 원형 밖으로 이미지가 튀어나가지 않도록 숨김 */
+            display: flex; /* 이미지 중앙 정렬을 위해 flexbox 사용 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+        }
+
+        .thumb-box-header img {
+            width: 100%; /* 이미지의 너비를 박스 크기와 맞춤 */
+            height: 100%; /* 이미지의 높이를 박스 크기와 맞춤 */
+            object-fit: cover; /* 이미지의 가운데 부분만 보이도록 설정 */
+            object-position: center; /* 이미지의 중심을 기준으로 잘림 처리 */
+        }
     </style>
     <script>
         $(function () {
@@ -17,7 +47,7 @@
                 location.href = "/member/cart";
             })
 
-            $("#myPage").click(function () {
+            $(".myPage").click(function () {
                 location.href = "/member/myPage";
             })
         })
@@ -54,9 +84,17 @@
           </button>
         </form>
       </div>
-      <div class="icon ms-auto d-flex">
-        <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
-        <img src="/img/user/myPage.png" id="myPage" class="me-15" width="36" height="36" alt="마이페이지">
+      <div class="ms-5 icon d-flex">
+        <div>
+          <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
+        </div>
+<!--        <img src="/img/user/myPage.png" class="myPage" class="me-15" width="36" height="36" alt="마이페이지">-->
+        <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
+          <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+        </div>
+        <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
+          <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+        </div>
       </div>
     </div>
   </div>

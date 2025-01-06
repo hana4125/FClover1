@@ -26,7 +26,6 @@
           width: 77px; /* 프로필 이미지의 원형 크기 */
           height: 77px; /* 프로필 이미지의 원형 크기 */
           border-radius: 50%; /* 원형 모양으로 만들기 */
-          border: 1px solid white; /* 테두리 추가 */
           overflow: hidden; /* 원형 밖으로 이미지가 튀어나가지 않도록 숨김 */
           display: flex; /* 이미지 중앙 정렬을 위해 flexbox 사용 */
           justify-content: center; /* 가로 중앙 정렬 */
@@ -89,10 +88,10 @@
               <tr>
                 <th class="text-start align-top">프로필 이미지</th>
                 <td class="text-center align-top">
-                  <div class="thumb-box" th:if="${member.profilePicture == null}">
+                  <div class="thumb-box border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
                     <img src="/img/user/profile.png" class="preview" alt="기본 프로필 이미지">
                   </div>
-                  <div class="thumb-box" th:unless="${member.profilePicture == null}">
+                  <div class="thumb-box border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
                     <img th:src="@{|/img/user/upload/${member.profilePicture}|}" class="preview" alt="업로드된 프로필 이미지">
                   </div>
                 </td>
