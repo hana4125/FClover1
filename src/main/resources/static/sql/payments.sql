@@ -1,7 +1,7 @@
 CREATE TABLE `payments` (
                             `id` bigint NOT NULL AUTO_INCREMENT,
                             `partner_id` bigint DEFAULT NULL,
-                            `user_id` bigint NOT NULL,
+                            `user_id` varchar(50) NOT NULL,
                             `order_id` bigint NOT NULL,
                             `payment_amount` decimal(15,2) NOT NULL,
                             `payment_date` datetime NOT NULL,
@@ -19,7 +19,11 @@ CREATE TABLE `payments` (
                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;
 
-
-
 select* from payments;
 
+
+select * from payments where user_id='test1';
+
+commit;
+
+select* from payments;

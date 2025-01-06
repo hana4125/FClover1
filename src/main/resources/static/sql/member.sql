@@ -12,3 +12,4 @@ CREATE TABLE member
     updated_at      DATETIME
 );
 
+commit;

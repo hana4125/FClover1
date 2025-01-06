@@ -1,6 +1,9 @@
 // 구매자 정보
+
+
 const useremail = "as02268@naver.com"
-const username = "as02268"
+const username=document.getElementById("username").innerText;
+// const username = "as02268"
 
 
 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -52,7 +55,7 @@ function paymentProcess() {
                 if (rsp.success) { //결제 성공시
                     // 필요한 데이터를 추가
                     rsp.partnerId = 12345;  // partnerId 값 설정 (필요시 동적으로 가져올 수 있음)
-                    rsp.userId = 67890;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
+                    rsp.userId = `${username}`;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
                     rsp.orderId = 112233;   // orderId 값 설정 (주문 관련 정보로 설정 가능)
                     rsp.paymentDate = new Date().toISOString().split('T')[0];  // paymentDate를 현재 날짜로 설정 (yyyy-mm-dd 형식)
 
