@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +20,17 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentClient paymentClient;
 
     @Override
-    public Payment save(PaymentReq paymentReq) {
-       Payment payment = dao.save(paymentReq);
+    public List<Payment> searchList(String userId) {
+        List<Payment> payments =  dao.searchList(userId);
 
-        return payment;
+        return payments;
+    }
+
+    @Override
+    public Payment save(PaymentReq paymentReq) {
+       Payment payment1 = dao.save(paymentReq);
+
+        return payment1;
     }
 
     @Override

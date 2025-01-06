@@ -3,16 +3,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.MemberMapper">
-    <insert id="insert">
+    <insert id="insertMember">
         INSERT INTO member (member_id, password, name, email, phone_number, auth) VALUES (#{memberId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{auth});
     </insert>
 
-    <select id="isId">
+    <select id="selectMemberById">
         SELECT * FROM member WHERE member_id = #{memberId}
     </select>
 
     <update id="updateMember">
         UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone_number = #{phoneNumber} WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updateProfile">
+        UPDATE member SET profile_picture = #{profilePicture} WHERE member_id = #{memberId}
+    </update>
+
+    <update id="deleteProfilePicture">
+        UPDATE member SET profile_picture = null WHERE member_id = #{memberId}
     </update>
 
     <select id="selectMemNum">
@@ -36,7 +44,27 @@
         VALUES (#{memNum}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
     </insert>
 
-    <select id="selectDeliveryAddress">
+    <select id="selectAddressBook">
         SELECT * FROM address_book WHERE mem_num = #{memNum}
     </select>
+
+    <update id="updateDefaultAddress">
+        UPDATE address_book
+        SET is_default = CASE
+                             WHEN address_num = #{addressNum} THEN 1
+                             ELSE 0
+            END
+    </update>
+
+    <select id="selectDefaultAddress">
+        SELECT * FROM address_book WHERE mem_num = #{mem_num} AND is_default = 1
+    </select>
+
+    <select id="selectIsDefault">
+        SELECT is_default FROM address_book WHERE address_num = #{addressNum}
+    </select>
+
+    <delete id="deleteAddressBook">
+        DELETE FROM address_book WHERE address_num = #{addressNum}
+    </delete>
 </mapper>

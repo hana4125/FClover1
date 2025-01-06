@@ -8,7 +8,7 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
-    <link rel="stylesheet" href="/css/user/bestItem.css">
+    <link rel="stylesheet" href="/css/user/newItem.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -49,6 +49,22 @@
         })
 
         $(document).ready(function () {
+            // 드롭다운 메뉴 클릭 이벤트
+            $(".dropdown-year").click(function () {
+                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
+                $("#dropdownYear").text(selectedText); // 드롭다운 버튼 텍스트 변경
+            })
+
+            $(".dropdown-month").click(function () {
+                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
+                $("#dropdownMonth").text(selectedText); // 드롭다운 버튼 텍스트 변경
+            })
+
+            $(".dropdown-week").click(function () {
+                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
+                $("#dropdownWeek").text(selectedText); // 드롭다운 버튼 텍스트 변경
+            })
+
             $(".dropdown-view").click(function () {
                 const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
                 $("#dropdownView").text(selectedText); // 드롭다운 버튼 텍스트 변경
@@ -216,14 +232,59 @@
 
 <div class="container w-75 mt-5">
     <div class="d-flex justify-content-end align-items-center mb-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            2025년
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownYear">
+            <li><a class="dropdown-year" href="#">2025년</a></li>
+            <li><a class="dropdown-year" href="#">2024년</a></li>
+            <li><a class="dropdown-year" href="#">2023년</a></li>
+            <li><a class="dropdown-year" href="#">2022년</a></li>
+            <li><a class="dropdown-year" href="#">2021년</a></li>
+            <li><a class="dropdown-year" href="#">2020년</a></li>
+            <li><a class="dropdown-year" href="#">2019년</a></li>
+            <li><a class="dropdown-year" href="#">2018년</a></li>
+            <li><a class="dropdown-year" href="#">2017년</a></li>
+        </ul>
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            1월
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMonth">
+            <li><a class="dropdown-month" href="#">1월</a></li>
+            <li><a class="dropdown-month" href="#">2월</a></li>
+            <li><a class="dropdown-month" href="#">3월</a></li>
+            <li><a class="dropdown-month" href="#">4월</a></li>
+            <li><a class="dropdown-month" href="#">5월</a></li>
+            <li><a class="dropdown-month" href="#">6월</a></li>
+            <li><a class="dropdown-month" href="#">7월</a></li>
+            <li><a class="dropdown-month" href="#">8월</a></li>
+            <li><a class="dropdown-month" href="#">9월</a></li>
+            <li><a class="dropdown-month" href="#">10월</a></li>
+            <li><a class="dropdown-month" href="#">11월</a></li>
+            <li><a class="dropdown-month" href="#">12월</a></li>
+        </ul>
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownWeek" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            1주
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownWeek">
+            <li><a class="dropdown-week" href="#">1주</a></li>
+            <li><a class="dropdown-week" href="#">2주</a></li>
+            <li><a class="dropdown-week" href="#">3주</a></li>
+            <li><a class="dropdown-week" href="#">4주</a></li>
+            <li><a class="dropdown-week" href="#">5주</a></li>
+            <li><a class="dropdown-week" href="#">6주</a></li>
+        </ul>
 
         <!-- 장바구니, 찜 버튼 -->
         <div class="icon ms-auto d-flex">
             <img src="/img/user/heart.png" class="heart me-2" width="36" height="36" alt="찜">
             <img src="/img/user/cart.png" class="cart me-2" width="36" height="36" alt="장바구니">
         </div>
-
-
         <!-- 드롭다운 -->
         <div class="dropdown me-2">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView" data-bs-toggle="dropdown"

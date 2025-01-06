@@ -9,15 +9,19 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-    int insert(Member member);
+    int insertMember(Member member);
 
-    Member isId(String id);
+    Member selectMemberById(String id);
 
     int updateMember(Member member);
 
+    int updateProfile(Member member);
+
+    int deleteProfilePicture(String memberId);
+
     int insertAddressBook(AddressBook addressBook);
 
-    List<AddressBook> selectDeliveryAddress(int memNum);
+    List<AddressBook> selectAddressBook(int memNum);
 
     Member selectMember(String memberId, String password);
 
@@ -26,4 +30,12 @@ public interface MemberMapper {
     void deleteMember(String memberId);
 
     int selectMemNum(String memberId);
+
+    AddressBook selectDefaultAddress(int memNum);
+
+    int updateDefaultAddress(int addressId);
+
+    int selectIsDefault(int addressNum);
+
+    int deleteAddressBook(int addressNum);
 }
