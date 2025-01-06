@@ -40,7 +40,7 @@
   <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="boMain.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/bo/main">
       <div class="sidebar-brand-icon rotate-n-15">
         <i class="fas fa-laugh-wink"></i>
       </div>
@@ -63,7 +63,7 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#"
          aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-fw fa-cog"></i>
         <span>판매자 정보 조회</span>
@@ -73,9 +73,9 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-         aria-expanded="true" aria-controls="collapseUtilities">
+      <a class="nav-link collapsed" href="/bo/SellerSettlement" data-toggle="collapse">
         <i class="fas fa-fw fa-wrench"></i>
+        <!--                    //data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities"-->
         <span>정산관리</span>
       </a>
 
@@ -84,11 +84,22 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
          aria-expanded="true" aria-controls="collapsePages">
         <i class="fas fa-fw fa-folder"></i>
         <span>배송관리</span>
       </a>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">주문/배송상태</h6>
+          <a class="collapse-item" href="#">결제취소</a>
+          <a class="collapse-item" href="/bo/deliveryOrder">결제완료</a>
+          <a class="collapse-item" href="/bo/deliveryReady">상품준비중</a>
+          <a class="collapse-item" href="/bo/deliveryReady">배송준비중</a>
+          <a class="collapse-item" href="/bo/deliveryInTransit">배송중</a>
+          <a class="collapse-item" href="/bo/deliveryDone">배송완료</a>
+        </div>
+      </div>
 
     </li>
 
@@ -185,7 +196,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">여기는 주문완료 조회 페이지입니다</h1>
+          <h1 class="h3 mb-0 text-gray-800">여기는 결제완료 조회 페이지입니다</h1>
           <!--                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i-->
           <!--                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
         </div>
@@ -193,13 +204,24 @@
         <table id="paymentTable" class="display" style="width:100%">
           <thead>
           <tr>
-            <th>NUM</th>
-            <th>MEMBER_ID</th>
-            <th>SHIPPING_ADDRESS_NAME</th>
-            <th>RECEIVER</th>
-            <th>PHONE</th>
-            <th>ADDRESS</th>
-            <th>Actions</th> <!-- 결제 취소 버튼을 위한 열 추가 -->
+            <th>ID</th>
+            <th>PARTNER ID</th>
+            <th>USER ID</th>
+            <th>ORDER ID</th>
+            <th>PAYMENT AMOUNT</th>
+            <th>PAYMENT DATE</th>
+            <th>IMP UID</th>
+            <th>PAYMENT METHOD</th>
+            <th>MERCHANT UID</th>
+            <th>PG TYPE</th>
+            <th>PG TID</th>
+            <th>STATUS</th>
+            <th>CARD NAME</th>
+            <th>CARD NUMBER</th>
+            <th>CREATE AT</th>
+            <th>UPDATE AT</th>
+
+            <th>Actions</th><!-- 결제 취소 버튼을 위한 열 추가 -->
           </tr>
           </thead>
           <tbody>
@@ -219,6 +241,7 @@
               "searching": true,
               "ordering": true,
               "info": true,
+              scrollX : true,
               "language": {
                 "lengthMenu": "_MENU_ 개씩 보기",
                 "search": "검색:",
@@ -233,21 +256,32 @@
                 }
               },
               "ajax": {
-                "url": "/api/payment/list", // 서버의 결제 데이터를 가져오는 API 경로
+                "url": "/bo/delivery/SearchOrder", // 서버의 결제 데이터를 가져오는 API 경로
                 "type": "GET",
                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
               },
               "columns": [
-                { "data": "num" },
-                { "data": "memberId" },
-                { "data": "shippingAddressName" },
-                { "data": "Receiver" },
-                { "data": "phone" },
-                { "data": "address" },
+                { "data": "id" },
+                { "data": "partnerId" },
+                { "data": "userId" },
+                { "data": "orderId" },
+                { "data": "paymentAmount" },
+                { "data": "paymentDate" },
+                { "data": "impUid" },
+                { "data": "paymentMethod" },
+                { "data": "merchantUid" },
+                { "data": "pgType" },
+                { "data": "pgTid" },
+                { "data": "status" },
+                { "data": "cardName" },
+                { "data": "cardNumber" },
+                { "data": "createdAt" },
+                { "data": "updatedAt" },
+
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="cancel-btn" data-imp-uid="${row.impUid}">배송 취소</button>`;
+                    return `<button class="cancel-btn" data-imp-uid="${row.impUid}">결제 취소</button>`;
                   }
                 }
               ]
@@ -321,21 +355,21 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!--<script src="/vendor/jquery/jquery.min.js"></script>-->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+<script src="/js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
+<script src="/vendor/chart.js/Chart.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="js/demo/chart-area-demo.js"></script>
-<script src="js/demo/chart-pie-demo.js"></script>
+<script src="/js/demo/chart-area-demo.js"></script>
+<script src="/js/demo/chart-pie-demo.js"></script>
 
 </body>
 
