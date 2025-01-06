@@ -20,6 +20,13 @@
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <script>
+        $(function () {
+            $("#delivery").click(function () {
+                location.href = "/bo/deliveryDone";
+            })
+        })
+    </script>
 
 </head>
 
@@ -75,8 +82,8 @@
 
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+            <li class="nav-item" id="delivery">
+                <a class="nav-link collapsed" href="/bo/delivery" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>배송관리</span>
@@ -280,10 +287,10 @@
             </footer>
             <!-- End of Footer -->
 
-        </div>
+
         <!-- End of Content Wrapper -->
 
-    </div>
+
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
