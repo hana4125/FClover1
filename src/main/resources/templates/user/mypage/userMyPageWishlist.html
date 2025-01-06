@@ -18,8 +18,17 @@
     <div class="d-flex">
       <div th:replace="~{fragment/mypage :: sidebar}"></div>
       <div style="width: 80%; height: 100vh;">
-        <h5 class="ms-5 fw-bold">찜한 상품</h5>
+        <h4 class="ms-5 fw-bold">찜</h4>
+        <div class="ms-5 mt-4 fw-bold">상품(0)</div>
+        <div class="ms-5 mt-3 bg-body-secondary rounded-3 d-flex align-items-center" style="height: 80px">
+          <div class="fw-bold p-4">리스트에 담아 <span class="text-primary">나만의 리스트</span>를 만들어보세요!</div>
+        </div>
         <hr class="ms-5 mb-5">
+        <div class="ms-5 text-center" style="height: 200px">
+          <img src="/img/user/warning.png" alt="경고" class="mt-5">
+          <div class="mt-2">찜한 상품이 없습니다.</div>
+        </div>
+        <hr class="ms-5">
       </div>
     </div>
   </div>
