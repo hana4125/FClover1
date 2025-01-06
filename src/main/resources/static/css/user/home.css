@@ -60,19 +60,36 @@
 
 /* 베스트 스테디 셀러 */
 
-/* 기본 스타일 */
-
 .best-title,
 .steady-title {
     cursor: pointer;
     color: gray;
 }
 
-/* 선택된 제목 스타일 */
 .best-title.active,
 .steady-title.active {
     color: black;
     font-weight: bold;
+}
+
+.item-info a {
+    font-size: 19px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+.item-info a:hover {
+    color: #007bff;
+}
+
+
+.best-list li,
+.steady-list li {
+    display: inline-block;
+    width: 18%; /* 각 아이템의 너비를 설정 */
+    margin: 0.5%;
+    text-align: center;
 }
 
 /* 카테고리 버튼 스타일 */
@@ -106,3 +123,51 @@
     top: -16px; /* 위로 16px 이동 */
     transition: all 0.3s ease;
 }
+
+/* 카테고리 전체보기 */
+#categoryView {
+    display: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: auto; /* 열 크기에 맞게 자동 조정 */
+    position: absolute;
+    top: 205px;
+    left: 550px;
+    padding: 20px;
+    z-index: 9999;
+}
+
+.category-list {
+    display: flex; /* 열 정렬을 위해 flex 사용 */
+    flex-wrap: wrap; /* 열이 많아지면 자동으로 줄바꿈 */
+    gap: 20px; /* 열 사이 간격 */
+}
+
+.category-column {
+    flex: 1; /* 각 열을 동일한 너비로 설정 */
+    min-width: 150px; /* 최소 열 너비 */
+}
+
+.category-column ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.category-column ul li {
+    margin-bottom: 10px; /* 항목 간격 */
+}
+
+.category-column ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.category-column ul li a:hover {
+    color: #007bff;
+}
+
+
+

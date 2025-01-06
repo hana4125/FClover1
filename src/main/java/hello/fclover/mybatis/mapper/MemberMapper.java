@@ -9,6 +9,8 @@ import java.util.List;
 
 import java.util.List;
 
+import java.util.List;
+
 @Mapper
 public interface MemberMapper {
 
@@ -35,4 +37,14 @@ public interface MemberMapper {
     void setReadCountUpdate(int num);
 
     Member getDetail(int num);
+
+    int insertDeliveryAddress(Delivery delivery);
+
+    List<Delivery> selectDeliveryAddress(String member_id);
+
+    Member selectMember(String member_id, String password);
+
+    String selectPassword(String member_id);
+
+    void deleteMember(String member_id);
 }

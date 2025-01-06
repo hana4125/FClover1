@@ -1,10 +1,8 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
-import hello.fclover.service.CommentService;
 import hello.fclover.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import hello.fclover.service.PaymentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.security.Principal;
 import hello.fclover.domain.PaginationResult;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -293,3 +297,19 @@ public class MemberController {
         return "user/userQNA";
     }
 }
+    @GetMapping("/OrderCancel/{uid}")
+    public ResponseEntity<String> OrderCancel(@PathVariable("uid")String uid) {
+        paymentService.cancelPayment(uid);
+
+        return ResponseEntity.ok("Payment cancel processed successfully.");
+    }
+
+//    @GetMapping("/OrderCancelProcess")
+//    public ResponseEntity<String> OrderCancelProcess() {
+//        paymentService.cancelPayment(uid);
+//
+//        return ResponseEntity.ok("Payment cancel processed successfully.");
+//    }
+
+}
+
