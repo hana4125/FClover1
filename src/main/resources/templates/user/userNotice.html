@@ -22,9 +22,31 @@
       $("#myPage").click(function() {
         location.href="/myPage";
       })
+
+      let selectedValue = /*[[${search_field}]]*/"i"
+      if(selectedValue != "") {
+        $("#viewcount").val(selectedValue);
+      }
+      else {
+        selectedValue = 'i';
+      }
+
+      const $input= $(".input-group input");
+      $input.attr("placeholder",$("select option:selected").text() + "를 입력하세요");
+
+
+      $("button").click(function() {
+        const word = $input.val();
+        if(word == ''){
+          alert("검색어를 입력하세요");
+          $input.focus();
+          return false;
+        }
+      });
     })
   </script>
 </head>
+
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
 
@@ -60,6 +82,7 @@
               </ul>
             </div>
           </div>
+          <!-- cscenter -->
         </div>
       </div>
 
@@ -94,6 +117,18 @@
           <p class="result_count">
             <span class="ct_green">[[${listcount}]]</span>건
           </p>
+
+            <th:block th:if="${listcount > 0}">
+              <div class="rows" style="width: 120px">
+                <select class="form-control" id="viewcount">
+
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="10" selected>10</option>
+                </select>
+              </div>
+
+
           <table class="table">
             <colgroup>
               <col style="width: 75px;">
@@ -129,24 +164,29 @@
             </th:block>
             </tbody>
           </table>
-        </div>
 
         <!--pagination-->
-        <div class="pagination">
+
           <th:block th:replace="~{fragment/paging :: paging('list', '')}"/>
-        </div>
+       </th:block>
 
-
+      <!--admin 글쓰기-->
         <div>
           <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
-              <a th:href="@{/member/notice}">
+              <a th:href="@{/member/notice/write}">
                 <button type="button" class="btn btn-primary" style="height: 44px">글쓰기</button>
               </a>
               </th:block>
         </div>
+          <!--admin 글쓰기-->
       </div>
+        <!-- table wrap -->
     </div>
+      <!-- main -->
+  </div>
+    <!--div container-->
   </div>
 </div>
+<!-- aside -->
 </body>
 </html>

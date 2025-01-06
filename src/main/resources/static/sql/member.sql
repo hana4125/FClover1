@@ -7,7 +7,7 @@ CREATE TABLE member
     password        VARCHAR(100) NOT NULL,
     name            VARCHAR(20)  NOT NULL,
     email           VARCHAR(20)  NOT NULL,
-    phone_number    VARCHAR(20)  NOT NULL,
+    phone    VARCHAR(20)  NOT NULL,
     auth            VARCHAR(20)  NOT NULL,
     profile_picture VARCHAR(255) DEFAULT NULL,
     created_at      DATETIME     DEFAULT CURRENT_TIMESTAMP,
@@ -22,4 +22,11 @@ select * from member;
 drop table member;
 
 SHOW CREATE TABLE comments;
-ALTER TABLE comments DROP FOREIGN KEY comments_ibfk_1;
+delete from member;
+
+update member
+set auth = 'ROLE_ADMIN'
+where auth = 'ROLE_MEMBER';
+
+
+
