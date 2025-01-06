@@ -1,14 +1,15 @@
--- 임시 회원 테이블
-
 CREATE TABLE member
 (
-    num int primary key auto_increment,
-    member_id varchar(20) not null unique,
-    password varchar(60) not null,
-    name varchar(10) not null,
-    email varchar(20) not null,
-    phone varchar(20) not null,
-    auth varchar(20) not null
+    mem_num         INT AUTO_INCREMENT PRIMARY KEY,
+    member_id       VARCHAR(20)  NOT NULL UNIQUE,
+    password        VARCHAR(100) NOT NULL,
+    name            VARCHAR(20)  NOT NULL,
+    email           VARCHAR(20)  NOT NULL,
+    phone_number    VARCHAR(20)  NOT NULL,
+    auth            VARCHAR(20)  NOT NULL,
+    profile_picture VARCHAR(255) DEFAULT NULL,
+    created_at      DATETIME     DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME
 );
 
 commit;

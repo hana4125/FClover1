@@ -7,6 +7,21 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        $(function () {
+            $("#logo").click(function () {
+                location.href = "/";
+            })
+
+            $("#cart").click(function () {
+                location.href = "/member/cart";
+            })
+
+            $("#myPage").click(function () {
+                location.href = "/member/myPage";
+            })
+        })
+    </script>
     <div class="bg-light mb-3">
       <div class="container w-75">
         <div class="top-menu d-flex justify-content-end">
@@ -15,15 +30,15 @@
             <a href="/member/signup" class="pe-2">회원가입</a>
           </th:block>
           <th:block sec:authorize-expr="isAuthenticated()">
-            <a href="/member/myPage" class="pe-2"><span sec:authentication="name" id="username"></span>님</a>
-            <form th:action="@{/logout}" method="post">
+            <a href="/member/myPage" class="pe-2"><span sec:authentication="name"></span>님</a>
+            <form th:action="@{/member/logout}" method="post">
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
           <a href="#" class="pe-2">고객센터</a>
           <th:block sec:authorize-expr="not isAuthenticated()">
-            <a href="/member/sellerLogin" class="pe-2">판매자 로그인</a>
-            <a href="/member/sellerSignup" class="pe-2">판매자 가입</a>
+            <a href="/seller/sellerLogin" class="pe-2">판매자 로그인</a>
+            <a href="/seller/sellerSignup" class="pe-2">판매자 가입</a>
           </th:block>
         </div>
       </div>

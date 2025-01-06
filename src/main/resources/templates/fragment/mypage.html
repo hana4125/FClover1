@@ -1,0 +1,83 @@
+<th:block th:fragment="sidebar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <style>
+      .thumb-box {
+          width: 77px; /* 프로필 이미지의 원형 크기 */
+          height: 77px; /* 프로필 이미지의 원형 크기 */
+          border-radius: 50%; /* 원형 모양으로 만들기 */
+          border: 1px solid black; /* 테두리 추가 */
+          overflow: hidden; /* 원형 밖으로 이미지가 튀어나가지 않도록 숨김 */
+          display: flex; /* 이미지 중앙 정렬을 위해 flexbox 사용 */
+          justify-content: center; /* 가로 중앙 정렬 */
+          align-items: center; /* 세로 중앙 정렬 */
+      }
+
+      .thumb-box img {
+          width: 100%; /* 이미지의 너비를 박스 크기와 맞춤 */
+          height: 100%; /* 이미지의 높이를 박스 크기와 맞춤 */
+          object-fit: cover; /* 이미지의 가운데 부분만 보이도록 설정 */
+          object-position: center; /* 이미지의 중심을 기준으로 잘림 처리 */
+      }
+  </style>
+  <script>
+    $(function() {
+        $(".profile").click(function() {
+            location.href = "/member/myPage/profile";
+        })
+    })
+  </script>
+  <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+    <div class="bg-success rounded-4 p-4">
+      <table class="ms-3">
+        <tr>
+          <td>
+            <div class="thumb-box profile" th:if="${member.profilePicture == null}">
+              <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+            </div>
+            <div class="thumb-box profile" th:unless="${member.profilePicture == null}">
+              <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+            </div>
+            <span class="badge profile text-bg-danger rounded-circle opacity-75" style="position: relative; left: 50px; bottom: 25px; cursor: pointer"><img width="15" height="20" src="/img/user/edit.png"></span>
+          </td>
+        </tr>
+        <tr>
+          <td style="position: relative; bottom: 25px;">
+            <th:block sec:authorize-expr="isAuthenticated()">
+              <span sec:authentication="name" class="fs-4 text-white fw-bold"></span>
+              <span class="text-white fw-bold">님</span>
+            </th:block>
+            <th:block sec:authorize-expr="not isAuthenticated()">
+              <span class="ms-2 fs-4 text-white fw-bold">null님</span>
+            </th:block>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="container mt-5">
+      <!-- 쇼핑내역 -->
+      <div class="mb-4">
+        <h5 class="fw-bold">쇼핑내역</h5>
+        <ul class="list-unstyled">
+          <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
+          <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
+        </ul>
+      </div>
+
+      <!-- 라이브러리 -->
+      <div class="mb-4">
+        <h5 class="fw-bold">라이브러리</h5>
+        <ul class="list-unstyled">
+          <li><a href="/member/myPage/wishlist">찜 목록</a></li>
+        </ul>
+      </div>
+
+      <!--회원정보-->
+      <div class="mb-4">
+        <h5 class="fw-bold">회원정보</h5>
+        <ul class="list-unstyled">
+          <li><a href="/member/myPage/addressBook">배송주소록</a></li>
+          <li><a href="/member/myPage/info-check">회원정보관리</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</th:block>

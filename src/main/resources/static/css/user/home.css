@@ -87,9 +87,21 @@
 .best-list li,
 .steady-list li {
     display: inline-block;
-    width: 18%; /* 각 아이템의 너비를 설정 */
-    margin: 0.5%;
+    margin: 2%;
     text-align: center;
+}
+
+.show-plus {
+    margin-left: auto;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: -25px;
+    color: #333;
+}
+
+.show-plus:hover {
+    color: #007bff;
 }
 
 /* 카테고리 버튼 스타일 */
@@ -168,6 +180,5 @@
 .category-column ul li a:hover {
     color: #007bff;
 }
-
 
 
