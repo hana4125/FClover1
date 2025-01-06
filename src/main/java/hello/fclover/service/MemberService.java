@@ -1,29 +1,44 @@
 package hello.fclover.service;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 public interface MemberService {
 
     int signup(Member member);
 
-    int isId(String id);
+    int getMemNum(String memberId);
 
-    int isId(String id, String password);
-
-    Member getMember(String id);
+    Member findMemberById(String memberId);
 
     int updateMember(Member member);
 
-    int addDeliveryAddress(Delivery delivery);
+    int updateProfile(Member member);
 
-    List<Delivery> getDeliveryAddress(String member_id);
+    int removeProfilePicture(String memberId);
 
-    Member isMemberExists(String member_id, String password);
+    int addDeliveryAddress(AddressBook addressBook);
 
-    String getEncryptedPassword(String member_id);
+    void setDefaultAddress(int addressId);
 
-    void removeAccount(String member_id);
+    List<AddressBook> getDeliveryAddress(int memNum);
+
+    Member isMemberExists(String memberId, String password);
+
+    String getEncryptedPassword(String memberId);
+
+    void removeAccount(String memberId);
+
+    AddressBook getDefaultAddress(int memNum);
+
+    int checkDefaultAddress(int addressNum);
+
+    int removeAddressBook(int addressNum);
+
+    String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
 }

@@ -1,0 +1,23 @@
+.dropdown-view {
+    color: inherit;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.steady-list input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.icon {
+    position: relative; /* 위치 조정 가능 */
+    top: 1px; /* 위로 올리기 */
+}
+
+.buy-now-btn {
+    position: relative; /* 위치 조정 가능 */
+    margin-left: 20px;
+    height: 40px;
+    top: 15px;
+}
+

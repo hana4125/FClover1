@@ -12,24 +12,12 @@
   <link rel="stylesheet" href="/css/user/myPage.css">
   <script th:inline="javascript">
       $(function () {
-          $("#logo").click(function () {
-              location.href = "/";
-          })
-
-          $("#cart").click(function () {
-              location.href = "/cart";
-          })
-
-          $("#myPage").click(function () {
-              location.href = "/myPage";
-          })
-
           $("#updateInfo").click(function() {
-              location.href = "/myPage/info/modify";
+              location.href = "/member/myPage/info/modify";
           })
 
           $("#deleteBtn").click(function() {
-              location.href = "/myPage/info/delete";
+              location.href = "/member/myPage/info/delete";
           })
       })
   </script>
@@ -39,52 +27,7 @@
 <div class="mt-4 border-top">
   <div class="container w-75 pt-5">
     <div class="d-flex">
-      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
-        <div class="bg-success rounded-3 p-5">
-          <table class="ms-3">
-            <tr>
-              <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
-            </tr>
-            <tr>
-              <td>
-                <th:block sec:authorize-expr="isAuthenticated()">
-                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
-                </th:block>
-                <th:block sec:authorize-expr="not isAuthenticated()">
-                  <span class="ms-2 fs-4 text-white fw-bold">null님</span>
-                </th:block>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="container mt-5">
-          <!-- 쇼핑내역 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">쇼핑내역</h5>
-            <ul class="list-unstyled">
-              <li><a href="/myPage/orderDelivery">주문/배송</a></li>
-              <li><a href="/myPage/purchaseHistory">구매 내역</a></li>
-            </ul>
-          </div>
-
-          <!-- 라이브러리 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">라이브러리</h5>
-            <ul class="list-unstyled">
-              <li><a href="/myPage/wishlist">찜 목록</a></li>
-            </ul>
-          </div>
-
-          <!--회원정보-->
-          <div class="mb-4">
-            <h5 class="fw-bold">회원정보</h5>
-            <ul class="list-unstyled">
-              <li><a href="/myPage/deliveryAddressBook">배송주소록</a></li>
-              <li><a href="/myPage/info-check">회원정보관리</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <div th:replace="~{fragment/mypage :: sidebar}"></div>
       <div style="width: 80%; height: 100vh;">
         <h3 class="ms-5 fw-bold">회원정보수정</h3>
         <br>
@@ -93,7 +36,7 @@
         <div class="w-75 ms-5">
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">아이디</span>
-            <input type="text" name="member_id" readonly class="form-control mb-3 bg-light" th:value="${member.member_id}">
+            <input type="text" name="memberId" readonly class="form-control mb-3 bg-light" th:value="${member.memberId}">
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">비밀번호</span>
@@ -109,7 +52,7 @@
           </div>
           <div class="d-flex">
             <span class="w-50 fw-bold" style="line-height: 36px">휴대폰 번호</span>
-            <input type="text" name="phone" readonly class="form-control mb-5 bg-light" th:value="${member.phone}">
+            <input type="text" name="phoneNumber" readonly class="form-control mb-5 bg-light" th:value="${member.phoneNumber}">
           </div>
           <div class="d-flex justify-content-end">
             <button class="btn btn-success ps-5 pe-5" id="updateInfo">수정</button>

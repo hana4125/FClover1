@@ -1,9 +1,11 @@
 package hello.fclover.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Results;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,9 +18,11 @@ import java.time.LocalDateTime;
 public class Payment {
 
 
-    private Long id;               // 결제 ID
+    private Long id;// 결제 ID
+
+
     private Long partnerId;        // 파트너 ID (nullable)
-    private Long userId;           // 사용자 ID
+    private String userId;           // 사용자 ID
     private Long orderId;          // 주문 ID
     private BigDecimal paymentAmount; // 결제 금액
     private LocalDate paymentDate; // 결제 일자
@@ -53,4 +57,23 @@ public class Payment {
                 .cardNumber(paymentReq.getCardNumber())
                 .build();
     }
+//
+//    public static Payment searchList(String userId) {
+//        return Payment.builder()
+//                .partnerId(paymentReq.getPartnerId())
+//                .userId(paymentReq.getUserId())
+//                .orderId(paymentReq.getOrderId())
+//                .impUid(paymentReq.getImpUid())
+//                .paymentDate(paymentReq.getPaymentDate())
+//                .paymentMethod(paymentReq.getPayMethod())
+//                .merchantUid(paymentReq.getMerchantUid())
+//                .paymentAmount(BigDecimal.valueOf(paymentReq.getPaidAmount()))
+//                .pgProvider(paymentReq.getPgProvider())
+//                .pgType(paymentReq.getPgType())
+//                .pgTid(paymentReq.getPgTid())
+//                .status(paymentReq.getStatus())
+//                .cardName(paymentReq.getCardName())
+//                .cardNumber(paymentReq.getCardNumber())
+//                .build();
+//    }
 }

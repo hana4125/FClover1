@@ -1,6 +1,6 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
@@ -13,14 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -35,13 +38,23 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
 
+    @ModelAttribute("member")
+    public Member addMemberToModel(Principal principal) {
+
+        if (principal != null) {
+            String memberId = principal.getName();
+            return memberService.findMemberById(memberId);
+        }
+        return null;
+    }
+
     @GetMapping("/signup")
     public String signup() {
         return "user/userSignup";
     }
 
     @PostMapping("/signupProcess")
-    public String signupProcess(@ModelAttribute Member member) {
+    public String signupProcess(@ModelAttribute("signupMember") Member member) {
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
@@ -71,30 +84,57 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPageMain(Principal principal, Model model) {
+    public String myPageMain(Principal principal) {
 
         if (principal == null) {
-            return "redirect:/login";
+            return "redirect:/member/login";
         }
-
         return "/user/mypage/userMyPageMain";
     }
 
-    @GetMapping("/myPage/deliveryAddressBook")
+    @GetMapping("/myPage/addressBook")
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
-        String member_id = principal.getName();
-        Member member = memberService.getMember(member_id);
-        memberService.getDeliveryAddress(member_id);
-        List<Delivery> deliveryAddressList = memberService.getDeliveryAddress(member_id);
-        model.addAttribute("member", member);
-        model.addAttribute("deliveryAddressList", deliveryAddressList);
-        return "/user/mypage/userMyPageDeliveryAddressBook";
+        String memberId = principal.getName();
+        Member member = memberService.findMemberById(memberId);
+        int memNum = member.getMemNum();
+
+        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
+
+        model.addAttribute("defaultAddress", defaultAddress);
+        model.addAttribute("addressBookList", addressBookList);
+
+        return "user/mypage/userMyPageAddressBook";
     }
 
-    @PostMapping("/addDeliveryAddress")
-    public String addDeliveryAddress(@ModelAttribute Delivery delivery) {
-        memberService.addDeliveryAddress(delivery);
-        return "redirect:/myPage/deliveryAddressBook";
+    @PostMapping("/addAddressBook")
+    public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
+        String memberId = principal.getName();
+        int memNum = memberService.getMemNum(memberId);
+        addressBook.setMemNum(memNum);
+        memberService.addDeliveryAddress(addressBook);
+        return "redirect:/member/myPage/addressBook";
+    }
+
+    @GetMapping("/deleteAddressBook")
+    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNum);
+
+        if (result == 1) {
+            redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
+        } else {
+            memberService.removeAddressBook(addressNum);
+        }
+        return "redirect:/member/myPage/addressBook";
+    }
+
+
+
+    @Transactional
+    @PostMapping("/defaultAddress")
+    public String defaultAddress(@RequestParam int addressNum) {
+        memberService.setDefaultAddress(addressNum);
+        return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/myPage/info-check")
@@ -106,33 +146,27 @@ public class MemberController {
 
     @PostMapping("/myPage/info-check")
     public String passwordCheck(@RequestParam String password, Principal principal, HttpSession session) {
-        String member_id = principal.getName();
-        String encryptedPassword = memberService.getEncryptedPassword(member_id);
+        String memberId = principal.getName();
+        String encryptedPassword = memberService.getEncryptedPassword(memberId);
 
         boolean matches = passwordEncoder.matches(password, encryptedPassword);
 
         if (!matches) {
             session.setAttribute("idCheckFail", "입력하신 정보가 일치하지 않습니다. 다시 확인해 주세요.");
-            return "redirect:/myPage/info-check";
+            return "redirect:/member/myPage/info-check";
         }
 
-        return "redirect:/myPage/info";
+        return "redirect:/member/myPage/info";
     }
 
     @GetMapping("/myPage/info")
-    public String myPageInfo(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
-        model.addAttribute("member", member);
+    public String myPageInfo() {
 
         return "/user/mypage/userMyPageInfo";
     }
 
     @GetMapping("/myPage/info/modify")
-    public String memberUpdateForm(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
-        model.addAttribute("member", member);
+    public String memberUpdateForm() {
 
         return "/user/mypage/userMyPageInfoUpdateForm";
     }
@@ -144,15 +178,46 @@ public class MemberController {
 
     @GetMapping("/myPage/info/deleteProgress")
     public String deleteAccount(Principal principal, HttpServletRequest request, HttpServletResponse response) {
-        String member_id = principal.getName();
-        memberService.removeAccount(member_id);
+        String memberId = principal.getName();
+        memberService.removeAccount(memberId);
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/";
     }
 
+    @GetMapping("/myPage/profile")
+    public String profile() {
+
+        return "/user/mypage/userMyPageProfile";
+    }
+
+    @GetMapping("/myPage/delete-profile-picture")
+    public String deleteProfile(Principal principal) {
+        String memberId = principal.getName();
+        memberService.removeProfilePicture(memberId);
+        return "redirect:/member/myPage/profile";
+    }
+
+    @PostMapping("/myPage/upload-profile")
+    public String uploadProfile(@RequestParam MultipartFile file, Principal principal) {
+
+        String memberId = principal.getName();
+
+        try {
+            memberService.uploadProfilePicture(file, memberId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/member/myPage/profile";
+    }
+
     @GetMapping("/myPage/orderDelivery")
-    public String myPageOrderDelivery() {
-        return "/user/mypage/userMyPageOrderDelivery";
+    public String myPageOrderDelivery(Principal principal, Model model) {
+        List<Payment> payment = paymentService.searchList(principal.getName());
+        System.out.println("principal = " + principal.getName());
+        System.out.println("===========>여기는 controller ===============payment = " + payment);
+        model.addAttribute("list", payment);
+        return "/user/mypage/userOrderlist";
     }
 
     @GetMapping("/myPage/purchaseHistory")
@@ -170,6 +235,26 @@ public class MemberController {
         return "/user/userCart";
     }
 
+    @GetMapping("/category")
+    public String category() {
+        return "/user/userCategory";
+    }
+
+    @GetMapping("/bestSeller")
+    public String bestSeller() {
+        return "/user/userBestseller";
+    }
+
+    @GetMapping("/steadySeller")
+    public String steadySeller() {
+        return "/user/userSteadyseller";
+    }
+
+    @GetMapping("/newItems")
+    public String newItems() {
+        return "/user/userNewItems";
+    }
+
     @GetMapping("/sellerSignup")
     public String sellerSignup() {
         return "seller/sellerSignup";
@@ -180,13 +265,12 @@ public class MemberController {
         return "seller/sellerLogin";
     }
 
-
     @PostMapping("/memberUpdate")
     public String memberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
         memberService.updateMember(member);
-        return "redirect:/myPage/info";
+        return "redirect:/member/myPage/info";
     }
 
     @GetMapping("/memberPay")
@@ -199,17 +283,25 @@ public class MemberController {
         return "user/userPaymentsDone";
     }
 
-    @GetMapping("/memberOrderList")
-    public String OrderList() {
+//    @GetMapping("/memberOrderList")
+//    public String OrderList(String userId, Model model) {
+//
+//
+//        Payment payment = paymentService.searchList(userId);
+//        System.out.println("===========>여기는 controller ===============payment = " + payment);
+//        model.addAttribute("list", payment);
+//
+//
+//        return "user/userOrderList";
+//    }
 
-        return "user/userOrderList";
-    }
-    @GetMapping("/memberOrderListDetail")
+
+    @GetMapping("/myPage/memberOrderListDetail")
     public String OrderListDetail( Model model) {
 //        @RequestParam String impUid,
 //        model.addAttribute("impUid", impUid);
 
-        return "user/userOrderListDetail";
+        return "user/mypage/userOrderListDetail";
     }
 
 
@@ -242,12 +334,6 @@ public class MemberController {
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
 
-//    @GetMapping("/OrderCancelProcess")
-//    public ResponseEntity<String> OrderCancelProcess() {
-//        paymentService.cancelPayment(uid);
-//
-//        return ResponseEntity.ok("Payment cancel processed successfully.");
-//    }
 
 }
 

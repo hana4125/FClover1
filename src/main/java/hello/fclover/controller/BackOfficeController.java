@@ -34,6 +34,11 @@ public class BackOfficeController {
         return "backOffice/boDeliveryOrder";
     }
 
+    @GetMapping("/deliveryDone")
+    public String deliveDone(Model model) {
+        return "backOffice/boDeliveryDone";
+    }
+
 
     @GetMapping("/info")
     public String sellerinfo(Model model) {

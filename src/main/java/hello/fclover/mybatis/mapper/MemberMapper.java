@@ -1,6 +1,6 @@
 package hello.fclover.mybatis.mapper;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -9,19 +9,33 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-    int insert(Member member);
+    int insertMember(Member member);
 
-    Member isId(String id);
+    Member selectMemberById(String id);
 
-    int memberUpdate(Member member);
+    int updateMember(Member member);
 
-    int insertDeliveryAddress(Delivery delivery);
+    int updateProfile(Member member);
 
-    List<Delivery> selectDeliveryAddress(String member_id);
+    int deleteProfilePicture(String memberId);
 
-    Member selectMember(String member_id, String password);
+    int insertAddressBook(AddressBook addressBook);
 
-    String selectPassword(String member_id);
+    List<AddressBook> selectAddressBook(int memNum);
 
-    void deleteMember(String member_id);
+    Member selectMember(String memberId, String password);
+
+    String selectPassword(String memberId);
+
+    void deleteMember(String memberId);
+
+    int selectMemNum(String memberId);
+
+    AddressBook selectDefaultAddress(int memNum);
+
+    int updateDefaultAddress(int addressId);
+
+    int selectIsDefault(int addressNum);
+
+    int deleteAddressBook(int addressNum);
 }
