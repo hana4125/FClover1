@@ -1,4 +1,4 @@
-package hello.fclover;
+package hello.fclover.config;
 
 import hello.fclover.oauth.CustomOAuth2UserService;
 import hello.fclover.security.CustomAccessDeniedHandler;

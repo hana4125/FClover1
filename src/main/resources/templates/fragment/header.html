@@ -88,12 +88,18 @@
         <div>
           <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
         </div>
-<!--        <img src="/img/user/myPage.png" class="myPage" class="me-15" width="36" height="36" alt="마이페이지">-->
-        <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
-          <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+        <div th:if="${member == null}">
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle">
+            <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+          </div>
         </div>
-        <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-          <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+        <div th:unless="${member == null}">
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
+            <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+          </div>
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
+            <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+          </div>
         </div>
       </div>
     </div>
