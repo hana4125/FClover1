@@ -12,7 +12,5 @@
         select product_stock from stock where goods_no=#{goodsNo}
     </select>
 
-    <select id="decrease">
 
-    </select>
 </mapper>

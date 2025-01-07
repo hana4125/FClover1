@@ -76,17 +76,17 @@ public class BackOfficeController {
         return payment;
     }
 
-    //재고 감소
-    @GetMapping("/StockCount")
-    public String StockCount(Model model) {
-        int goods_no = 3;
-        int stockCount = backOfficeService.getProduct_stock(goods_no);
-        int result =  backOfficeService.decrease(stockCount);
-
-
-
-        return "backOffice/boSellerSettlement";
-    }
+//    //재고 감소
+//    @GetMapping("/StockCount")
+//    public String StockCount(Model model) {
+//        int goods_no = 3;
+//        int stockCount = backOfficeService.getProduct_stock(goods_no);
+//        int result =  backOfficeService.decrease(stockCount);
+//
+//
+//
+//        return "backOffice/boSellerSettlement";
+//    }
 
 
 
