@@ -15,6 +15,10 @@
         UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone_number = #{phoneNumber} WHERE member_id = #{memberId}
     </update>
 
+    <update id="socialMember">
+        UPDATE member SET password = #{password}, phone_number = #{phoneNumber}
+    </update>
+
     <update id="updateProfile">
         UPDATE member SET profile_picture = #{profilePicture} WHERE member_id = #{memberId}
     </update>

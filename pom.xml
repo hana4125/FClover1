@@ -113,12 +113,6 @@
             <version>6.4.1</version>
         </dependency>
 
-        <!-- env 환경변수 -->
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>2.3.2</version>
-        </dependency>
         <!-- Spring Retry -->
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -157,6 +151,11 @@
             <artifactId>spring-aspects</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.5</version>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
