@@ -29,10 +29,6 @@ public class HomeController {
         return null;
     }
 
-    public HomeController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
     @GetMapping("/")
     public String home(Model model) {
         // 카테고리 데이터 가져오기
