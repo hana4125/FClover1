@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<html lang="en">
+<!--<html lang="en">-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,11 +27,11 @@
             })
 
             $("#cart").click(function () {
-                location.href = "/cart";
+                location.href = "/member/cart";
             })
 
             $("#myPage").click(function () {
-                location.href = "/myPage";
+                location.href = "/member/myPage";
             })
         })
     </script>
@@ -41,60 +41,10 @@
 <div class="mt-4 border-top">
     <div class="container w-75 pt-5">
         <div class="d-flex">
-            <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
-                <div class="bg-success rounded-3 p-5">
-                    <table class="ms-3">
-                        <tr>
-                            <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <th:block sec:authorize-expr="isAuthenticated()">
-                                    <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
-                                </th:block>
-                                <th:block sec:authorize-expr="not isAuthenticated()">
-                                    <span class="ms-2 fs-4 text-white fw-bold">null님</span>
-                                </th:block>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="container mt-5">
-                    <!-- 쇼핑내역 -->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">쇼핑내역</h5>
-                        <ul class="list-unstyled">
-                            <li>주문/배송목록</li>
-                        </ul>
-                    </div>
+            <div th:replace="~{fragment/mypage :: sidebar}"></div>
 
-                    <!-- 라이브러리 -->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">라이브러리</h5>
-                        <ul class="list-unstyled">
-                            <li>찜</li>
-                        </ul>
-                    </div>
 
-                    <!-- 문의 내역 -->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">문의내역</h5>
-                        <ul class="list-unstyled">
-                            <li>1:1문의</li>
-                        </ul>
-                    </div>
-
-                    <!--회원정보-->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">회원정보</h5>
-                        <ul class="list-unstyled">
-                            <li>배송주소록</li>
-                            <li>회원정보관리</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div style="width: 80%; height: 100vh;" class="text-center">
+            <div style="width: 80%; height: 100vh;" class="text-center ms-5" >
 
 
                 <div class="order_history_group">
@@ -111,7 +61,7 @@
                     <!-- 수정 220428 리스트 목록 수정 -->
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-preparation="">0</span>
+                            <span class="history_val" data-order-summary-preparation="" th:text="${#lists.size(list)}"></span>
                             <span class="history_desc">준비중</span>
                         </button>
                     </div>
@@ -151,14 +101,15 @@
 
 
             <!--      여기서 부터는 주문건이 있을떄          -->
-            <div class="tbl_prod_wrap type_myroom" style data-order-commodity-list>
-                <div class="tbl_myorder-inner" data-order-id="024040779225">
+<!--                <div th:each="order : ${list}">-->
+            <div class="tbl_prod_wrap type_myroom" style data-order-commodity-list th:each="list : ${list}">
+                <div class="tbl_myorder-inner" data-order-id="024040779225" >
                 <div class="tbl_order_info">
-                    <span class="order_date">2024.04.14(O24040779225)</span><!-- 수정 220428 날짜 양식 yyyy.mm.dd 로 수정 -->
-                    <a href="/member/memberOrderListDetail?goodsId=123123&&id=123123456456&&impUid=test123123" class="btn_more_view" data-order-detail-link="N"><span class="text">상세보기</span><span class="ico_arw"></span></a>
+                    <span class="order_date" th:text="'주문번호 : ' + ${list.orderId}">2024.04.14(O24040779225)</span><!-- 수정 220428 날짜 양식 yyyy.mm.dd 로 수정 -->
+<!--                    <a href="/member/myPage/memberOrderListDetail?goodsId=123123&&id=123123456456&&impUid=test123123" class="btn_more_view" data-order-detail-link="N"><span class="text">상세보기</span><span class="ico_arw"></span></a>-->
 
                     <div class="right_area">
-                        <button type="button" class="btn_delete_text size_xxs" data-order-commodity-delete-button=""><span class="ico_delete"></span><span class="text">주문내역에서 삭제</span></button><!-- 수정 220428 버튼 클래스 추가 [size_xxs]-->
+                        <button type="button" class="btn_delete_text size_xxs" data-order-commodity-delete-button=""><span class="ico_delete"></span><span class="text"><a th:href="'/member/myPage/memberOrderListDetail?orderId=' + ${list.orderId}">상세보기 ></a> </span></button><!-- 수정 220428 버튼 클래스 추가 [size_xxs]-->
                     </div>
                 </div>
 
@@ -176,12 +127,12 @@
                             <th scope="col">상품정보</th>
                             <th scope="col">금액</th>
                             <th scope="col">배송정보</th>
-                            <th scope="col"></th>
+<!--                            <th scope="col"></th>-->
                         </tr>
                         </thead>
                         <tbody>
 
-                        <tr data-order-commodity="{&quot;ordrSrmb&quot;:1,&quot;ordrCmdtSrmb&quot;:1,&quot;ordrCmdtProsSrmb&quot;:1,&quot;ordrDlpnId&quot;:&quot;A2404B6F0A2E&quot;,&quot;origOrdrDlpnId&quot;:&quot;A2404B6F0A2E&quot;,&quot;onlnOrdrDvsnCode&quot;:&quot;100&quot;,&quot;onlnOrdrDvsnCodeName&quot;:&quot;주문&quot;,&quot;saleCmdtid&quot;:&quot;S000201372723&quot;,&quot;unfyCmdtid&quot;:&quot;CM00000780608&quot;,&quot;cmdtcode&quot;:&quot;5200000000214&quot;,&quot;cmdtName&quot;:&quot;[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml&quot;,&quot;cmdtSlsAmnt&quot;:29800,&quot;ordrPrgsCdtnQntt&quot;:1,&quot;cmdtQnttSlsAmnt&quot;:29800,&quot;cmdtLastStlmAmnt&quot;:29800,&quot;ordrPrgsCdtnCode&quot;:&quot;115&quot;,&quot;ordrPrgsCdtnCodeName&quot;:&quot;배송완료&quot;,&quot;ordrPrgsCdtnExprName&quot;:&quot;배송완료&quot;,&quot;saleCmdtDvsnCode&quot;:&quot;PBC&quot;,&quot;saleCmdtDvsnCodeName&quot;:&quot;PB상품(교보굿즈)&quot;,&quot;saleCmdtGrpDvsnCode&quot;:&quot;SGK&quot;,&quot;saleCmdtGrpDvsnCodeName&quot;:&quot;교보문고배송상품&quot;,&quot;cmdtClstCode&quot;:&quot;CA010151&quot;,&quot;cmdtClstCodeName&quot;:null,&quot;enbsCmdtDvsnCode&quot;:null,&quot;entsId&quot;:&quot;0130151&quot;,&quot;entsName&quot;:&quot;교보문고&quot;,&quot;ordrDtlCmdtGrpName&quot;:&quot;배송&quot;,&quot;ordrCmdt1DepthExprName&quot;:&quot;교보문고굿즈&quot;,&quot;dlvrRspbCode&quot;:&quot;010&quot;,&quot;dlvrRspbCodeName&quot;:&quot;북시티&quot;,&quot;dlvrShpCode&quot;:&quot;110&quot;,&quot;dlvrShpCodeName&quot;:&quot;일반택배&quot;,&quot;dlvrShpDtlCode&quot;:&quot;010&quot;,&quot;dlvrShpDtlCodeName&quot;:&quot;일반배송&quot;,&quot;dlvrRequProsId&quot;:&quot;I2404C267A53&quot;,&quot;brdrPickupboxYsno&quot;:&quot;N&quot;,&quot;brdrPatrCode&quot;:null,&quot;brdrPatrCodeName&quot;:null,&quot;rcptSchdDate&quot;:&quot;20240416&quot;,&quot;rcptDate&quot;:&quot;20240416&quot;,&quot;pckpDate&quot;:null,&quot;dlvrPrgsCdtnCode&quot;:&quot;804&quot;,&quot;dlvrFnshDate&quot;:&quot;20240416&quot;,&quot;dlvrFnshExprDate&quot;:&quot;20240416&quot;,&quot;dlvrFnshDateExprPhrs&quot;:&quot;2024.04.16 배송완료&quot;,&quot;untItmSrmb&quot;:0,&quot;untItmName&quot;:&quot;&quot;,&quot;prinCntt&quot;:&quot;0&quot;,&quot;ordrCmdtKindCode&quot;:&quot;100&quot;,&quot;ordrCmdtKindCodeName&quot;:&quot;본품&quot;,&quot;dgctSaleFrDvsnCode&quot;:null,&quot;dgctSaleFrDvsnCodeName&quot;:null,&quot;cstmDlvrDlyAproYsno&quot;:null,&quot;ordrGftRcmsTrgtId&quot;:null,&quot;ordrGftRcmsTrgtSrmb&quot;:null,&quot;combCmdtSaleCmdtid&quot;:null,&quot;combCmdtPatrCode&quot;:null,&quot;combCmdtPatrCodeName&quot;:null,&quot;dlvrCmdtLabelCode&quot;:&quot;010&quot;,&quot;dlvrCmdtLabelCodeName&quot;:&quot;교보문고 배송&quot;,&quot;crtrId&quot;:&quot;API-BIZ06-02-I065&quot;,&quot;cretDttm&quot;:&quot;2024-04-14 21:40:22.246&quot;,&quot;amnrId&quot;:&quot;CJDeliveryStateUpdateJob&quot;,&quot;amndDttm&quot;:&quot;2024-04-16 15:43:46.278&quot;,&quot;rprsCmdtYsno&quot;:null,&quot;combCmdtName&quot;:null,&quot;dlvrRequId&quot;:&quot;D2404BAA2308&quot;,&quot;couponUseYsno&quot;:null,&quot;stlmMthdCode&quot;:null,&quot;prodImg&quot;:&quot;https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg&quot;,&quot;rqrdYsno&quot;:null,&quot;ordrKindCode&quot;:&quot;001&quot;,&quot;ordrKindCodeName&quot;:&quot;일반 주문&quot;,&quot;gftCdtnCode&quot;:null,&quot;gftCdtnCodeName&quot;:null,&quot;saleEndDttm&quot;:&quot;99991231235959&quot;,&quot;reviewYn&quot;:&quot;N&quot;,&quot;revwPatrCode&quot;:null,&quot;sntcGthrYn&quot;:&quot;N&quot;,&quot;sntcGthrPatrCode&quot;:null,&quot;dlvrRequIemSrmb&quot;:&quot;1&quot;,&quot;evcShowYsno&quot;:&quot;N&quot;,&quot;clturCnfgCmdtEvtDate&quot;:null,&quot;clturExprSrmb&quot;:null,&quot;clturCnfgCmdtName&quot;:null,&quot;clturSeatGrdName&quot;:null,&quot;clturCmdtSlsAmnt&quot;:null,&quot;clturRequQntt&quot;:null,&quot;clturEvtDateStr&quot;:null,&quot;pkgCombCmdtPatrCode&quot;:null,&quot;pkgSaleLmttYsno&quot;:null,&quot;pkgIndpSlctOptExprYsno&quot;:null,&quot;pkgSaleCmdtDvsnCode&quot;:null,&quot;pkgRqrdYsno&quot;:null,&quot;combCmdtPatrRqrdYn&quot;:null,&quot;mixedYn&quot;:null,&quot;samYn&quot;:null,&quot;saleLmttAge&quot;:&quot;0&quot;,&quot;saleCdtnCode&quot;:&quot;002&quot;,&quot;prenCmdtChk&quot;:&quot;&quot;,&quot;invcNum&quot;:&quot;571581820822&quot;,&quot;dlvrQntt&quot;:&quot;1&quot;,&quot;dlvrRequProsSrmb&quot;:&quot;1&quot;,&quot;attName1&quot;:null,&quot;attWrth1&quot;:null,&quot;attWrth2&quot;:null,&quot;attWrth3&quot;:null,&quot;saleCmdtImgUrl&quot;:&quot;https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg&quot;,&quot;saleCmdtClstCode&quot;:&quot;0301&quot;,&quot;cancelBtnYsno&quot;:null,&quot;pinYn&quot;:null,&quot;rprsSaleCmdtId&quot;:null,&quot;joCode&quot;:&quot;&quot;,&quot;dlpnName&quot;:&quot;강하나&quot;,&quot;fundingProjectStarDate&quot;:null,&quot;fundingProjectEndDate&quot;:null,&quot;fundingProjectConditionCode&quot;:null,&quot;fundingProjectImgUrl&quot;:null,&quot;isOrdrDlpnMdfc&quot;:false,&quot;dlvrTypeLabel&quot;:&quot;&quot;,&quot;isFree&quot;:false,&quot;ordrId&quot;:&quot;O24040779225&quot;,&quot;ordrDate&quot;:&quot;20240414&quot;,&quot;orderMmbrDvsnCd&quot;:&quot;001&quot;,&quot;ordrCstmName&quot;:&quot;강하나&quot;,&quot;fndgPrjtSrmb&quot;:null,&quot;drawInfm&quot;:{&quot;commodityType&quot;:&quot;KBC&quot;,&quot;deliveryResponsibleClass&quot;:&quot;badge_kyobo&quot;,&quot;conditionClass&quot;:&quot;&quot;,&quot;typeClass&quot;:&quot;type_square_round&quot;,&quot;delivery&quot;:&quot;N&quot;,&quot;eLibrary&quot;:&quot;N&quot;,&quot;booksCondition&quot;:&quot;N&quot;,&quot;bookmorning&quot;:&quot;N&quot;,&quot;dlvrReq&quot;:&quot;N&quot;,&quot;reward&quot;:&quot;N&quot;,&quot;review&quot;:&quot;Y&quot;,&quot;reviewWrite&quot;:&quot;Y&quot;,&quot;sentence&quot;:&quot;N&quot;,&quot;cancel&quot;:&quot;N&quot;,&quot;returnedGoods&quot;:&quot;N&quot;,&quot;exchange&quot;:&quot;N&quot;,&quot;returnedGoodsCancel&quot;:&quot;N&quot;,&quot;exchangeCancel&quot;:&quot;N&quot;,&quot;returnedGoodsDetail&quot;:&quot;N&quot;,&quot;exchangeDetail&quot;:&quot;N&quot;,&quot;mms&quot;:&quot;N&quot;,&quot;deliveryFinish&quot;:&quot;N&quot;,&quot;download&quot;:&quot;N&quot;,&quot;myTicket&quot;:&quot;N&quot;,&quot;cstmDlvrDlyAproYsno&quot;:&quot;N&quot;,&quot;bookDivision&quot;:&quot;N&quot;,&quot;isMember&quot;:true},&quot;cmdtLink&quot;:&quot;https://product.kyobobook.co.kr/detail/S000201372723&quot;}">
+                        <tr  data-order-commodity="{&quot;ordrSrmb&quot;:1,&quot;ordrCmdtSrmb&quot;:1,&quot;ordrCmdtProsSrmb&quot;:1,&quot;ordrDlpnId&quot;:&quot;A2404B6F0A2E&quot;,&quot;origOrdrDlpnId&quot;:&quot;A2404B6F0A2E&quot;,&quot;onlnOrdrDvsnCode&quot;:&quot;100&quot;,&quot;onlnOrdrDvsnCodeName&quot;:&quot;주문&quot;,&quot;saleCmdtid&quot;:&quot;S000201372723&quot;,&quot;unfyCmdtid&quot;:&quot;CM00000780608&quot;,&quot;cmdtcode&quot;:&quot;5200000000214&quot;,&quot;cmdtName&quot;:&quot;[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml&quot;,&quot;cmdtSlsAmnt&quot;:29800,&quot;ordrPrgsCdtnQntt&quot;:1,&quot;cmdtQnttSlsAmnt&quot;:29800,&quot;cmdtLastStlmAmnt&quot;:29800,&quot;ordrPrgsCdtnCode&quot;:&quot;115&quot;,&quot;ordrPrgsCdtnCodeName&quot;:&quot;배송완료&quot;,&quot;ordrPrgsCdtnExprName&quot;:&quot;배송완료&quot;,&quot;saleCmdtDvsnCode&quot;:&quot;PBC&quot;,&quot;saleCmdtDvsnCodeName&quot;:&quot;PB상품(교보굿즈)&quot;,&quot;saleCmdtGrpDvsnCode&quot;:&quot;SGK&quot;,&quot;saleCmdtGrpDvsnCodeName&quot;:&quot;교보문고배송상품&quot;,&quot;cmdtClstCode&quot;:&quot;CA010151&quot;,&quot;cmdtClstCodeName&quot;:null,&quot;enbsCmdtDvsnCode&quot;:null,&quot;entsId&quot;:&quot;0130151&quot;,&quot;entsName&quot;:&quot;교보문고&quot;,&quot;ordrDtlCmdtGrpName&quot;:&quot;배송&quot;,&quot;ordrCmdt1DepthExprName&quot;:&quot;교보문고굿즈&quot;,&quot;dlvrRspbCode&quot;:&quot;010&quot;,&quot;dlvrRspbCodeName&quot;:&quot;북시티&quot;,&quot;dlvrShpCode&quot;:&quot;110&quot;,&quot;dlvrShpCodeName&quot;:&quot;일반택배&quot;,&quot;dlvrShpDtlCode&quot;:&quot;010&quot;,&quot;dlvrShpDtlCodeName&quot;:&quot;일반배송&quot;,&quot;dlvrRequProsId&quot;:&quot;I2404C267A53&quot;,&quot;brdrPickupboxYsno&quot;:&quot;N&quot;,&quot;brdrPatrCode&quot;:null,&quot;brdrPatrCodeName&quot;:null,&quot;rcptSchdDate&quot;:&quot;20240416&quot;,&quot;rcptDate&quot;:&quot;20240416&quot;,&quot;pckpDate&quot;:null,&quot;dlvrPrgsCdtnCode&quot;:&quot;804&quot;,&quot;dlvrFnshDate&quot;:&quot;20240416&quot;,&quot;dlvrFnshExprDate&quot;:&quot;20240416&quot;,&quot;dlvrFnshDateExprPhrs&quot;:&quot;2024.04.16 배송완료&quot;,&quot;untItmSrmb&quot;:0,&quot;untItmName&quot;:&quot;&quot;,&quot;prinCntt&quot;:&quot;0&quot;,&quot;ordrCmdtKindCode&quot;:&quot;100&quot;,&quot;ordrCmdtKindCodeName&quot;:&quot;본품&quot;,&quot;dgctSaleFrDvsnCode&quot;:null,&quot;dgctSaleFrDvsnCodeName&quot;:null,&quot;cstmDlvrDlyAproYsno&quot;:null,&quot;ordrGftRcmsTrgtId&quot;:null,&quot;ordrGftRcmsTrgtSrmb&quot;:null,&quot;combCmdtSaleCmdtid&quot;:null,&quot;combCmdtPatrCode&quot;:null,&quot;combCmdtPatrCodeName&quot;:null,&quot;dlvrCmdtLabelCode&quot;:&quot;010&quot;,&quot;dlvrCmdtLabelCodeName&quot;:&quot;교보문고 배송&quot;,&quot;crtrId&quot;:&quot;API-BIZ06-02-I065&quot;,&quot;cretDttm&quot;:&quot;2024-04-14 21:40:22.246&quot;,&quot;amnrId&quot;:&quot;CJDeliveryStateUpdateJob&quot;,&quot;amndDttm&quot;:&quot;2024-04-16 15:43:46.278&quot;,&quot;rprsCmdtYsno&quot;:null,&quot;combCmdtName&quot;:null,&quot;dlvrRequId&quot;:&quot;D2404BAA2308&quot;,&quot;couponUseYsno&quot;:null,&quot;stlmMthdCode&quot;:null,&quot;prodImg&quot;:&quot;https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg&quot;,&quot;rqrdYsno&quot;:null,&quot;ordrKindCode&quot;:&quot;001&quot;,&quot;ordrKindCodeName&quot;:&quot;일반 주문&quot;,&quot;gftCdtnCode&quot;:null,&quot;gftCdtnCodeName&quot;:null,&quot;saleEndDttm&quot;:&quot;99991231235959&quot;,&quot;reviewYn&quot;:&quot;N&quot;,&quot;revwPatrCode&quot;:null,&quot;sntcGthrYn&quot;:&quot;N&quot;,&quot;sntcGthrPatrCode&quot;:null,&quot;dlvrRequIemSrmb&quot;:&quot;1&quot;,&quot;evcShowYsno&quot;:&quot;N&quot;,&quot;clturCnfgCmdtEvtDate&quot;:null,&quot;clturExprSrmb&quot;:null,&quot;clturCnfgCmdtName&quot;:null,&quot;clturSeatGrdName&quot;:null,&quot;clturCmdtSlsAmnt&quot;:null,&quot;clturRequQntt&quot;:null,&quot;clturEvtDateStr&quot;:null,&quot;pkgCombCmdtPatrCode&quot;:null,&quot;pkgSaleLmttYsno&quot;:null,&quot;pkgIndpSlctOptExprYsno&quot;:null,&quot;pkgSaleCmdtDvsnCode&quot;:null,&quot;pkgRqrdYsno&quot;:null,&quot;combCmdtPatrRqrdYn&quot;:null,&quot;mixedYn&quot;:null,&quot;samYn&quot;:null,&quot;saleLmttAge&quot;:&quot;0&quot;,&quot;saleCdtnCode&quot;:&quot;002&quot;,&quot;prenCmdtChk&quot;:&quot;&quot;,&quot;invcNum&quot;:&quot;571581820822&quot;,&quot;dlvrQntt&quot;:&quot;1&quot;,&quot;dlvrRequProsSrmb&quot;:&quot;1&quot;,&quot;attName1&quot;:null,&quot;attWrth1&quot;:null,&quot;attWrth2&quot;:null,&quot;attWrth3&quot;:null,&quot;saleCmdtImgUrl&quot;:&quot;https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg&quot;,&quot;saleCmdtClstCode&quot;:&quot;0301&quot;,&quot;cancelBtnYsno&quot;:null,&quot;pinYn&quot;:null,&quot;rprsSaleCmdtId&quot;:null,&quot;joCode&quot;:&quot;&quot;,&quot;dlpnName&quot;:&quot;강하나&quot;,&quot;fundingProjectStarDate&quot;:null,&quot;fundingProjectEndDate&quot;:null,&quot;fundingProjectConditionCode&quot;:null,&quot;fundingProjectImgUrl&quot;:null,&quot;isOrdrDlpnMdfc&quot;:false,&quot;dlvrTypeLabel&quot;:&quot;&quot;,&quot;isFree&quot;:false,&quot;ordrId&quot;:&quot;O24040779225&quot;,&quot;ordrDate&quot;:&quot;20240414&quot;,&quot;orderMmbrDvsnCd&quot;:&quot;001&quot;,&quot;ordrCstmName&quot;:&quot;강하나&quot;,&quot;fndgPrjtSrmb&quot;:null,&quot;drawInfm&quot;:{&quot;commodityType&quot;:&quot;KBC&quot;,&quot;deliveryResponsibleClass&quot;:&quot;badge_kyobo&quot;,&quot;conditionClass&quot;:&quot;&quot;,&quot;typeClass&quot;:&quot;type_square_round&quot;,&quot;delivery&quot;:&quot;N&quot;,&quot;eLibrary&quot;:&quot;N&quot;,&quot;booksCondition&quot;:&quot;N&quot;,&quot;bookmorning&quot;:&quot;N&quot;,&quot;dlvrReq&quot;:&quot;N&quot;,&quot;reward&quot;:&quot;N&quot;,&quot;review&quot;:&quot;Y&quot;,&quot;reviewWrite&quot;:&quot;Y&quot;,&quot;sentence&quot;:&quot;N&quot;,&quot;cancel&quot;:&quot;N&quot;,&quot;returnedGoods&quot;:&quot;N&quot;,&quot;exchange&quot;:&quot;N&quot;,&quot;returnedGoodsCancel&quot;:&quot;N&quot;,&quot;exchangeCancel&quot;:&quot;N&quot;,&quot;returnedGoodsDetail&quot;:&quot;N&quot;,&quot;exchangeDetail&quot;:&quot;N&quot;,&quot;mms&quot;:&quot;N&quot;,&quot;deliveryFinish&quot;:&quot;N&quot;,&quot;download&quot;:&quot;N&quot;,&quot;myTicket&quot;:&quot;N&quot;,&quot;cstmDlvrDlyAproYsno&quot;:&quot;N&quot;,&quot;bookDivision&quot;:&quot;N&quot;,&quot;isMember&quot;:true},&quot;cmdtLink&quot;:&quot;https://product.kyobobook.co.kr/detail/S000201372723&quot;}">
                             <td class="prod">
                                 <!--
                                     eBook, sam, 학술논문, 오디오북 상품인 경우 [ type_bookcover ] class 추가, [ size_sm ] class 추가
@@ -255,7 +206,7 @@
                             <td>
                         <span class="price">
 
-                            <span class="val">29,800</span>
+                            <span class="val" th:text="${list.paymentAmount}">29,800</span>
                             <span class="unit">원</span>
 
 
@@ -264,7 +215,7 @@
                             <td>
                                 <div class="delivery_info">
 
-                                    <span class="delivery_state ">배송완료</span><!-- 수정 220428 주문 클레임 영역 뱃지 일반텍스트케이스로 수정  -->
+                                    <span class="delivery_state ">주문완료</span><!-- 수정 220428 주문 클레임 영역 뱃지 일반텍스트케이스로 수정  -->
 
                                     <!-- 수정 221028 배송예정일 안내 수정 -->
                                     <!-- <p class="delivery_desc">
@@ -279,7 +230,7 @@
                                     </p>-->
 
                                     <p class="delivery_desc">
-                                        <span>2024.04.16 배송완료</span>
+                                        <span th:text="${list.paymentDate}">2024.04.16 주문완료</span>
                                     </p>
 
 
@@ -302,8 +253,12 @@
                 </div>
             </div>
             </div>
-        </div>
+            </div>
+<!--        </div>-->
     </div>
+
+    <br>
+    <br>
 </div>
 </body>
 </html>

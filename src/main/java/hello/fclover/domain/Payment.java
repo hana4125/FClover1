@@ -1,9 +1,11 @@
 package hello.fclover.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Results;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,9 +18,11 @@ import java.time.LocalDateTime;
 public class Payment {
 
 
-    private Long id;               // 결제 ID
+    private Long id;// 결제 ID
+
+
     private Long partnerId;        // 파트너 ID (nullable)
-    private Long userId;           // 사용자 ID
+    private String userId;           // 사용자 ID
     private Long orderId;          // 주문 ID
     private BigDecimal paymentAmount; // 결제 금액
     private LocalDate paymentDate; // 결제 일자
@@ -33,7 +37,6 @@ public class Payment {
     private String cardNumber;     // 카드 번호 (nullable)
     private LocalDateTime createdAt; // 생성일
     private LocalDateTime updatedAt; // 업데이트일
-
 
     public static Payment save(PaymentReq paymentReq) {
         return Payment.builder()
@@ -52,5 +55,7 @@ public class Payment {
                 .cardName(paymentReq.getCardName())
                 .cardNumber(paymentReq.getCardNumber())
                 .build();
+
     }
+
 }

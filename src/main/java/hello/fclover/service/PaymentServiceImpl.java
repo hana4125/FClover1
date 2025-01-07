@@ -9,6 +9,9 @@ import hello.fclover.util.PaymentClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -17,13 +20,25 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentMapper dao;
     private final PaymentClient paymentClient;
 
+    @Transactional(readOnly = true)
     @Override
-    public Payment save(PaymentReq paymentReq) {
-       Payment payment = dao.save(paymentReq);
+    public List<Payment> searchList(String userId) {
+        List<Payment> payments =  dao.searchList(userId);
 
-        return payment;
+        return payments;
     }
 
+    @Transactional
+    @Override
+    public Payment save(PaymentReq paymentReq) {
+       Payment payment1 = dao.save(paymentReq);
+
+
+
+        return payment1;
+    }
+
+    @Transactional
     @Override
     public int savePayment(Payment payment) {
         int result = dao.savePayment(payment);
@@ -32,6 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     }
 
+    @Transactional
     @Override
     public void cancelPayment(String uid) {
 
@@ -49,12 +65,6 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setStatus("cancel");
     }
 
-    @Override
-    public void decrease(Long id, Long quantity) {
-        //상품수량 조회
-        //재고 감소 로직 작성
-        //갱신된 값을 저장하는 로직
-    }
 
 
 }

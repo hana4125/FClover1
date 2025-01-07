@@ -1,6 +1,6 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.Delivery;
+import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
@@ -13,14 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -35,13 +38,23 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
 
+    @ModelAttribute("member")
+    public Member addMemberToModel(Principal principal) {
+
+        if (principal != null) {
+            String memberId = principal.getName();
+            return memberService.findMemberById(memberId);
+        }
+        return null;
+    }
+
     @GetMapping("/signup")
     public String signup() {
         return "user/userSignup";
     }
 
     @PostMapping("/signupProcess")
-    public String signupProcess(@ModelAttribute Member member) {
+    public String signupProcess(@ModelAttribute("signupMember") Member member) {
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
@@ -71,30 +84,57 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPageMain(Principal principal, Model model) {
+    public String myPageMain(Principal principal) {
 
         if (principal == null) {
             return "redirect:/member/login";
         }
-
         return "/user/mypage/userMyPageMain";
     }
 
-    @GetMapping("/myPage/deliveryAddressBook")
+    @GetMapping("/myPage/addressBook")
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
-        String member_id = principal.getName();
-        Member member = memberService.getMember(member_id);
-        memberService.getDeliveryAddress(member_id);
-        List<Delivery> deliveryAddressList = memberService.getDeliveryAddress(member_id);
-        model.addAttribute("member", member);
-        model.addAttribute("deliveryAddressList", deliveryAddressList);
-        return "/user/mypage/userMyPageDeliveryAddressBook";
+        String memberId = principal.getName();
+        Member member = memberService.findMemberById(memberId);
+        int memNum = member.getMemNum();
+
+        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
+
+        model.addAttribute("defaultAddress", defaultAddress);
+        model.addAttribute("addressBookList", addressBookList);
+
+        return "user/mypage/userMyPageAddressBook";
     }
 
-    @PostMapping("/addDeliveryAddress")
-    public String addDeliveryAddress(@ModelAttribute Delivery delivery) {
-        memberService.addDeliveryAddress(delivery);
-        return "redirect:/member/myPage/deliveryAddressBook";
+    @PostMapping("/addAddressBook")
+    public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
+        String memberId = principal.getName();
+        int memNum = memberService.getMemNum(memberId);
+        addressBook.setMemNum(memNum);
+        memberService.addDeliveryAddress(addressBook);
+        return "redirect:/member/myPage/addressBook";
+    }
+
+    @GetMapping("/deleteAddressBook")
+    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNum);
+
+        if (result == 1) {
+            redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
+        } else {
+            memberService.removeAddressBook(addressNum);
+        }
+        return "redirect:/member/myPage/addressBook";
+    }
+
+
+
+    @Transactional
+    @PostMapping("/defaultAddress")
+    public String defaultAddress(@RequestParam int addressNum) {
+        memberService.setDefaultAddress(addressNum);
+        return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/myPage/info-check")
@@ -106,8 +146,8 @@ public class MemberController {
 
     @PostMapping("/myPage/info-check")
     public String passwordCheck(@RequestParam String password, Principal principal, HttpSession session) {
-        String member_id = principal.getName();
-        String encryptedPassword = memberService.getEncryptedPassword(member_id);
+        String memberId = principal.getName();
+        String encryptedPassword = memberService.getEncryptedPassword(memberId);
 
         boolean matches = passwordEncoder.matches(password, encryptedPassword);
 
@@ -120,19 +160,13 @@ public class MemberController {
     }
 
     @GetMapping("/myPage/info")
-    public String myPageInfo(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
-        model.addAttribute("member", member);
+    public String myPageInfo() {
 
         return "/user/mypage/userMyPageInfo";
     }
 
     @GetMapping("/myPage/info/modify")
-    public String memberUpdateForm(Principal principal, Model model) {
-        String id = principal.getName();
-        Member member = memberService.getMember(id);
-        model.addAttribute("member", member);
+    public String memberUpdateForm() {
 
         return "/user/mypage/userMyPageInfoUpdateForm";
     }
@@ -144,15 +178,37 @@ public class MemberController {
 
     @GetMapping("/myPage/info/deleteProgress")
     public String deleteAccount(Principal principal, HttpServletRequest request, HttpServletResponse response) {
-        String member_id = principal.getName();
-        memberService.removeAccount(member_id);
+        String memberId = principal.getName();
+        memberService.removeAccount(memberId);
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/";
     }
 
-    @GetMapping("/myPage/orderDelivery")
-    public String myPageOrderDelivery() {
-        return "/user/mypage/userMyPageOrderDelivery";
+    @GetMapping("/myPage/profile")
+    public String profile() {
+
+        return "/user/mypage/userMyPageProfile";
+    }
+
+    @GetMapping("/myPage/delete-profile-picture")
+    public String deleteProfile(Principal principal) {
+        String memberId = principal.getName();
+        memberService.removeProfilePicture(memberId);
+        return "redirect:/member/myPage/profile";
+    }
+
+    @PostMapping("/myPage/upload-profile")
+    public String uploadProfile(@RequestParam MultipartFile file, Principal principal) {
+
+        String memberId = principal.getName();
+
+        try {
+            memberService.uploadProfilePicture(file, memberId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/member/myPage/profile";
     }
 
     @GetMapping("/myPage/purchaseHistory")
@@ -203,8 +259,17 @@ public class MemberController {
         return "redirect:/member/myPage/info";
     }
 
+    @PostMapping("/socialMemberUpdate")
+    public String socialMemberUpdate(@ModelAttribute Member member) {
+        String encPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encPassword);
+        memberService.updateMember(member);
+        return "redirect:/member/myPage/info";
+    }
+
     @GetMapping("/memberPay")
-    public String sellerPay() {
+    public String sellerPay(Principal principal,Model model) {
+        model.addAttribute("username", principal.getName());
         return "user/userPayments";
     }
 
@@ -213,20 +278,30 @@ public class MemberController {
         return "user/userPaymentsDone";
     }
 
-    @GetMapping("/memberOrderList")
-    public String OrderList() {
 
-        return "user/userOrderList";
-    }
-    @GetMapping("/memberOrderListDetail")
-    public String OrderListDetail( Model model) {
-//        @RequestParam String impUid,
-//        model.addAttribute("impUid", impUid);
-
-        return "user/userOrderListDetail";
+    //마이페이지 주문/배송 조회
+    @GetMapping("/myPage/orderDelivery")
+    public String myPageOrderDelivery(Principal principal, Model model) {
+        List<Payment> payment = paymentService.searchList(principal.getName());
+        System.out.println("principal = " + principal.getName());
+        System.out.println("===========>여기는 controller ===============payment = " + payment);
+        model.addAttribute("list", payment);
+        return "/user/mypage/userOrderlist";
     }
 
 
+    //마이페이지 주문/배송조회 상세보기
+    @GetMapping("/myPage/memberOrderListDetail")
+    public String OrderListDetail(@RequestParam("orderId") Long orderId, Model model) {
+
+        System.out.println("======================>여기는 컨트롤러 : orderId = " + orderId);
+
+        model.addAttribute("orderId", orderId);
+
+        return "user/mypage/userOrderListDetail";
+    }
+
+    //포트원 결제
     @PostMapping("/portone")
     public ResponseEntity<Map<String, String>> savePortone(@RequestBody PaymentReq paymentRequest) {
         Map<String, String> response = new HashMap<>();
@@ -256,12 +331,6 @@ public class MemberController {
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
 
-//    @GetMapping("/OrderCancelProcess")
-//    public ResponseEntity<String> OrderCancelProcess() {
-//        paymentService.cancelPayment(uid);
-//
-//        return ResponseEntity.ok("Payment cancel processed successfully.");
-//    }
 
 }
 

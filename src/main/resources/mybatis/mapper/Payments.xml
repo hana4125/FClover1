@@ -16,4 +16,13 @@
     <select id="findByImpUid" resultType="hello.fclover.domain.Payment">
         SELECT * FROM payments WHERE imp_uid = #{impUid}
     </select>
+
+
+    <select id="searchList" resultType="hello.fclover.domain.Payment">
+            SELECT * FROM payments
+           WHERE user_id=#{userId}
+    </select>
+    <select id="findByPaymentDateBetweenAndStatus">
+
+    </select>
 </mapper>

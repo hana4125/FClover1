@@ -16,55 +16,22 @@
 <div class="mt-4 border-top">
   <div class="container w-75 pt-5">
     <div class="d-flex">
-      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
-        <div class="bg-success rounded-3 p-5">
-          <table class="ms-3">
-            <tr>
-              <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
-            </tr>
-            <tr>
-              <td>
-                <th:block sec:authorize-expr="isAuthenticated()">
-                  <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
-                </th:block>
-                <th:block sec:authorize-expr="not isAuthenticated()">
-                  <span class="ms-2 fs-4 text-white fw-bold">null님</span>
-                </th:block>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="container mt-5">
-          <!-- 쇼핑내역 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">쇼핑내역</h5>
-            <ul class="list-unstyled">
-              <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
-              <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
-            </ul>
-          </div>
-
-          <!-- 라이브러리 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">라이브러리</h5>
-            <ul class="list-unstyled">
-              <li><a href="/member/myPage/wishlist">찜 목록</a></li>
-            </ul>
-          </div>
-
-          <!--회원정보-->
-          <div class="mb-4">
-            <h5 class="fw-bold">회원정보</h5>
-            <ul class="list-unstyled">
-              <li><a href="/member/myPage/deliveryAddressBook">배송주소록</a></li>
-              <li><a href="/member/myPage/info-check">회원정보관리</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <div th:replace="~{fragment/mypage :: sidebar}"></div>
       <div style="width: 80%; height: 100vh;">
-        <h5 class="ms-5 fw-bold">찜한 상품</h5>
+        <h5 class="ms-5 mb-5 fw-bold">찜</h5>
+        <div class="ms-5 mt-3 bg-body-secondary rounded-3 d-flex align-items-center" style="height: 80px">
+          <div class="fw-bold p-4">리스트에 담아 <span class="text-primary">나만의 리스트</span>를 만들어보세요!</div>
+        </div>
+        <div class="mt-5 ms-5 d-flex">
+          <div>찜한 상품</div>
+          <div class="ms-auto"><button class="btn btn-sm btn-outline-secondary me-2">삭제</button><button class="btn btn-sm btn-outline-secondary">리스트에 담기</button></div>
+        </div>
         <hr class="ms-5 mb-5">
+        <div class="ms-5 text-center" style="height: 200px">
+          <img src="/img/user/warning.png" alt="경고" class="mt-5">
+          <div class="mt-2">찜한 상품이 없습니다.</div>
+        </div>
+        <hr class="ms-5">
       </div>
     </div>
   </div>

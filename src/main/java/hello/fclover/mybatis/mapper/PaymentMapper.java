@@ -6,11 +6,18 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Mapper
 public interface PaymentMapper {
     Payment save(PaymentReq paymentReq);
+
     int savePayment(Payment payment);
 
     Payment findByImpUid(String uid);
 
+    List<Payment> searchList(String userId);
+
+    List<Payment> findByPaymentDateBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, String paymentCompleted);
 }

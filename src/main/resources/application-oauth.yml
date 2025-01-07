@@ -1,18 +1,23 @@
+jasypt:
+  encryptor:
+    bean: jasyptEncryptorAES
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+
 spring:
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: ENC(82l93H2j8225rAfGelL3UcCrsZtUqlIXZ3QE/WPWnzs1aRS0s7H3rV4ow7RU0E/Id+BGVAcvqUYCTS7ZDPZQyUwgIdliVmtGC4vpSMTVBgDrj2AJdBJYtQDL4LVgInCqbrVjuzmLfQEGmp4I4h1U0g==)
+            client-secret: ENC(J5KOkZtFtzsVYcJGz7uSPVm20txWwIGRUA2AzAg2nyipjFzOPkPfDGznNQ/qp2hXZ/UToo4zdlWJLPqXp2y0sbRZ6kOZzjZ7qStpEHV3HE4=)
             scope:
               - profile
               - email
 
           naver:
-            client-id: ${NAVER_CLIENT_ID}
-            client-secret: ${NAVER_CLIENT_SECRET}
+            client-id: ENC(8lpicoAlvXa3VOLlgvISDhvdiSwZ/Ezhoe2b41gdIbqkqZctCqbJkLnwJmLCdVXO8K4T3d7UyQuidNQ5wAGBdA==)
+            client-secret: ENC(kpSclERDaSXREEGPaxEsDACUq6nnKaqV6pIlko7+urOX4uQnfIpK9AT5HwI9MpPn)
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
