@@ -12,5 +12,7 @@
         select product_stock from stock where goods_no=#{goodsNo}
     </select>
 
-
+    <select id="searchSeller">
+        select * from seller
+    </select>
 </mapper>

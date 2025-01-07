@@ -65,21 +65,34 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#"
-         aria-expanded="true" aria-controls="collapseTwo">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+         aria-expanded="true" aria-controls="collapseOne">
         <i class="fas fa-fw fa-cog"></i>
         <span>판매자 정보 조회</span>
       </a>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item" href="/bo/info">판매자 정보 조회</a>
+
+        </div>
+      </div>
 
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-      <a class="nav-link collapsed" href="/bo/SellerSettlement" data-toggle="collapse">
+      <a class="nav-link collapsed" id="settlement" href="/bo/SellerSettlement" data-target="#collapseThree" data-toggle="collapse">
         <i class="fas fa-fw fa-wrench"></i>
         <!--                    //data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities"-->
         <span>정산관리</span>
       </a>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item" href="/bo/SellerSettlement">판매자 일정산 조회</a>
+          <a class="collapse-item" href="/bo/SellerSettlement">판매자 월정산 조회</a>
+
+        </div>
+      </div>
 
     </li>
 
@@ -198,7 +211,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">여기는 Seller 정산관리 페이지입니다</h1>
+          <h1 class="h3 mb-0 text-gray-800">여기는 정산관리 페이지입니다</h1>
           <!--                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i-->
           <!--                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
         </div>

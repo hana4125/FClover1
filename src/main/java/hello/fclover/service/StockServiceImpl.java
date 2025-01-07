@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 public class StockServiceImpl implements StockService {
 
+
     private final StockMapper dao;
 
     public StockServiceImpl(StockMapper dao){

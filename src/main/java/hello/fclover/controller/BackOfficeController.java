@@ -2,6 +2,7 @@ package hello.fclover.controller;
 
 
 import hello.fclover.domain.Payment;
+import hello.fclover.domain.Seller;
 import hello.fclover.service.BackOfficeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,12 +63,22 @@ public class BackOfficeController {
     }
 
 
+    //판매자 정보 조회 페이지 이동
     @GetMapping("/info")
-    public String sellerinfo(Model model) {
+    public String sellerinfo() {
         return "backOffice/boSellerInfo";
     }
 
+    //판매자 정보 조회 데이터
+    @GetMapping("/infoSearch")
+    @ResponseBody
+    public List<Seller> sellerinfoSearch(Model model) {
+        List<Seller> sellers = backOfficeService.searchSeller();
+        System.out.println("=======>여기는 컨트롤러 : sellers = " + sellers);
+        return sellers;
+    }
 
+    //결제정보 조회 데이터
     @GetMapping("/delivery/SearchOrder")
     @ResponseBody
     public  List<Payment> SearchOrder() {
