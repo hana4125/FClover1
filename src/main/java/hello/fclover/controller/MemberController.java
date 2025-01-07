@@ -226,11 +226,6 @@ public class MemberController {
         return "/user/userCart";
     }
 
-    @GetMapping("/category")
-    public String category() {
-        return "/user/userCategory";
-    }
-
     @GetMapping("/bestSeller")
     public String bestSeller() {
         return "/user/userBestseller";
