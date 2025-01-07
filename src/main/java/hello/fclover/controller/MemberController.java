@@ -254,6 +254,14 @@ public class MemberController {
         return "redirect:/member/myPage/info";
     }
 
+    @PostMapping("/socialMemberUpdate")
+    public String socialMemberUpdate(@ModelAttribute Member member) {
+        String encPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encPassword);
+        memberService.updateMember(member);
+        return "redirect:/member/myPage/info";
+    }
+
     @GetMapping("/memberPay")
     public String sellerPay() {
         return "user/userPayments";

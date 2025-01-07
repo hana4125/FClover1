@@ -29,19 +29,24 @@
       <table class="ms-3">
         <tr>
           <td>
-            <div class="thumb-box profile border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
+            <div class="thumb-box profile border border-2 border-dark-subtle" th:if="${member == null}">
               <img src="/img/user/profile.png" alt="기본 프로필 이미지">
             </div>
-            <div class="thumb-box profile border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-              <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+            <div th:unless="${member == null}">
+              <div class="thumb-box profile border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
+                <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+              </div>
+              <div class="thumb-box profile border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
+                <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+              </div>
+              <span class="badge profile text-bg-danger rounded-circle opacity-75" style="position: relative; left: 50px; bottom: 25px; cursor: pointer"><img width="15" height="20" src="/img/user/edit.png"></span>
             </div>
-            <span class="badge profile text-bg-danger rounded-circle opacity-75" style="position: relative; left: 50px; bottom: 25px; cursor: pointer"><img width="15" height="20" src="/img/user/edit.png"></span>
           </td>
         </tr>
         <tr>
           <td style="position: relative; bottom: 25px;">
             <th:block sec:authorize-expr="isAuthenticated()">
-              <span sec:authentication="name" class="fs-4 text-white fw-bold"></span>
+              <span th:text="${member.name}" class="fs-4 text-white fw-bold"></span>
               <span class="text-white fw-bold">님</span>
             </th:block>
             <th:block sec:authorize-expr="not isAuthenticated()">

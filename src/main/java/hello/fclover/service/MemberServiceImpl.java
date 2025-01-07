@@ -25,8 +25,6 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper dao;
-    private final PasswordEncoder passwordEncoder;
-
     private static final String UPLOAD_DIR = "src/main/resources/static/img/user/upload/";
 
     @Override
@@ -47,6 +45,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int updateMember(Member member) {
         return dao.updateMember(member);
+    }
+
+    @Override
+    public int updateSocialMember(Member member) {
+        return dao.updateSocialMember(member);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package hello.fclover.config;
 
-import hello.fclover.oauth.CustomOAuth2UserService;
+import hello.fclover.oauth2.service.CustomOAuth2UserService;
 import hello.fclover.security.CustomAccessDeniedHandler;
 import hello.fclover.security.CustomUserDetailsService;
 import hello.fclover.security.LoginFailHandler;
@@ -25,10 +25,7 @@ public class SecurityConfig {
     private final DataSource dataSource;
     private final LoginFailHandler loginFailHandler;
     private final LoginSuccessHandler loginSuccessHandler;
-    private final CustomUserDetailsService customUserDetailsService;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    //OAuth2
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -46,7 +43,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth2/authorization/google")
+                        .loginPage("/oauth2/authorization/{registrationId}")
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
                         .defaultSuccessUrl("/")
                 );
 
