@@ -8,7 +8,7 @@ public interface BackOfficeService {
 
     List<Payment> searchOrder();
 
-    int getProduct_stock(int goods_no);
-
-    int decrease(int stockCount);
+//    int getProduct_stock(int goods_no);
+//
+//    int decrease(int stockCount);
 }

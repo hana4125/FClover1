@@ -6,11 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface BackOfficeMapper {
+public interface StockMapper {
 
-    List<Payment> searchOrder();
-
-//    int getProduct_stock(Integer goodsNo);
-
-//    int decrease(int stockCount);
+    int decrease(int stockCount);
 }
