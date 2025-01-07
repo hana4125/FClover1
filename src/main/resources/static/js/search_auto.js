@@ -1,4 +1,7 @@
-// 검색 기능 스크립트
+/**
+ * @file search_auto.js
+ * @doc 자동 완성 검색 기능
+ */
 
 var isRcntShow = true; // 최근 검색어 노출 여부 설정
 
@@ -12,8 +15,8 @@ $(function() {
       $('.noKeyword').hide();
 
       // 추천 검색어 삽입
-      let recommendKeywords = getRecomKeyword();
-      $('#recommendKeywordBox').append(recommendKeywords);
+      // let recommendKeywords = getRecomKeyword();
+      // $('#recommendKeywordBox').append(recommendKeywords);
 
 
 
@@ -41,6 +44,7 @@ $(function() {
 });
 
 // 추천 검색어 가져오기
+/*
 function getRecomKeyword() {
   let result = '';
 
@@ -51,8 +55,6 @@ function getRecomKeyword() {
   let gender = "0";
 
   // User 성별, 나이 정보 불러와서 지정
-
-
 
   $.ajax({
     url: '/getRecommendKeyword',
@@ -73,3 +75,4 @@ function getRecomKeyword() {
 
   return result;
 }
+*/
