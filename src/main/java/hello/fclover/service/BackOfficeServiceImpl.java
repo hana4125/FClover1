@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 
 import hello.fclover.domain.Payment;
+import hello.fclover.domain.Seller;
 import hello.fclover.mybatis.mapper.BackOfficeMapper;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.mybatis.mapper.MemberMapper;
@@ -23,6 +24,12 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     public List<Payment> searchOrder() {
         List<Payment> payment = dao.searchOrder();
         return payment;
+    }
+
+    @Override
+    public List<Seller> searchSeller() {
+        List<Seller> sellers = dao.searchSeller();
+        return sellers;
     }
 
 //    @Transactional(readOnly = true)
