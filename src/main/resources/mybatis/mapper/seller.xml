@@ -4,4 +4,7 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.SellerMapper">
 
+    <update id="save">
+
+    </update>
 </mapper>

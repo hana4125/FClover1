@@ -579,3 +579,61 @@ th, td {
     margin-left: 10px; /* 이미지와 텍스트 사이의 간격을 주기 위해 */
     white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 */
 }
+.title_wrap.title_size_md.has_btn {
+    min-height: 38px;
+    padding-bottom: 16px;
+}
+
+.wrapper .container_wrapper .contents_wrap.aside .section_wrap {
+    width: calc(100% - 216px);
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+.tbl_prod_wrap.type_notify .tbl_summary {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 64px;
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid #ccc;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+.order_summary_box {
+    display: block;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    overflow: hidden;
+    word-break: break-all;
+}
+.order_summary_box {
+    display: block;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    overflow: hidden;
+    word-break: break-all;
+}

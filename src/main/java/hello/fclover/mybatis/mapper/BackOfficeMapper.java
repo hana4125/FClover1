@@ -13,7 +13,4 @@ public interface BackOfficeMapper {
 
     List<Seller> searchSeller();
 
-//    int getProduct_stock(Integer goodsNo);
-
-//    int decrease(int stockCount);
 }

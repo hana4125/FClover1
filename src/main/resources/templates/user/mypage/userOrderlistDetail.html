@@ -95,57 +95,231 @@
                     </div>
                 </div>
             </div>
-            <div style="width: 80%; height: 100vh;" class="text-center">
+            <div style="width: 80%; height: 100vh;" class="text-center ms-5">
 
 
-                <div class="order_history_group">
-                    <!-- 주문내역 타이틀 영역 -->
-                    <!-- DESC : 타이틀 영역은 [.type_title] 클래스 추가 -->
-                    <div class="order_history_box type_title">
-                        <span class="history_val">주문내역</span>
-                        <span class="history_desc">
-                    주문/배송안내
-<!--                    <button type="button" class="btn_info_popup" data-role="btn-dialog" data-target="#popOrderdeliveryinfo"><span class="ico_question"></span><span class="hidden"></span></button>-->
-                </span>
+                <div class="order_summary_box">
+                    <div class="box_header">
+                        <div class="label">
+                            <span class="order_date" data-order-date="">2024.04.14</span>
+                            <span class="gap">|</span>
+                            <span class="order_num">주문번호 <span class="num" data-order-id="">O24040779225</span></span>
+                        </div>
                     </div>
-                    <!-- //주문내역 타이틀 영역 -->
-                    <!-- 수정 220428 리스트 목록 수정 -->
-                    <div class="order_history_box">
-                        <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-preparation="">0</span>
-                            <span class="history_desc">준비중</span>
-                        </button>
+
+
+
+
+                    <div class="box_body" style="display: none;" data-online-deposit="">
+                        <ul class="order_summary_list">
+                            <li class="order_summary_item">
+                                <p class="label">입금금액</p>
+                                <div class="right_box">
+                            <span class="price">
+                                <span class="val" data-online-deposit-amount=""></span>
+                                <span class="unit">원</span>
+                            </span>
+                                </div>
+                            </li>
+                            <li class="order_summary_item">
+                                <p class="label">예금주명</p>
+                                <div class="right_box">㈜교보문고
+                                </div>
+                            </li>
+                            <li class="order_summary_item">
+                                <p class="label">입금자명</p>
+                                <div class="right_box" data-online-deposit-depositor="">
+                                </div>
+                            </li>
+                            <li class="order_summary_item">
+                                <p class="label">입금은행</p><!-- 수정 220428 텍스트 수정 -->
+                                <div class="right_box">
+                                    <span data-online-deposit-bank-name=""></span>
+                                    <span class="bank_account" data-online-deposit-bank-account=""></span>
+                                    <button type="button" class="btn_more_view" data-online-deposit-account-copy-button=""><span class="text">복사하기</span><span class="ico_arw"></span></button>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="valid_check fail">
+                            <span class="valid_desc"><span data-online-deposit-finish-date=""></span>까지 입금해 주세요. 미입금 시 자동 취소 됩니다.</span><!-- 수정 220428 [입금해 주세요.] 띄어쓰기 수정 -->
+                        </div>
                     </div>
-                    <div class="order_history_box">
-                        <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-addressBook="">0</span>
-                            <span class="history_desc">배송중</span>
-                        </button>
-                    </div>
-                    <div class="order_history_box">
-                        <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-addressBook-finish="">0</span>
-                            <span class="history_desc">배송완료</span>
-                        </button>
-                    </div>
-                    <div class="order_history_box">
-                        <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-cancel="">0</span>
-                            <span class="history_desc">취소</span>
-                        </button>
-                    </div>
-                    <div class="order_history_box">
-                        <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-exchange-returned-goods="">0</span>
-                            <span class="history_desc">교환/반품</span>
-                        </button>
-                    </div>
-                    <!-- //수정 220428 리스트 목록 수정 -->
+
+
+
+                    <script type="text/javascript" src="/assets/js/my/online-deposit.js?t=202412301435"></script>
+
+
+
+
+
                 </div>
 
 
-                주문상세조회 페이지 입니다.
+<!--                <div class="order_history_group">-->
+<!--                    &lt;!&ndash; 주문내역 타이틀 영역 &ndash;&gt;-->
+<!--                    &lt;!&ndash; DESC : 타이틀 영역은 [.type_title] 클래스 추가 &ndash;&gt;-->
+<!--                    <div class="order_history_box type_title">-->
+<!--                        <span class="history_val">주문내역</span>-->
+<!--                        <span class="history_desc">-->
+<!--                    주문/배송안내-->
+<!--&lt;!&ndash;                    <button type="button" class="btn_info_popup" data-role="btn-dialog" data-target="#popOrderdeliveryinfo"><span class="ico_question"></span><span class="hidden"></span></button>&ndash;&gt;-->
+<!--                </span>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; //주문내역 타이틀 영역 &ndash;&gt;-->
+<!--                    &lt;!&ndash; 수정 220428 리스트 목록 수정 &ndash;&gt;-->
+<!--                    <div class="order_history_box">-->
+<!--                        <button type="button" class="btn_filter_history">-->
+<!--                            <span class="history_val" data-order-summary-preparation="">0</span>-->
+<!--                            <span class="history_desc">준비중</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="order_history_box">-->
+<!--                        <button type="button" class="btn_filter_history">-->
+<!--                            <span class="history_val" data-order-summary-addressBook="">0</span>-->
+<!--                            <span class="history_desc">배송중</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="order_history_box">-->
+<!--                        <button type="button" class="btn_filter_history">-->
+<!--                            <span class="history_val" data-order-summary-addressBook-finish="">0</span>-->
+<!--                            <span class="history_desc">배송완료</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="order_history_box">-->
+<!--                        <button type="button" class="btn_filter_history">-->
+<!--                            <span class="history_val" data-order-summary-cancel="">0</span>-->
+<!--                            <span class="history_desc">취소</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="order_history_box">-->
+<!--                        <button type="button" class="btn_filter_history">-->
+<!--                            <span class="history_val" data-order-summary-exchange-returned-goods="">0</span>-->
+<!--                            <span class="history_desc">교환/반품</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+    <!-- 교보문고 구분선   -->
+                <div class="tbl_prod_wrap type_myroom" style data-order-commodity-list>
+                    <div class="tbl_myorder-inner" data-order-id="024040779225" >
+                        <div class="tbl_order_info">
+                            <span class="order_date" th:text="'주문번호 : testorder111'">2024.04.14(O24040779225)</span>
 
+                            <div class="right_area">
+                                <button type="button" class="btn_delete_text size_xxs" data-order-commodity-delete-button=""><span class="ico_delete"></span><span class="text">주문취소</span></button><!-- 수정 220428 버튼 클래스 추가 [size_xxs]-->
+                            </div>
+                        </div>
+
+                        <div class="tbl_prod_inner">
+                            <table class="tbl_prod">
+                                <!--                        <caption>주문상품</caption>-->
+                                <colgroup>
+                                    <col>
+                                    <col style="width: 164px;">
+                                    <col style="width: 180px;">
+                                    <col style="width: 130px;">
+                                </colgroup>
+                                <thead class="hidden">
+                                <tr>
+                                    <th scope="col">상품정보</th>
+                                    <th scope="col">금액</th>
+                                    <th scope="col">배송정보</th>
+                                    <!--                            <th scope="col"></th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr  data-order-commodity="{&quot;ordrSrmb&quot;:1,&quot;ordrCmdtSrmb&quot;:1,&quot;ordrCmdtProsSrmb&quot;:1,&quot;ordrDlpnId&quot;:&quot;A2404B6F0A2E&quot;,&quot;origOrdrDlpnId&quot;:&quot;A2404B6F0A2E&quot;,&quot;onlnOrdrDvsnCode&quot;:&quot;100&quot;,&quot;onlnOrdrDvsnCodeName&quot;:&quot;주문&quot;,&quot;saleCmdtid&quot;:&quot;S000201372723&quot;,&quot;unfyCmdtid&quot;:&quot;CM00000780608&quot;,&quot;cmdtcode&quot;:&quot;5200000000214&quot;,&quot;cmdtName&quot;:&quot;[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml&quot;,&quot;cmdtSlsAmnt&quot;:29800,&quot;ordrPrgsCdtnQntt&quot;:1,&quot;cmdtQnttSlsAmnt&quot;:29800,&quot;cmdtLastStlmAmnt&quot;:29800,&quot;ordrPrgsCdtnCode&quot;:&quot;115&quot;,&quot;ordrPrgsCdtnCodeName&quot;:&quot;배송완료&quot;,&quot;ordrPrgsCdtnExprName&quot;:&quot;배송완료&quot;,&quot;saleCmdtDvsnCode&quot;:&quot;PBC&quot;,&quot;saleCmdtDvsnCodeName&quot;:&quot;PB상품(교보굿즈)&quot;,&quot;saleCmdtGrpDvsnCode&quot;:&quot;SGK&quot;,&quot;saleCmdtGrpDvsnCodeName&quot;:&quot;교보문고배송상품&quot;,&quot;cmdtClstCode&quot;:&quot;CA010151&quot;,&quot;cmdtClstCodeName&quot;:null,&quot;enbsCmdtDvsnCode&quot;:null,&quot;entsId&quot;:&quot;0130151&quot;,&quot;entsName&quot;:&quot;교보문고&quot;,&quot;ordrDtlCmdtGrpName&quot;:&quot;배송&quot;,&quot;ordrCmdt1DepthExprName&quot;:&quot;교보문고굿즈&quot;,&quot;dlvrRspbCode&quot;:&quot;010&quot;,&quot;dlvrRspbCodeName&quot;:&quot;북시티&quot;,&quot;dlvrShpCode&quot;:&quot;110&quot;,&quot;dlvrShpCodeName&quot;:&quot;일반택배&quot;,&quot;dlvrShpDtlCode&quot;:&quot;010&quot;,&quot;dlvrShpDtlCodeName&quot;:&quot;일반배송&quot;,&quot;dlvrRequProsId&quot;:&quot;I2404C267A53&quot;,&quot;brdrPickupboxYsno&quot;:&quot;N&quot;,&quot;brdrPatrCode&quot;:null,&quot;brdrPatrCodeName&quot;:null,&quot;rcptSchdDate&quot;:&quot;20240416&quot;,&quot;rcptDate&quot;:&quot;20240416&quot;,&quot;pckpDate&quot;:null,&quot;dlvrPrgsCdtnCode&quot;:&quot;804&quot;,&quot;dlvrFnshDate&quot;:&quot;20240416&quot;,&quot;dlvrFnshExprDate&quot;:&quot;20240416&quot;,&quot;dlvrFnshDateExprPhrs&quot;:&quot;2024.04.16 배송완료&quot;,&quot;untItmSrmb&quot;:0,&quot;untItmName&quot;:&quot;&quot;,&quot;prinCntt&quot;:&quot;0&quot;,&quot;ordrCmdtKindCode&quot;:&quot;100&quot;,&quot;ordrCmdtKindCodeName&quot;:&quot;본품&quot;,&quot;dgctSaleFrDvsnCode&quot;:null,&quot;dgctSaleFrDvsnCodeName&quot;:null,&quot;cstmDlvrDlyAproYsno&quot;:null,&quot;ordrGftRcmsTrgtId&quot;:null,&quot;ordrGftRcmsTrgtSrmb&quot;:null,&quot;combCmdtSaleCmdtid&quot;:null,&quot;combCmdtPatrCode&quot;:null,&quot;combCmdtPatrCodeName&quot;:null,&quot;dlvrCmdtLabelCode&quot;:&quot;010&quot;,&quot;dlvrCmdtLabelCodeName&quot;:&quot;교보문고 배송&quot;,&quot;crtrId&quot;:&quot;API-BIZ06-02-I065&quot;,&quot;cretDttm&quot;:&quot;2024-04-14 21:40:22.246&quot;,&quot;amnrId&quot;:&quot;CJDeliveryStateUpdateJob&quot;,&quot;amndDttm&quot;:&quot;2024-04-16 15:43:46.278&quot;,&quot;rprsCmdtYsno&quot;:null,&quot;combCmdtName&quot;:null,&quot;dlvrRequId&quot;:&quot;D2404BAA2308&quot;,&quot;couponUseYsno&quot;:null,&quot;stlmMthdCode&quot;:null,&quot;prodImg&quot;:&quot;https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg&quot;,&quot;rqrdYsno&quot;:null,&quot;ordrKindCode&quot;:&quot;001&quot;,&quot;ordrKindCodeName&quot;:&quot;일반 주문&quot;,&quot;gftCdtnCode&quot;:null,&quot;gftCdtnCodeName&quot;:null,&quot;saleEndDttm&quot;:&quot;99991231235959&quot;,&quot;reviewYn&quot;:&quot;N&quot;,&quot;revwPatrCode&quot;:null,&quot;sntcGthrYn&quot;:&quot;N&quot;,&quot;sntcGthrPatrCode&quot;:null,&quot;dlvrRequIemSrmb&quot;:&quot;1&quot;,&quot;evcShowYsno&quot;:&quot;N&quot;,&quot;clturCnfgCmdtEvtDate&quot;:null,&quot;clturExprSrmb&quot;:null,&quot;clturCnfgCmdtName&quot;:null,&quot;clturSeatGrdName&quot;:null,&quot;clturCmdtSlsAmnt&quot;:null,&quot;clturRequQntt&quot;:null,&quot;clturEvtDateStr&quot;:null,&quot;pkgCombCmdtPatrCode&quot;:null,&quot;pkgSaleLmttYsno&quot;:null,&quot;pkgIndpSlctOptExprYsno&quot;:null,&quot;pkgSaleCmdtDvsnCode&quot;:null,&quot;pkgRqrdYsno&quot;:null,&quot;combCmdtPatrRqrdYn&quot;:null,&quot;mixedYn&quot;:null,&quot;samYn&quot;:null,&quot;saleLmttAge&quot;:&quot;0&quot;,&quot;saleCdtnCode&quot;:&quot;002&quot;,&quot;prenCmdtChk&quot;:&quot;&quot;,&quot;invcNum&quot;:&quot;571581820822&quot;,&quot;dlvrQntt&quot;:&quot;1&quot;,&quot;dlvrRequProsSrmb&quot;:&quot;1&quot;,&quot;attName1&quot;:null,&quot;attWrth1&quot;:null,&quot;attWrth2&quot;:null,&quot;attWrth3&quot;:null,&quot;saleCmdtImgUrl&quot;:&quot;https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg&quot;,&quot;saleCmdtClstCode&quot;:&quot;0301&quot;,&quot;cancelBtnYsno&quot;:null,&quot;pinYn&quot;:null,&quot;rprsSaleCmdtId&quot;:null,&quot;joCode&quot;:&quot;&quot;,&quot;dlpnName&quot;:&quot;강하나&quot;,&quot;fundingProjectStarDate&quot;:null,&quot;fundingProjectEndDate&quot;:null,&quot;fundingProjectConditionCode&quot;:null,&quot;fundingProjectImgUrl&quot;:null,&quot;isOrdrDlpnMdfc&quot;:false,&quot;dlvrTypeLabel&quot;:&quot;&quot;,&quot;isFree&quot;:false,&quot;ordrId&quot;:&quot;O24040779225&quot;,&quot;ordrDate&quot;:&quot;20240414&quot;,&quot;orderMmbrDvsnCd&quot;:&quot;001&quot;,&quot;ordrCstmName&quot;:&quot;강하나&quot;,&quot;fndgPrjtSrmb&quot;:null,&quot;drawInfm&quot;:{&quot;commodityType&quot;:&quot;KBC&quot;,&quot;deliveryResponsibleClass&quot;:&quot;badge_kyobo&quot;,&quot;conditionClass&quot;:&quot;&quot;,&quot;typeClass&quot;:&quot;type_square_round&quot;,&quot;delivery&quot;:&quot;N&quot;,&quot;eLibrary&quot;:&quot;N&quot;,&quot;booksCondition&quot;:&quot;N&quot;,&quot;bookmorning&quot;:&quot;N&quot;,&quot;dlvrReq&quot;:&quot;N&quot;,&quot;reward&quot;:&quot;N&quot;,&quot;review&quot;:&quot;Y&quot;,&quot;reviewWrite&quot;:&quot;Y&quot;,&quot;sentence&quot;:&quot;N&quot;,&quot;cancel&quot;:&quot;N&quot;,&quot;returnedGoods&quot;:&quot;N&quot;,&quot;exchange&quot;:&quot;N&quot;,&quot;returnedGoodsCancel&quot;:&quot;N&quot;,&quot;exchangeCancel&quot;:&quot;N&quot;,&quot;returnedGoodsDetail&quot;:&quot;N&quot;,&quot;exchangeDetail&quot;:&quot;N&quot;,&quot;mms&quot;:&quot;N&quot;,&quot;deliveryFinish&quot;:&quot;N&quot;,&quot;download&quot;:&quot;N&quot;,&quot;myTicket&quot;:&quot;N&quot;,&quot;cstmDlvrDlyAproYsno&quot;:&quot;N&quot;,&quot;bookDivision&quot;:&quot;N&quot;,&quot;isMember&quot;:true},&quot;cmdtLink&quot;:&quot;https://product.kyobobook.co.kr/detail/S000201372723&quot;}">
+                                    <td class="prod">
+                                        <!--
+                                            eBook, sam, 학술논문, 오디오북 상품인 경우 [ type_bookcover ] class 추가, [ size_sm ] class 추가
+                                            썸네일 정방형인 경우 사용(동영상, 핫트랙스) [ type_square_round ] class 추가
+                                            기프트카드인 경우 [ type_gift_card ] class 추가
+                                            사은품인 경우 [ type_cover ] class 추가(사은품은 이미지 background로 처리되므로, 반드시 사은품 전용 DOM구조를 사용할 것)
+                                        -->
+                                        <div class="prod_area horizontal">
+                                            <div class="prod_thumb_box size_sm">
+
+                                                <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_link" data-order-commoditylink="">
+
+                                    <span class="img_box">
+                                        <img src="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg" alt="[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml"><!-- 수정 220428 단일태그 닫기 추가 -->
+                                    </span>
+
+                                                </a>
+
+
+                                            </div>
+                                            <div class="prod_info_box size_sm">
+
+
+
+
+
+                                                <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_info" data-order-commoditylink="">
+                                                    <span class="prod_name">
+                                        [교보문고굿즈]The Scent of PAGE : 디퓨저 100ml
+                                    </span>
+
+                                                </a>
+
+                                                <ul class="prod_option_list">
+
+
+                                                    <li class="option_item">
+                                                        <span class="text">수량 : </span><span class="val">1</span>
+
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                        <!---->
+                                    </td>
+                                    <td>
+                        <span class="price">
+
+                            <span class="val" >29,800</span>
+                            <span class="unit">원</span>
+
+
+                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="delivery_info">
+
+                                            <span class="delivery_state ">배송완료</span><!-- 수정 220428 주문 클레임 영역 뱃지 일반텍스트케이스로 수정  -->
+
+                                            <!-- 수정 221028 배송예정일 안내 수정 -->
+                                            <!-- <p class="delivery_desc">
+
+
+
+                                            <p class="delivery_desc">
+                                                <span class="fw_bold">20240416</span> 배송완료
+                                            </p>
+
+
+                                            </p>-->
+
+                                            <p class="delivery_desc">
+                                                <span>2024.04.16 배송완료</span>
+                                            </p>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                </div>
+    <!--교보문고 구분선-->
                 <br>
                 <br>
                 <h2> <button class="OrderCancel" data-imp-uid="imp_532414720262">주문취소</button></h2>
