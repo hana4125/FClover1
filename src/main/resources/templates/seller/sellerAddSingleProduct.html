@@ -8,8 +8,7 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script th:src="@{/js/seller/addSingleProduct}"></script>
-    <th:block th:replace="~{fragment/header :: header}"/>
+    <script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
     <title>상품 단일 등록</title>
     <style>
         /* textarea의 크기 조정 방지 */
@@ -17,41 +16,250 @@
             resize: none;
         }
 
-        /* 미리 보기 이미지 스타일 */
-        .preview-images {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        /* 파일 선택 기본 텍스트 영역 숨기기 */
+        .visually-hidden {
+            display: none;
         }
 
-        .preview-images img {
-            max-width: 100px;
-            max-height: 100px;
+        #fileListContainer img {
+            width: 50px;
+            height: 50px;
             object-fit: cover;
             border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #fileListContainer .file-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #fileListContainer .file-item span {
+            margin-left: 10px;
+            color: gray;
+        }
+
+        #fileListContainer .remove-file {
+            margin-left: auto;
+            color: red;
+            cursor: pointer;
         }
     </style>
+    <script>
+        $(function () {
+            // 상품 등록 폼 제출 처리
+            $('form[name="addSingleProductForm"]').submit(function (event) {
+                event.preventDefault(); // 기본 제출 동작 중단
+
+                // 유효성 검사
+                if ($('input[name="goods_name"]').val().trim() == "") {
+                    alert("상품 이름을 입력하세요.");
+                    $("#goods_name").focus();
+                    return false;
+                }
+
+                const pricePattern = /^\d+$/;
+                if ($("#goods_price").val().trim() == "") {
+                    alert("상품 가격을 입력하세요.");
+                    $("#goods_price").focus();
+                    return false;
+                } else if (!pricePattern.test($("#goods_price").val().replace(/,/g, ""))) {
+                    alert("숫자만 입력하세요");
+                    $("#goods_price").focus();
+                    return false;
+                }
+
+                if (!$.isNumeric($("#goods_count").val())) {
+                    alert("상품 수량을 정확히 입력하세요.");
+                    $("#goods_count").focus();
+                    return false;
+                }
+
+                if ($("#goods_content").val().trim() == "") {
+                    alert("상품 상세 설명을 작성하세요.");
+                    $("#goods_content").focus();
+                    return false;
+                }
+
+                if ($("#goods_writer").val().trim() == "") {
+                    alert("작가 이름을 작성하세요.");
+                    $("#goods_writer").focus();
+                    return false;
+                }
+
+                if ($("#writer_content").val().trim() == "") {
+                    alert("작가 설명을 작성하세요.");
+                    $("#writer_content").focus();
+                    return false;
+                }
+
+                if ($("#goods_create_at").val().trim() == "") {
+                    alert("발행일자를 확인하세요.");
+                    $("#goods_create_at").focus();
+                    return false;
+                }
+
+                if ($("#goods_pageCount").val().trim() == "") {
+                    alert("쪽수를 작성하세요.");
+                    $("#goods_pageCount").focus();
+                    return false;
+                }
+
+                const bookPattern = /^\d{1,3}[*]\d{1,3}$/;
+                if ($("#goods_bookSize").val().trim() == "") {
+                    alert("크기를 작성하세요.");
+                    $("#goods_bookSize").focus();
+                    return false;
+                } else if (!bookPattern.test($("#goods_bookSize").val())) {
+                    alert("크기를 확인하세요. ex)10*10");
+                    return false;
+                }
+
+                // FormData 생성
+                const formData = new FormData(this);
+
+                // 업로드된 파일 데이터 추가
+                const fileInput = document.getElementById("fileInput");
+                const files = Array.from(fileInput.files);
+
+                if (files.length > 3) {
+                    alert("최대 3개의 이미지만 업로드할 수 있습니다.");
+                    return;
+                }
+
+                files.forEach((file) => {
+                    formData.append("goods_image", file);
+                });
+
+                // 서버로 데이터 전송
+                $.ajax({
+                    url: '/seller/addSingleProductProcess', // 서버 엔드포인트 URL
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // FormData를 문자열로 변환하지 않도록 설정
+                    contentType: false, // Content-Type 헤더를 자동으로 설정하도록 false 지정
+                    success: function (response) {
+                        alert("상품이 성공적으로 등록되었습니다.");
+                        window.location.reload(); // 페이지 새로고침
+                    },
+                    error: function (xhr, status, error) {
+                        alert("상품 등록 중 오류가 발생했습니다.");
+                        console.error("Error:", error);
+                    }
+                });
+            });
+
+            // 이미지 미리보기
+            const fileInput = document.getElementById("fileInput");
+            const customFileButton = document.getElementById("customFileButton");
+            const fileListContainer = document.getElementById("fileListContainer");
+            const noFilesText = document.getElementById("noFilesText");
+
+            // 커스텀 버튼 클릭 시 파일 선택 창 열기
+            customFileButton.addEventListener("click", () => {
+                fileInput.click();
+            });
+
+            let uploadedFiles = []; // 파일 목록을 저장할 배열
+
+            fileInput.addEventListener("change", () => {
+                const files = Array.from(fileInput.files);
+
+                // 기존 파일과 새 파일을 병합
+                const newFiles = files.filter((newFile) => {
+                    // 중복 파일 방지
+                    return !uploadedFiles.some((existingFile) => existingFile.name === newFile.name);
+                });
+
+                // 파일 개수 제한 검사
+                if (uploadedFiles.length + newFiles.length > 3) {
+                    alert("최대 3개의 이미지만 업로드할 수 있습니다.");
+                    fileInput.value = ""; // 입력 초기화
+                    return;
+                }
+
+                // 새 파일 추가
+                uploadedFiles = [...uploadedFiles, ...newFiles];
+
+                // 파일 목록 업데이트
+                updateFileList();
+
+                // 선택 초기화
+                fileInput.value = "";
+            });
+
+            // 파일 목록 업데이트 함수
+            function updateFileList() {
+                fileListContainer.innerHTML = ""; // 기존 목록 초기화
+
+                if (uploadedFiles.length === 0) {
+                    noFilesText.style.display = "block"; // 선택된 파일 없음 표시
+                } else {
+                    noFilesText.style.display = "none"; // 선택된 파일 없음 숨기기
+
+                    uploadedFiles.forEach((file, index) => {
+                        // 파일 아이템 생성
+                        const fileItem = document.createElement("div");
+                        fileItem.className = "file-item";
+
+                        // 이미지 미리보기 생성
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const img = document.createElement("img");
+                            img.src = e.target.result;
+                            fileItem.appendChild(img);
+                        };
+
+                        // 파일 이름 및 크기 표시
+                        const fileInfo = document.createElement("span");
+                        fileInfo.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                        fileItem.appendChild(fileInfo);
+
+                        // 삭제 버튼 추가
+                        const removeButton = document.createElement("span");
+                        removeButton.className = "remove-file";
+                        removeButton.textContent = "삭제";
+                        removeButton.addEventListener("click", () => {
+                            // 파일 삭제
+                            uploadedFiles = uploadedFiles.filter((_, fileIndex) => fileIndex !== index);
+                            updateFileList(); // 목록 갱신
+                        });
+                        fileItem.appendChild(removeButton);
+
+                        // 파일 아이템 추가
+                        fileListContainer.appendChild(fileItem);
+
+                        // 파일 읽기 시작 (이미지 로드)
+                        reader.readAsDataURL(file);
+                    });
+                }
+            }
+        });
+    </script>
+
 </head>
 <body>
-
 <div class="container mt-5">
     <h2 class="text mb-4">상품 단일 등록</h2>
-
     <!-- 상품 등록 폼 시작 -->
-    <form th:action="@{/seller/addSingleProductProcess}" method="POST" enctype="multipart/form-data" name="addSingleProductForm">
+    <form action="seller/addSingleProductProcess" method="POST" enctype="multipart/form-data" name="addSingleProductForm">
+
         <div class="row">
             <!-- 상품 이름 -->
             <div class="col-md-4">
                 <div class="mb-3">
-                    <label for="productName" class="form-label">상품 이름</label>
-                    <input type="text" class="form-control" id="productName" name="productName" required>
+                    <label for="goods_name" class="form-label">상품 이름</label>
+                    <input type="text" class="form-control" id="goods_name" name="goods_name" required>
                 </div>
             </div>
             <!-- 출판사 -->
             <div class="col-md-3 offset-md-2">
                 <div class="mb-3">
-                    <label for="sellerCompany" class="form-label">출판사</label>
-                    <input type="text" class="form-control" id="sellerCompany" name="sellerCompany" readonly>
+                    <label for="seller_company" class="form-label">출판사</label>
+                    <!--                    출판사는 판매자 member db에서 가져오는 걸로 수정해야함-->
+                    <input type="text" class="form-control" id="seller_company" name="seller_company"
+                           style="background-color:lightgray" value="출판사" readonly>
                 </div>
             </div>
         </div>
@@ -60,16 +268,16 @@
             <!-- 상품 가격, 상품 수량, 책 카테고리 -->
             <div class="col-md-2">
                 <div class="mb-3">
-                    <label for="productPrice" class="form-label" >상품 가격</label>
-                    <input type="text" class="form-control" id="productPrice" name="productPrice" placeholder="예: 10,000 or 10000" required>
+                    <label for="goods_price" class="form-label">상품 가격</label>
+                    <input type="text" class="form-control" id="goods_price" name="goods_price" required>
                 </div>
             </div>
 
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="productQuantity" class="form-label" >상품 수량</label>
-                    <input type="number" class="form-control" id="productQuantity"
-                           name="productQuantity" step="10" placeholder="예: 10" required>
+                    <label for="goods_count" class="form-label">상품 수량</label>
+                    <input type="number" class="form-control" id="goods_count"
+                           name="goods_count" placeholder="예: 10" required>
                 </div>
             </div>
 
@@ -77,7 +285,7 @@
                 <div class="mb-3">
                     <label for="productCategory" class="form-label">책 카테고리</label>
                     <select class="form-select" id="productCategory" name="productCategory" required>
-<!--                       타임리프로 수정 사항 -->
+                        <!--                       타임리프로 수정 사항 -->
                         <option value="">카테고리 선택</option>
                         <option value="fiction">소설</option>
                         <option value="non-fiction">논픽션</option>
@@ -93,8 +301,8 @@
             <!-- 상품 상세 설명 -->
             <div class="col-md-9">
                 <div class="mb-3">
-                    <label for="productDescription" class="form-label">상품 상세 설명</label>
-                    <textarea class="form-control" id="productDescription" name="productDescription" rows="4"
+                    <label for="goods_content" class="form-label">상품 상세 설명</label>
+                    <textarea class="form-control" id="goods_content" name="goods_content" rows="4"
                               required></textarea>
                 </div>
             </div>
@@ -104,8 +312,8 @@
             <!-- 작가 이름 -->
             <div class="col-md-3">
                 <div class="mb-3">
-                    <label for="authorName" class="form-label">작가 이름</label>
-                    <input type="text" class="form-control" id="authorName" name="authorName" required>
+                    <label for="goods_writer" class="form-label">작가 이름</label>
+                    <input type="text" class="form-control" id="goods_writer" name="goods_writer" required>
                 </div>
             </div>
         </div>
@@ -113,8 +321,8 @@
             <!-- 작가 설명 -->
             <div class="col-md-9">
                 <div class="mb-3">
-                    <label for="authorDescription" class="form-label">작가 설명</label>
-                    <textarea class="form-control" id="authorDescription" name="authorDescription" rows="3"
+                    <label for="writer_content" class="form-label">작가 설명</label>
+                    <textarea class="form-control" id="writer_content" name="writer_content" rows="3"
                               required></textarea>
                 </div>
             </div>
@@ -124,42 +332,46 @@
             <!-- 발행일자 -->
             <div class="col-md-2">
                 <div class="mb-3">
-                    <label for="publicationDate" class="form-label">발행일자</label>
-                    <input type="date" class="form-control" id="publicationDate" name="publicationDate" required>
+                    <label for="goods_create_at" class="form-label">발행일자</label>
+                    <input type="date" class="form-control" id="goods_create_at" name="goods_create_at" max="9999-12-31"
+                           required>
                 </div>
             </div>
 
             <!-- 쪽수 -->
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="pageCount" class="form-label">쪽수</label>
-                    <input type="number" class="form-control" id="pageCount" name="pageCount" placeholder="예: 365" required>
+                    <label for="goods_pageCount" class="form-label">쪽수</label>
+                    <input type="number" class="form-control" id="goods_pageCount" name="goods_pageCount"
+                           placeholder="예: 365"
+                           required>
                 </div>
             </div>
 
             <!-- 크기 -->
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="bookSize" class="form-label">크기 (cm)</label>
-                    <input type="text" class="form-control" id="bookSize" name="bookSize" placeholder="예: 14 x 21"
+                    <label for="goods_bookSize" class="form-label">크기 (cm)</label>
+                    <input type="text" class="form-control" id="goods_bookSize" name="goods_bookSize"
+                           placeholder="예: 14*21"
                            required>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <!-- 다중 상품 이미지 -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="productImages" class="form-label">상품 이미지</label>
-                    <input type="file" class="form-control" id="productImages" name="productImages[]" accept="image/*"
-                           multiple required>
-                </div>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">상품 이미지 (최대 3개)</label>
+            <!-- 숨겨진 파일 입력 -->
+            <input type="file" id="fileInput" class="form-control visually-hidden" name="goods_image" multiple
+                   accept="image/*">
+            <!-- 커스텀 파일 선택 버튼 -->
+            <button type="button" id="customFileButton" class="btn btn-primary">파일 선택</button>
         </div>
 
-        <!-- 이미지 미리 보기 영역 -->
-        <div class="preview-images" id="imagePreview"></div>
+        <!-- 파일 목록 -->
+        <div id="fileListContainer" class="mt-3">
+            <p id="noFilesText" class="text-muted">선택된 파일 없음</p>
+        </div>
 
         <div class="text-center col-md-6 offset-5 ">
             <button type="submit" class="btn btn-primary">상품 등록</button>
@@ -169,26 +381,5 @@
     <!-- 상품 등록 폼 끝 -->
 
 </div>
-<script>
-    // 상품 이미지 미리보기
-    document.getElementById('productImages').addEventListener('change', function (event) {
-        const files = event.target.files;
-        const previewContainer = document.getElementById('imagePreview');
-        previewContainer.innerHTML = ''; // 기존 미리보기 이미지 제거
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result; // 이미지 파일의 데이터 URL
-                previewContainer.appendChild(img); // 미리보기 이미지를 컨테이너에 추가
-            };
-
-            reader.readAsDataURL(file); // 파일을 읽어서 미리보기 표시
-        }
-    });
-</script>
 </body>
 </html>
