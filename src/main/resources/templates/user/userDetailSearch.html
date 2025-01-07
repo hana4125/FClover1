@@ -33,12 +33,10 @@
   <div class="contents_inner">
 
     <div class="title_wrap title_size_lg mb-4">
-      <!-- 필요 시 Bootstrap 스타일 적용 예: fs-3, fw-bold 등 -->
       <p class="title_heading fs-3 fw-bold">상세검색</p>
     </div>
 
     <div class="tbl_row_wrap mb-3">
-      <!-- 기존 form 구조 및 id 유지 -->
       <form action="#" id="detailSearchForm" method="get" role="form">
         <input id="cnameHidden" name="cname" type="hidden" value="">
         <input id="chrcHidden" name="chrcDetail" type="hidden" value="">
@@ -69,7 +67,6 @@
               <label for="cnameInput" class="form-label">상품명</label>
             </th>
             <td>
-              <!-- jQuery UI input 대신 Bootstrap form-control -->
               <input class="form-control" id="cnameInput" placeholder="상품명을 입력해주세요." type="text">
             </td>
           </tr>
@@ -95,8 +92,7 @@
           <tr>
             <th scope="row">발행일</th>
             <td>
-              <!-- 날짜 선택 부분을 Bootstrap 요소로 대체 -->
-              <!-- 직접 기간 선택 & 직접 날짜 입력이 혼합된 상황이므로, 필요에 따라 datepicker 라이브러리 추가 가능 -->
+              <!-- 직접 기간 선택 & 직접 날짜 입력이 혼합된 상황이므로, datepicker 라이브러리 추가 필요 -->
               <div class="d-flex align-items-center gap-2">
                 <!-- 기간 선택 select -->
                 <div style="max-width: 150px;">
@@ -111,7 +107,7 @@
                 <!-- 시작일 -->
                 <div class="input-group" style="max-width: 200px;">
                   <input class="form-control" id="rlseStr" placeholder="시작일 선택" title="시작일 선택" type="text">
-                  <!-- 달력 아이콘 버튼(직접 DatePicker 라이브러리 연결) -->
+                  <!-- 달력 아이콘 버튼(DatePicker 라이브러리 연결해야 함) -->
                   <button class="btn btn-outline-secondary" type="button">
                     <img
                         alt="날짜 선택"
@@ -139,7 +135,6 @@
           <tr>
             <th scope="row">가격</th>
             <td>
-              <!-- 가격 구간 표시 -->
               <div class="input-group" style="max-width: 350px;">
                 <input
                     class="form-control"
@@ -166,7 +161,6 @@
     </div>
 
     <div class="btn_wrap page_bottom">
-      <!-- 부트스트랩 버튼 형태로 변경 -->
       <button
           class="btn btn-lg btn-outline-primary me-2"
           onclick="initValue();"
