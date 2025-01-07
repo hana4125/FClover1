@@ -23,7 +23,30 @@
             })
 
             $("#categoryItem").click(function () {
-                location.href = "/category";
+                location.href = "/member/category";
+            })
+
+            $(".show-detail").click(function () {
+                location.href = "";
+            })
+
+            $(".show-plus").click(function (e) {
+                e.preventDefault(); // 기본 동작 방지
+                if ($(".best-title").hasClass("active")) {
+                    // 베스트셀러 탭이 활성화된 경우
+                    location.href = "/member/bestSeller";
+                } else if ($(".steady-title").hasClass("active")) {
+                    // 스테디셀러 탭이 활성화된 경우
+                    location.href = "/member/steadySeller";
+                }
+            });
+
+            $(".best").click(function () {
+                location.href = "/member/bestSeller";
+            })
+
+            $(".new").click(function () {
+                location.href = "/member/newItems";
             })
 
             // 카테고리 버튼 동작
@@ -83,8 +106,8 @@
 <!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
 <!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
 <!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
-            <a href="#" class="ps-5 pe-5">베스트</a>
-            <a href="#" class="ps-5 pe-5">신상품</a>
+            <a href="#" class="best ps-5 pe-5">베스트</a>
+            <a href="#" class="new ps-5 pe-5">신상품</a>
             <a href="#" class="ps-5 pe-5">이벤트</a>
         </div>
     </div>
@@ -94,51 +117,11 @@
     <h4 class="text-center mb-3">카테고리</h4><br>
     <!-- 하위 카테고리 리스트 -->
     <div class="category-list">
-        <div class="category-column">
-<!--        <div class="category-column" th:each="categoryGroup : ${categoryGroups}">-->
-<!--            <ul class="list-unstyled">-->
-<!--                <li th:each="category : ${categoryGroup}">-->
-<!--                    <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>-->
-<!--                </li>-->
-<!--            </ul>-->
+        <div class="category-column" th:each="categoryGroup : ${categoryGroups}">
             <ul class="list-unstyled">
-                <li><a href="#" id="categoryItem">소설</a></li>
-                <li><a href="#">시/에세이</a></li>
-                <li><a href="#">인문</a></li>
-                <li><a href="#">가정/육아</a></li>
-                <li><a href="#">요리</a></li>
-                <li><a href="#">건강</a></li>
-                <li><a href="#">취미/스포츠</a></li>
-                <li><a href="#">경제/경영</a></li>
-                <li><a href="#">자기계발</a></li>
-                <li><a href="#">정치/사회</a></li>
-                <li><a href="#">역사/문화</a></li>
-            </ul>
-        </div>
-        <div class="category-column">
-            <ul class="list-unstyled">
-                <li><a href="#">종교</a></li>
-                <li><a href="#">예술/대중문화</a></li>
-                <li><a href="#">중/고등참고서</a></li>
-                <li><a href="#">기술/공학</a></li>
-                <li><a href="#">외국어</a></li>
-                <li><a href="#">과학</a></li>
-                <li><a href="#">취업/수험서</a></li>
-                <li><a href="#">여행</a></li>
-                <li><a href="#">컴퓨터/IT</a></li>
-                <li><a href="#">잡지</a></li>
-                <li><a href="#">청소년</a></li>
-            </ul>
-        </div>
-        <div class="category-column">
-            <ul class="list-unstyled">
-                <li><a href="#">초등참고서</a></li>
-                <li><a href="#">유아(0~7세)</a></li>
-                <li><a href="#">어린이(초등)</a></li>
-                <li><a href="#">만화</a></li>
-                <li><a href="#">대학교재</a></li>
-                <li><a href="#">한국소개도서</a></li>
-                <li><a href="#">교보오리지널</a></li>
+                <li th:each="category : ${categoryGroup}">
+                    <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>
+                </li>
             </ul>
         </div>
     </div>

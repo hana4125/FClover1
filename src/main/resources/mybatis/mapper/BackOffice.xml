@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.fclover.mybatis.mapper.BackOfficeMapper">
+    <select id="searchOrder">
+        select * from payments
+    </select>
+
+
+    <select id="getProduct_stock">
+        select product_stock from stock where goods_no=#{goodsNo}
+    </select>
+
+    <select id="searchSeller">
+        select * from seller
+    </select>
+</mapper>

@@ -212,8 +212,12 @@ public class MemberController {
     }
 
     @GetMapping("/myPage/orderDelivery")
-    public String myPageOrderDelivery() {
-        return "/user/mypage/userMyPageOrderDelivery";
+    public String myPageOrderDelivery(Principal principal, Model model) {
+        List<Payment> payment = paymentService.searchList(principal.getName());
+        System.out.println("principal = " + principal.getName());
+        System.out.println("===========>여기는 controller ===============payment = " + payment);
+        model.addAttribute("list", payment);
+        return "/user/mypage/userOrderlist";
     }
 
     @GetMapping("/myPage/purchaseHistory")
@@ -234,6 +238,21 @@ public class MemberController {
     @GetMapping("/category")
     public String category() {
         return "/user/userCategory";
+    }
+
+    @GetMapping("/bestSeller")
+    public String bestSeller() {
+        return "/user/userBestseller";
+    }
+
+    @GetMapping("/steadySeller")
+    public String steadySeller() {
+        return "/user/userSteadyseller";
+    }
+
+    @GetMapping("/newItems")
+    public String newItems() {
+        return "/user/userNewItems";
     }
 
     @GetMapping("/sellerSignup")
@@ -272,17 +291,25 @@ public class MemberController {
         return "user/userPaymentsDone";
     }
 
-    @GetMapping("/memberOrderList")
-    public String OrderList() {
+//    @GetMapping("/memberOrderList")
+//    public String OrderList(String userId, Model model) {
+//
+//
+//        Payment payment = paymentService.searchList(userId);
+//        System.out.println("===========>여기는 controller ===============payment = " + payment);
+//        model.addAttribute("list", payment);
+//
+//
+//        return "user/userOrderList";
+//    }
 
-        return "user/userOrderList";
-    }
-    @GetMapping("/memberOrderListDetail")
+
+    @GetMapping("/myPage/memberOrderListDetail")
     public String OrderListDetail( Model model) {
 //        @RequestParam String impUid,
 //        model.addAttribute("impUid", impUid);
 
-        return "user/userOrderListDetail";
+        return "user/mypage/userOrderListDetail";
     }
 
 
@@ -315,12 +342,6 @@ public class MemberController {
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
 
-//    @GetMapping("/OrderCancelProcess")
-//    public ResponseEntity<String> OrderCancelProcess() {
-//        paymentService.cancelPayment(uid);
-//
-//        return ResponseEntity.ok("Payment cancel processed successfully.");
-//    }
 
 }
 
