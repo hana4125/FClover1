@@ -8,39 +8,44 @@
   <script src="/js/jquery-3.7.1.js"></script>
   <link href="/css/user/home.css" rel="stylesheet">
   <link href="/css/user/searchBox.css" rel="stylesheet">
+
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
         location.href = "/";
-      })
+      });
 
       $("#cart").click(function () {
         location.href = "/cart";
-      })
+      });
 
       $("#myPage").click(function () {
         location.href = "/myPage";
-      })
-    })
+      });
+    });
   </script>
 </head>
 <body>
-<div th:replace="~{../fragment/header :: header}"></div>
+<div th:replace="~{fragment/header :: header}"></div>
 <script th:src="@{/js/search_detail.js}"></script>
+
 <section class="contents_wrap" id="contents">
   <div class="contents_inner">
 
-    <div class="title_wrap title_size_lg">
-      <p class="title_heading">상세검색</p>
+    <div class="title_wrap title_size_lg mb-4">
+      <!-- 필요 시 Bootstrap 스타일 적용 예: fs-3, fw-bold 등 -->
+      <p class="title_heading fs-3 fw-bold">상세검색</p>
     </div>
-    <div class="tbl_row_wrap">
-      <!-- TODO 주소 수정하기 -->
+
+    <div class="tbl_row_wrap mb-3">
+      <!-- 기존 form 구조 및 id 유지 -->
       <form action="#" id="detailSearchForm" method="get" role="form">
         <input id="cnameHidden" name="cname" type="hidden" value="">
         <input id="chrcHidden" name="chrcDetail" type="hidden" value="">
         <input id="pbcmHidden" name="pbcmDetail" type="hidden" value="">
         <input id="repKeywordHidden" name="repKeyword" type="hidden" value="">
-        <table class="tbl_row">
+
+        <table class="table table-bordered">
           <caption>상세검색 테이블로 상품군, 상품명, 저자/역자, 출판사, 발행일, 가격을(를) 나타낸 표입니다.</caption>
           <colgroup>
             <col style="width: 140px;">
@@ -48,43 +53,54 @@
           </colgroup>
           <tbody>
           <tr>
-            <th class="has_ip" scope="row">상품군</th>
+            <th scope="row">상품군</th>
             <td>
-              <div class="input_text_box">
-                <div class="form_sel" id="form_sel_id" style="width: 222px;">
-                  <select id="cateSel" name="cate" style="display: none;" title="상품군 카테고리 선택">
-                    <option value="전체@ALL">전체</option>
-                    <!-- TODO : 정해진 카테고리만큼 추가하기 -->
-                  </select>
-                </div>
+              <div class="input-group" style="max-width: 222px;">
+                <select class="form-select" id="cateSel" name="cate" title="상품군 카테고리 선택">
+                  <option value="전체@ALL">전체</option>
+                  <!-- TODO : 정해진 카테고리만큼 추가하기 -->
+                </select>
               </div>
             </td>
           </tr>
+
           <tr>
-            <th class="has_ip" scope="row"><label for="cnameInput">상품명</label></th>
+            <th scope="row">
+              <label for="cnameInput" class="form-label">상품명</label>
+            </th>
             <td>
-              <input class="form_ip" id="cnameInput" placeholder="상품명을 입력해주세요." type="text">
+              <!-- jQuery UI input 대신 Bootstrap form-control -->
+              <input class="form-control" id="cnameInput" placeholder="상품명을 입력해주세요." type="text">
             </td>
           </tr>
+
           <tr>
-            <th class="has_ip" scope="row"><label for="chrcDetailInput">저자/역자</label></th>
+            <th scope="row">
+              <label for="chrcDetailInput" class="form-label">저자/역자</label>
+            </th>
             <td>
-              <input class="form_ip" id="chrcDetailInput" placeholder="저자/역자를 입력해주세요." type="text">
+              <input class="form-control" id="chrcDetailInput" placeholder="저자/역자를 입력해주세요." type="text">
             </td>
           </tr>
+
           <tr>
-            <th class="has_ip" scope="row"><label for="pbcmDetailInput">출판사</label></th>
+            <th scope="row">
+              <label for="pbcmDetailInput" class="form-label">출판사</label>
+            </th>
             <td>
-              <input class="form_ip" id="pbcmDetailInput" placeholder="출판사를 입력해주세요." type="text">
+              <input class="form-control" id="pbcmDetailInput" placeholder="출판사를 입력해주세요." type="text">
             </td>
           </tr>
+
           <tr>
-            <th class="has_ip" scope="row">발행일</th>
+            <th scope="row">발행일</th>
             <td>
-              <div class="date_picker_box">
-                <!-- form_sel -->
-                <div class="form_sel"> <!-- 수정 220121 data-class="type_md" 삭제 -->
-                  <select id="selMonInterval" style="display: none;" title="발행일 기간 선택">
+              <!-- 날짜 선택 부분을 Bootstrap 요소로 대체 -->
+              <!-- 직접 기간 선택 & 직접 날짜 입력이 혼합된 상황이므로, 필요에 따라 datepicker 라이브러리 추가 가능 -->
+              <div class="d-flex align-items-center gap-2">
+                <!-- 기간 선택 select -->
+                <div style="max-width: 150px;">
+                  <select class="form-select" id="selMonInterval" title="발행일 기간 선택">
                     <option value="1m">최근 1개월</option>
                     <option value="2m">최근 2개월</option>
                     <option value="3m">최근 3개월</option>
@@ -92,49 +108,76 @@
                     <option value="">직접입력</option>
                   </select>
                 </div>
-                <!-- //form_sel -->
-                <!-- FIXME : 1. 아이콘 다른 것으로 수정
-                             2. 달력 api 가져와서 쓰기 -->
-                <div class="date_box">
-                  <input class="ui_date hasDatepicker" id="rlseStr" placeholder="" title="시작일 선택" type="text"><img
-                    alt="날짜 선택"
-                    class="ui-datepicker-trigger"
-                    src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/datepicker_icon_button@2x.png"
-                    title="날짜 선택">
+                <!-- 시작일 -->
+                <div class="input-group" style="max-width: 200px;">
+                  <input class="form-control" id="rlseStr" placeholder="시작일 선택" title="시작일 선택" type="text">
+                  <!-- 달력 아이콘 버튼(직접 DatePicker 라이브러리 연결) -->
+                  <button class="btn btn-outline-secondary" type="button">
+                    <img
+                        alt="날짜 선택"
+                        src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/datepicker_icon_button@2x.png"
+                        title="날짜 선택"
+                        style="width: 20px; height: 20px;">
+                  </button>
                 </div>
-                <span class="gap">~</span>
-                <div class="date_box">
-                  <input class="ui_date hasDatepicker" id="rlseEnd" placeholder="" title="종료일 선택" type="text"><img
-                    alt="날짜 선택"
-                    class="ui-datepicker-trigger"
-                    src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/datepicker_icon_button@2x.png"
-                    title="날짜 선택">
+                <span>~</span>
+                <!-- 종료일 -->
+                <div class="input-group" style="max-width: 200px;">
+                  <input class="form-control" id="rlseEnd" placeholder="종료일 선택" title="종료일 선택" type="text">
+                  <button class="btn btn-outline-secondary" type="button">
+                    <img
+                        alt="날짜 선택"
+                        src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/datepicker_icon_button@2x.png"
+                        title="날짜 선택"
+                        style="width: 20px; height: 20px;">
+                  </button>
                 </div>
+              </div>
+            </td>
+          </tr>
 
-              </div>
-            </td>
-          </tr>
           <tr>
-            <th class="has_ip" scope="row">가격</th>
+            <th scope="row">가격</th>
             <td>
-              <div class="input_text_box">
-                <input class="form_ip" id="saprmin" onkeyup="inputNumberFormat(this)" placeholder="0" title="최소 금액 입력"
-                       type="text">
-                <span class="gap">~</span>
-                <input class="form_ip" id="saprmax" onkeyup="inputNumberFormat(this)" placeholder="9,999,999"
-                       title="최대 금액 입력"
-                       type="text">
+              <!-- 가격 구간 표시 -->
+              <div class="input-group" style="max-width: 350px;">
+                <input
+                    class="form-control"
+                    id="saprmin"
+                    onkeyup="inputNumberFormat(this)"
+                    placeholder="0"
+                    title="최소 금액 입력"
+                    type="text">
+                <span class="input-group-text">~</span>
+                <input
+                    class="form-control"
+                    id="saprmax"
+                    onkeyup="inputNumberFormat(this)"
+                    placeholder="9,999,999"
+                    title="최대 금액 입력"
+                    type="text">
               </div>
             </td>
           </tr>
+
           </tbody>
         </table>
       </form>
     </div>
+
     <div class="btn_wrap page_bottom">
-      <button class="btn_lg btn_line_primary" onclick="initValue();" type="button"><span class="text">초기화</span>
+      <!-- 부트스트랩 버튼 형태로 변경 -->
+      <button
+          class="btn btn-lg btn-outline-primary me-2"
+          onclick="initValue();"
+          type="button">
+        <span class="text">초기화</span>
       </button>
-      <a class="btn_lg btn_primary" onclick="goDetailSearchResult()"><span class="text">상세검색</span></a>
+      <a
+          class="btn btn-lg btn-primary"
+          onclick="goDetailSearchResult()">
+        <span class="text">상세검색</span>
+      </a>
     </div>
   </div>
 </section>
