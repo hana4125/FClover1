@@ -105,8 +105,5 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# Client ID & Client Secret
-.env
-
 # intellij
 .idea

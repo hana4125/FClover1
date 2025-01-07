@@ -38,7 +38,6 @@ public class Payment {
     private LocalDateTime createdAt; // 생성일
     private LocalDateTime updatedAt; // 업데이트일
 
-
     public static Payment save(PaymentReq paymentReq) {
         return Payment.builder()
                 .partnerId(paymentReq.getPartnerId())
@@ -56,24 +55,7 @@ public class Payment {
                 .cardName(paymentReq.getCardName())
                 .cardNumber(paymentReq.getCardNumber())
                 .build();
+
     }
-//
-//    public static Payment searchList(String userId) {
-//        return Payment.builder()
-//                .partnerId(paymentReq.getPartnerId())
-//                .userId(paymentReq.getUserId())
-//                .orderId(paymentReq.getOrderId())
-//                .impUid(paymentReq.getImpUid())
-//                .paymentDate(paymentReq.getPaymentDate())
-//                .paymentMethod(paymentReq.getPayMethod())
-//                .merchantUid(paymentReq.getMerchantUid())
-//                .paymentAmount(BigDecimal.valueOf(paymentReq.getPaidAmount()))
-//                .pgProvider(paymentReq.getPgProvider())
-//                .pgType(paymentReq.getPgType())
-//                .pgTid(paymentReq.getPgTid())
-//                .status(paymentReq.getStatus())
-//                .cardName(paymentReq.getCardName())
-//                .cardNumber(paymentReq.getCardNumber())
-//                .build();
-//    }
+
 }

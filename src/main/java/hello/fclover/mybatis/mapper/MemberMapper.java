@@ -15,6 +15,8 @@ public interface MemberMapper {
 
     int updateMember(Member member);
 
+    int updateSocialMember(Member member);
+
     int updateProfile(Member member);
 
     int deleteProfilePicture(String memberId);

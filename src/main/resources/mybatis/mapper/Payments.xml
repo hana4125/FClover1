@@ -22,4 +22,7 @@
             SELECT * FROM payments
            WHERE user_id=#{userId}
     </select>
+    <select id="findByPaymentDateBetweenAndStatus">
+
+    </select>
 </mapper>
