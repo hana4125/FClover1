@@ -4,4 +4,11 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.SellerMapper">
 
+    <insert id="goodsSingleInsert">
+        insert into Goods
+        (seller_id, cate_no, goods_name, goods_content, goods_price, goods_writer, seller_company, goods_create_at,
+         goods_image, goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
+        values(#{seller_id}, #{cate_no}, #{goods_name}, #{goods_content}, #{goods_price}, #{goods_writer}, #{seller_company}, #{goods_create_at},
+               #{goods_image}, #{goods_count}, date , #{goods_pageCount}, #{goods_bookSize}, #{writer_content})
+    </insert>
 </mapper>
