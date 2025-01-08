@@ -211,15 +211,6 @@ public class MemberController {
         return "redirect:/member/myPage/profile";
     }
 
-    @GetMapping("/myPage/orderDelivery")
-    public String myPageOrderDelivery(Principal principal, Model model) {
-        List<Payment> payment = paymentService.searchList(principal.getName());
-        System.out.println("principal = " + principal.getName());
-        System.out.println("===========>여기는 controller ===============payment = " + payment);
-        model.addAttribute("list", payment);
-        return "/user/mypage/userOrderlist";
-    }
-
     @GetMapping("/myPage/purchaseHistory")
     public String myPagePurchaseHistory() {
         return "/user/mypage/userMyPagePurchaseHistory";
@@ -233,11 +224,6 @@ public class MemberController {
     @GetMapping("/cart")
     public String cart() {
         return "/user/userCart";
-    }
-
-    @GetMapping("/category")
-    public String category() {
-        return "/user/userCategory";
     }
 
     @GetMapping("/bestSeller")
@@ -273,8 +259,17 @@ public class MemberController {
         return "redirect:/member/myPage/info";
     }
 
+    @PostMapping("/socialMemberUpdate")
+    public String socialMemberUpdate(@ModelAttribute Member member) {
+        String encPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encPassword);
+        memberService.updateMember(member);
+        return "redirect:/member/myPage/info";
+    }
+
     @GetMapping("/memberPay")
-    public String sellerPay() {
+    public String sellerPay(Principal principal,Model model) {
+        model.addAttribute("username", principal.getName());
         return "user/userPayments";
     }
 
@@ -283,28 +278,30 @@ public class MemberController {
         return "user/userPaymentsDone";
     }
 
-//    @GetMapping("/memberOrderList")
-//    public String OrderList(String userId, Model model) {
-//
-//
-//        Payment payment = paymentService.searchList(userId);
-//        System.out.println("===========>여기는 controller ===============payment = " + payment);
-//        model.addAttribute("list", payment);
-//
-//
-//        return "user/userOrderList";
-//    }
+
+    //마이페이지 주문/배송 조회
+    @GetMapping("/myPage/orderDelivery")
+    public String myPageOrderDelivery(Principal principal, Model model) {
+        List<Payment> payment = paymentService.searchList(principal.getName());
+        System.out.println("principal = " + principal.getName());
+        System.out.println("===========>여기는 controller ===============payment = " + payment);
+        model.addAttribute("list", payment);
+        return "/user/mypage/userOrderlist";
+    }
 
 
+    //마이페이지 주문/배송조회 상세보기
     @GetMapping("/myPage/memberOrderListDetail")
-    public String OrderListDetail( Model model) {
-//        @RequestParam String impUid,
-//        model.addAttribute("impUid", impUid);
+    public String OrderListDetail(@RequestParam("orderId") Long orderId, Model model) {
+
+        System.out.println("======================>여기는 컨트롤러 : orderId = " + orderId);
+
+        model.addAttribute("orderId", orderId);
 
         return "user/mypage/userOrderListDetail";
     }
 
-
+    //포트원 결제
     @PostMapping("/portone")
     public ResponseEntity<Map<String, String>> savePortone(@RequestBody PaymentReq paymentRequest) {
         Map<String, String> response = new HashMap<>();

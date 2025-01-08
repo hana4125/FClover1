@@ -579,3 +579,344 @@ th, td {
     margin-left: 10px; /* 이미지와 텍스트 사이의 간격을 주기 위해 */
     white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 */
 }
+.title_wrap.title_size_md.has_btn {
+    min-height: 38px;
+    padding-bottom: 16px;
+}
+
+.wrapper .container_wrapper .contents_wrap.aside .section_wrap {
+    width: calc(100% - 216px);
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+.tbl_prod_wrap.type_notify .tbl_summary {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 64px;
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid #ccc;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+.order_summary_box {
+    display: block;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    overflow: hidden;
+    word-break: break-all;
+}
+.order_summary_box {
+    display: block;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    overflow: hidden;
+    word-break: break-all;
+}
+.order_summary_box .box_header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    min-height: 60px;
+    padding: 15px 24px;
+    background-color: rgba(80, 85, 177, 0.06);
+    box-sizing: border-box;
+}
+.title_wrap .title_heading {
+    display: inline-block;
+    position: relative;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+.title_wrap.title_size_md .title_heading {
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+}
+.title_wrap .title_heading {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.tbl_row_wrap {
+    display: block;
+    width: 100%;
+    padding: 18px 0;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #eaeaea;
+    box-sizing: border-box;
+}
+
+.tbl_row_wrap .tbl_row tbody th {
+    padding: 12px 10px;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    text-align: left;
+    color: #000;
+    font-weight: 500;
+    vertical-align: top;
+}
+.tbl_row_wrap .tbl_row tbody td .address_item .address, .tbl_row_wrap .tbl_row tbody td .address_item .email {
+    margin-top: 12px;
+}
+.address_item .address_info_box .address, .address_item .address_info_box .email, .address_item .address_info_box .ebook_info {
+    display: block;
+    margin-top: 8px;
+    color: #000;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+
+.address_person {
+    display: block;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    font-weight: 500;
+
+}
+.contents_wrap.aside .title_wrap.title_size_md ~ .title_size_md, .contents_wrap.aside .title_wrap.title_size_lg ~ .title_size_md {
+    margin-top: 70px;
+}
+.title_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.title_wrap.title_size_md .title_heading {
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+}
+.payment_info_wrap {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 30px 10px;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #eaeaea;
+    box-sizing: border-box;
+}
+.payment_info_wrap .payment_info_area {
+     display: block;
+     position: relative;
+     flex: 1 0;
+     box-sizing: border-box;
+ }
+.payment_info_wrap .payment_info_area ~ .payment_info_area {
+    margin-left: 30px;
+    padding-left: 30px;
+}
+
+.payment_info_wrap .payment_info_area {
+    display: block;
+    position: relative;
+    flex: 1 0;
+    box-sizing: border-box;
+}
+.btn_wrap.page_bottom {
+    margin-top: 40px;
+}
+
+.btn_wrap {
+    display: block;
+    font-size: 0;
+    text-align: center;
+}
+a.btn_primary, button.btn_primary, a.btn_line_primary.active, button.btn_line_primary.active {
+    color: #fff;
+    background: #5055b1;
+    border: 1px solid #5055b1;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+a.btn_lg, button.btn_lg {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    min-width: 200px;
+    height: 50px;
+    padding: 0 23px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a.btn_primary, button.btn_primary, a.btn_line_primary.active, button.btn_line_primary.active {
+    color: #fff;
+    background: #5055b1;
+    border: 1px solid #5055b1;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.btn_wrap {
+    display: block;
+    font-size: 0;
+    text-align: center;
+}
+a.btn_lg, button.btn_lg {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    min-width: 200px;
+    height: 50px;
+    padding: 0 23px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+}

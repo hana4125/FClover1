@@ -1,7 +1,7 @@
 // 구매자 정보
 
 
-const useremail = "as02268@naver.com"
+// const useremail = "as02268@naver.com"
 const username=document.getElementById("username").innerText;
 // const username = "as02268"
 
@@ -44,7 +44,7 @@ function paymentProcess() {
                 amount: 1000, // 가격
 
                 /* 구매자 정보 */
-                buyer_email: `${useremail}`,
+                // buyer_email: `${useremail}`,
                 buyer_name: `${username}`,
                 // buyer_tel : '010-1234-5678',
                 // buyer_addr : '서울특별시 강남구 삼성동',
@@ -53,10 +53,11 @@ function paymentProcess() {
                 //async : 비동기처리, 항상 promise를 반환 .
                 //비동기 함수 내에서 발생한 비동기 작업들은 await를 사용해 기다릴 수 있음.
                 if (rsp.success) { //결제 성공시
+
                     // 필요한 데이터를 추가
                     rsp.partnerId = 12345;  // partnerId 값 설정 (필요시 동적으로 가져올 수 있음)
                     rsp.userId = `${username}`;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
-                    rsp.orderId = 112233;   // orderId 값 설정 (주문 관련 정보로 설정 가능)
+                    rsp.orderId = "12341234" + generateMerchantUid();   // orderId 값 설정 (주문 관련 정보로 설정 가능)
                     rsp.paymentDate = new Date().toISOString().split('T')[0];  // paymentDate를 현재 날짜로 설정 (yyyy-mm-dd 형식)
 
                     console.log("=====>payment.js의 rsp : " +rsp);

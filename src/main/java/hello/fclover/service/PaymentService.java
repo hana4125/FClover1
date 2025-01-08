@@ -19,5 +19,4 @@ public interface PaymentService {
 
     void cancelPayment(String uid);
 
-    void decrease(Long id, Long quantity);
 }

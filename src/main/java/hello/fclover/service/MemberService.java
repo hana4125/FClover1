@@ -18,6 +18,8 @@ public interface MemberService {
 
     int updateMember(Member member);
 
+    int updateSocialMember(Member member);
+
     int updateProfile(Member member);
 
     int removeProfilePicture(String memberId);

@@ -22,9 +22,16 @@
                 location.href = "/myPage";
             })
 
-            $("#categoryItem").click(function () {
-                location.href = "/member/category";
+            $(".category-item").click(function () {
+                location.href = "/category/{no}";
             })
+
+            // 카테고리 클릭 이벤트
+            // $(".category-item").click(function (event) {
+            //     event.preventDefault(); // 기본 동작 방지
+            //     const href = $(this).attr("href"); // 클릭한 항목의 href 속성 가져오기
+            //     location.href = href; // 해당 URL로 이동
+            // });
 
             $(".show-detail").click(function () {
                 location.href = "";
@@ -103,9 +110,6 @@
         </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-<!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
-<!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
-<!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
             <a href="#" class="best ps-5 pe-5">베스트</a>
             <a href="#" class="new ps-5 pe-5">신상품</a>
             <a href="#" class="ps-5 pe-5">이벤트</a>
@@ -115,15 +119,16 @@
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
     <h4 class="text-center mb-3">카테고리</h4><br>
-    <!-- 하위 카테고리 리스트 -->
     <div class="category-list">
-        <div class="category-column" th:each="categoryGroup : ${categoryGroups}">
-            <ul class="list-unstyled">
-                <li th:each="category : ${categoryGroup}">
-                    <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>
-                </li>
-            </ul>
-        </div>
+        <ul class="list-unstyled">
+            <!-- categoryList의 각 요소를 반복하여 출력 -->
+            <li th:each="category : ${categoryList}">
+                <!-- 카테고리 이름 출력 -->
+                <a th:href="@{/category/{no}(no=${category.cate_no})}"
+                   th:text="${category.cate_name}"
+                   class="category-item"></a>
+            </li>
+        </ul>
     </div>
 </div>
 
