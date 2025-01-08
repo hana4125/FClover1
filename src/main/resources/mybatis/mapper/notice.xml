@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.fclover.mybatis.mapper.NoticeMapper">
+
+    <select id="getListCount" resultType="int">
+        select count(*) from NOTICE
+    </select>
+
+    <select id="getBoardList" resultType="Notice">
+        select *,  IFNULL(cnt,0) cnt
+        from   NOTICE   left outer join (select NOTI_NUM, count(*) cnt
+                                         from COMMENTS
+                                         group by NOTI_NUM) c
+                                        on NOTICE.NOTI_NUM = c.NOTI_NUM
+            limit #{start}, #{limit}
+    </select>
+
+    <insert id="insertNotice">
+        <selectKey resultType="int" order="BEFORE" keyProperty="NOTINUM" keyColumn="NOTI_NUM">
+            select IFNULL(max(NOTI_NUM), 0) + 1 from NOTICE
+        </selectKey>
+        insert into NOTICE
+        (NOTI_NUM,
+        NOTI_TITLE, NOTI_NAME,
+        NOTI_CONTENT, NOTI_DATE)
+        values
+        (#{NOTINUM},
+        #{NOTITITLE}, #{NOTINAME},
+        #{NOTICONTENT}, now())
+    </insert>
+</mapper>
