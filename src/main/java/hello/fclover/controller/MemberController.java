@@ -83,6 +83,26 @@ public class MemberController {
         return "user/userLogin";
     }
 
+    @GetMapping("/find-id")
+    public String findIdPage() {
+        return "user/userFindId";
+    }
+
+    @PostMapping("/find-id")
+    public String findId() {
+        return "redirect:/member/find-id";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordPage() {
+        return "user/userResetPassword";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword() {
+        return "redirect:/member/reset-password";
+    }
+
     @GetMapping("/myPage")
     public String myPageMain(Principal principal) {
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>signup</title>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/css/user/signup.css">
+  <script>
+    $(function() {
+        $("#logo").click(function() {
+            location.href = "/";
+        })
+    })
+  </script>
+</head>
+<body>
+<div class="container w-25 text-center">
+  <div class="mt-5">
+    <img id="logo" src="/img/user/kybo.png" alt="교보" width="300px" height="80px" class="mb-3">
+    <form th:action="@{/member/find-id}" method="post">
+      <h5 class="text-center">아이디 찾기</h5>
+      <div class="d-flex fw-bold mt-3 mb-3">이메일로 찾기</div>
+      <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름">
+      <input type="text" class="form-control mb-3" id="email" name="email" placeholder="이메일">
+      <input type="hidden" id="auth" name="auth" value="ROLE_MEMBER">
+      <input type="submit" class="form-control btn btn-success" value="확인">
+    </form>
+  </div>
+</div>
+</body>
+</html>
