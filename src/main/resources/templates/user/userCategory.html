@@ -40,7 +40,7 @@
       })
 
       $(".show-detail").click(function () {
-        location.href = "";
+        location.href = "/goodsDetail";
       })
     })
 
@@ -153,7 +153,6 @@
       </button>
       <a href="#" class="best ps-5 pe-5">베스트</a>
       <a href="#" class="new ps-5 pe-5">신상품</a>
-      <a href="#" class="ps-5 pe-5">이벤트</a>
     </div>
   </div>
 </div>
@@ -175,9 +174,8 @@
 
 <div class="container w-75 mt-5">
   <div class="d-flex justify-content-end align-items-center mb-3">
-
     <!-- 장바구니, 찜 버튼 -->
-    <div class="icon ms-auto d-flex">
+    <div class="icon ms-auto mb-4">
       <img src="/img/user/heart.png" class="heart me-2" width="36" height="36" alt="찜">
       <img src="/img/user/cart.png" class="cart me-2" width="36" height="36" alt="장바구니">
     </div>
@@ -202,74 +200,60 @@
     </ul>
     </div>
   </div>
+
   <!-- 전체 선택 체크박스 -->
   <input type="checkbox" id="selectAll" class="all-checkbox" style="width: 18px; height: 18px;">
   <label for="selectAll">전체 선택</label>
-  <!--    <div class="best-items">-->
-  <!--        <ul class="list-unstyled">-->
-  <!--            <li th:each="book : ${bestBooks}">-->
-  <!--                <span class="item-lank" style="font-size : 18px;" th:text="${book.rank}"></span>-->
-  <!--                <div class="item-image">-->
-  <!--                    <a href="#" class="show-detail">-->
-  <!--                        <div class="img-box">-->
-  <!--                            <img th:src="@{/img/user/book/{image}(image=${book.image})}" style="width:200px; height:280px;" th:alt="${book.alt}">-->
-  <!--                        </div>-->
-  <!--                    </a>-->
-  <!--                </div>-->
-  <!--                <br>-->
-  <!--                <div class="item-info">-->
-  <!--                    <a href="#" class="show-detail">-->
-  <!--                        <span class="item_name" th:text="${book.name}"></span>-->
-  <!--                    </a><br>-->
-  <!--                    <span class="item_author" th:text="${book.author}"></span>-->
-  <!--                </div>-->
-  <!--            </li>-->
-  <!--        </ul>-->
-  <!--    </div>-->
-  <div class="best-items">
-    <ul class="best-list list-unstyled">
-      <li class="d-flex align-items-start">
-        <input type="checkbox" class="item-checkbox" style="margin-top: 5px;">
-        <div>
-        <span class="item-lank" style="font-size : 18px;">1</span>
-        <div class="item-image">
-          <a href="#" class="show-detail">
-            <div class="img-box">
-              <img src="/img/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
+  <div class="category-items">
+    <ul class="list-unstyled">
+      <!-- bestBooks 리스트를 반복하여 출력 -->
+      <li th:each="goods : ${goodsList}">
+        <div class="category-list d-flex align-items-start">
+          <input type="checkbox" class="item-checkbox" style="margin-top: 5px;">
+          <div class="category-item">
+            <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
+            <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+              <div class="img-box">
+                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">
+              </div>
+            </a>
+            <div class="item-info">
+              <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+              <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+                <span class="item_name" th:text="${goods.goodsName}"></span>
+              </a>
+              <br>
+              <span class="item_author" th:text="${goods.goodsWriter}"></span>
             </div>
-          </a>
-        </div>
-        <br>
-        <div class="item-info">
-          <a href="#" class="show-detail">
-            <span class="item_name">소년이 온다</span>
-          </a><br>
-          <span class="item_author">한강 · 창비</span>
-        </div>
-        </div>
-      </li>
-      <li class="d-flex align-items-start">
-        <input type="checkbox" class="item-checkbox" style="margin-top: 5px;">
-        <div>
-        <span class="item-lank" style="font-size : 18px;">2</span>
-        <div class="item-image">
-          <a href="#" class="show-detail">
-            <div class="img-box">
-              <img src="/img/user/book/bestItem2.png" style="width:200px; height:280px;" alt="bestItem2">
-            </div>
-          </a>
-        </div>
-        <br>
-        <div class="item-info">
-          <a href="#" class="show-detail">
-            <span class="item_name">채식주의자</span>
-          </a><br>
-          <span class="item_author">한강 · 문학동네</span>
-        </div>
+          </div>
         </div>
       </li>
     </ul>
-  </div>
+  </div><hr>
+<!--  <div class="best-items">-->
+<!--    <ul class="best-list list-unstyled">-->
+<!--      <li class="d-flex align-items-start">-->
+<!--        <input type="checkbox" class="item-checkbox" style="margin-top: 5px;">-->
+<!--        <div>-->
+<!--        <span class="item-lank" style="font-size : 18px;">1</span>-->
+<!--        <div class="item-image">-->
+<!--          <a href="#" class="show-detail">-->
+<!--            <div class="img-box">-->
+<!--              <img src="/img/user/book/item1.png" style="width:200px; height:280px;" alt="item1">-->
+<!--            </div>-->
+<!--          </a>-->
+<!--        </div>-->
+<!--        <br>-->
+<!--        <div class="item-info">-->
+<!--          <a href="#" class="show-detail">-->
+<!--            <span class="item_name">소년이 온다</span>-->
+<!--          </a><br>-->
+<!--          <span class="item_author">한강 · 창비</span>-->
+<!--        </div>-->
+<!--        </div>-->
+<!--      </li>-->
+<!--    </ul>-->
+<!--  </div>-->
   <!-- 페이지네이션 -->
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">

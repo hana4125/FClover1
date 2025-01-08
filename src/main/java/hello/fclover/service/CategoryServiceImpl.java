@@ -18,10 +18,4 @@ public class CategoryServiceImpl implements CategoryService {
         // 모든 카테고리 가져오기
         return categoryMapper.findAll();
     }
-
-    @Override
-    public Category getCategoryById(int cate_no) {
-        // 카테고리 ID로 특정 카테고리 가져오기
-        return categoryMapper.findById(cate_no);
-    }
 }

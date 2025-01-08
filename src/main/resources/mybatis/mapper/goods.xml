@@ -4,4 +4,17 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
 
+    <!-- 모든 카테고리에 있는 상품 조회 -->
+    <select id="findAll" resultType="hello.fclover.domain.Goods">
+        SELECT *
+        FROM goods
+        WHERE cate_no = #{cate_no}
+    </select>
+
+    <!-- 상품 상세 조회 -->
+    <select id="findById" parameterType="int" resultType="hello.fclover.domain.Goods">
+        SELECT *
+        FROM goods
+        WHERE goods_no = #{goods_no}
+    </select>
 </mapper>

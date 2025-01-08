@@ -15,19 +15,19 @@ CREATE TABLE GOODS
     GOODS_DATE          TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP #--상품 등록일
 );
 
-insert into GOODS values(1,123111,'test1',444,'GoodsName1',
+insert into GOODS values(1,123111,'test1',1,'GoodsName1',
                          'GoodsContent1',1000,'writer1',
                          'company1',sysdate(),null,1,current_timestamp() );
-insert into GOODS values(2,123222,'test2',444,'GoodsName2',
+insert into GOODS values(2,123222,'test2',1,'GoodsName2',
                          'GoodsContent2',1000,'writer2',
                          'company2',sysdate(),null,2,current_timestamp() );
-insert into GOODS values(3,123333,'test3',444,'GoodsName3',
+insert into GOODS values(3,123333,'test3',1,'GoodsName3',
                          'GoodsContent3',1000,'writer1',
                          'company3',sysdate(),null,3,current_timestamp() );
-insert into GOODS values(4,123444,'test4',444,'GoodsName4',
+insert into GOODS values(4,123444,'test4',1,'GoodsName4',
                          'GoodsContent4',1000,'writer4',
                          'company4',sysdate(),null,4,current_timestamp() );
-insert into GOODS values(5,123555,'test5',444,'GoodsName5',
+insert into GOODS values(5,123555,'test5',1,'GoodsName5',
                          'GoodsContent5',1000,'writer5',
                          'company5',sysdate(),null,1,current_timestamp() );
 
@@ -35,4 +35,5 @@ commit ;
 
 drop table goods;
 
+select * from goods;
 

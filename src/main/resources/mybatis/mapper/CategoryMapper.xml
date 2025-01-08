@@ -12,9 +12,9 @@
     </select>
 
     <!-- 특정 카테고리 조회 -->
-    <select id="findById" parameterType="int" resultType="hello.fclover.domain.Category">
-        SELECT cate_no, cate_name
-        FROM category
-        WHERE cate_no = #{cate_no}
-    </select>
+<!--    <select id="findById" parameterType="int" resultType="hello.fclover.domain.Category">-->
+<!--        SELECT cate_no, cate_name-->
+<!--        FROM category-->
+<!--        WHERE cate_no = #{cate_no}-->
+<!--    </select>-->
 </mapper>
