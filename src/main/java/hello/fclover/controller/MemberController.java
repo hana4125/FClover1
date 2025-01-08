@@ -89,7 +89,14 @@ public class MemberController {
     }
 
     @PostMapping("/find-id")
-    public String findId() {
+    public String findId(@ModelAttribute("findMember") Member member, Model model, RedirectAttributes redirectAttributes) {
+
+        String memberId = memberService.findMemberId(member);
+        if (memberId == null) {
+            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
+            return "redirect:/member/find-id";
+        }
+
         return "redirect:/member/find-id";
     }
 

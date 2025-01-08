@@ -19,6 +19,10 @@
         UPDATE member SET password = #{password}, birthdate = #{birthdate}, phone_number = #{phoneNumber}, gender = #{gender}
     </update>
 
+    <select id="selectMemberId">
+        SELECT member_id FROM member WHERE name = #{name} AND birthdate = #{birthdate} AND email = #{email}
+    </select>
+
     <update id="updateProfile">
         UPDATE member SET profile_picture = #{profilePicture} WHERE member_id = #{memberId}
     </update>
