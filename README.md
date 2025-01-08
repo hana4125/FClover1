@@ -1,14 +1,47 @@
-# OAuth 사용자 정보 등록
-[https://velog.io/@yso8296/Spring-Security%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%E[…]EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84   ](https://velog.io/@yso8296/Spring-Security%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%ED%86%B5%ED%95%A9-OAuth2-%EC%86%8C%EC%85%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84)
+# jasypt 환경변수
+JASYPT_ENCRYPTOR_PASSWORD=fClover
 
-위 링크 보고 구글 CLIENT_ID, CLIENT_SECRET / 네이버 CLIENT_ID, CLIENT_SECRET 받아오기
 
-프로젝트 루트 디렉토리에 .env 파일 만들기 (pom.xml과 같은 위치)
+
+
+# Git 명령어
+
+```shell
+$ git clone # 프로젝트 소스 불러오기
+
+$ git fetch # 프로젝트 최신화 
+
+$ git checkout -b dev origin/dev # dev 브랜치 생성 및 이동
+
+$ git branch # 브랜치 확인 ( dev, prod 두 개의 브랜치가 있어야 함 )
+
+$ git add . #  Git에서 현재 디렉토리와 하위 디렉토리에 있는 변경된 모든 파일을 스테이징 영역에 추가하는 명령
+
+$ git commit -m "커밋메시지" # 깃 커밋
+
+$ git push -u origin 작업중인브랜치명 # 깃 push
 
 ```
-GOOGLE_CLIENT_ID=받아온 아이디
-GOOGLE_CLIENT_SECRET=받아온 시크릿
-NAVER_CLIENT_ID=받아온 아이디
-NAVER_CLIENT_SECRET=받아온 시크릿
+
+# Commit Message Convention
+
+
+```shell
+1. feat
+- ex). “[user_payments] feat : BO 판매자 정보조회 페이지 구현”
+
+2. fix
+
+3. chore
+- ex). “[CJH] chore : 카테고리 버튼 추가”
+
+4. test
+
+5. refac
+
+6. css
+- ex). “[user_payments] css : 주문상세 css 수정”
+
+7. js
+
 ```
-env 파일에 내용 넣기

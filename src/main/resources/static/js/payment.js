@@ -1,6 +1,13 @@
 // 구매자 정보
-const useremail = "as02268@naver.com"
-const username = "as02268"
+
+
+// const useremail = "as02268@naver.com"
+const username=document.getElementById("username").innerText;
+// const username = "as02268"
+
+
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 // 결제창 함수 넣어주기
 document.getElementById('payment-button').addEventListener("click",
@@ -25,7 +32,7 @@ function generateMerchantUid() {
 
 function paymentProcess() {
     if (confirm("구매 하시겠습니까?")) {
-        if(isLogin){ // 회원만 결제 가능
+        if (isLogin) { // 회원만 결제 가능
             // IMP.init("imp34428218"); // 가맹점 식별코드
             IMP.init("imp03578475");
             IMP.request_pay({
@@ -37,36 +44,52 @@ function paymentProcess() {
                 amount: 1000, // 가격
 
                 /* 구매자 정보 */
-                buyer_email: `${useremail}`,
+                // buyer_email: `${useremail}`,
                 buyer_name: `${username}`,
                 // buyer_tel : '010-1234-5678',
                 // buyer_addr : '서울특별시 강남구 삼성동',
                 // buyer_postcode : '123-456'
-            }, async function (rsp) { // callback
+            }, async function (rsp) { // callback : 콜백 함수란 비동기 작업이 완료되면 호출되는 함수
+                //async : 비동기처리, 항상 promise를 반환 .
+                //비동기 함수 내에서 발생한 비동기 작업들은 await를 사용해 기다릴 수 있음.
                 if (rsp.success) { //결제 성공시
 
                     // 필요한 데이터를 추가
                     rsp.partnerId = 12345;  // partnerId 값 설정 (필요시 동적으로 가져올 수 있음)
-                    rsp.userId = 67890;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
-                    rsp.orderId = 112233;   // orderId 값 설정 (주문 관련 정보로 설정 가능)
+                    rsp.userId = `${username}`;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
+                    rsp.orderId = "12341234" + generateMerchantUid();   // orderId 값 설정 (주문 관련 정보로 설정 가능)
                     rsp.paymentDate = new Date().toISOString().split('T')[0];  // paymentDate를 현재 날짜로 설정 (yyyy-mm-dd 형식)
 
-                    console.log(rsp);
+                    console.log("=====>payment.js의 rsp : " +rsp);
                     // Send the payment details to your Spring Boot backend
-                    const response = await fetch('/api/payment/portone', {
+
+
+                    //await fetch : 동기코드와 유사한 비동기 코드. 콜백지옥에서 탈출가능.
+                    //요새는 ajax보다 fetch로 많이 처리한다고 함. fetch는 js sowkd api로 비동기 통신 네트워크를 가능하게 하는 기술.
+                    //
+                    const response = await fetch('/member/portone', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            [csrfHeader]: csrfToken// CSRF 헤더 추가
                         },
                         body: JSON.stringify(rsp) // Send the response object
                     });
 
-                    const result = await response.json();
-                    console.log(result)
+                    // console.log('==> 1. response : ', response);
+                    console.log('==> 2. response : ', response.text());
+                    // console.log('==> 3. response : ', await response);
+                    // console.log('==> 4. response : ', await response.json())
+                    // const result = await response.json();
+                    // const result = await response.json();
+                    const result = await response;
+                    console.log("=====>payment.js의 result : " + result)
 
-                    if (rsp.status == 200) { // DB저장 성공시
+                    if(result.status==200){
+                    // if (rsp.status == 200) { // DB저장 성공시
                         alert('결제 완료!')
                         window.location.reload();
+                        location.href = "/member/memberPayDone";
                     } else { // 결제완료 후 DB저장 실패시
                         alert(`error:[${rsp.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
                         // DB저장 실패시 status에 따라 추가적인 작업 가능성
@@ -75,9 +98,7 @@ function paymentProcess() {
                     alert(rsp.error_msg)
                 }
             });
-        }
-
-        else { // 비회원 결제 불가
+        } else { // 비회원 결제 불가
             alert('로그인이 필요합니다!')
         }
     } else { // 구매 확인 알림창 취소 클릭시 돌아가기

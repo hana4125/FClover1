@@ -36,14 +36,12 @@ public class SellerController {
                                           HttpServletRequest request,
                                           @RequestParam("goods_image") List<MultipartFile> files) {
         sellerService.goodsSingleInsert(goods);
+        for (MultipartFile file : files) {
+            // 파일 이름 가져오기
+            String fileName = file.getOriginalFilename();
 
-
-            for (MultipartFile file : files) {
-                // 파일 이름 가져오기
-                String fileName = file.getOriginalFilename();
-
-                System.out.println(file);
-            }
+            System.out.println(file);
+        }
 
 
         return "seller/sellerAddSingleProduct"; // 성공 후 상세 페이지로 이동
@@ -54,5 +52,22 @@ public class SellerController {
         return "seller/sellerProductDetail";
     }
 
+
+
+
+    @GetMapping("/main")
+    public String signup() {
+        return "seller/sellerMypage";
+    }
+
+    @GetMapping("/sellerSignup")
+    public String sellerSignup() {
+        return "seller/sellerSignup";
+    }
+
+    @GetMapping("/sellerLogin")
+    public String sellerLogin() {
+        return "seller/sellerLogin";
+    }
 
 }
