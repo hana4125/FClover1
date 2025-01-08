@@ -23,7 +23,7 @@ $ git push -u origin 작업중인브랜치명 # 깃 push
 
 ```
 
-# Commit Convention
+# Commit Message Convention
 
 
 ```shell
