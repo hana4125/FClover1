@@ -1,15 +1,14 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.AddressBook;
-import hello.fclover.domain.Member;
-import hello.fclover.domain.Payment;
-import hello.fclover.domain.PaymentReq;
+import hello.fclover.domain.*;
 import hello.fclover.service.MemberService;
+import hello.fclover.service.NoticeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
@@ -21,9 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -35,6 +36,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final NoticeService noticeService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
 
@@ -331,6 +333,66 @@ public class MemberController {
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
 
+    //공지사항
+    @GetMapping("/notice")
+    public String notice(
+            @RequestParam(defaultValue = "1") Integer page, Model m) {
+
+        int limit = 10;
+        int listcount = noticeService.getListCount();
+        List<Member> list = noticeService.getBoardList(page, limit);
+
+        PaginationResult result = new PaginationResult(page, limit, listcount);
+        m.addAttribute("page", page);
+        m.addAttribute("maxpage", result.getMaxpage());
+        m.addAttribute("startpage", result.getStartpage());
+        m.addAttribute("endpage", result.getEndpage());
+        m.addAttribute("listcount", listcount);
+        m.addAttribute("boardlist", list);
+        m.addAttribute("limit", limit);
+        return "user/userNotice";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/notice/write")
+    public String noticeWrite() {
+        return "user/userWrite";
+    }
+
+    @PostMapping(value ="/notice/add")
+    public String noticeAdd(Notice notice) {
+        noticeService.insertNotice(notice);
+        return "redirect:/member/notice";
+    }
+
+
+    @GetMapping(value = "/notice/detail")
+    public String Detail(
+            int num, ModelAndView mv,
+            HttpServletRequest request,
+            @RequestHeader(value = "referer", required = false) String beforeURL, HttpSession session) {
+
+        String sessionReferer = (String) session.getAttribute("referer");
+
+        if (sessionReferer != null && sessionReferer.equals("list")) {
+            if (beforeURL != null && beforeURL.endsWith("list")) {
+                memberService.setReadCountUpdate(num);
+            }
+            session.removeAttribute("referer");
+        }
+
+        Member member = memberService.getDetail(num);
+
+        if (member == null) {
+            mv.setViewName("error/error");
+            mv.addObject("url",request.getRequestURL());
+            mv.addObject("message","상세보기 실패");
+        }else {
+            mv.setViewName("user/userNoticeDetail");
+            mv.addObject("noticedata", member);
+        }
+        return "user/userNotice";
+    }
 
 }
 

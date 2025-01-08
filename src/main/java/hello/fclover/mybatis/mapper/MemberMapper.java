@@ -2,8 +2,10 @@ package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.domain.Notice;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -40,4 +42,16 @@ public interface MemberMapper {
     int selectIsDefault(int addressNum);
 
     int deleteAddressBook(int addressNum);
+
+
+
+
+
+    Member getDetail(int num);
+
+
+
+
+
+    void setReadCountUpdate(int num);
 }
