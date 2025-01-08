@@ -12,6 +12,7 @@ public class Member {
     private String password;
     private String name;
     private String email;
+    private String birthdate;
     private String phoneNumber;
     private String auth;
     private String profilePicture;
