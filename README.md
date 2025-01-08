@@ -29,13 +29,19 @@ $ git push -u origin 작업중인브랜치명 # 깃 push
 ```shell
 1. feat
 - ex). “[user_payments] feat : BO 판매자 정보조회 페이지 구현”
+
 2. fix
+
 3. chore
 - ex). “[CJH] chore : 카테고리 버튼 추가”
+
 4. test
+
 5. refac
+
 6. css
 - ex). “[user_payments] css : 주문상세 css 수정”
+
 7. js
 
 ```
