@@ -27,49 +27,49 @@
         margin-left: auto;
       }
 
-        .header-profile {
-            cursor: pointer;
-        }
+      .header-profile {
+        cursor: pointer;
+      }
 
-        .icon {
-            position: relative; top: 15px;
-        }
+      .icon {
+        position: relative;
+        top: 15px;
+      }
 
-        .icon img {
-            cursor: pointer;
-        }
+      .icon img {
+        cursor: pointer;
+      }
 
-        .thumb-box-header {
-            width: 36px; /* 프로필 이미지의 원형 크기 */
-            height: 36px; /* 프로필 이미지의 원형 크기 */
-            border-radius: 50%; /* 원형 모양으로 만들기 */
-            border: 1px solid white; /* 테두리 추가 */
-            overflow: hidden; /* 원형 밖으로 이미지가 튀어나가지 않도록 숨김 */
-            display: flex; /* 이미지 중앙 정렬을 위해 flexbox 사용 */
-            justify-content: center; /* 가로 중앙 정렬 */
-            align-items: center; /* 세로 중앙 정렬 */
-        }
+      .thumb-box-header {
+        width: 36px; /* 프로필 이미지의 원형 크기 */
+        height: 36px; /* 프로필 이미지의 원형 크기 */
+        border-radius: 50%; /* 원형 모양으로 만들기 */
+        border: 1px solid white; /* 테두리 추가 */
+        overflow: hidden; /* 원형 밖으로 이미지가 튀어나가지 않도록 숨김 */
+        display: flex; /* 이미지 중앙 정렬을 위해 flexbox 사용 */
+        justify-content: center; /* 가로 중앙 정렬 */
+        align-items: center; /* 세로 중앙 정렬 */
+      }
 
-        .thumb-box-header img {
-            width: 100%; /* 이미지의 너비를 박스 크기와 맞춤 */
-            height: 100%; /* 이미지의 높이를 박스 크기와 맞춤 */
-            object-fit: cover; /* 이미지의 가운데 부분만 보이도록 설정 */
-            object-position: center; /* 이미지의 중심을 기준으로 잘림 처리 */
-        }
+      .thumb-box-header img {
+        width: 100%; /* 이미지의 너비를 박스 크기와 맞춤 */
+        height: 100%; /* 이미지의 높이를 박스 크기와 맞춤 */
+        object-fit: cover; /* 이미지의 가운데 부분만 보이도록 설정 */
+        object-position: center; /* 이미지의 중심을 기준으로 잘림 처리 */
+      }
     </style>
-    <script th:inline="javascript">
-        $(function () {
-            $("#logo").click(function () {
-                location.href = "/";
-            })
+    <script>
+      $(function () {
+        $("#logo").click(function () {
+          location.href = "/";
+        })
 
-            $("#cart").click(function () {
-                location.href = "/member/cart";
-            })
+        $("#cart").click(function () {
+          location.href = "/member/cart";
+        })
 
-            $(".myPage").click(function () {
-                location.href = "/member/myPage";
-            })
+        $(".myPage").click(function () {
+          location.href = "/member/myPage";
         })
 
         const $searchBar = $("#searchBarToggle");
@@ -128,9 +128,9 @@
             <a class="pe-2" href="/member/signup">회원가입</a>
           </th:block>
           <th:block sec:authorize-expr="isAuthenticated()">
-            <a href="/member/myPage" class="pe-2"><span th:text="${member.name}"></span>님</a>
-            <form th:action="@{/member/logout}" method="post">
-              <button type="submit" class="pe-2">로그아웃</button>
+            <a class="pe-2" href="/member/myPage"><span th:text="${member.name}"></span>님</a>
+            <form method="post" th:action="@{/member/logout}">
+              <button class="pe-2" type="submit">로그아웃</button>
             </form>
           </th:block>
           <a class="pe-2" href="#">고객센터</a>
@@ -145,10 +145,9 @@
       <img alt="메인 로고" class="me-3" id="logo" src="/img/user/kybo.png">
 
       <div class="dropdown search-bar">
-
         <form class="d-flex search-box" id="searchBarToggle">
-          <input aria-label="Search" class="form-control me-2 search-text border-0" placeholder="찾고 싶은 도서를 검색해 보세요!"
-                 type="text" id="searchKeyword" name="keyword" autocomplete="off">
+          <input aria-label="Search" autocomplete="off" class="form-control me-2 search-text border-0"
+                 id="searchKeyword" name="keyword" placeholder="찾고 싶은 도서를 검색해 보세요!" type="text">
           <button class="btn p-0 m-0 search-btn" type="submit">
             <img alt="검색" height="36" src="/img/user/search.png" width="36">
           </button>
@@ -231,19 +230,21 @@
       </div>
       <div class="ms-5 icon d-flex">
         <div>
-          <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
+          <img alt="장바구니" class="me-3" height="36" id="cart" src="/img/user/cart.png" width="36">
         </div>
         <div th:if="${member == null}">
           <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle">
-            <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+            <img alt="기본 프로필 이미지" src="/img/user/profile.png">
           </div>
         </div>
         <div th:unless="${member == null}">
-          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
-            <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
+               th:if="${member.profilePicture == null}">
+            <img alt="기본 프로필 이미지" src="/img/user/profile.png">
           </div>
-          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-            <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
+               th:unless="${member.profilePicture == null}">
+            <img alt="프로필 이미지" th:src="@{|/img/user/upload/${member.profilePicture}|}">
           </div>
         </div>
       </div>
