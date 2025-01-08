@@ -22,3 +22,24 @@ $ git commit -m "커밋메시지" # 깃 커밋
 $ git push -u origin 작업중인브랜치명 # 깃 push
 
 
+# Commit 컨벤션
+
+```shell
+- feat
+- ex). “[user_payments] feat : **BO 판매자 정보조회 페이지 구현”**
+
+- fix
+
+- chore
+- ex). “[CJH] chore : 카테고리 버튼 추가**”**
+
+- test
+
+- refac
+
+- css
+- ex). “[user_payments] css : **주문상세 css 수정”**
+
+- js
+
+
