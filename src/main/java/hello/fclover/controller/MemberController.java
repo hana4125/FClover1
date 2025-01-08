@@ -297,7 +297,7 @@ public class MemberController {
     public String socialMemberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-        memberService.updateMember(member);
+        memberService.updateSocialMember(member);
         return "redirect:/member/myPage/info";
     }
 
