@@ -21,8 +21,10 @@ $ git commit -m "커밋메시지" # 깃 커밋
 
 $ git push -u origin 작업중인브랜치명 # 깃 push
 
+```
 
-# Commit 컨벤션
+# Commit Convention
+
 
 ```shell
 - feat
@@ -42,4 +44,4 @@ $ git push -u origin 작업중인브랜치명 # 깃 push
 
 - js
 
-
+```
