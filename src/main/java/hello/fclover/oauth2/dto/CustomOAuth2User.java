@@ -28,11 +28,6 @@ public class CustomOAuth2User implements OAuth2User {
     @Override
     public String getName() {
 
-        return oAuth2Response.getName();
-    }
-
-    public String getUsername() {
-
-        return oAuth2Response.getProvider() + " " + oAuth2Response.getName();
+        return oAuth2Response.getProvider() + "_" + oAuth2Response.getProviderId();
     }
 }
