@@ -165,8 +165,8 @@
       <!-- categoryList의 각 요소를 반복하여 출력 -->
       <li th:each="category : ${categoryList}">
         <!-- 카테고리 이름 출력 -->
-        <a th:href="@{/category/{no}(no=${category.cate_no})}"
-           th:text="${category.cate_name}"
+        <a th:href="@{/category/{no}(no=${category.cateNo})}"
+           th:text="${category.cateName}"
            class="category-item"></a>
       </li>
     </ul>
