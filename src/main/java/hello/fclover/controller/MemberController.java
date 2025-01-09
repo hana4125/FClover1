@@ -83,6 +83,33 @@ public class MemberController {
         return "user/userLogin";
     }
 
+    @GetMapping("/find-id")
+    public String findIdPage() {
+        return "user/userFindId";
+    }
+
+    @PostMapping("/find-id")
+    public String findId(@ModelAttribute("findMember") Member member, Model model, RedirectAttributes redirectAttributes) {
+
+        String memberId = memberService.findMemberId(member);
+        if (memberId == null) {
+            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
+            return "redirect:/member/find-id";
+        }
+
+        return "redirect:/member/find-id";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordPage() {
+        return "user/userResetPassword";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword() {
+        return "redirect:/member/reset-password";
+    }
+
     @GetMapping("/myPage")
     public String myPageMain(Principal principal) {
 
@@ -263,7 +290,7 @@ public class MemberController {
     public String socialMemberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-        memberService.updateMember(member);
+        memberService.updateSocialMember(member);
         return "redirect:/member/myPage/info";
     }
 

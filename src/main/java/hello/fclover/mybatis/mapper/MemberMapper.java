@@ -27,6 +27,8 @@ public interface MemberMapper {
 
     Member selectMember(String memberId, String password);
 
+    String selectMemberId(Member member);
+
     String selectPassword(String memberId);
 
     void deleteMember(String memberId);

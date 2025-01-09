@@ -7,6 +7,14 @@
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="/css/user/signup.css">
+  <style>
+      .btn-left-rounded {
+          border-radius: 6px 0 0 6px;
+      }
+      .btn-right-rounded {
+          border-radius: 0 6px 6px 0;
+      }
+  </style>
   <script>
       $(function () {
           $("#logo").click(function() {
@@ -14,15 +22,16 @@
           })
 
           $("form").submit(function () {
-              const id = $("#id");
+              const memberId = $("#memberId");
               const password = $("#password");
               const name = $("#name");
               const email = $("#email");
-              const phone = $("#phone");
+              const birthdate = $("#birthdate");
+              const phoneNumber = $("#phoneNumber");
 
-              if (id.val().trim() === '') {
+              if (memberId.val().trim() === '') {
                   alert("아이디를 입력하세요");
-                  id.focus();
+                  memberId.focus();
                   return false;
               }
 
@@ -44,9 +53,15 @@
                   return false;
               }
 
-              if (phone.val().trim === '') {
+              if (birthdate.val().trim() === '') {
+                  alert("생년월일을 입력하세요");
+                  birthdate.focus();
+                  return false;
+              }
+
+              if (phoneNumber.val().trim() === '') {
                   alert("휴대폰 번호를 입력하세요");
-                  phone.focus();
+                  phoneNumber.focus();
                   return false;
               }
           })
@@ -63,7 +78,14 @@
       <input type="password" class="form-control mb-3" id="password" name="password" placeholder="비밀번호">
       <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름">
       <input type="text" class="form-control mb-3" id="email" name="email" placeholder="이메일">
-      <input type="text" class="form-control mb-5" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호">
+      <input type="text" class="form-control mb-3" id="birthdate" name="birthdate" placeholder="생년월일 (예:19990101)">
+      <input type="text" class="form-control mb-3" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호 (예: 010-1234-5678)">
+      <div class="d-flex justify-content-start mb-5">
+        <input type="radio" class="btn-check" name="gender" value="male" id="success-outlined" checked>
+        <label class="btn btn-outline-success btn-left-rounded" for="success-outlined">남자</label>
+        <input type="radio" class="btn-check" name="gender" value="female" id="danger-outlined">
+        <label class="btn btn-outline-success btn-right-rounded" for="danger-outlined">여자</label>
+      </div>
       <input type="hidden" id="auth" name="auth" value="ROLE_MEMBER">
       <input type="submit" class="form-control btn btn-success" value="회원가입">
     </form>
