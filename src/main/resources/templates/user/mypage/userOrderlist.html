@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<html lang="en">
+<!--<html lang="en">-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,71 +41,8 @@
 <div class="mt-4 border-top">
     <div class="container w-75 pt-5">
         <div class="d-flex">
-            <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
-                <div class="bg-success rounded-3 p-5">
-                    <table class="ms-3">
-                        <tr>
-                            <td><img class="profile" src="/img/user/profile.png" alt="프로필"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <th:block sec:authorize-expr="isAuthenticated()">
-                                    <span sec:authentication="name" class="fs-4 text-white fw-bold"></span><span class="text-white fw-bold">님</span>
-                                </th:block>
-                                <th:block sec:authorize-expr="not isAuthenticated()">
-                                    <span class="ms-2 fs-4 text-white fw-bold">null님</span>
-                                </th:block>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="container mt-5">
-                    <!-- 쇼핑내역 -->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">쇼핑내역</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
-                            <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
-                        </ul>
-                    </div>
+            <div th:replace="~{fragment/mypage :: sidebar}"></div>
 
-                    <!-- 라이브러리 -->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">라이브러리</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="/member/myPage/wishlist">찜 목록</a></li>
-                        </ul>
-                    </div>
-
-
-                    <!--회원정보-->
-                    <div class="mb-4">
-                        <h5 class="fw-bold">회원정보</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="/member/myPage/deliveryAddressBook">배송주소록</a></li>
-                            <li><a href="/member/myPage/info-check">회원정보관리</a></li>
-                        </ul>
-                    </div>
-
-<!--                    &lt;!&ndash; 문의 내역 &ndash;&gt;-->
-<!--                    <div class="mb-4">-->
-<!--                        <h5 class="fw-bold">문의내역</h5>-->
-<!--                        <ul class="list-unstyled">-->
-<!--                            <li>1:1문의</li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-
-
-<!--                    &lt;!&ndash;회원정보&ndash;&gt;-->
-<!--                    <div class="mb-4">-->
-<!--                        <h5 class="fw-bold">회원정보</h5>-->
-<!--                        <ul class="list-unstyled">-->
-<!--                            <li>배송주소록</li>-->
-<!--                            <li>회원정보관리</li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-                </div>
-            </div>
 
             <div style="width: 80%; height: 100vh;" class="text-center ms-5" >
 
@@ -124,7 +61,7 @@
                     <!-- 수정 220428 리스트 목록 수정 -->
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-preparation="">0</span>
+                            <span class="history_val" data-order-summary-preparation="" th:text="${#lists.size(list)}"></span>
                             <span class="history_desc">준비중</span>
                         </button>
                     </div>
@@ -169,10 +106,10 @@
                 <div class="tbl_myorder-inner" data-order-id="024040779225" >
                 <div class="tbl_order_info">
                     <span class="order_date" th:text="'주문번호 : ' + ${list.orderId}">2024.04.14(O24040779225)</span><!-- 수정 220428 날짜 양식 yyyy.mm.dd 로 수정 -->
-                    <a href="/member/myPage/memberOrderListDetail?goodsId=123123&&id=123123456456&&impUid=test123123" class="btn_more_view" data-order-detail-link="N"><span class="text">상세보기</span><span class="ico_arw"></span></a>
+<!--                    <a href="/member/myPage/memberOrderListDetail?goodsId=123123&&id=123123456456&&impUid=test123123" class="btn_more_view" data-order-detail-link="N"><span class="text">상세보기</span><span class="ico_arw"></span></a>-->
 
                     <div class="right_area">
-                        <button type="button" class="btn_delete_text size_xxs" data-order-commodity-delete-button=""><span class="ico_delete"></span><span class="text">주문내역에서 삭제</span></button><!-- 수정 220428 버튼 클래스 추가 [size_xxs]-->
+                        <button type="button" class="btn_delete_text size_xxs" data-order-commodity-delete-button=""><span class="ico_delete"></span><span class="text"><a th:href="'/member/myPage/memberOrderListDetail?orderId=' + ${list.orderId}">상세보기 ></a> </span></button><!-- 수정 220428 버튼 클래스 추가 [size_xxs]-->
                     </div>
                 </div>
 
@@ -278,7 +215,7 @@
                             <td>
                                 <div class="delivery_info">
 
-                                    <span class="delivery_state ">배송완료</span><!-- 수정 220428 주문 클레임 영역 뱃지 일반텍스트케이스로 수정  -->
+                                    <span class="delivery_state ">주문완료</span><!-- 수정 220428 주문 클레임 영역 뱃지 일반텍스트케이스로 수정  -->
 
                                     <!-- 수정 221028 배송예정일 안내 수정 -->
                                     <!-- <p class="delivery_desc">
@@ -293,7 +230,7 @@
                                     </p>-->
 
                                     <p class="delivery_desc">
-                                        <span>2024.04.16 배송완료</span>
+                                        <span th:text="${list.paymentDate}">2024.04.16 주문완료</span>
                                     </p>
 
 
@@ -319,6 +256,9 @@
             </div>
 <!--        </div>-->
     </div>
+
+    <br>
+    <br>
 </div>
 </body>
 </html>
