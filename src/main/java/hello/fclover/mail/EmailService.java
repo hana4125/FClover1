@@ -9,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 public class EmailService {
 
@@ -21,6 +23,18 @@ public class EmailService {
 
     @Value("${spring.mail.username}")
     private String from;
+
+    public static String generateRandomNumber() {
+        Random random = new Random();
+        StringBuilder randomNumber = new StringBuilder();
+
+        for (int i = 0; i < 6; i++) {
+            int digit = random.nextInt(10); // 0부터 9까지의 랜덤 숫자
+            randomNumber.append(digit);
+        }
+
+        return randomNumber.toString();
+    }
 
     public void sendMail(EmailMessage emailMessage) {
         MimeMessage mimeMessage = mailSender.createMimeMessage(); // MimeMessage 객체 생성
