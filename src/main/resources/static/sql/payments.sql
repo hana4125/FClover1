@@ -19,7 +19,7 @@ CREATE TABLE `payments` (
                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;
 
-select* from payments;
+select* from payments;]
 
 
 select * from payments where user_id='test1';
