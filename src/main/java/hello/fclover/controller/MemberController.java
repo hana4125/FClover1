@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -89,7 +90,7 @@ public class MemberController {
     }
 
     @PostMapping("/find-id")
-    public String findId(@ModelAttribute("findMember") Member member, Model model, RedirectAttributes redirectAttributes) {
+    public String findId(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
 
         String memberId = memberService.findMemberId(member);
         if (memberId == null) {
@@ -97,7 +98,17 @@ public class MemberController {
             return "redirect:/member/find-id";
         }
 
-        return "redirect:/member/find-id";
+        redirectAttributes.addAttribute("memberId", memberId);
+        return "redirect:/member/find-id-ok";
+    }
+
+    @GetMapping("/find-id-ok")
+    public String findOkPage(@RequestParam(required = false) String memberId, Model model) {
+        if (memberId != null) {
+            Member member = memberService.findMemberById(memberId);
+            model.addAttribute("member", member);
+        }
+        return "user/userFindIdOk";
     }
 
     @GetMapping("/reset-password")
