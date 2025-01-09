@@ -5,7 +5,9 @@ import java.util.List;
 
 public interface GoodsService {
 
-    List<Goods> getGoodsList(int cate_no);
+    List<Goods> getGoodsList(int cateNo, String sort, int page, int size);
+
+    int getTotalGoodsCount(int cate_no);
 
     Goods getGoodsById(int goods_no);
 }
