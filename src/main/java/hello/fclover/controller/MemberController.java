@@ -1,9 +1,8 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.AddressBook;
-import hello.fclover.domain.Member;
-import hello.fclover.domain.Payment;
-import hello.fclover.domain.PaymentReq;
+import hello.fclover.domain.*;
+import hello.fclover.mail.EmailMessage;
+import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -388,6 +387,14 @@ public class MemberController {
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
 
+
+    @GetMapping("/GoodsDetail")
+    public String GoodsDetail() {
+//ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
+        System.out.println("====");
+        return "/user/userGoodsDetail";
+    }
+
     //공지사항
     @GetMapping("/notice")
     public String notice(
@@ -471,5 +478,6 @@ public class MemberController {
         mv.addObject("limit",limit);
         return mv;
     }
+
 }
 
