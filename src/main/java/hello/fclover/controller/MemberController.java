@@ -337,5 +337,12 @@ public class MemberController {
     }
 
 
+    @GetMapping("/GoodsDetail")
+    public String GoodsDetail() {
+//ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
+        System.out.println("====");
+        return "/user/userGoodsDetail";
+    }
+
 }
 

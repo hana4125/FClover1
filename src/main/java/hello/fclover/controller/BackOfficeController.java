@@ -102,7 +102,7 @@ public class BackOfficeController {
     @GetMapping("/delivery/ready")
     @ResponseBody
     public  void  ready(@RequestParam Long orderId,@RequestParam String userId,Model model) {
-
+        System.out.println("test1");
         //조회한 주문정보 기반으로 delivery테이블에 insert하기.
         backOfficeService.InsertdeliveryReadyList(orderId,userId);
 
