@@ -4,7 +4,7 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.MemberMapper">
     <insert id="insertMember">
-        INSERT INTO member (member_id, password, name, email, phone_number, auth) VALUES (#{memberId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{auth});
+        INSERT INTO member (member_id, password, name, email, birthdate, phone_number, gender, auth) VALUES (#{memberId}, #{password}, #{name}, #{email}, #{birthdate}, #{phoneNumber}, #{gender}, #{auth});
     </insert>
 
     <select id="selectMemberById">
@@ -12,12 +12,20 @@
     </select>
 
     <update id="updateMember">
-        UPDATE member SET password = #{password}, name = #{name}, email = #{email}, phone_number = #{phoneNumber} WHERE member_id = #{memberId}
+        UPDATE member SET password = #{password}, name = #{name}, email = #{email}, birthdate = #{birthdate}, phone_number = #{phoneNumber} WHERE member_id = #{memberId}
     </update>
 
-    <update id="socialMember">
-        UPDATE member SET password = #{password}, phone_number = #{phoneNumber}
+    <update id="updateSocialMember">
+        UPDATE member SET password = #{password}, birthdate = #{birthdate}, phone_number = #{phoneNumber}, gender = #{gender}
     </update>
+
+    <select id="selectMemberId">
+        SELECT member_id FROM member WHERE name = #{name} AND birthdate = #{birthdate} AND email = #{email}
+    </select>
+
+    <select id="selectMemberResetPassword">
+        SELECT mem_num FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
+    </select>
 
     <update id="updateProfile">
         UPDATE member SET profile_picture = #{profilePicture} WHERE member_id = #{memberId}

@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin((formLogin) -> formLogin.loginPage("/member/login")
                 .loginProcessingUrl("/member/loginProcess")
-                .usernameParameter("member_id")
+                .usernameParameter("memberId")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler));

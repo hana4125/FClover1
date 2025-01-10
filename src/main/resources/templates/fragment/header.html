@@ -1,11 +1,31 @@
 <th:block th:fragment="header">
-  <div xmlns:th="http://www.thymeleaf.org"
-       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+       xmlns:th="http://www.thymeleaf.org">
     <style>
-        button[type=submit] {
-            all: unset;
-            cursor: pointer;
-        }
+      button[type=submit] {
+        all: unset;
+        cursor: pointer;
+      }
+
+      .util_area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .util_button_area {
+        display: flex;
+        gap: 10px;
+      }
+
+      .util_button_area a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .close-dropdown {
+        margin-left: auto;
+      }
 
         .header-profile {
             cursor: pointer;
@@ -37,7 +57,7 @@
             object-position: center; /* 이미지의 중심을 기준으로 잘림 처리 */
         }
     </style>
-    <script>
+    <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
                 location.href = "/";
@@ -51,13 +71,60 @@
                 location.href = "/member/myPage";
             })
         })
+
+        const $searchBar = $("#searchBarToggle");
+        const $dropdown = $(".dropdown-menu");
+
+        // searchBar 클릭시 드롭다운 열기
+        $searchBar.on("click", function (e) {
+          e.stopPropagation();
+
+          // 드롭 다운 위치 설정
+          const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance($dropdown[0], {
+            reference: $searchBar[0],
+            popperConfig: {
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 0],
+                  },
+                },
+              ],
+            },
+          });
+
+          dropdownInstance.show();
+        });
+
+        // 외부 클릭시 드롭다운 닫기
+        $(document).on("click", function () {
+          const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
+          if (dropdownInstance) {
+            dropdownInstance.hide();
+          }
+        });
+
+        // 드롭다운 내부 클릭 시 이벤트 전파 방지
+        $dropdown.on("click", function (e) {
+          e.stopPropagation();
+        });
+
+        // 닫기 버튼 클릭 시 드롭다운 닫기
+        $(".close-dropdown").on("click", function () {
+          const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
+          if (dropdownInstance) {
+            dropdownInstance.hide();
+          }
+        });
     </script>
+    <script th:src="@{/js/search_auto.js}"></script>
     <div class="bg-light mb-3">
       <div class="container w-75">
         <div class="top-menu d-flex justify-content-end">
           <th:block sec:authorize-expr="not isAuthenticated()">
-            <a href="/member/login" class="pe-2">로그인</a>
-            <a href="/member/signup" class="pe-2">회원가입</a>
+            <a class="pe-2" href="/member/login">로그인</a>
+            <a class="pe-2" href="/member/signup">회원가입</a>
           </th:block>
           <th:block sec:authorize-expr="isAuthenticated()">
             <a href="/member/myPage" class="pe-2"><span th:text="${member.name}"></span>님</a>
@@ -65,24 +132,101 @@
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
-          <a href="#" class="pe-2">고객센터</a>
+          <a class="pe-2" href="#">고객센터</a>
           <th:block sec:authorize-expr="not isAuthenticated()">
-            <a href="/seller/sellerLogin" class="pe-2">판매자 로그인</a>
-            <a href="/seller/sellerSignup" class="pe-2">판매자 가입</a>
+            <a class="pe-2" href="/seller/sellerLogin">판매자 로그인</a>
+            <a class="pe-2" href="/seller/sellerSignup">판매자 가입</a>
           </th:block>
         </div>
       </div>
     </div>
     <div class="container w-75 header d-flex align-items-center">
-      <img id="logo" class="me-3" src="/img/user/kybo.png" alt="메인 로고">
-      <div class="search-bar">
-        <form class="d-flex search-box">
-          <input class="form-control me-2 search-text border-0" type="text" placeholder="찾고 싶은 도서를 검색해 보세요!"
-                 aria-label="Search">
+      <img alt="메인 로고" class="me-3" id="logo" src="/img/user/fClover.png">
+
+      <div class="dropdown search-bar">
+
+        <form class="d-flex search-box" id="searchBarToggle">
+          <input aria-label="Search" class="form-control me-2 search-text border-0" placeholder="찾고 싶은 도서를 검색해 보세요!"
+                 type="text" id="searchKeyword" name="keyword" autocomplete="off">
           <button class="btn p-0 m-0 search-btn" type="submit">
-            <img src="/img/user/search.png" width="36" height="36" alt="검색">
+            <img alt="검색" height="36" src="/img/user/search.png" width="36">
           </button>
         </form>
+        <!-- TODO :
+                    1. 검색창 드롭다운으로 구현하기
+                    2. 검색어 입력했을 경우, 입력하지 않았을 경우로 나누어서 다른 정보가 표시되도록 스크립트 작성
+                       - 검색어가 있을 때
+                       검색어 관련 도서 (3권씩 총 4페이지)
+                       첫 번째 도서의 상세 정보
+                       검색어 관련 인물 3명까지 제공 (저자 - 도서 형식)
+                       - 검색어가 없을 때
+                       추천 검색어 (사람들이 많이 검색하는 검색어 표시)
+                       최근 검색어 (온오프 기능 까지)
+                       실시간 인기 검색어 (성별 또는 연령 별로 표시)
+                    3. 입력한 검색어와 검색창 안에서 검색어 클릭시 해당 검색어로 검색 결과 페이지 로드
+                    4. 검색어 유무와 관계 없이 하단에는 Q&A, 상세검색, 닫기 버튼 나오도록 설정 -->
+
+        <div class="dropdown-menu m-0 p-3">
+          <div class="search-content inKeyword">
+            <!-- 검색어 입력시 스크립트로 추가 -->
+            <div class="scroll">
+              <p>검색어가 있는 경우</p>
+            </div>
+          </div>
+          <div class="search-content noKeyword">
+            <div class="scroll">
+              <div class="recommend_keyword_area">
+                <div class="title_wrap title_size_def"><p class="title_heading">추천 검색어</p></div>
+                <!-- 추천 검색어 나오는 곳 (스크립트로 추가) -->
+                <div class="tag_wrap" id="recommendKeywordBox">
+                  <p>검색어가 없는 경우</p>
+                </div>
+              </div>
+              <div class="keyword_contents_area">
+                <!-- 최근 검색어 나오는 곳 -->
+                <div class="recent_keyword_box"></div>
+                <!-- 인기 검색어 나오는 곳 -->
+                <div class="hot_keyword_box" id="hotKeywordBox">
+                  <div class="title_wrap title_size_def">
+                    <p class="title_heading">실시간 인기 검색어</p>
+                    <!-- 정렬 기준 선택 하는 곳-->
+                    <div class="right_area">
+                      <!-- TODO : 옵션 선택에 따라 다른 기준으로 나오게 만들기 -->
+                      <!-- form_sel -->
+                      <!--<div class="form_sel" data-class="type_arw auto_complete_maintain">
+                                <select title="연령기준 정렬" id="ageSel">
+                                    <option value="">전연령</option>
+                                    <option value="10">10대</option>
+                                    <option value="20">20대</option>
+                                    <option value="30">30대</option>
+                                    <option value="40">40대↑</option>
+                                </select>
+                            </div>--> <!-- //form_sel --> <!-- form_sel --> <!--<div class="form_sel" data-class="type_arw auto_complete_maintain">
+                                <select title="성별기준 정렬" id="genderSel">
+                                    <option value="">전성별</option>
+                                    <option value="1">남성</option>
+                                    <option value="2">여성</option>
+                                </select>
+                            </div>-->
+                      <!-- //form_sel -->
+                    </div>
+                  </div>
+                  <!-- 정렬에 따른 인기 검색어 순위 나오는 곳 (스크립트로 추가) -->
+                  <div class="hot_keyword_list_wrap"></div>
+                </div>
+              </div>
+            </div>
+            <!-- 검색어 입력시에도 뜰 수 있도록 스크립트로 추가 -->
+            <div class="util_area">
+              <div class="util_button_area">
+                <!-- TODO : 주소 설정해야 함 -->
+                <a class="btn-sm" th:href="@{#}">도움말</a>
+                <a class="btn-sm" th:href="@{/search/detailSearch}">상세검색</a>
+              </div>
+              <button class="btn btn-sm close-dropdown" type="button">닫기</button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="ms-5 icon d-flex">
         <div>

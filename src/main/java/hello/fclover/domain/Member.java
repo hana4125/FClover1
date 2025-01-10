@@ -12,7 +12,9 @@ public class Member {
     private String password;
     private String name;
     private String email;
+    private String birthdate;
     private String phoneNumber;
+    private String gender;
     private String auth;
     private String profilePicture;
     private LocalDateTime createdAt;

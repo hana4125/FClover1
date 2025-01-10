@@ -25,9 +25,9 @@
 <body>
 <div class="container w-25 text-center">
   <div class="mt-5">
-    <img id="logo" src="/img/user/kybo.png" alt="교보" width="300px" height="80px" class="mb-3">
+    <img id="logo" src="/img/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-5">
     <form th:action="@{/member/loginProcess}" method="post">
-      <input type="text" class="form-control mb-3" id="member_id" name="member_id" th:value="${rememberId}" placeholder="아이디">
+      <input type="text" class="form-control mb-3" id="memberId" name="memberId" th:value="${rememberId}" placeholder="아이디">
       <input type="password" class="form-control mb-4" id="password" name="password" placeholder="비밀번호">
       <div id="message" style="color: red" th:text="${message}" class="text-start mb-1"></div>
       <input type="submit" class="form-control btn btn-success" value="로그인">
@@ -37,7 +37,7 @@
           <label for="remember-me">아이디 저장</label>
         </div>
         <div class="ms-auto">
-          <a href="#" class="text-decoration-none text-dark">아이디 찾기</a> | <a href="#" class="text-decoration-none text-dark">비밀번호 찾기</a>
+          <a href="/member/find-id" class="text-decoration-none text-dark">아이디 찾기</a> | <a href="/member/reset-password" class="text-decoration-none text-dark">비밀번호 찾기</a>
         </div>
       </div>
     </form>

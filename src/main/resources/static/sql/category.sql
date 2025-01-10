@@ -2,11 +2,11 @@
 
 CREATE TABLE category
 (
-    cate_num int primary key not null,
+    cate_no int primary key not null,
     cate_name varchar(20)
 );
 
-insert into category (cate_num, cate_name) values
+insert into category (cate_no, cate_name) values
 (1, '소설'), (2, '시/에세이'), (3, '인문'),
 (4, '가정/육아'), (5, '요리'),(6, '건강'),
 (7, '취미/실용/스포츠'), (8, '경제/경영'),
@@ -31,6 +31,9 @@ select * from category;
 commit;
 
 create schema fClover;
+
+SELECT cate_no, cate_name FROM category;
+
 
 
 

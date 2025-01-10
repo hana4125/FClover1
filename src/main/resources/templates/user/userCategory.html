@@ -23,8 +23,8 @@
         location.href = "/myPage";
       })
 
-      $("#categoryItem").click(function () {
-        location.href = "/member/category";
+      $(".category-item").click(function () {
+        location.href = "/category/{no}";
       })
 
       $(".show-plus").click(function () {
@@ -151,9 +151,6 @@
         </span>
         <span class="close-icon d-none">&times;</span>
       </button>
-      <!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
-      <!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
-      <!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
       <a href="#" class="best ps-5 pe-5">베스트</a>
       <a href="#" class="new ps-5 pe-5">신상품</a>
       <a href="#" class="ps-5 pe-5">이벤트</a>
@@ -163,19 +160,19 @@
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
   <h4 class="text-center mb-3">카테고리</h4><br>
-  <!-- 하위 카테고리 리스트 -->
   <div class="category-list">
-    <div class="category-column">
-              <div class="category-column" th:each="categoryGroup : ${categoryGroups}">
-                  <ul class="list-unstyled">
-                      <li th:each="category : ${categoryGroup}">
-                          <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>
-                      </li>
-                  </ul>
-              </div>
-    </div>
+    <ul class="list-unstyled">
+      <!-- categoryList의 각 요소를 반복하여 출력 -->
+      <li th:each="category : ${categoryList}">
+        <!-- 카테고리 이름 출력 -->
+        <a th:href="@{/category/{no}(no=${category.cateNo})}"
+           th:text="${category.cateName}"
+           class="category-item"></a>
+      </li>
+    </ul>
   </div>
 </div>
+
 <div class="container w-75 mt-5">
   <div class="d-flex justify-content-end align-items-center mb-3">
 
@@ -184,7 +181,6 @@
       <img src="/img/user/heart.png" class="heart me-2" width="36" height="36" alt="찜">
       <img src="/img/user/cart.png" class="cart me-2" width="36" height="36" alt="장바구니">
     </div>
-
 
     <!-- 드롭다운 -->
     <div class="dropdown me-2">
