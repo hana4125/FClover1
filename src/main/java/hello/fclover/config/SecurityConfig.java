@@ -1,8 +1,6 @@
 package hello.fclover.config;
 
 import hello.fclover.oauth2.service.CustomOAuth2UserService;
-import hello.fclover.security.CustomAccessDeniedHandler;
-import hello.fclover.security.CustomUserDetailsService;
 import hello.fclover.security.LoginFailHandler;
 import hello.fclover.security.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
 import javax.sql.DataSource;
 
 @RequiredArgsConstructor
@@ -37,8 +34,7 @@ public class SecurityConfig {
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler));
 
-        http
-                .authorizeHttpRequests(authorize -> authorize
+        http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/**").permitAll() // 모든 경로에 대해 인증 없이 접근 허용
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )

@@ -24,7 +24,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 84px;
+    height: 100px;
     background-color: rgba(80, 85, 177, 0.06);
     border-radius: 5px;
 }
@@ -38,7 +38,43 @@
 .input_btn_box .form-control {
     flex: 1;
     max-width: 408px;
+}
+.right_area {
+    display: flex;
+    justify-content: flex-end;
+}
 
+
+#viewcount:focus {
+    border-color: rgba(128, 128, 128, 0.5);
+    box-shadow: none;
+    outline: none;
+}
+
+
+#viewcount option:checked {
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+
+#viewcount {
+    background-color: white;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+    cursor: pointer;
+}
+
+#viewcount option:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+#viewcount {
+    background-color: white;
 }
 
 button.btn-primary {
@@ -63,7 +99,10 @@ button.btn-primary:hover {
 .list_category {
     list-style: none !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin-top: 20px;
+}
+.side_item{
+    margin-bottom: 6px;
 }
 
 .sd_link {
@@ -76,24 +115,9 @@ button.btn-primary:hover {
     color: inherit !important;
 }
 
-
 .result_count .ct_green {
     color: #28a745;
     font-weight: bold;
-}
-
-.list_result_wrap{
-    position: relative;
-    display: flex;
-}
-
-.list_result_wrap .result_count{
-    display: inline-block;
-    font-size: 16px;
-    line-height: 24px;
-    letter-spacing: -0.01em;
-    font-weight: 500;
-    margin-bottom: 18px;
 }
 
 .tbl_col_wrap .table {
@@ -119,4 +143,7 @@ button.btn-primary:hover {
     gap: 10px;
 }
 
+.tbl_col_wrap .table .ntitle a {
+    color: inherit;
+}
 

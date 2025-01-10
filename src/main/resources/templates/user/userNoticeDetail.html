@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+  <meta charset="UTF-8">
+  <title>home</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <link rel="stylesheet" href="/css/user/notice.css">
+  <script th:inline="javascript">
+    $(function () {
+      $("#logo").click(function () {
+        location.href = "/";
+      })
+
+      $("#cart").click(function() {
+        location.href="/cart";
+      })
+
+      $("#myPage").click(function() {
+        location.href="/myPage";
+      })
+    })
+  </script>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+
+<!-- aside -->
+<div class="mt-4 border-top">
+  <div class="container w-75 pt-51">
+
+    <!--div headwrap-->
+    <section class="header-menu mt-4">
+      <a href="#" class="home_link">home</a>
+      <a href="#" class="btn_sub_depth">고객센터</a>
+    </section>
+
+    <!--div container-->
+    <div class="d-flex">
+      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+        <div class="aside_wrap">
+          <div class="aside_header">
+            <p class="side_heading">고객센터</p>
+          </div>
+
+          <!-- cscenter -->
+          <div class="aside_body">
+            <div class="sd_wrap" style="width: 170px;">
+              <ul class="list_category">
+                <li class="side_item">
+                  <a href="#" class="sd_link">메인</a>
+                </li>
+                <li class="side_item">공지사항</li>
+                <li class="side_item">
+                  <a href="#" class="sd_link">QnA</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- main -->
+      <div>
+      <p class="title_heading" th:text="${notidata.NOTITITLE}"></p>
+      <div class="info_case">
+      <span class="desc">고객센터</span>
+      <span class="gap">|</span>
+      <span class="date" th:text="${notidata.NOTIDATE}"></span>
+       <hr>
+      </div>
+      <div th:text="${notidata.NOTICONTENT}"></div>
+      </div>
+
+
+
+      <th:block sec:authorize-expr="isAuthenticated()">
+        <th:block th:with="pinfo=${#authentication.principal}">
+          <th:block th:if="${notidata.NOTINAME == pinfo.username || pinfo.username=='admin'}">
+
+            <a th:href="@{'modifyView?num=' + ${notidata.NOTINUM}}">
+              <button class="btn" >수정</button>
+            </a>
+            <a>
+              <button class="btn btn-warning" data-toggle="modal" data-target="#myModal">삭제</button>
+            </a>
+          </th:block>
+        </th:block>
+      </th:block>
+
+
+
+      <!-- 공지사항 버튼-->
+      <div class="d-flex justify-content-center" style="position: absolute; bottom:100px; width: 100%;">
+        <a th:href="@{notice}">
+          <button type="button" class="btn" style="border:1px solid #226b24;
+                 background-color:transparent; height: 44px; color:#226b24; font-weight: bold;"> 공지사항 목록</button>
+        </a>
+      </div>
+
+      </div>
+    </div>
+  </div>
+<div th:replace="~{fragment/footer :: footer}"></div>
+</body>
+</html>

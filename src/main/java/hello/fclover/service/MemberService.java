@@ -47,4 +47,9 @@ public interface MemberService {
     int removeAddressBook(int addressNum);
 
     String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
+
+    void setReadCountUpdate(int num);
+
+    Member getDetail(int num);
+
 }

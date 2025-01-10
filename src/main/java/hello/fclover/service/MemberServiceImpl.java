@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.domain.Notice;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -148,4 +150,19 @@ public class MemberServiceImpl implements MemberService {
 
         return member.getProfilePicture();
     }
+
+
+
+
+    @Override
+    public void setReadCountUpdate(int num) {
+        dao.setReadCountUpdate(num);
+    }
+
+    @Override
+    public Member getDetail(int num) {
+        return dao.getDetail(num);
+    }
+
+
 }
