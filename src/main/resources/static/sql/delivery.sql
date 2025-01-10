@@ -12,7 +12,7 @@ CREATE TABLE `delivery` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;
 
 
-ㄴ
+
 select* from delivery;
-es
+
 drop table delivery;

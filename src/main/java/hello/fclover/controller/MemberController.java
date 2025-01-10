@@ -390,8 +390,7 @@ public class MemberController {
 
     @GetMapping("/GoodsDetail")
     public String GoodsDetail() {
-
-//test11
+//ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
         System.out.println("====");
         return "/user/userGoodsDetail";
     }
