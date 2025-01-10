@@ -1,5 +1,5 @@
 CREATE TABLE `seller` (
-                               `seller_no` bigint unsigned NOT NULL AUTO_INCREMENT,
+                               `id` bigint unsigned NOT NULL AUTO_INCREMENT,
                                `seller_id` varchar(20),
                                `seller_pass` varchar(50),
                                 `seller_name` varchar(100),
@@ -12,8 +12,8 @@ CREATE TABLE `seller` (
                                `seller_gender` varchar(1),
                                `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                                `updated_at` timestamp,
-                               PRIMARY KEY (`seller_no`),
-                               UNIQUE KEY `id` (`seller_no`)
+                               PRIMARY KEY (`id`),
+                               UNIQUE KEY `id` (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;
 
 
