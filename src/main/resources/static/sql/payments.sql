@@ -1,4 +1,6 @@
 CREATE TABLE `payments` (
+
+    #   payments_no 로 pk 수정
                             `payments_no` bigint NOT NULL AUTO_INCREMENT,
                             `partner_id` bigint DEFAULT NULL,
                             `user_id` varchar(50) NOT NULL,

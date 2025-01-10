@@ -1,5 +1,6 @@
 CREATE TABLE address_book
 (
+#   address_no 로 pk 수정
     address_no    INT AUTO_INCREMENT PRIMARY KEY,
     mem_no        INT          NOT NULL,
     address_name   VARCHAR(50)  NOT NULL,

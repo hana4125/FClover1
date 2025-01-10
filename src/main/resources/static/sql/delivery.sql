@@ -1,4 +1,5 @@
 CREATE TABLE `delivery` (
+    #   deli_no 로 pk 수정
                             `deli_no` bigint NOT NULL AUTO_INCREMENT,
                             `order_id` LONG DEFAULT NULL,
                             `user_id` varchar(50) NOT NULL,

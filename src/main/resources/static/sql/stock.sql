@@ -1,4 +1,5 @@
 CREATE TABLE `stock` (
+    #   stock_no 로 pk 수정
                                `stock_no` bigint unsigned NOT NULL AUTO_INCREMENT,
                                `goods_no` int not NULL,
                                `goods_code` int,

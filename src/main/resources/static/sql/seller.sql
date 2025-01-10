@@ -1,4 +1,5 @@
 CREATE TABLE `seller` (
+    #   seller_no 로 pk 수정
                                `seller_no` bigint unsigned NOT NULL AUTO_INCREMENT,
                                `seller_id` varchar(20),
                                `seller_pass` varchar(50),

@@ -1,4 +1,5 @@
 CREATE TABLE `settlements` (
+    #   settlements_no 로 pk 수정
                                `settlements_no` bigint unsigned NOT NULL AUTO_INCREMENT,
                                `partner_id` int DEFAULT NULL,
                                `total_amount` decimal(15,2) NOT NULL,
