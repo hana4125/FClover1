@@ -29,9 +29,9 @@
         $(".deleteAddress").click(function() {
             let result = confirm("정말 배송지를 삭제하시겠습니까?");
             if (result) {
-                let addressNum = $(this).data('id');
-                console.log("/member/deleteAddressBook?addressNum=" + addressNum);
-                location.href="/member/deleteAddressBook?addressNum=" + addressNum;
+                let addressNo = $(this).data('id');
+                console.log("/member/deleteAddressBook?addressNo=" + addressNo);
+                location.href="/member/deleteAddressBook?addressNo=" + addressNo;
             }
         })
 
@@ -89,7 +89,7 @@
                 <div class="d-flex justify-content-between">
                   <table>
                     <tr>
-                      <td class="p-3" rowspan="3"><input type="radio" name="addressNum" th:value="${addressBook.addressNum}"></td>
+                      <td class="p-3" rowspan="3"><input type="radio" name="addressNo" th:value="${addressBook.addressNo}"></td>
                       <td><div class="fw-bold" th:text="${addressBook.addressName}"></div></td>
                     </tr>
                     <tr class="fw-bold">
@@ -99,7 +99,7 @@
                       <td><span th:text="${addressBook.address}"></span></td>
                     </tr>
                   </table>
-                  <div><button type="button" class="btn btn-sm btn-danger deleteAddress" th:data-id="${addressBook.addressNum}">삭제</button></div>
+                  <div><button type="button" class="btn btn-sm btn-danger deleteAddress" th:data-id="${addressBook.addressNo}">삭제</button></div>
                 </div>
                 <hr class="mt-5 mb-5">
               </div>

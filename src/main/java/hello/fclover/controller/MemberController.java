@@ -152,10 +152,10 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memNum = member.getMemNum();
+        int memNo = member.getMemNo();
 
-        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
-        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
+        AddressBook defaultAddress = memberService.getDefaultAddress(memNo);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNo);
 
         model.addAttribute("defaultAddress", defaultAddress);
         model.addAttribute("addressBookList", addressBookList);
@@ -166,20 +166,20 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memNum = memberService.getMemNum(memberId);
-        addressBook.setMemNum(memNum);
+        int memNo = memberService.getmemNo(memberId);
+        addressBook.setMemNo(memNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/deleteAddressBook")
-    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
-        int result = memberService.checkDefaultAddress(addressNum);
+    public String deleteDeliveryAddress(@RequestParam int addressNo, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNo);
 
         if (result == 1) {
             redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
         } else {
-            memberService.removeAddressBook(addressNum);
+            memberService.removeAddressBook(addressNo);
         }
         return "redirect:/member/myPage/addressBook";
     }
@@ -188,8 +188,8 @@ public class MemberController {
 
     @Transactional
     @PostMapping("/defaultAddress")
-    public String defaultAddress(@RequestParam int addressNum) {
-        memberService.setDefaultAddress(addressNum);
+    public String defaultAddress(@RequestParam int addressNo) {
+        memberService.setDefaultAddress(addressNo);
         return "redirect:/member/myPage/addressBook";
     }
 
