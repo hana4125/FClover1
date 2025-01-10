@@ -79,6 +79,4 @@
     <delete id="deleteAddressBook">
         DELETE FROM address_book WHERE address_num = #{addressNum}
     </delete>
-
-
 </mapper>
