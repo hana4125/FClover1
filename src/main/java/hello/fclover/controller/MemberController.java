@@ -1,6 +1,9 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.*;
+import hello.fclover.domain.AddressBook;
+import hello.fclover.domain.Member;
+import hello.fclover.domain.Payment;
+import hello.fclover.domain.PaymentReq;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -39,6 +41,7 @@ public class MemberController {
     private final NoticeService noticeService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+    private final EmailService emailService;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -83,6 +86,58 @@ public class MemberController {
         session.removeAttribute("loginfail");
 
         return "user/userLogin";
+    }
+
+    @GetMapping("/find-id")
+    public String findIdPage() {
+        return "user/userFindId";
+    }
+
+    @PostMapping("/find-id")
+    public String findId(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+
+        String memberId = memberService.findMemberId(member);
+        if (memberId == null) {
+            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
+            return "redirect:/member/find-id";
+        }
+
+        redirectAttributes.addAttribute("memberId", memberId);
+        return "redirect:/member/find-id-ok";
+    }
+
+    @GetMapping("/find-id-ok")
+    public String findOkPage(@RequestParam(required = false) String memberId, Model model) {
+        if (memberId != null) {
+            Member member = memberService.findMemberById(memberId);
+            model.addAttribute("member", member);
+        }
+        return "user/userFindIdOk";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordPage() {
+        return "user/userResetPassword";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+        Integer memberNum = memberService.selectMemberResetPassword(member);
+        if (memberNum == null) {
+            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
+            return "redirect:/member/reset-password";
+        }
+        redirectAttributes.addFlashAttribute("message", "메일 발송 성공");
+
+        String randomNumber = EmailService.generateRandomNumber();
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(member.getEmail())
+                .subject("비밀번호 재설정")
+                .message("인증번호 : " + randomNumber)
+                .build();
+        emailService.sendMail(emailMessage);
+        return "redirect:/member/reset-password";
     }
 
     @GetMapping("/myPage")
@@ -265,7 +320,7 @@ public class MemberController {
     public String socialMemberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-        memberService.updateMember(member);
+        memberService.updateSocialMember(member);
         return "redirect:/member/myPage/info";
     }
 

@@ -1,0 +1,14 @@
+spring:
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: fclover1234
+    password: fclovertest1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
