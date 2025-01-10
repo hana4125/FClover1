@@ -1,6 +1,6 @@
 CREATE TABLE member
 (
-    mem_num         INT AUTO_INCREMENT PRIMARY KEY,
+    mem_no         INT AUTO_INCREMENT PRIMARY KEY,
     member_id       VARCHAR(100) NOT NULL UNIQUE,
     password        VARCHAR(100),
     name            VARCHAR(100)  NOT NULL,
@@ -13,6 +13,7 @@ CREATE TABLE member
     created_at      DATETIME     DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME
 );
+
 
 drop table member;
 commit;
