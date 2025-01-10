@@ -18,6 +18,8 @@ public interface MemberService {
 
     String findMemberId(Member member);
 
+    Integer selectMemberResetPassword(Member member);
+
     int updateMember(Member member);
 
     int updateSocialMember(Member member);

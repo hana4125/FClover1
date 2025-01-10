@@ -1,5 +1,6 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
 
@@ -11,7 +12,7 @@ public interface BackOfficeService {
 
     List<Seller> searchSeller();
 
-//    int getProduct_stock(int goods_no);
-//
-//    int decrease(int stockCount);
+    void InsertdeliveryReadyList(Long orderId, String userId);
+
+    List<Delivery> deliveryReadyOrderSearch();
 }
