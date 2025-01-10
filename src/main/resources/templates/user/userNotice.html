@@ -24,29 +24,38 @@
       $("#myPage").click(function() {
         location.href="/myPage";
       })
+    });
+  </script>
+  <script th:inline="javascript">
+    $(function() {
+      // 검색 버튼 클릭 시
+      $(".search-btn").click(function() {
+        console.log("검색 버튼 클릭됨");
+        const searchWord = $("input[name='search_word']").val();
+        console.log("검색어:", searchWord);
 
-      let selectedValue = /*[[${search_field}]]*/"i"
-      if(selectedValue != "") {
-        $("#viewcount").val(selectedValue);
-      }
-      else {
-        selectedValue = 'i';
-      }
-
-      const $input= $(".input-group input");
-      $input.attr("placeholder",$("select option:selected").text() + "를 입력하세요");
-
-
-      $("button").click(function() {
-        const word = $input.val();
-        if(word == ''){
+        if(searchWord.trim() === '') {
           alert("검색어를 입력하세요");
-          $input.focus();
+          $("input[name='search_word']").focus();
           return false;
         }
+
+        // 폼 제출
+        console.log("폼 제출 시도");
+        $("form").submit();
       });
-    })
+
+      // Enter 키 입력 시에도 검색 실행
+      $("input[name='search_word']").keypress(function(e) {
+        if(e.keyCode === 13) {
+          e.preventDefault();
+          $(".search-btn").click();
+        }
+      });
+    });
   </script>
+
+
 </head>
 
 <body>
@@ -97,14 +106,17 @@
         </div>
 
         <!-- search box -->
+        <form method="get" action="notice/noti_list">
         <div class="info_search-box" style="height: 100px;">
           <div class="input_btn_box">
+            <input type="hidden" name="search_field" value="title">
             <input name="search_word" type="text" class="form-control"
-                   placeholder="제목을 입력하세요" th:value="${search_word}" style="width: 408px; height: 44px;">
-            <button type="button" class="btn btn-primary" style="height: 44px">검색</button>
+                   placeholder="제목을 검색하세요" th:value="${search_word}"
+                   style="width: 408px; height: 44px;">
+            <button type="submit" class="btn btn-primary" style="height: 44px">검색</button>
           </div>
         </div>
-
+        </form>
         <!-- list_result_wrap -->
         <div>
           <div class="list_result_wrap mt-3">
@@ -150,7 +162,7 @@
             </thead>
             <tbody>
             <th:block th:with="num=${listcount - (page - 1) * limit}">
-              <th:block th:each="b, iterStat : ${boardlist}">
+              <th:block th:each="b, iterStat : ${noticelist}">
                 <tr>
                   <td><span th:text="${num - (iterStat.index)}"></span></td>
                   <td>
@@ -161,7 +173,7 @@
                     </div>
                   </td>
                   <td><div th:text="${b.nOTINAME}"></div></td>
-                  <td><div th:text="${b.nOTIDATE}"></div></td>
+                  <td><div th:text="${#strings.substring(b.nOTIDATE, 2, 10)}"></div></td>
                 </tr>
               </th:block>
             </th:block>

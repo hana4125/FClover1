@@ -12,3 +12,4 @@ select * from NOTICE;
 
 drop table NOTICE;
 
+TRUNCATE TABLE NOTICE;

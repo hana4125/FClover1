@@ -340,7 +340,7 @@ public class MemberController {
 
         int limit = 10;
         int listcount = noticeService.getListCount();
-        List<Member> list = noticeService.getBoardList(page, limit);
+        List<Notice> list = noticeService.getBoardList(page, limit);
 
         PaginationResult result = new PaginationResult(page, limit, listcount);
         m.addAttribute("page", page);
@@ -348,7 +348,7 @@ public class MemberController {
         m.addAttribute("startpage", result.getStartpage());
         m.addAttribute("endpage", result.getEndpage());
         m.addAttribute("listcount", listcount);
-        m.addAttribute("boardlist", list);
+        m.addAttribute("noticelist", list);
         m.addAttribute("limit", limit);
         return "user/userNotice";
     }
@@ -365,34 +365,56 @@ public class MemberController {
         return "redirect:/member/notice";
     }
 
-
-    @GetMapping(value = "/notice/detail")
-    public String Detail(
+    @GetMapping(value = "/detail")
+    public ModelAndView Detail(
             int num, ModelAndView mv,
             HttpServletRequest request,
-            @RequestHeader(value = "referer", required = false) String beforeURL, HttpSession session) {
+            String beforeURL, HttpSession session) {
 
-        String sessionReferer = (String) session.getAttribute("referer");
 
-        if (sessionReferer != null && sessionReferer.equals("list")) {
-            if (beforeURL != null && beforeURL.endsWith("list")) {
-                memberService.setReadCountUpdate(num);
-            }
-            session.removeAttribute("referer");
-        }
+        Notice notice = noticeService.getDetail(num);
 
-        Member member = memberService.getDetail(num);
+        if (notice == null) {
 
-        if (member == null) {
             mv.setViewName("error/error");
             mv.addObject("url",request.getRequestURL());
-            mv.addObject("message","상세보기 실패");
+            mv.addObject("message","상세보기 실패입니다.");
         }else {
+
+            //int count = noticeService.getListCount(num);
+            //int count = 0;
             mv.setViewName("user/userNoticeDetail");
-            mv.addObject("noticedata", member);
+            //mv.addObject("count",count);
+            mv.addObject("notidata", notice);
         }
-        return "user/userNotice";
+        return mv;
     }
 
+    //공지사항 검색
+    @GetMapping(value = "/notice/noti_list")
+    public ModelAndView noticeList(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int limit,
+            ModelAndView mv,
+            @RequestParam(defaultValue = "") String search_word)
+    {
+        System.out.println("페이지: " + page);
+        System.out.println("검색어: " + search_word);
+
+        int listcount = noticeService.getSearchListCount(search_word);
+        List<Notice> list = noticeService.getSearchList( search_word, page, limit);
+        PaginationResult result = new PaginationResult(page, limit, listcount);
+
+        mv.setViewName("user/userNotice");
+        mv.addObject("page", page);
+        mv.addObject("maxpage",result.getMaxpage());
+        mv.addObject("startpage",result.getStartpage());
+        mv.addObject("endpage",result.getEndpage());
+        mv.addObject("listcount",listcount);
+        mv.addObject("noticelist",list);
+        mv.addObject("search_word",search_word);
+        mv.addObject("limit",limit);
+        return mv;
+    }
 }
 

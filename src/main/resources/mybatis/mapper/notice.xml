@@ -14,6 +14,7 @@
                                          from COMMENTS
                                          group by NOTI_NUM) c
                                         on NOTICE.NOTI_NUM = c.NOTI_NUM
+        order by NOTI_DATE DESC
             limit #{start}, #{limit}
     </select>
 
@@ -30,4 +31,30 @@
         #{NOTITITLE}, #{NOTINAME},
         #{NOTICONTENT}, now())
     </insert>
+
+    <select id="getDetail" resultType="Notice">
+        select *
+        from NOTICE
+        where NOTI_NUM = #{NOTINUM}
+    </select>
+
+    <select id="getSearchList" resultType="Notice">
+        SELECT *
+        FROM NOTICE
+        WHERE NOTI_TITLE LIKE #{search_word}
+        ORDER BY NOTI_DATE DESC
+        LIMIT #{start}, #{size}
+    </select>
+
+
+    <select id="getSearchListCount" resultType="int">
+        select  count(*)
+        from NOTICE
+        <where>
+            <if test="search_word != null and search_word != ''">
+                NOTI_TITLE LIKE #{search_word}
+            </if>
+        </where>
+    </select>
+
 </mapper>

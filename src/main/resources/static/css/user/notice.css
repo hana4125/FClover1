@@ -99,7 +99,10 @@ button.btn-primary:hover {
 .list_category {
     list-style: none !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin-top: 20px;
+}
+.side_item{
+    margin-bottom: 6px;
 }
 
 .sd_link {
@@ -143,3 +146,4 @@ button.btn-primary:hover {
 .tbl_col_wrap .table .ntitle a {
     color: inherit;
 }
+

@@ -12,7 +12,15 @@ public interface NoticeService {
 
     public int getListCount();
 
-    List<Member> getBoardList(int page, int limit);
+    List<Notice> getBoardList(int page, int limit);
 
     void insertNotice(Notice notice);
+
+    void setReadCountUpdate(int num);
+
+    Notice getDetail(int num);
+
+    int getSearchListCount( String searchWord);
+
+    List<Notice> getSearchList( String searchWord, int page, int limit);
 }
