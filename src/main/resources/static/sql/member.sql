@@ -1,6 +1,5 @@
 CREATE TABLE member
 (
-    #   mem_no 로 pk 수정
     mem_no         INT AUTO_INCREMENT PRIMARY KEY,
     member_id       VARCHAR(100) NOT NULL UNIQUE,
     password        VARCHAR(100),
