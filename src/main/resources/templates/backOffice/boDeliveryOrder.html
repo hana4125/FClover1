@@ -17,7 +17,8 @@
   <link
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-
+<!--jquery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Custom styles for this template-->
   <link href="/css/sb-admin-2.min.css" rel="stylesheet">
   <!-- DataTables CSS -->
@@ -25,6 +26,8 @@
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 
   <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -216,6 +219,7 @@
         <table id="paymentTable" class="display" style="width:100%">
           <thead>
           <tr>
+            <th>선택</th>
             <th>ID</th>
             <th>PARTNER ID</th>
             <th>USER ID</th>
@@ -232,8 +236,8 @@
             <th>CARD NUMBER</th>
             <th>CREATE AT</th>
             <th>UPDATE AT</th>
-
-            <th>Actions</th><!-- 결제 취소 버튼을 위한 열 추가 -->
+            <th>Actions1</th><!-- 결제 취소 버튼을 위한 열 추가 -->
+            <th>Actions2</th><!-- 배송준비 버튼을 위한 열 추가 -->
           </tr>
           </thead>
           <tbody>
@@ -273,6 +277,11 @@
                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
               },
               "columns": [
+                { "data" : null,
+                  "render": function(data, type, row) {
+                    return `<input type="checkbox" name="checkOrder" id="checkOrder">`;
+                  }
+                },
                 { "data": "id" },
                 { "data": "partnerId" },
                 { "data": "userId" },
@@ -295,15 +304,42 @@
                   "render": function(data, type, row) {
                     return `<button class="cancel-btn" data-imp-uid="${row.impUid}">결제 취소</button>`;
                   }
+                },
+                {
+                  "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
+                  "render": function(data, type, row) {
+                    return `<button class="delivery-btn" data-order-id="${row.orderId}" data-user-id="${row.userId}">배송 준비</button>`;
+                  }
                 }
-              ]
+              ],
+              columnDefs: [
+                {
+                  "targets" : [1,2,3,6,7,10,11,14],
+                  "visible" : false
+                }
+            ],select: {
+                style: "multi",
+                selector: "td:first-child"
+              },
+              initComplete: function(settings, json) {
+                $("#checkall").prop("checked", false);
+                $("#checkall").click(function () {
+                  if ($(this).prop("checked")) {
+                    table.rows().select();
+                  } else {
+                    table.rows().deselect();
+                  }
+                });
+              }
             });
+
+
           });
 
-          // 배송 취소 버튼 클릭 이벤트
+          // 결제 취소 버튼 클릭 이벤트
           $(document).on('click', '.cancel-btn', async function() {
-            const impUid = $(this).data('imp-uid');
-            const response = await fetch(`/api/payment/cancel/${impUid}`, {
+            const impUid = $(this).data('impUid');
+            const response = await fetch(`/api/payment/cancel/${imp-uid}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json'
@@ -312,9 +348,30 @@
 
             if (response.ok) {
               const result = await response.text();
-              alert(`배송 취소 요청이 성공적으로 처리되었습니다.`);
+              alert(`결제 취소 요청이 성공적으로 처리되었습니다.`);
             } else {
-              alert('배송 취소 요청에 실패했습니다.');
+              alert('결제 취소 요청에 실패했습니다.');
+            }
+          });
+
+          // 배송준비 버튼 클릭 이벤트
+          $(document).on('click', '.delivery-btn', async function() {
+            // const impUid = $(this).data('imp-uid');
+            const orderId = $(this).data('order-id');
+            const userId = $(this).data('user-id');
+
+            const response = await fetch(`/bo/delivery/ready?orderId=${orderId}&userId=${userId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+
+            if (response.ok) {
+              const result = await response.text();
+              alert(`배송준비 요청이 성공적으로 처리되었습니다.`);
+            } else {
+              alert('배송준비 요청에 실패했습니다.');
             }
           });
 
@@ -376,7 +433,7 @@
 <!-- Custom scripts for all pages-->
 <script src="/js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
+<!--&lt;!&ndash; Page level plugins &ndash;&gt;-->
 <script src="/vendor/chart.js/Chart.min.js"></script>
 
 <!-- Page level custom scripts -->

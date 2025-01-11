@@ -14,5 +14,6 @@ CREATE TABLE member
     updated_at      DATETIME
 );
 
+
 drop table member;
 commit;

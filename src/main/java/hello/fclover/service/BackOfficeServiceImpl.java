@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
 import hello.fclover.mybatis.mapper.BackOfficeMapper;
@@ -30,6 +31,20 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     public List<Seller> searchSeller() {
         List<Seller> sellers = dao.searchSeller();
         return sellers;
+    }
+
+    @Override
+    public void InsertdeliveryReadyList(Long orderId, String userId) {
+
+         String status = "ready";
+
+          dao.insertDeliveryReadyList(orderId,userId,status);
+    }
+
+    @Override
+    public List<Delivery> deliveryReadyOrderSearch() {
+            List<Delivery> deliveries = dao.deliveryReadyOrderSearch();
+        return deliveries;
     }
 
 }
