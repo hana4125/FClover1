@@ -22,21 +22,15 @@
       })
   </script>
 </head>
-<body class="d-flex justify-content-center align-items-center bg-success">
+<body class="d-flex justify-content-center align-items-center bg-primary">
 <div class="container w-25 text-center">
   <div>
     <form th:action="@{/seller/loginProcess}" method="post" class="border p-5 rounded-3 mb-5" style="background-color: white">
       <img id="logo" src="/img/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-3">
       <h4 class="mb-4">판매자 로그인</h4>
-      <input type="text" class="form-control mb-3" id="id" name="id" placeholder="아이디">
+      <input type="text" class="form-control mb-3" id="sellerId" name="sellerId" placeholder="아이디">
       <input type="password" class="form-control mb-5" id="password" name="password" placeholder="비밀번호">
-      <input type="submit" class="form-control btn btn-success" value="로그인">
-      <div class="d-flex mt-2">
-        <div>
-          <input type="checkbox" id="remember-me">
-          <label for="remember-me">아이디 저장</label>
-        </div>
-      </div>
+      <input type="submit" class="form-control btn btn-primary" value="로그인">
     </form>
   </div>
 </div>

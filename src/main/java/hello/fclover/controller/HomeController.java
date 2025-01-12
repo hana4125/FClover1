@@ -5,6 +5,7 @@ import hello.fclover.service.CategoryService;
 import hello.fclover.domain.Member;
 import hello.fclover.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class HomeController {

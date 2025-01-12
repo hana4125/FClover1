@@ -26,19 +26,19 @@ public class SellerController {
         return "seller/sellerMypage";
     }
 
-    @GetMapping("/sellerSignup")
+    @GetMapping("/signup")
     public String sellerSignupForm() {
         return "seller/sellerSignup";
     }
 
-    @PostMapping("/sellerSignup")
+    @PostMapping("/signup")
     public String sellerSignup(@ModelAttribute Seller seller) {
 
         sellerService.signup(seller);
         return "redirect:/";
     }
 
-    @GetMapping("/sellerLogin")
+    @GetMapping("/login")
     public String sellerLoginForm() {
         return "seller/sellerLogin";
     }

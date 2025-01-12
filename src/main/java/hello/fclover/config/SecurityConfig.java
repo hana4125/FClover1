@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
+import java.security.Security;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -27,6 +28,27 @@ public class SecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
 
     private final CustomOAuth2UserService customOAuth2UserService;
+
+    @Bean
+    public SecurityFilterChain sellerFilterChain(HttpSecurity http) throws Exception {
+
+        http
+                .securityMatcher("/seller/**")
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/seller/login")
+                        .loginProcessingUrl("/seller/loginProcess")
+                        .usernameParameter("sellerId")
+                        .passwordParameter("password")
+                        .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailHandler));
+
+        http.logout((lo) -> lo.logoutUrl("/seller/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID"));
+
+        return http.build();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
