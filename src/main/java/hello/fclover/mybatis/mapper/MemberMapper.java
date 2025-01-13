@@ -35,7 +35,7 @@ public interface MemberMapper {
 
     void deleteMember(String memberId);
 
-    int selectmemNo(String memberId);
+    int selectMemNo(String memberId);
 
     AddressBook selectDefaultAddress(int memNo);
 

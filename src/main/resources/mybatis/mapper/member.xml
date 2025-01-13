@@ -35,7 +35,7 @@
         UPDATE member SET profile_picture = null WHERE member_id = #{memberId}
     </update>
 
-    <select id="selectmemNo">
+    <select id="selectMemNo">
         SELECT mem_no FROM member WHERE member_id = #{memberId}
     </select>
 

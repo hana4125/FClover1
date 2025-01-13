@@ -43,7 +43,7 @@
         <a class="pe-2" href="/seller/signup">판매자 가입</a>
       </th:block>
       <th:block th:if="${seller != null}">
-        <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>님</a>
+        <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
         <form th:action="@{/seller/logout}" method="post">
           <button type="submit" class="pe-2">로그아웃</button>
         </form>

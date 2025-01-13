@@ -1,10 +1,7 @@
 package hello.fclover.config;
 
 import hello.fclover.oauth2.service.CustomOAuth2UserService;
-import hello.fclover.security.CustomAccessDeniedHandler;
-import hello.fclover.security.CustomUserDetailsService;
-import hello.fclover.security.LoginFailHandler;
-import hello.fclover.security.LoginSuccessHandler;
+import hello.fclover.security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +27,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
-    public SecurityFilterChain sellerFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain sellerFilterChain(HttpSecurity http, SellerLoginSuccessHandler sellerLoginSuccessHandler, SellerLoginFailHandler sellerLoginFailHandler) throws Exception {
 
         http
                 .securityMatcher("/seller/**")
@@ -39,11 +36,11 @@ public class SecurityConfig {
                         .loginProcessingUrl("/seller/loginProcess")
                         .usernameParameter("sellerId")
                         .passwordParameter("password")
-                        .successHandler(loginSuccessHandler)
-                        .failureHandler(loginFailHandler));
+                        .successHandler(sellerLoginSuccessHandler)
+                        .failureHandler(sellerLoginFailHandler));
 
         http.logout((lo) -> lo.logoutUrl("/seller/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/seller/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID"));
 

@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int getmemNo(String memberId) {
-        return dao.selectmemNo(memberId);
+        return dao.selectMemNo(memberId);
     }
 
     @Override
