@@ -63,7 +63,7 @@
     <update id="updateDefaultAddress">
         UPDATE address_book
         SET is_default = CASE
-                             WHEN address_num = #{addressNum} THEN 1
+                             WHEN address_no = #{addressNo} THEN 1
                              ELSE 0
             END
     </update>
@@ -73,10 +73,10 @@
     </select>
 
     <select id="selectIsDefault">
-        SELECT is_default FROM address_book WHERE address_num = #{addressNum}
+        SELECT is_default FROM address_book WHERE address_no = #{addressNo}
     </select>
 
     <delete id="deleteAddressBook">
-        DELETE FROM address_book WHERE address_num = #{addressNum}
+        DELETE FROM address_book WHERE address_no = #{addressNo}
     </delete>
 </mapper>

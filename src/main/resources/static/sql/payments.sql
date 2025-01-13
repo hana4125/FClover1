@@ -1,5 +1,7 @@
 CREATE TABLE `payments` (
-                            `id` bigint NOT NULL AUTO_INCREMENT,
+
+    #   payments_no 로 pk 수정
+                            `payments_no` bigint NOT NULL AUTO_INCREMENT,
                             `partner_id` bigint DEFAULT NULL,
                             `user_id` varchar(50) NOT NULL,
                             `order_id` bigint NOT NULL,
@@ -16,7 +18,7 @@ CREATE TABLE `payments` (
                             `card_number` varchar(50) DEFAULT NULL,
                             `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                             `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                            PRIMARY KEY (`id`)
+                            PRIMARY KEY (`payments_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;
 
 select* from payments;
