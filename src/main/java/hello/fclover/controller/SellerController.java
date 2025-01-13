@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 
 @Slf4j
 @Controller
@@ -24,8 +26,23 @@ public class SellerController {
     private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
 
+    @ModelAttribute("seller")
+    public Seller addSellerToModel(Principal principal) {
+
+        if (principal != null) {
+            String sellerId = principal.getName();
+            return sellerService.findSellerById(sellerId);
+        }
+        return null;
+    }
+
     @GetMapping("/main")
-    public String signup() {
+    public String signup(Principal principal) {
+
+        if (principal == null) {
+            return "redirect:/seller/login";
+        }
+
         return "seller/sellerMain";
     }
 
@@ -51,5 +68,4 @@ public class SellerController {
 
         return "seller/sellerLogin";
     }
-
 }

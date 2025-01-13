@@ -33,4 +33,9 @@ public class SellerServiceImpl implements SellerService {
     public int signup(Seller seller) {
         return dao.insertSeller(seller);
     }
+
+    @Override
+    public Seller findSellerById(String sellerId) {
+        return dao.selectSellerById(sellerId);
+    }
 }

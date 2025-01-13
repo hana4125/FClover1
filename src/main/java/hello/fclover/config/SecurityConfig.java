@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .failureHandler(sellerLoginFailHandler));
 
         http.logout((lo) -> lo.logoutUrl("/seller/logout")
-                .logoutSuccessUrl("/seller/login")
+                .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID"));
 
