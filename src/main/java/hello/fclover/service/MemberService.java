@@ -12,7 +12,7 @@ public interface MemberService {
 
     int signup(Member member);
 
-    int getmemNo(String memberId);
+    int getmemberNo(String memberId);
 
     Member findMemberById(String memberId);
 
@@ -32,7 +32,7 @@ public interface MemberService {
 
     void setDefaultAddress(int addressId);
 
-    List<AddressBook> getDeliveryAddress(int memNo);
+    List<AddressBook> getDeliveryAddress(int memberNo);
 
     Member isMemberExists(String memberId, String password);
 
@@ -40,7 +40,7 @@ public interface MemberService {
 
     void removeAccount(String memberId);
 
-    AddressBook getDefaultAddress(int memNo);
+    AddressBook getDefaultAddress(int memberNo);
 
     int checkDefaultAddress(int addressNo);
 

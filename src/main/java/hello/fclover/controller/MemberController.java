@@ -152,10 +152,10 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memNo = member.getMemNo();
+        int memberNo = member.getMemberNo();
 
-        AddressBook defaultAddress = memberService.getDefaultAddress(memNo);
-        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNo);
+        AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);
 
         model.addAttribute("defaultAddress", defaultAddress);
         model.addAttribute("addressBookList", addressBookList);
@@ -166,8 +166,8 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memNo = memberService.getmemNo(memberId);
-        addressBook.setMemNo(memNo);
+        int memberNo = memberService.getmemberNo(memberId);
+        addressBook.setMemberNo(memberNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
     }

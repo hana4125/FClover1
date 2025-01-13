@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int getmemNo(String memberId) {
-        return dao.selectMemNo(memberId);
+    public int getmemberNo(String memberId) {
+        return dao.selectmemberNo(memberId);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<AddressBook> getDeliveryAddress(int memNo) {
-        return dao.selectAddressBook(memNo);
+    public List<AddressBook> getDeliveryAddress(int memberNo) {
+        return dao.selectAddressBook(memberNo);
     }
 
     @Override
@@ -104,8 +104,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public AddressBook getDefaultAddress(int memNo) {
-        return dao.selectDefaultAddress(memNo);
+    public AddressBook getDefaultAddress(int memberNo) {
+        return dao.selectDefaultAddress(memberNo);
     }
 
     @Override
