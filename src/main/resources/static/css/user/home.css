@@ -190,4 +190,12 @@
     display: inline-block; /* inline-block으로 변경 */
 }
 
+/* 바로구매 버튼 */
+.buy-now-btn {
+    position: relative; /* 위치 조정 가능 */
+    height: 40px;
+    margin-right: 10px;
+    top: 10px;
+}
+
 

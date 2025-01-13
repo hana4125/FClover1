@@ -9,7 +9,7 @@ public interface GoodsService {
 
     int getTotalGoodsCount(int cate_no);
 
-    Goods getGoodsById(int goods_no);
+    Goods findGoodsByNo(Long goodsNo);
 }
 
 

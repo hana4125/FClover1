@@ -67,8 +67,9 @@
     <div style="width: 25%; height: 300vh">
       <div class="mt-6 ms-3 p-4 border rounded-3 sticky-top">
         <div class="d-flex justify-content-between">
+          <p>상품명: <span th:text="${goods.goodsName}"></span></p>
           <p>상품 금액</p>
-          <span>42,120원</span>
+          <span th:text="${goods.goodsPrice}"></span>원
         </div>
         <div class="d-flex justify-content-between">
           <p>배송비</p>

@@ -132,61 +132,60 @@
         })
       })
 
+    // 찜 버튼 동작
     $(function () {
-      // 찜 버튼 동작
       $(".heart").click(function () {
-        const checkedItems = $(".item-checkbox:checked"); // 체크된 박스 선택
-        if (checkedItems.length > 0) {
-          const goodsNos = checkedItems.map(function () {
-            return $(this).closest("li").find(".show-detail").attr("th:href").match(/goods\/(\d+)/)[1]; // goodsNo 추출
-          }).get();
-
-          // 서버에 Ajax 요청
-          $.ajax({
-            url: "/wishlist/add", // 찜 추가 API 엔드포인트
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ goodsNos: goodsNos }),
-            success: function () {
-              alert("찜 설정 되었습니다.");
-            },
-            error: function () {
-              alert("찜 설정 중 오류가 발생했습니다.");
-            },
-          });
+        // const checkedItems = $(".item-checkbox:checked").length; // 체크된 박스 개수 확인
+        const heartButton = $(this);
+        const isLiked = heartButton.attr("src") === "/img/user/redHeart.png";
+        // if (checkedItems > 0) {
+        // 체크된 상품이 1개 이상일 경우
+        if (isLiked) {
+          // 찜 해제 동작
+          alert("찜 해제 되었어요.");
+          heartButton.attr("src", "/img/user/heart.png"); // 원래 하트 이미지로 변경
         } else {
-          alert("선택된 상품이 없습니다.");
+          // 찜 설정 동작
+          alert("찜 설정 되었어요.");
+          heartButton.attr("src", "/img/user/redHeart.png"); // 빨간 하트 이미지로 변경
         }
-      });
+        // } else {
+        // 체크된 상품이 없을 경우
+        //   alert("선택된 상품이 없습니다.");
+        // }
+      })
+    })
 
-      // 장바구니 버튼 동작
+    // 장바구니 버튼 동작
+    $(function () {
       $(".cart").click(function () {
-        const checkedItems = $(".item-checkbox:checked"); // 체크된 박스 선택
-        if (checkedItems.length > 0) {
-          const goodsNos = checkedItems.map(function () {
-            return $(this).closest("li").find(".show-detail").attr("th:href").match(/goods\/(\d+)/)[1]; // goodsNo 추출
-          }).get();
+        // const checkedItems = $(".item-checkbox:checked").length; // 체크된 상품 수
+        // const alreadyInCart = false; // 이미 장바구니에 담긴 상품 여부 (예제용: 실제로 서버와 통신하여 확인 필요)
 
-          // 서버에 Ajax 요청
-          $.ajax({
-            url: "/cart/add", // 장바구니 추가 API 엔드포인트
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ goodsNos: goodsNos }),
-            success: function () {
-              if (confirm("장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?")) {
-                location.href = "/member/cart";
-              }
-            },
-            error: function () {
-              alert("장바구니 추가 중 오류가 발생했습니다.");
-            },
-          });
-        } else {
-          alert("선택된 상품이 없습니다.");
-        }
-      });
-    });
+        // if (checkedItems > 0) {
+        //   if (alreadyInCart) {
+        //     // 장바구니에 이미 담긴 상품이 있을 경우
+        //     if (confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?")) {
+        //       // 확인 버튼 클릭 시 장바구니 페이지로 이동
+        //       location.href = "/member/cart";
+        //     }
+        //   } else {
+            // 새로운 상품을 장바구니에 추가하는 경우
+            if (confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+              // 확인 버튼 클릭 시 장바구니 페이지로 이동
+              location.href = "/member/cart";
+            }
+      })
+    })
+
+    $(function () {
+      $(".buy-now-btn").click(function () {
+        const goodsNo = $(this).data("id");
+
+        // 바로구매 페이지로 이동
+        location.href = `/payments?goodsNo=${goodsNo}`;
+      })
+    })
   </script>
 </head>
 <body>
@@ -226,10 +225,10 @@
 <div class="container w-75 mt-5">
   <div class="d-flex justify-content-end align-items-center mb-3">
     <!-- 장바구니, 찜 버튼 -->
-    <div class="icon ms-auto mb-4">
-      <img src="/img/user/heart.png" class="heart me-2" width="36" height="36" alt="찜">
-      <img src="/img/user/cart.png" class="cart me-2" width="36" height="36" alt="장바구니">
-    </div>
+<!--    <div class="icon ms-auto mb-4">-->
+<!--      <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
+<!--      <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
+<!--    </div>-->
 
     <!-- 드롭다운 -->
     <div class="dropdown me-2">
@@ -276,6 +275,12 @@
               <span class="item-author" th:text="${goods.goodsWriter}"></span>
             </div>
           </div>
+          <div class="icon ms-auto mb-4">
+            <img src="/img/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">
+            <img src="/img/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="장바구니">
+          </div>
+          <!-- 바로구매 버튼 -->
+          <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매</button>
         </div>
       </li>
     </ul>

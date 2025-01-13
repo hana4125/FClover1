@@ -27,8 +27,7 @@
         WHERE cate_no = #{cate_no}
     </select>
 
-    <!-- 상품 상세 조회 -->
-    <select id="findById" parameterType="int" resultType="hello.fclover.domain.Goods">
+    <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
         SELECT *
         FROM goods
         WHERE goods_no = #{goods_no}

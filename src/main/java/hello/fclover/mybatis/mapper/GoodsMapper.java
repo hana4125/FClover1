@@ -16,6 +16,5 @@ public interface GoodsMapper {
 
     int countGoods(int cate_no);
 
-    // 특정 카테고리 조회
-    Goods findById(int cate_no);
+    Goods findGoodsById(long goods_no);
 }

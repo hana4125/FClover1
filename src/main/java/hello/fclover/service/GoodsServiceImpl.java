@@ -25,7 +25,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public Goods getGoodsById(int goods_no) {
-        return goodsMapper.findById(goods_no);
+    public Goods findGoodsByNo(Long goodsNo) {
+        return goodsMapper.findGoodsById(goodsNo);
     }
 }
