@@ -15,4 +15,7 @@ CREATE TABLE member
 );
 
 drop table member;
+
 commit;
+
+select * from member;
