@@ -24,7 +24,7 @@
     </select>
 
     <select id="selectMemberResetPassword">
-        SELECT mem_no FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
+        SELECT member_no FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
     </select>
 
     <update id="updateProfile">
@@ -35,8 +35,8 @@
         UPDATE member SET profile_picture = null WHERE member_id = #{memberId}
     </update>
 
-    <select id="selectmemNo">
-        SELECT mem_no FROM member WHERE member_id = #{memberId}
+    <select id="selectmemberNo">
+        SELECT member_no FROM member WHERE member_id = #{memberId}
     </select>
 
     <select id="selectMember">
@@ -52,12 +52,12 @@
     </delete>
 
     <insert id="insertAddressBook">
-        INSERT INTO address_book (mem_no, address_name, recipient_name, phone_number, address)
-        VALUES (#{memNo}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
+        INSERT INTO address_book (member_no, address_name, recipient_name, phone_number, address)
+        VALUES (#{memberNo}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
     </insert>
 
     <select id="selectAddressBook">
-        SELECT * FROM address_book WHERE mem_no = #{memNo}
+        SELECT * FROM address_book WHERE member_no = #{memberNo}
     </select>
 
     <update id="updateDefaultAddress">
@@ -69,7 +69,7 @@
     </update>
 
     <select id="selectDefaultAddress">
-        SELECT * FROM address_book WHERE mem_no = #{mem_no} AND is_default = 1
+        SELECT * FROM address_book WHERE member_no = #{member_no} AND is_default = 1
     </select>
 
     <select id="selectIsDefault">

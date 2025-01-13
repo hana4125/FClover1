@@ -2,37 +2,38 @@
   <div xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
        xmlns:th="http://www.thymeleaf.org">
     <style>
-      button[type=submit] {
-        all: unset;
-        cursor: pointer;
-      }
+        button[type=submit] {
+            all: unset;
+            cursor: pointer;
+        }
 
-      .util_area {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
+        .util_area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-      .util_button_area {
-        display: flex;
-        gap: 10px;
-      }
+        .util_button_area {
+            display: flex;
+            gap: 10px;
+        }
 
-      .util_button_area a {
-        text-decoration: none;
-        color: inherit;
-      }
+        .util_button_area a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-      .close-dropdown {
-        margin-left: auto;
-      }
+        .close-dropdown {
+            margin-left: auto;
+        }
 
         .header-profile {
             cursor: pointer;
         }
 
         .icon {
-            position: relative; top: 15px;
+            position: relative;
+            top: 15px;
         }
 
         .icon img {
@@ -77,65 +78,69 @@
 
         // searchBar 클릭시 드롭다운 열기
         $searchBar.on("click", function (e) {
-          e.stopPropagation();
+            e.stopPropagation();
 
-          // 드롭 다운 위치 설정
-          const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance($dropdown[0], {
-            reference: $searchBar[0],
-            popperConfig: {
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [0, 0],
-                  },
+            // 드롭 다운 위치 설정
+            const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance($dropdown[0], {
+                reference: $searchBar[0],
+                popperConfig: {
+                    modifiers: [
+                        {
+                            name: 'offset',
+                            options: {
+                                offset: [0, 0],
+                            },
+                        },
+                    ],
                 },
-              ],
-            },
-          });
+            });
 
-          dropdownInstance.show();
+            dropdownInstance.show();
         });
 
         // 외부 클릭시 드롭다운 닫기
         $(document).on("click", function () {
-          const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
-          if (dropdownInstance) {
-            dropdownInstance.hide();
-          }
+            const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
+            if (dropdownInstance) {
+                dropdownInstance.hide();
+            }
         });
 
         // 드롭다운 내부 클릭 시 이벤트 전파 방지
         $dropdown.on("click", function (e) {
-          e.stopPropagation();
+            e.stopPropagation();
         });
 
         // 닫기 버튼 클릭 시 드롭다운 닫기
         $(".close-dropdown").on("click", function () {
-          const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
-          if (dropdownInstance) {
-            dropdownInstance.hide();
-          }
+            const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
+            if (dropdownInstance) {
+                dropdownInstance.hide();
+            }
         });
     </script>
     <script th:src="@{/js/search_auto.js}"></script>
     <div class="bg-light mb-3">
       <div class="container w-75">
         <div class="top-menu d-flex justify-content-end">
-          <th:block sec:authorize-expr="not isAuthenticated()">
+          <th:block th:if="${member == null && seller == null}">
             <a class="pe-2" href="/member/login">로그인</a>
             <a class="pe-2" href="/member/signup">회원가입</a>
+            <a class="pe-2" href="#">고객센터</a>
+            <a class="pe-2" href="/seller/login">판매자 로그인</a>
+            <a class="pe-2" href="/seller/signup">판매자 가입</a>
           </th:block>
-          <th:block sec:authorize-expr="isAuthenticated()">
+          <th:block th:if="${member != null}">
             <a href="/member/myPage" class="pe-2"><span th:text="${member.name}"></span>님</a>
             <form th:action="@{/member/logout}" method="post">
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
-          <a class="pe-2" href="#">고객센터</a>
-          <th:block sec:authorize-expr="not isAuthenticated()">
-            <a class="pe-2" href="/seller/sellerLogin">판매자 로그인</a>
-            <a class="pe-2" href="/seller/sellerSignup">판매자 가입</a>
+          <th:block th:if="${seller != null}">
+            <a href="/member/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+            <form th:action="@{/seller/logout}" method="post">
+              <button type="submit" class="pe-2">로그아웃</button>
+            </form>
           </th:block>
         </div>
       </div>
@@ -238,10 +243,12 @@
           </div>
         </div>
         <div th:unless="${member == null}">
-          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
+               th:if="${member.profilePicture == null}">
             <img src="/img/user/profile.png" alt="기본 프로필 이미지">
           </div>
-          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
+          <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
+               th:unless="${member.profilePicture == null}">
             <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
           </div>
         </div>
