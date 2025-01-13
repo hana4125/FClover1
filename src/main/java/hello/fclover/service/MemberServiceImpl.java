@@ -43,6 +43,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public String findMemberId(Member member) {
+        return dao.selectMemberId(member);
+    }
+
+    @Override
+    public Integer selectMemberResetPassword(Member member) {
+        return dao.selectMemberResetPassword(member);
+    }
+
+    @Override
     public int updateMember(Member member) {
         return dao.updateMember(member);
     }
