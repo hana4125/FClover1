@@ -1,7 +1,8 @@
 CREATE TABLE address_book
 (
+
     address_no    INT AUTO_INCREMENT PRIMARY KEY,
-    mem_no        INT          NOT NULL,
+    member_no        INT          NOT NULL,
     address_name   VARCHAR(50)  NOT NULL,
     recipient_name VARCHAR(100) NOT NULL,
     phone_number   VARCHAR(20)  NOT NULL,
@@ -9,3 +10,7 @@ CREATE TABLE address_book
     is_default     TINYINT(1) DEFAULT 0,
     created_at     DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+commit;
+
+drop table address_book;

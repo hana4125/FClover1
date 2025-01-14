@@ -9,8 +9,5 @@ import java.util.List;
 public interface CategoryMapper {
     // 모든 카테고리 조회
     List<Category> findAll();
-
-    // 특정 카테고리 조회
-    Category findById(int cate_no);
 }
 
