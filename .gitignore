@@ -109,4 +109,4 @@ gradle-app.setting
 .idea
 
 #이미지 파일
-src/main/resources/static/img/user/upload/*
+src/main/resources/static/images/user/upload/*

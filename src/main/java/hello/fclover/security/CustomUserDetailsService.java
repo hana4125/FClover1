@@ -55,6 +55,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (users instanceof Member) {
             Member member = (Member) users;
             roles.add(new SimpleGrantedAuthority(member.getAuth()));
+            log.info("roles = {}", roles);
             UserDetails user = new User(username, member.getPassword(), roles);
             return user;
         } else {

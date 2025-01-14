@@ -139,11 +139,8 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPageMain(Principal principal) {
+    public String myPageMain() {
 
-        if (principal == null) {
-            return "redirect:/member/login";
-        }
         return "/user/mypage/userMyPageMain";
     }
 

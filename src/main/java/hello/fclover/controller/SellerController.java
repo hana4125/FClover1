@@ -3,6 +3,7 @@ package hello.fclover.controller;
 
 import hello.fclover.domain.Seller;
 import hello.fclover.service.SellerService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,11 +52,19 @@ public class SellerController {
         return "seller/sellerSignup";
     }
 
-    @PostMapping("/signup")
-    public String sellerSignup(@ModelAttribute Seller seller) {
+    @PostMapping("/signupProcess")
+    public String sellerSignup(HttpServletRequest request) {
 
-        String encPassword = passwordEncoder.encode(seller.getPassword());
-        seller.setPassword(encPassword);
+        //이유는 모르겠지만 ModelAttribute가 안됨
+        Seller seller = new Seller();
+        seller.setSellerId(request.getParameter("sellerId"));
+        seller.setPassword(passwordEncoder.encode(request.getParameter("password")));
+        seller.setName(request.getParameter("name"));
+        seller.setEmail(request.getParameter("email"));
+        seller.setPhoneNumber(request.getParameter("phoneNumber"));
+        seller.setBusinessNumber(request.getParameter("businessNumber"));
+        seller.setCompanyName(request.getParameter("companyName"));
+
         sellerService.signup(seller);
         return "redirect:/seller/main";
     }
