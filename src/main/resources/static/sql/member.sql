@@ -14,10 +14,10 @@ CREATE TABLE member
 
 commit;
 
+select * from member;
+
 drop table member;
 
 update member
 set auth = 'ROLE_ADMIN'
 where member_id = 'admin';
-
-select * from member;

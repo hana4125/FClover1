@@ -12,7 +12,7 @@ public interface MemberService {
 
     int signup(Member member);
 
-    int getMemNum(String memberId);
+    int getmemNo(String memberId);
 
     Member findMemberById(String memberId);
 
@@ -32,7 +32,7 @@ public interface MemberService {
 
     void setDefaultAddress(int addressId);
 
-    List<AddressBook> getDeliveryAddress(int memNum);
+    List<AddressBook> getDeliveryAddress(int memNo);
 
     Member isMemberExists(String memberId, String password);
 
@@ -40,11 +40,11 @@ public interface MemberService {
 
     void removeAccount(String memberId);
 
-    AddressBook getDefaultAddress(int memNum);
+    AddressBook getDefaultAddress(int memNo);
 
-    int checkDefaultAddress(int addressNum);
+    int checkDefaultAddress(int addressNo);
 
-    int removeAddressBook(int addressNum);
+    int removeAddressBook(int addressNo);
 
     String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
 }

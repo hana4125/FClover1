@@ -1,6 +1,7 @@
 package hello.fclover.controller;
 
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
 import hello.fclover.service.BackOfficeService;
@@ -41,6 +42,16 @@ public class BackOfficeController {
     @GetMapping("/deliveryReady")
     public String deliveryReady() {
         return "backOffice/boDeliveryReady";
+    }
+
+    //배송준비중 데이터 비동기처리
+    @GetMapping("/deliveryReadyAsync")
+    @ResponseBody
+    public List<Delivery> deliveryReadyAsync(ModelAndView mv) {
+        List<Delivery> list = backOfficeService.deliveryReadyOrderSearch();
+
+        System.out.println("=======>여기는 controller list = " + list);
+        return list;
     }
 
 
@@ -87,17 +98,20 @@ public class BackOfficeController {
         return payment;
     }
 
-//    //재고 감소
-//    @GetMapping("/StockCount")
-//    public String StockCount(Model model) {
-//        int goods_no = 3;
-//        int stockCount = backOfficeService.getProduct_stock(goods_no);
-//        int result =  backOfficeService.decrease(stockCount);
-//
-//
-//
-//        return "backOffice/boSellerSettlement";
-//    }
+    //결제완료페이지에서 [배송준비] 버튼 클릭 시
+    @GetMapping("/delivery/ready")
+    @ResponseBody
+    public  void  ready(@RequestParam Long orderId,@RequestParam String userId,Model model) {
+        System.out.println("test1");
+        //조회한 주문정보 기반으로 delivery테이블에 insert하기.
+        backOfficeService.InsertdeliveryReadyList(orderId,userId);
+
+    }
+
+
+
+
+
 
 
 

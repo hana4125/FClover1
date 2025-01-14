@@ -32,6 +32,9 @@ commit;
 
 create schema fClover;
 
+SELECT cate_no, cate_name FROM category;
+
+
 
 
 

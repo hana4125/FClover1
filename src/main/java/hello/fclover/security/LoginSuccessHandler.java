@@ -19,7 +19,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("로그인 성공 : LoginSuccessHandler");
         String url = request.getContextPath() + "/";
 
-        String member_id = request.getParameter("member_id");
+        String member_id = request.getParameter("memberId");
         String rememberMe = request.getParameter("remember-me");
 
         if ("on".equals(rememberMe)) {

@@ -31,9 +31,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        // 카테고리 데이터 가져오기
         List<Category> categoryList = categoryService.getCategoryList();
-        model.addAttribute("categoryList", categoryList); // 모델에 데이터 추가
-        return "user/userHome"; // Thymeleaf 템플릿 반환
+        model.addAttribute("categoryList", categoryList);
+        return "user/userHome";
     }
 }

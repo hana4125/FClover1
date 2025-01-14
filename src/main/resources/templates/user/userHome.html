@@ -33,9 +33,9 @@
             //     location.href = href; // 해당 URL로 이동
             // });
 
-            $(".show-detail").click(function () {
-                location.href = "";
-            })
+            // $(".show-detail").click(function () {
+            //     location.href = "";
+            // })
 
             $(".show-plus").click(function (e) {
                 e.preventDefault(); // 기본 동작 방지
@@ -124,8 +124,8 @@
             <!-- categoryList의 각 요소를 반복하여 출력 -->
             <li th:each="category : ${categoryList}">
                 <!-- 카테고리 이름 출력 -->
-                <a th:href="@{/category/{no}(no=${category.cate_no})}"
-                   th:text="${category.cate_name}"
+                <a th:href="@{/category/{no}(no=${category.cateNo})}"
+                   th:text="${category.cateName}"
                    class="category-item"></a>
             </li>
         </ul>

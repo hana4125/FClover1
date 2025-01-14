@@ -31,10 +31,8 @@ insert into GOODS values(5,123555,'test5',444,'GoodsName5',
                          'GoodsContent5',1000,'writer5',
                          'company5',sysdate(),null,1,current_timestamp() );
 
-
-
-
-
 commit ;
+
+drop table goods;
 
 

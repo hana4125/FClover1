@@ -2,8 +2,7 @@ package hello.fclover.controller;
 
 import hello.fclover.domain.*;
 import hello.fclover.mail.EmailMessage;
-//import hello.fclover.mail.EmailService;
-import hello.fclover.service.InquiryService;
+import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.io.IOException;
-import java.time.LocalDateTime;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -40,9 +38,8 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+    private final EmailService emailService;
     private final NoticeService noticeService;
-    private final InquiryService inquiryService;
-    //private final EmailService emailService;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -68,10 +65,10 @@ public class MemberController {
         int result = memberService.signup(member);
 
         if (result == 1) {
-            //log.info("회원가입 완료");
+            log.info("회원가입 완료");
             return "redirect:/";
         } else {
-            //log.info("회원가입 실패");
+            log.info("회원가입 실패");
             return "error/error";
         }
     }
@@ -130,14 +127,14 @@ public class MemberController {
         }
         redirectAttributes.addFlashAttribute("message", "메일 발송 성공");
 
-        //String randomNumber = EmailService.generateRandomNumber();
+        String randomNumber = EmailService.generateRandomNumber();
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(member.getEmail())
                 .subject("비밀번호 재설정")
-                //.message("인증번호 : " + randomNumber)
+                .message("인증번호 : " + randomNumber)
                 .build();
-        //emailService.sendMail(emailMessage);
+        emailService.sendMail(emailMessage);
         return "redirect:/member/reset-password";
     }
 
@@ -154,10 +151,10 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memNum = member.getMemNum();
+        int memberNo = member.getMemberNo();
 
-        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
-        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
+        AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);
 
         model.addAttribute("defaultAddress", defaultAddress);
         model.addAttribute("addressBookList", addressBookList);
@@ -168,20 +165,20 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memNum = memberService.getMemNum(memberId);
-        addressBook.setMemNum(memNum);
+        int memberNo = memberService.getmemberNo(memberId);
+        addressBook.setMemberNo(memberNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/deleteAddressBook")
-    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
-        int result = memberService.checkDefaultAddress(addressNum);
+    public String deleteDeliveryAddress(@RequestParam int addressNo, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNo);
 
         if (result == 1) {
             redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
         } else {
-            memberService.removeAddressBook(addressNum);
+            memberService.removeAddressBook(addressNo);
         }
         return "redirect:/member/myPage/addressBook";
     }
@@ -190,8 +187,8 @@ public class MemberController {
 
     @Transactional
     @PostMapping("/defaultAddress")
-    public String defaultAddress(@RequestParam int addressNum) {
-        memberService.setDefaultAddress(addressNum);
+    public String defaultAddress(@RequestParam int addressNo) {
+        memberService.setDefaultAddress(addressNo);
         return "redirect:/member/myPage/addressBook";
     }
 
@@ -477,23 +474,4 @@ public class MemberController {
         return mv;
     }
 
-    //QnA 문의하기
-    @GetMapping("/inquiry")
-    public String inqiury(
-            @RequestParam(defaultValue = "1") Integer page, Model m) {
-
-        int limit = 10;
-        int listcount = inquiryService.ListCount();
-        List<Inquiry> list = inquiryService.BoardList(page, limit);
-
-        PaginationResult result = new PaginationResult(page, limit, listcount);
-        m.addAttribute("page", page);
-        m.addAttribute("maxpage", result.getMaxpage());
-        m.addAttribute("startpage", result.getStartpage());
-        m.addAttribute("endpage", result.getEndpage());
-        m.addAttribute("listcount", listcount);
-        m.addAttribute("inquirylist", list);
-        m.addAttribute("limit", limit);
-        return "user/userQNA";
-    }
 }
