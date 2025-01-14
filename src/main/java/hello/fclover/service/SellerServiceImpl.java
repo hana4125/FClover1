@@ -1,5 +1,6 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Seller;
 import hello.fclover.domain.Settlement;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import lombok.RequiredArgsConstructor;
@@ -28,4 +29,13 @@ public class SellerServiceImpl implements SellerService {
         return settlement;
     }
 
+    @Override
+    public int signup(Seller seller) {
+        return dao.insertSeller(seller);
+    }
+
+    @Override
+    public Seller findSellerById(String sellerId) {
+        return dao.selectSellerById(sellerId);
+    }
 }

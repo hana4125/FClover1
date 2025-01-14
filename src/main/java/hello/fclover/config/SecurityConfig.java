@@ -1,10 +1,7 @@
 package hello.fclover.config;
 
 import hello.fclover.oauth2.service.CustomOAuth2UserService;
-import hello.fclover.security.CustomAccessDeniedHandler;
-import hello.fclover.security.CustomUserDetailsService;
-import hello.fclover.security.LoginFailHandler;
-import hello.fclover.security.LoginSuccessHandler;
+import hello.fclover.security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +13,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
+import java.security.Security;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -29,10 +27,31 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
+    public SecurityFilterChain sellerFilterChain(HttpSecurity http, SellerLoginSuccessHandler sellerLoginSuccessHandler, SellerLoginFailHandler sellerLoginFailHandler) throws Exception {
+
+        http
+                .securityMatcher("/seller/**")
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/seller/login")
+                        .loginProcessingUrl("/seller/loginProcess")
+                        .usernameParameter("sellerId")
+                        .passwordParameter("password")
+                        .successHandler(sellerLoginSuccessHandler)
+                        .failureHandler(sellerLoginFailHandler));
+
+        http.logout((lo) -> lo.logoutUrl("/seller/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID"));
+
+        return http.build();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin((formLogin) -> formLogin.loginPage("/member/login")
                 .loginProcessingUrl("/member/loginProcess")
-                .usernameParameter("member_id")
+                .usernameParameter("memberId")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler));
