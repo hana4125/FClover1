@@ -15,7 +15,7 @@
             })
 
             $("#cart").click(function () {
-                location.href = "/cart";
+                location.href = "/member/cart";
             })
 
             $("#myPage").click(function () {
@@ -25,13 +25,6 @@
             $(".category-item").click(function () {
                 location.href = "/category/{no}";
             })
-
-            // 카테고리 클릭 이벤트
-            // $(".category-item").click(function (event) {
-            //     event.preventDefault(); // 기본 동작 방지
-            //     const href = $(this).attr("href"); // 클릭한 항목의 href 속성 가져오기
-            //     location.href = href; // 해당 URL로 이동
-            // });
 
             // $(".show-detail").click(function () {
             //     location.href = "";
@@ -112,7 +105,6 @@
             </button>
             <a href="#" class="best ps-5 pe-5">베스트</a>
             <a href="#" class="new ps-5 pe-5">신상품</a>
-            <a href="#" class="ps-5 pe-5">이벤트</a>
         </div>
     </div>
 </div>

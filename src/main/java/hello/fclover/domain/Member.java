@@ -19,5 +19,4 @@ public class Member {
     private String profilePicture;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }
