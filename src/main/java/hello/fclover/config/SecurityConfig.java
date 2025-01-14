@@ -41,8 +41,8 @@ public class SecurityConfig {
                         .successHandler(sellerLoginSuccessHandler)
                         .failureHandler(sellerLoginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("seller/login", "/seller/signup", "/seller/signupProcess").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/seller/login", "/seller/signup", "/seller/signupProcess").permitAll()
+                        .requestMatchers("/seller/**").hasRole("SELLER"))
                 .logout((lo) -> lo.logoutUrl("/seller/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/member/**").hasRole("MEMBER")
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")

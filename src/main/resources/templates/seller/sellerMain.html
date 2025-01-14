@@ -30,6 +30,13 @@
           cursor: pointer;
       }
   </style>
+  <script>
+    $(function() {
+        $("#logo").click(function() {
+            location.href ="/seller/main";
+        })
+    })
+  </script>
 </head>
 <body>
 <div class="bg-light mb-3">
@@ -81,8 +88,8 @@
           <div class="mb-4">
             <h5 class="fw-bold">결제/정산내역</h5>
             <ul class="list-unstyled">
-              <li><a href="/myPage/purchaseHistory">일 정산내역</a></li>
-              <li><a href="/myPage/purchaseHistory">월 정산내역</a></li>
+              <li><a href="#">일 정산내역</a></li>
+              <li><a href="#">월 정산내역</a></li>
             </ul>
           </div>
 
@@ -90,7 +97,7 @@
           <div class="mb-4">
             <h5 class="fw-bold">구매고객 리스트</h5>
             <ul class="list-unstyled">
-              <li><a href="/myPage/wishlist">구매자 리스트 조회</a></li>
+              <li><a href="#">구매자 리스트 조회</a></li>
             </ul>
           </div>
 
@@ -98,8 +105,8 @@
           <div class="mb-4">
             <h5 class="fw-bold">상품등록</h5>
             <ul class="list-unstyled">
-              <li><a href="/myPage/deliveryAddressBook">자동등록</a></li>
-              <li><a href="/myPage/info">수동등록</a></li>
+              <li><a href="#">자동등록</a></li>
+              <li><a href="#">수동등록</a></li>
             </ul>
           </div>
         </div>
