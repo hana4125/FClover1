@@ -3,10 +3,12 @@ package hello.fclover.config;
 import hello.fclover.oauth2.service.CustomOAuth2UserService;
 import hello.fclover.security.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -37,42 +39,42 @@ public class SecurityConfig {
                         .usernameParameter("sellerId")
                         .passwordParameter("password")
                         .successHandler(sellerLoginSuccessHandler)
-                        .failureHandler(sellerLoginFailHandler));
-
-        http.logout((lo) -> lo.logoutUrl("/seller/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID"));
+                        .failureHandler(sellerLoginFailHandler))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("seller/login", "/seller/signup", "/seller/signupProcess").permitAll()
+                        .anyRequest().authenticated())
+                .logout((lo) -> lo.logoutUrl("/seller/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"));
 
         return http.build();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin((formLogin) -> formLogin.loginPage("/member/login")
-                .loginProcessingUrl("/member/loginProcess")
-                .usernameParameter("memberId")
-                .passwordParameter("password")
-                .successHandler(loginSuccessHandler)
-                .failureHandler(loginFailHandler));
 
         http
+                .formLogin((formLogin) -> formLogin.loginPage("/member/login")
+                        .loginProcessingUrl("/member/loginProcess")
+                        .usernameParameter("memberId")
+                        .passwordParameter("password")
+                        .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").permitAll() // 모든 경로에 대해 인증 없이 접근 허용
-                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
+                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
                         .defaultSuccessUrl("/")
+                )
+                .logout((lo) -> lo.logoutUrl("/member/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 );
-
-        http.logout((lo) -> lo.logoutUrl("/member/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-        );
-
 
         return http.build();
     }
@@ -83,10 +85,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PersistentTokenRepository tokenRepository() {
-        //PersistentTokenRepository의 구현체인 JdbcTokenRepositoryImpl 클래스 사용합니다.
-        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource(dataSource);
-        return jdbcTokenRepository;
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
