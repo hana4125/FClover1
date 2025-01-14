@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Inquiry {
+public class Question {
     private int qno;
     private String qcreateat;
     private String memberid;

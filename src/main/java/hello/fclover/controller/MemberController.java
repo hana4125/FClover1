@@ -417,7 +417,7 @@ public class MemberController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/notice/write")
     public String noticeWrite() {
-        return "user/userWrite";
+        return "userNoticeWrite";
     }
 
     @PostMapping(value ="/notice/add")

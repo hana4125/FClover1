@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
@@ -24,6 +24,40 @@
       })
     })
   </script>
+  <script th:inline="javascript">
+    $(function() {
+      // 검색 버튼 클릭 시
+      $(".search-btn").click(function() {
+        console.log("검색 버튼 클릭됨");
+        const searchWord = $("input[name='search_word']").val();
+        console.log("검색어:", searchWord);
+
+        if(searchWord.trim() === '') {
+          alert("검색어를 입력하세요");
+          $("input[name='search_word']").focus();
+          return false;
+        }
+
+        // 폼 제출
+        console.log("폼 제출 시도");
+        $("form").submit();
+      });
+
+      // Enter 키 입력 시에도 검색 실행
+      $("input[name='search_word']").keypress(function(e) {
+        if(e.keyCode === 13) {
+          e.preventDefault();
+          $(".search-btn").click();
+        }
+      });
+    });
+
+    function filterData() {
+      var selectedValue = document.getElementById('viewcount').value;
+      console.log("선택된 값: " + selectedValue);
+    }
+
+  </script>
 </head>
 
 <body>
@@ -36,7 +70,7 @@
     <!--div headwrap-->
     <section class="header-menu mt-4">
       <a href="#" class="home_link">home</a>
-      <a href="#" class="btn_sub_depth">고객센터</a>
+      <a href="/member/notice" class="btn_sub_depth">고객센터</a>
     </section>
 
     <!--div container-->
@@ -52,15 +86,17 @@
             <div class="sd_wrap" style="width: 170px;">
               <ul class="list_category">
                 <li class="side_item">
-                  <a href="#" class="sd_link">메인</a>
+                  <a href="/" class="sd_link">메인</a>
                 </li>
-                <li class="side_item">공지사항</li>
+                <li class="side_item">
+                  <a href="/member/notice" class="sd_link">공지사항</a></li>
                 <li class="side_item">
                   <a href="#" class="sd_link">QnA</a>
                 </li>
               </ul>
             </div>
           </div>
+          <!-- cscenter -->
         </div>
       </div>
 
@@ -68,25 +104,25 @@
       <div style="width: 80%; height: 100vh;" class="customer_wrap">
         <!--title_wrap-->
         <div class="title_wrap title_size">
-          <h1 class="title_heading">QnA</h1>
+          <h1 class="title_heading">공지사항</h1>
           <div class="right_area"></div>
         </div>
 
         <!-- search box -->
-        <div class="info_search-box" style="height: 84px;">
-          <div class="input_btn_box">
-            <input name="search_word" type="text" class="form-control"
-                   placeholder="제목을 입력하세요" th:value="${search_word}" style="width: 408px; height: 44px;">
-            <button type="button" class="btn btn-primary" style="height: 44px">검색</button>
+        <form method="get" action="notice/noti_list">
+          <div class="info_search-box" style="height: 100px;">
+            <div class="input_btn_box">
+              <input type="hidden" name="search_field" value="title">
+              <input name="search_word" type="text" class="form-control"
+                     placeholder="제목을 검색하세요" th:value="${search_word}"
+                     style="width: 408px; height: 44px;">
+              <button type="submit" class="btn btn-primary" style="height: 32px">검색</button>
+            </div>
           </div>
-        </div>
-
+        </form>
         <!-- list_result_wrap -->
         <div>
-          <div class="list_result_wrap">
-            <p class="result_count">
-              <span class="ct_green">[[${listcount}]]</span>건
-            </p>
+          <div class="list_result_wrap mt-3">
             <div class="right_area">
               <div class="form_sel" style="width: 120px;"></div>
             </div>
@@ -95,6 +131,23 @@
 
         <!-- table wrap -->
         <div class="mt-5 tbl_col_wrap">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <p class="result_count">
+              <span class="ct_green">[[${listcount}]]</span>건
+            </p>
+
+            <th:block th:if="${listcount > 0}">
+              <div class="rows" style="width: 110px;">
+                <select class="form-control" id="viewcount" sec:onchange="filterData()">
+                  <option value="전체" selected>전체</option>
+                  <option value="공지사항">공지사항</option>
+                  <option value="이벤트">이벤트</option>
+                </select>
+              </div>
+            </th:block>
+          </div>
+
+
           <table class="table">
             <colgroup>
               <col style="width: 75px;">
@@ -110,17 +163,30 @@
               <th scope="col">날짜</th>
             </tr>
             </thead>
-            <tbody class="notice_tbody">
-            <tr>
-              <td>1</td>
-              <td>
-                검색이 되지 않거나 품절/절판인 도서는 구입할 수 없나요?
-              </td>
-              <td>고객센터</td>
-              <td>2024.12.31</td>
-            </tr>
+            <tbody>
+            <th:block th:with="no=${listcount - (page - 1) * limit}">
+              <th:block th:each="d, iterStat : ${questionlist}">
+                <tr>
+                  <td><span th:text="${no - (iterStat.index)}"></span></td>
+                  <td>
+                    <div class="ntitle">
+                      <a th:href="@{/inquiry/question/detail(no=${d.qNo})}">
+                        <span th:text="${d.qTitle}"></span>
+                      </a>
+                    </div>
+                  </td>
+                  <td><div th:text="${d.qName}"></div></td>
+                  <td><div th:text="${#strings.substring(d.qCreateat, 2, 10)}"></div></td>
+                </tr>
+              </th:block>
+            </th:block>
             </tbody>
           </table>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <a th:href="@{/inquiry/question/write}">
+              <button type="button" class="btn btn-primary" style="height: 44px">글쓰기</button>
+            </a>
         </div>
 
         <!--pagination-->
@@ -128,7 +194,7 @@
           <button class="btn_page prev" disabled="disabled">
             <span class="hidden"></span>
           </button>
-          <div class="page_num">
+          <div class="page_no">
 
           </div>
           <button class="btn_page next">
@@ -140,6 +206,6 @@
     </div>
   </div>
 </div>
-
+</div>
 </body>
 </html>

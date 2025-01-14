@@ -1,4 +1,4 @@
-package hello.fclover.mail;/*
+
 package hello.fclover.mail;
 
 import jakarta.mail.MessagingException;
@@ -64,4 +64,4 @@ public class EmailService {
         }
     }
 }
-*/
+
