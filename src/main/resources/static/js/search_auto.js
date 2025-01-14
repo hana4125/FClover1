@@ -49,7 +49,7 @@ let prevSearchKeyword = SCF.getSearchKeyword();
 
 $(function() {
 
-  isRcntShow = getAutoCompleteCookie("rcntShow")=="off" ? false : true;
+  isRcntShow = getAutoCompleteCookie("rcntShow") != "off";
 
   //최근검색어 남기기-pc
   // if($("#searchKeyword").val() !=null && $("#searchKeyword").val() !=''){
@@ -70,22 +70,9 @@ $(function() {
       // $('#recommendKeywordBox').append(recommendKeywords);
 
 
-
-
-
-
-
-
     } else {
       $('.inKeyword').hide();
       $('.noKeyword').show();
-
-
-
-
-
-
-
 
 
     }
@@ -277,7 +264,7 @@ function rcntKeywordShow() {
     }
   }
   //추천 검색어
-  trendsCall();
+  //trendsCall();
   //실시간 급등 검색어
   riseCall();
 }
@@ -436,16 +423,16 @@ function getRcntKeywordNoShow() {
   $(".recent_keyword_box").empty();
 
   let addHtml  ="";
-  addHtml  += "                              <div class=\"title_wrap title_size_def\">";
-  addHtml  += "                                  <p class=\"title_heading\">최근 검색어</p>";
+  addHtml  += "                              <div class='title_wrap title_size_def'>";
+  addHtml  += "                                  <p class='title_heading'>최근 검색어</p>";
   addHtml  += "                              </div>";
-  addHtml  += "                              <div class=\"recent_keyword_list_wrap\">";
-  addHtml  += "                                    <div class=\"no_data size_sm\">";
-  addHtml  += "                                         <div class=\"no_data_desc\">검색어저장이 꺼져 있습니다.<br />검색어저장 켜기를 클릭해 주세요.</div>";
+  addHtml  += "                              <div class='recent_keyword_list_wrap'>";
+  addHtml  += "                                    <div class='no_data size_sm'>";
+  addHtml  += "                                         <div class='no_data_desc'>검색어저장이 꺼져 있습니다.<br />검색어저장 켜기를 클릭해 주세요.</div>";
   addHtml  += "                                    </div>";
-  addHtml  += "                                    <div class=\"recent_keyword_bottom auto_complete_maintain\">";
-  addHtml  += "                                        <div class=\"btn_wrap\">";
-  addHtml  += "                                            <button type=\"button\" class=\"btn_save_keyword\"><span class=\"text\">검색어저장 <span class=\"val\" onclick=\"javascript:keywordShowOn(); \">켜기</span></span></button>";
+  addHtml  += "                                    <div class='recent_keyword_bottom auto_complete_maintain'>";
+  addHtml  += "                                        <div class='btn_wrap'>";
+  addHtml  += "                                            <button type='button' class='btn_save_keyword'><span class='text'>검색어저장 <span class='val' onclick='keywordShowOn(); '>켜기</span></span></button>";
   addHtml  += "                                        </div>";
   addHtml  += "                                    </div>";
   addHtml  += "                               </div>";
@@ -460,37 +447,37 @@ function getRcntKeywordList(recentSch) {
   let recentWrdList = recentSch.split("$|");
   let addHtml = "";
 
-  addHtml  += "                              <div class=\"title_wrap title_size_def\">";
-  addHtml  += "                                  <p class=\"title_heading\">최근 검색어</p>";
-  addHtml  += "                                  <div class=\"right_area\">";
-  addHtml  += "                                      <button type=\"button\" class=\"btn_delete_text\"><a href=\"javascript:removeKeywordAll();\"><span class=\"text\">전체삭제</span></a></button>";
+  addHtml  += "                              <div class='title_wrap title_size_def'>";
+  addHtml  += "                                  <p class='title_heading'>최근 검색어</p>";
+  addHtml  += "                                  <div class='right_area'>";
+  addHtml  += "                                      <button type='button' class='btn_delete_text'><a href='javascript:removeKeywordAll();'><span class='text'>전체삭제</span></a></button>";
   addHtml  += "                                  </div>";
   addHtml  += "                              </div>";
-  addHtml  += "                              <div class=\"recent_keyword_list_wrap\">";
-  addHtml  += "                                  <ul class=\"recent_keyword_list\">";
+  addHtml  += "                              <div class='recent_keyword_list_wrap'>";
+  addHtml  += "                                  <ul class='recent_keyword_list'>";
 
   for(let i = 0 ; i < recentWrdList.length-1 ; i++){
     let recentWrd = recentWrdList[i].split("$^|");
     let recentWrd0 = avoidQuotes(recentWrd[0]);
-    addHtml  += "                                      <li class=\"recent_keyword_item\">";
-    addHtml  += "                                          <div class=\"left_area\">";
-    addHtml  += "                                              <a href=\"javascript:goSearchKeywordPage(`"+encodeURIComponent(recentWrd[0])+"`)\" class=\"recent_keyword_link\">";
-    addHtml  += "                                                  <span class=\"keyword\">" + escapetHtml(recentWrd[0]) + "</span>";
+    addHtml  += "                                      <li class='recent_keyword_item'>";
+    addHtml  += "                                          <div class='left_area'>";
+    addHtml  += "                                              <a href='javascript:goSearchKeywordPage(`"+encodeURIComponent(recentWrd[0])+"`)' class='recent_keyword_link'>";
+    addHtml  += "                                                  <span class='keyword'>" + escapetHtml(recentWrd[0]) + "</span>";
     addHtml  += "                                              </a>";
     addHtml  += "                                          </div>";
-    addHtml  += "                                          <div class=\"right_area\">";
-    addHtml  += "                                              <span class=\"date\">" + recentWrd[1] + "</span>";
-    addHtml  += "                                              <a href=\"javascript:removeKeyword('"+i+"');\">";
-    addHtml  += "                                                   <button type=\"button\" class=\"btn_keyword_del\"><span class=\"hidden\">이 검색어 삭제</span></button>";
+    addHtml  += "                                          <div class='right_area'>";
+    addHtml  += "                                              <span class='date'>" + recentWrd[1] + "</span>";
+    addHtml  += "                                              <a href='javascript:removeKeyword('"+i+"');'>";
+    addHtml  += "                                                   <button type='button' class='btn_keyword_del'><span class='hidden'>이 검색어 삭제</span></button>";
     addHtml  += "                                              </a> ";
     addHtml  += "                                          </div>";
     addHtml  += "                                      </li>";
   }
 
   addHtml  += "                                    </ul>";
-  addHtml  += "                                    <div class=\"recent_keyword_bottom auto_complete_maintain\">";
-  addHtml  += "                                        <div class=\"btn_wrap\">";
-  addHtml  += "                                            <button type=\"button\" class=\"btn_save_keyword\"><span class=\"text\">검색어저장 <span class=\"val\" onclick=\"javascript:keywordShowOff(); \">끄기</span></span></button>";
+  addHtml  += "                                    <div class='recent_keyword_bottom auto_complete_maintain'>";
+  addHtml  += "                                        <div class='btn_wrap'>";
+  addHtml  += "                                            <button type='button' class='btn_save_keyword'><span class='text'>검색어저장 <span class='val' onclick='keywordShowOff(); '>끄기</span></span></button>";
   addHtml  += "                                        </div>";
   addHtml  += "                                    </div>";
   addHtml  += "                               </div>";
@@ -504,16 +491,16 @@ function getRcntKeywordNoList() {
   $(".recent_keyword_box").empty();
 
   let addHtml  ="";
-  addHtml  += "                              <div class=\"title_wrap title_size_def\">";
-  addHtml  += "                                  <p class=\"title_heading\">최근 검색어</p>";
+  addHtml  += "                              <div class='title_wrap title_size_def'>";
+  addHtml  += "                                  <p class='title_heading'>최근 검색어</p>";
   addHtml  += "                              </div>";
-  addHtml  += "                              <div class=\"recent_keyword_list_wrap\">";
-  addHtml  += "                                    <div class=\"no_data size_sm\">";
-  addHtml  += "                                         <div class=\"no_data_desc\">최근 검색어가 없습니다.</div>";
+  addHtml  += "                              <div class='recent_keyword_list_wrap'>";
+  addHtml  += "                                    <div class='no_data size_sm'>";
+  addHtml  += "                                         <div class='no_data_desc'>최근 검색어가 없습니다.</div>";
   addHtml  += "                                    </div>";
-  addHtml  += "                                    <div class=\"recent_keyword_bottom auto_complete_maintain\">";
-  addHtml  += "                                        <div class=\"btn_wrap\">";
-  addHtml  += "                                            <button type=\"button\" class=\"btn_save_keyword\"><span class=\"text\">검색어저장 <span class=\"val\" onclick=\"javascript:keywordShowOff();\">끄기</span></span></button>";
+  addHtml  += "                                    <div class='recent_keyword_bottom auto_complete_maintain'>";
+  addHtml  += "                                        <div class='btn_wrap'>";
+  addHtml  += "                                            <button type='button' class='btn_save_keyword'><span class='text'>검색어저장 <span class='val' onclick='keywordShowOff();'>끄기</span></span></button>";
   addHtml  += "                                        </div>";
   addHtml  += "                                    </div>";
   addHtml  += "                               </div>";
@@ -522,64 +509,64 @@ function getRcntKeywordNoList() {
 }
 
 //추천 검색어
-async function trendsCall() {
-  await KbbJS.auth.authorize();
-
-  let age = 0;
-  let gender = "0";
-
-  if (KbbJS.auth.authorized) {
-
-    age = KbbJS.user.model.age
-
-    if(age >= 10 && age < 20) {
-      age = "10";
-    }else if(age >= 20 && age < 30) {
-      age = "20";
-    }else if(age >= 30 && age < 40) {
-      age = "30";
-    }else {
-      age = "40";
-    }
-
-    gender = KbbJS.user.model.data.gndrCodeName;
-
-    if(gender == "남"){
-      gender = "1";
-    }else if(gender == "여"){
-      gender = "2";
-    }
-  }
-
-  $.ajax({
-    type: "GET",
-    dataType : "jsonp",
-    jsonpCallback: "searchAutoTrends",
-    url : autoCompleteDomain + "srp/api/v1/search/autocomplete/trends",
-    data: {
-      "sex": gender,
-      "age" : age,
-      "gubun" : "P"
-    },
-    success: function(rst) {
-      let $temp = rst.data.resultDocuments;
-      let addHtml ="";
-      if($temp !="" && $temp !=null){// 조회된 건수가 있다면  true
-        $.each($temp, function(index){
-          let item = $temp[index];
-          let keywords = checkKeyword(item.keywords);
-          let enKeywords = encodeURIComponent(keywords);
-          addHtml  += "        <a href=\"javascript:goSearchKeywordPage(decodeURIComponent('"+enKeywords+"'), 'LAG')\" class=\"tag\"><span class=\"text\">"+keywords+"</span></a>";
-        });
-      }else if(age =="" || age=="0"|| age==0 || age== null){// 조회된 건수가 없다면  true
-        "<div class=\"text_none\">검색어가 없습니다.</div>";
-      }else {// 조회된 건수가 없다면  true
-        addHtml += "<div class=\"text_none\">검색어가 없습니다.</div>";
-      }
-      $("#recommendKeywordBox").html(addHtml);
-    }
-  });
-}
+// async function trendsCall() {
+//   await temp.auth.authorize();
+//
+//   let age = 0;
+//   let gender = "0";
+//
+//   if (temp.auth.authorized) {
+//
+//     age = temp.user.model.age
+//
+//     if(age >= 10 && age < 20) {
+//       age = "10";
+//     }else if(age >= 20 && age < 30) {
+//       age = "20";
+//     }else if(age >= 30 && age < 40) {
+//       age = "30";
+//     }else {
+//       age = "40";
+//     }
+//
+//     gender = temp.user.model.data.gndrCodeName;
+//
+//     if(gender == "남"){
+//       gender = "1";
+//     }else if(gender == "여"){
+//       gender = "2";
+//     }
+//   }
+//
+//   $.ajax({
+//     type: "GET",
+//     dataType : "jsonp",
+//     jsonpCallback: "searchAutoTrends",
+//     url : autoCompleteDomain + "srp/api/v1/search/autocomplete/trends",
+//     data: {
+//       "sex": gender,
+//       "age" : age,
+//       "gubun" : "P"
+//     },
+//     success: function(rst) {
+//       let $temp = rst.data.resultDocuments;
+//       let addHtml ="";
+//       if($temp !="" && $temp !=null){// 조회된 건수가 있다면  true
+//         $.each($temp, function(index){
+//           let item = $temp[index];
+//           let keywords = checkKeyword(item.keywords);
+//           let enKeywords = encodeURIComponent(keywords);
+//           addHtml  += "        <a href=\"javascript:goSearchKeywordPage(decodeURIComponent('"+enKeywords+"'), 'LAG')\" class=\"tag\"><span class=\"text\">"+keywords+"</span></a>";
+//         });
+//       }else if(age =="" || age=="0"|| age==0 || age== null){// 조회된 건수가 없다면  true
+//         "<div class=\"text_none\">검색어가 없습니다.</div>";
+//       }else {// 조회된 건수가 없다면  true
+//         addHtml += "<div class=\"text_none\">검색어가 없습니다.</div>";
+//       }
+//       $("#recommendKeywordBox").html(addHtml);
+//     }
+//   });
+// }
 
 //실시간 급등 검색어
 function riseCall(age,gender) {
@@ -587,7 +574,7 @@ function riseCall(age,gender) {
     type: "GET",
     dataType : "jsonp",
     jsonpCallback: "searchAutoRise",
-    url : autoCompleteDomain + "srp/api/v1/search/autocomplete/rise",
+    url : "#",
     data: {
       "sex": gender,
       "age" : age,
@@ -595,36 +582,36 @@ function riseCall(age,gender) {
     },
     success: function(rst) {
       let addHtml = "";
-      addHtml  +="                <div class=\"title_wrap title_size_def\">";
-      addHtml  +="                    <p class=\"title_heading\">실시간 인기 검색어</p>";
-      addHtml  +="                    <div class=\"right_area\">";
-      addHtml  +="                        <div class=\"item_group\">";
+      addHtml  +="                <div class='title_wrap title_size_def'>";
+      addHtml  +="                    <p class='title_heading'>실시간 인기 검색어</p>";
+      addHtml  +="                    <div class='right_area'>";
+      addHtml  +="                        <div class='item_group'>";
       addHtml  +="                            <!-- form_sel -->";
-      addHtml  +="                            <div class=\"form_sel type_arw\" data-class=\"type_arw\">";
-      addHtml  +="                                <select title=\"연령기준 정렬\" id=\"ageSel\">";
-      addHtml  +="                                    <option value=\"\">전연령</option>";
+      addHtml  +="                            <div class='form_sel type_arw' data-class='type_arw'>";
+      addHtml  +="                                <select title='연령기준 정렬' id='ageSel'>";
+      addHtml  +="                                    <option value=''>전연령</option>";
       for(let i = 10; i<=40; i+=10){
         let selected = "";
         let upperChr = "";
         if (i==age) selected = "selected";
         if (i==40) upperChr ="↑"
-        addHtml  +="                                <option value=\""+i+"\" "+selected+">"+i+"대"+upperChr+"</option>";
+        addHtml  +="                                <option value='"+i+"' "+selected+">"+i+"대"+upperChr+"</option>";
       }
       addHtml  +="                                </select>";
       addHtml  +="                            </div>";
       addHtml  +="                            <!-- //form_sel -->"
-      addHtml  +="                            <div class=\"form_sel type_arw\" data-class=\"type_arw\">";
-      addHtml  +="                                <select title=\"성별기준 정렬\" id=\"genderSel\">";
-      addHtml  +="                                    <option value=\"\">전성별</option>";
+      addHtml  +="                            <div class='form_sel type_arw' data-class='type_arw'>";
+      addHtml  +="                                <select title='성별기준 정렬' id='genderSel'>";
+      addHtml  +="                                    <option value=''>전성별</option>";
       if(gender==1){
-        addHtml  +="                                 <option value=\"1\" selected>남성</option>";
-        addHtml  +="                                 <option value=\"2\">여성</option>";
+        addHtml  +="                                 <option value='1' selected>남성</option>";
+        addHtml  +="                                 <option value='2'>여성</option>";
       }else if(gender==2){
-        addHtml  +="                                 <option value=\"1\">남성</option>";
-        addHtml  +="                                 <option value=\"2\" selected>여성</option>";
+        addHtml  +="                                 <option value='1'>남성</option>";
+        addHtml  +="                                 <option value='2' selected>여성</option>";
       }else{
-        addHtml  +="                                 <option value=\"1\">남성</option>";
-        addHtml  +="                                 <option value=\"2\">여성</option>";
+        addHtml  +="                                 <option value='1'>남성</option>";
+        addHtml  +="                                 <option value='2'>여성</option>";
       }
       addHtml  +="                                </select>";
       addHtml  +="                            </div>";
@@ -632,8 +619,8 @@ function riseCall(age,gender) {
       addHtml  +="                        </div>";
       addHtml  +="                    </div>";
       addHtml  +="                </div>";
-      addHtml  +="                <div class=\"hot_keyword_list_wrap\">";
-      addHtml  +="                    <ul class=\"hot_keyword_list\">";
+      addHtml  +="                <div class='hot_keyword_list_wrap'>";
+      addHtml  +="                    <ul class='hot_keyword_list'>";
 
       if(rst.data.realSize > 0 && rst.resultCode == 200) {
         let $obj = rst.data.resultDocuments;
@@ -645,34 +632,34 @@ function riseCall(age,gender) {
           let enKeywords = encodeURIComponent(keywords);
 
           if(i<3){
-            addHtml +="             <li class=\"hot_keyword_item top\">";
+            addHtml +="             <li class='hot_keyword_item top'>";
           }else{
-            addHtml +="             <li class=\"hot_keyword_item\">";
+            addHtml +="             <li class='hot_keyword_item'>";
           }
-          addHtml +="                     <div class=\"left_area\">";
-          addHtml +="                         <a href=\"javascript:goSearchKeywordPage(decodeURIComponent('"+enKeywords+"'), 'LAG')\" class=\"hot_keyword_link\">";
-          addHtml +="                             <span class=\"rank\">"+zeroNum+(i+1)+"</span>";
-          addHtml +="                             <span class=\"keyword\">"+keywords+"</span>";
+          addHtml +="                     <div class='left_area'>";
+          addHtml +="                         <a href='javascript:goSearchKeywordPage(decodeURIComponent('" + enKeywords + "'), 'LAG')' class='hot_keyword_link'>";
+          addHtml +="                             <span class='rank'>" + zeroNum+(i+1) + "</span>";
+          addHtml +="                             <span class='keyword'>" + keywords + "</span>";
           addHtml +="                         </a>";
           addHtml +="                     </div>";
-          addHtml +="                     <div class=\"right_area\">";
+          addHtml +="                     <div class='right_area'>";
           if(item.diff == 0){ // 현상유지
-            addHtml +="                     <div class=\"rank_status\"><span class=\"hidden\">변동 없음</span></div>";
+            addHtml +="                     <div class='rank_status'><span class='hidden'>변동 없음</span></div>";
           }else if (item.diff > 0 && item.diff !=9999){//상승
-            addHtml +="                     <div class=\"rank_status up\"><span class=\"hidden\">순위 상승</span>"+item.diff+"</div>";
+            addHtml +="                     <div class='rank_status up'><span class='hidden'>순위 상승</span>"+item.diff+"</div>";
           }else if (item.diff < 0 ){//하락
-            addHtml +="                     <div class=\"rank_status down\"><span class=\"hidden\">순위 하락</span>"+Math.abs(item.diff)+"</div>";
+            addHtml +="                     <div class='rank_status down'><span class='hidden'>순위 하락</span>"+Math.abs(item.diff)+"</div>";
           }else if (item.diff > 0 && item.diff == 9999 ){ // 신규
-            addHtml +="                     <div class=\"rank_status new\"><span class=\"hidden\">신규 순위</span>NEW</div>";
+            addHtml +="                     <div class='rank_status new'><span class='hidden'>신규 순위</span>NEW</div>";
           }
           addHtml +="                     </div>";
           addHtml +="                 </li>";
         });
         addHtml +="                 </ul>";
-        addHtml +="                 <div class=\"hot_keyword_bottom\">";
+        addHtml +="                 <div class='hot_keyword_bottom'>";
 
         let dateStr = getRiseCallYmdStr(rst.data.resultDocuments[0].reg_DATE);
-        addHtml +="                     <p class=\"info_text font_size_xxs\">"+dateStr+" 기준</p>";
+        addHtml +="                     <p class='info_text font_size_xxs'>"+dateStr+" 기준</p>";
       }
 
       addHtml +="                     </div>";
