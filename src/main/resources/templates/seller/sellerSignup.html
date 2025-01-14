@@ -21,7 +21,7 @@
   <script>
       $(function() {
           $("img").click(function() {
-              location.href = "/seller/main";
+              location.href = "/member/main";
           })
 
           $("#login").click(function() {
@@ -32,7 +32,7 @@
 </head>
 <body>
 <div class="d-flex align-items-center mt-1 border-bottom">
-  <img class="mb-3" src="/img/user/fClover.png" alt="로고" width="300px" height="66px">
+  <img class="mb-3" src="/images/user/fClover.png" alt="로고" width="300px" height="66px">
   <div class="ms-auto">
     <button id="login" class="btn btn-outline-primary me-3">판매자 로그인</button>
   </div>
@@ -42,7 +42,7 @@
     <h1>비즈니스 시작하기</h1>
   </div>
   <div class="mt-5 w-45 m-auto">
-    <form th:action="@{/seller/signup}" method="post" class="p-5 rounded-3">
+    <form th:action="@{/seller/signupProcess}" method="post" class="p-5 rounded-3">
       <input type="text" class="form-control mb-3" id="sellerId" name="sellerId" placeholder="아이디">
       <input type="password" class="form-control mb-3" id="password" name="password" placeholder="비밀번호">
       <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름">

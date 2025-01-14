@@ -146,7 +146,7 @@
       </div>
     </div>
     <div class="container w-75 header d-flex align-items-center">
-      <img alt="메인 로고" class="me-3" id="logo" src="/img/user/fClover.png">
+      <img alt="메인 로고" class="me-3" id="logo" src="/images/user/fClover.png">
 
       <div class="dropdown search-bar">
 
@@ -154,7 +154,7 @@
           <input aria-label="Search" class="form-control me-2 search-text border-0" placeholder="찾고 싶은 도서를 검색해 보세요!"
                  type="text" id="searchKeyword" name="keyword" autocomplete="off">
           <button class="btn p-0 m-0 search-btn" type="submit">
-            <img alt="검색" height="36" src="/img/user/search.png" width="36">
+            <img alt="검색" height="36" src="/images/user/search.png" width="36">
           </button>
         </form>
         <!-- TODO :
@@ -235,21 +235,21 @@
       </div>
       <div class="ms-5 icon d-flex">
         <div>
-          <img src="/img/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
+          <img src="/images/user/cart.png" id="cart" class="me-3" width="36" height="36" alt="장바구니">
         </div>
         <div th:if="${member == null}">
           <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle">
-            <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+            <img src="/images/user/profile.png" alt="기본 프로필 이미지">
           </div>
         </div>
         <div th:unless="${member == null}">
           <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
                th:if="${member.profilePicture == null}">
-            <img src="/img/user/profile.png" alt="기본 프로필 이미지">
+            <img src="/images/user/profile.png" alt="기본 프로필 이미지">
           </div>
           <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
                th:unless="${member.profilePicture == null}">
-            <img th:src="@{|/img/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+            <img th:src="@{|/images/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
           </div>
         </div>
       </div>
