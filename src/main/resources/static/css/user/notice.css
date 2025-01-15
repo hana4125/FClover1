@@ -10,6 +10,7 @@
     display: inline-block;
     position: relative;
     overflow-wrap: anywhere;
+    color: #000000;
 }
 
 .side_heading{
