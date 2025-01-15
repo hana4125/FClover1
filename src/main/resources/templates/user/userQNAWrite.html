@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
+  <link rel="stylesheet" href="/css/user/qnawrite.css">
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -25,16 +26,7 @@
       })
     })
   </script>
-  <style>
-    .btn{
-      border-color:#226b24;
-      border-radius: 5px;
-      color:#226b24;
-      padding: 10px 20px;
-      margin-left: 10px;
-      hover: none;
-    }
-  </style>
+
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
@@ -62,11 +54,13 @@
             <div class="sd_wrap" style="width: 170px;">
               <ul class="list_category">
                 <li class="side_item">
-                  <a href="#" class="sd_link">메인</a>
+                  <a href="/" class="sd_link">메인</a>
                 </li>
-                <li class="side_item">공지사항</li>
                 <li class="side_item">
-                  <a href="#" class="sd_link">QnA</a>
+                  <a href="/inquiry/notice" class="sd_link">공지사항</a>
+                </li>
+                <li class="side_item">
+                  <a href="/inquiry/question" class="sd_link">QnA</a>
                 </li>
               </ul>
             </div>
@@ -77,35 +71,161 @@
       <!-- main -->
       <div class="container">
 
-        <div class="title_wrap title_size">
-          <h1 class="title_heading">공지사항 작성</h1>
+        <div class="title_wrap_size">
+          <h1 class="title_heading">QnA 작성</h1>
           <div class="right_area"></div>
+          <hr>
         </div>
-        <form th:action="@{/member/notice/add}" method="post" name="boardform">
+        <form th:action="@{/inquiry/question/plus}" method="post" name="boardform" enctype="multipart/form-data">
 
-          <div class="form-group">
-            <input name="notiName" id="noti_Name" readOnly
-                   type="text" class="form-control"
-                   placeholder="notice_writer"  th:value="${#authentication.name}" />
+<!--          <div class="form-group">-->
+<!--            <input name="notiName" id="noti_Name" readOnly-->
+<!--                   type="text" class="form-control"-->
+<!--                   placeholder="notice_writer"  th:value="${#authentication.name}" />-->
+<!--          </div>-->
+
+          <!--문의하기 전체 영역-->
+          <div class="tbl_row_wrap" id="inquiryForm">
+            <table class="tbl_row">
+              <colgroup>
+                <col style="width: 160px">
+                <col>
+              </colgroup>
+            <tbody>
+              <tr>
+                <th scope="row" class="has_ip">
+                  <label>문의유형</label>
+                  <span>*</span>
+                </th>
+                <td>
+                  <div class="form_cont">
+                    <div class="form_sel_multi">
+                      <select id="InquiryQuestList" title="문의유형 분류" name="qtype">
+                        <option value="-1" selected="selected">
+                          문의 유형을 선택해 주세요.</option>
+                        <option value="000">배송/수령예정일안내</option>
+                        <option value="001">주문/결제/기프트카드</option>
+                        <option value="002">검색 기능 관련</option>
+                        <option value="003">반품/교환/환불(도서)</option>
+                        <option value="004">도서/상품정보</option>
+                        <option value="005">회원정보서비스</option>
+                        <option value="006">웹사이트 이용 관련</option>
+                        <option value="007">시스템불편사항</option>
+                        <option value="008">서양도서 검색/주문</option>
+                        <option value="009">일본도서 검색/주문</option>
+                        <option value="010">매장관련</option>
+                        <option value="012">택배사사례</option>
+                        <option value="013">고객제안/친절불친절</option>
+                        <option value="014">파본/상품불량신고</option>
+                        <option value="926">북로그/리뷰&amp;리스트</option>
+                        <option value="935">ebook상품/오류신고</option>
+                        <option value="939">대량구매</option>
+                        <option value="941">POD 주문형출판</option>
+                        <option value="944">개인정보침해신고</option>
+                        <option value="945">모바일교보문고</option>
+                        <option value="948">동영상문의</option>
+                      </select>
+                  </div>
+                  </div>
+                </td>
+              </tr>
+              <!--문의 제목,내용-->
+              <tr>
+                <th scope="row" class="has_ip">
+                  <label>내용</label>
+                  <span>*</span>
+                  <td>
+                    <div class="w_full">
+                      <div class="col_box">
+                      <div class="form-group mt-2">
+                        <input name="qtitle" id="InquiryTitle" type="text" maxlength="20"
+                               class="form-control" placeholder="제목을 입력해 주세요.">
+                      </div>
+                      </div>
+                      <div class="col_box">
+                      <div class="form-group mt-3">
+                        <textarea name="qcontent" id="InquiryContent" placeholder="문의를 입력해 주세요." style="height: 246px"
+                         class="form-control" maxlength="300"></textarea>
+                      </div>
+                      </div>
+                    </div>
+                  </td>
+                </th>
+              </tr> <!--문의 제목,내용-->
+
+              <tr id="InqForm">
+                <th scope="row">
+                  <span>사진첨부</span>
+                </th>
+                <td>
+                  <label>
+                  <span class="file_item_box">
+                      <span class="attach_img_box">
+                        <span class="attach_img_view"></span>
+<!--                        <button class="btn_remove_img" type="button"></button>-->
+                        <input type="file" name="uploadfile" style="display: none">
+                      </span>
+                    </span>
+                    </label>
+
+                  <ul class="bul_list">
+                    <li class="bul_item" style="font-size: 13px;">
+                      JPG,PNG,GIF 파일만 업로드 가능합니다.
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+          </tbody>
+         </table>
+            <hr class="hr-divider">
+            <!--답변 알림-->
+            <div class="tbl_row_wrap">
+              <div class="title_size_sm">
+                <p class="inq_alram_title">문의 답변 등록 시 알려드립니다.</p>
+              </div>
+              <table class="tbl_row">
+                <colgroup>
+                  <col style="width: 160px">
+                  <col>
+                </colgroup>
+                <tbody>
+                <tr>
+                  <th>
+                    <label>연락처</label>
+                    <span class="required"><span class="hidden">*</span></span>
+                  </th>
+                  <td>
+                    <div class="form_cont">
+                      <div class="vaild_check">
+                        <input id="InqPhoneNumber" maxlength="20" placeholder="휴대폰 번호를 입력해 주세요.">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="has_ip">
+                    <label>이메일</label>
+                  </th>
+                  <td>
+                    <div class="valid_check">
+                      <input id="InqEmail" maxlength="100" placeholder="이메일을 입력해 주세요.">
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <hr class="hr-divider"> <!--답변 알림-->
+          </div><!--문의하기 전체 영역-->
+
+
+          <div class="button-container">
+            <button type="reset" class="cancelbtn">취소</button>
+            <button type="submit" class="inqbtn" style="border-radius:5px;">문의 접수</button>
           </div>
 
-          <div class="form-group mt-2">
-            <span></span>
-            <input name="notiTitle" id="noti_Title" type="text" maxlength="300"
-                   class="form-control" placeholder="notice_title">
-          </div>
-          <div class="form-group mt-3">
-            <span></span>
-            <textarea name="notiContent" id="noti_Content"
-                      rows="10" class="form-control"></textarea>
-          </div>
-
-          <div class="form-group mt-3 d-flex justify-content-end">
-            <button type="submit" class="btn" style="background-color:#226b24; border-radius: 5px; color:white; width: 74px; text-align: center;">등록</button>
-            <button type="reset" class="btn">취소</button>
-          </div>
         </form>
-
       </div>
       </div>
     </div>

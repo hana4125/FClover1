@@ -55,6 +55,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+                //.securityMatcher("/inquiry/**", "/member/**")
                 .formLogin((formLogin) -> formLogin.loginPage("/member/login")
                         .loginProcessingUrl("/member/loginProcess")
                         .usernameParameter("memberId")
@@ -62,8 +63,13 @@ public class SecurityConfig {
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess").permitAll()
+                        .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
+                        .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
+                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
+                               "/inquiry/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
+
+
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")

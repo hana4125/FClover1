@@ -19,22 +19,22 @@
             LIMIT #{start}, #{limit}
     </select>
 
-    <insert id="insertNotice">
+    <insert id="insertQuestion">
         <selectKey resultType="int" order="BEFORE" keyProperty="qno" keyColumn="q_no">
             select IFNULL(max(q_no), 0) + 1 from QnA
         </selectKey>
         insert into QnA
-        (q_no,q_create_at
+        (q_no,q_create_at,
         member_id, q_response_at,
         q_name, q_type, q_file, q_title,
         q_content,response_phone,response_email,
         q_alert,q_re_ref,q_re_lev,q_re_seq)
         values
-        (#{qno},now()
+        (#{qno},now(),
         #{memberid}, #{qresponseat},
         #{qname},#{qtype},#{qfile},#{qtitle},
-        #{qcontent},#{responsephone},#{response_email},
-        #{qalert},#{qreref},#{q_re_lev},#{q_re_seq})
+        #{qcontent},#{responsephone},#{responseemail},
+        #{qalert},#{qreref},#{qrelev},#{qreseq})
     </insert>
 
     <select id="Detail" parameterType="int" resultType="Question">

@@ -135,13 +135,13 @@
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
-          <a class="pe-2" href="/member/notice">고객센터</a>
           <th:block th:if="${seller != null}">
             <a href="/member/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
             <form th:action="@{/seller/logout}" method="post">
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
+          <a class="pe-2" href="/inquiry/notice">고객센터</a>
         </div>
       </div>
     </div>

@@ -1,0 +1,98 @@
+
+.w_full {
+    width: 100%;
+    max-width: 100%;
+}
+
+.inq_alram_title{
+    font-size: 15px;
+}
+
+#InquiryQuestList {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    min-width: 500px;
+}
+
+.form_cont {
+    width: 100%;
+}
+
+.w_full {
+    width: 100%;
+}
+
+#InquiryTitle, #InquiryContent {
+    width: 100%;
+}
+#InqPhoneNumber, #InqEmail {
+    width: 100%;
+    min-width: 500px;
+    height: 38px;  /* 제목 입력 박스와 동일한 높이 */
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.photo-attach-section {
+    margin-bottom: 20px;
+}
+
+.hr-divider {
+    width: 100%;
+    margin: 20px 0;
+    border-top: 1px solid #2a2a2a;
+}
+
+
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancelbtn, .inqbtn {
+    padding: 8px 20px;
+    border-radius: 5px;
+}
+
+.cancelbtn {
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.inqbtn {
+    padding: 8px 20px;
+    text-align: center;
+    border-radius: 5px; !important;
+    background-color: #226b24 !important;
+    color: white !important;
+    border: none !important;
+    width: 74px !important;
+}
+
+.tbl_row_wrap table tr {
+    height: 70px;
+}
+
+.file_item_box{
+    position: relative;
+    display: inline-block;
+    width: 94px;
+    height: 94px;
+    border: 1px dashed #e5e5e5;
+    background-color: #f7f7f7;
+    cursor: pointer;
+    border-radius: 6px;
+    vertical-align: top;
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
