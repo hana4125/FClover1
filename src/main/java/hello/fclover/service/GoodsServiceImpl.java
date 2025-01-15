@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,14 +23,17 @@ import java.util.UUID;
 public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsMapper goodsMapper;
-    private final GoodsImageMapper imageDao;
+    private final GoodsImageMapper imageMapper;
   
+    @Value("${goods.image.folder}")
+    String saveFolder;
+    GoodsImage goodsImage = new GoodsImage();
     @Override
     @Transactional
     public void goodsSingleInsert(Goods goods, List<MultipartFile> images, String sellerNumber) throws IOException {
-        int result = goodsDao.goodsInsertText(goods);
+        int result = goodsMapper.goodsInsertText(goods);
 
-        int goodsNo = goodsDao.goodsNoselect(goods.getSellerId(), goods.getGoodsName());
+        int goodsNo = goodsMapper.goodsNoselect(String.valueOf(goods.getSellerNo()), goods.getGoodsName());
         System.out.println(goodsNo);
         if (result > 0 && images.size() > 0) {
             goodsInsertImage(images, sellerNumber, goodsNo);
@@ -78,11 +82,11 @@ public class GoodsServiceImpl implements GoodsService {
             //파일 업로드
             image.transferTo(new File(imageUrl, imageDBName));
 
-            goodsImage.setGoodsNo(goodsNo);
+            goodsImage.setGoodsNo(BigInteger.valueOf(goodsNo));
             goodsImage.setGoodsUrl(imageUrl);
             goodsImage.setGoodsImageName(imageDBName);
             //상품 이미지 저장.
-            imageDao.goodsInsertImage(goodsImage);
+            imageMapper.goodsInsertImage(goodsImage);
         }
     }
   
