@@ -17,4 +17,6 @@ public interface GoodsMapper {
     int countGoods(int cate_no);
 
     Goods findGoodsById(long goods_no);
+
+    List<Goods> findGoodsByKeyword(@Param("keyword") String keyword);
 }
