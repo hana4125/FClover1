@@ -7,13 +7,17 @@ CREATE TABLE GOODS
     GOODS_NAME          VARCHAR(20), #--상품명
     GOODS_CONTENT       VARCHAR(100), #--상품 설명
     GOODS_PRICE         INT not null, #--상품 가격
-    GOODS_WRITER        VARCHAR(10) not null , #--상품 저자
-    SELLER_COMPANY      VARCHAR(10) not null , #-- 출판사
+    GOODS_WRITER        VARCHAR(50) not null , #--상품 저자
+    SELLER_COMPANY      VARCHAR(50) not null , #-- 출판사
     GOODS_CREATE_AT     DATE, #--상품발행일
-    GOODS_IMAGE         VARCHAR(255), #--상품이미지 링크
     GOODS_COUNT         INT, #--상품 총 판매수량 (베스트/스테디셀러 확인위해 필요한 값)
-    GOODS_DATE          TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP #--상품 등록일
-);
+    GOODS_DATE          TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, #--상품 등록일
+    GOODS_PAGECOUNT     INT,
+    GOODS_BOOKSIZE      VARCHAR(10),
+    WRITER_CONTENT      VARCHAR(100),
+    UPDATE_AT           DATE,
+    FULLTEXT KEY ft_index (GOODS_NAME, GOODS_CONTENT, GOODS_WRITER, SELLER_COMPANY) WITH PARSER ngram
+) ENGINE=InnoDB;
 
 insert into GOODS values(1,123111,'test1',1,'GoodsName1',
                          'GoodsContent1',2000,'writer1',
