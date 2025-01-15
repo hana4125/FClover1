@@ -10,7 +10,7 @@ import java.util.List;
 public interface GoodsMapper {
     int goodsInsertText(Goods goods);
 
-    int goodsNoselect(String sellerId, String goodsName);
+    int goodsNoselect(String sellerNo, String goodsName);
   
     List<Goods> findAll(@Param("cate_no") int cateNo,
                         @Param("sort") String sort,

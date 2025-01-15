@@ -1,6 +1,7 @@
 package hello.fclover.domain;
 
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -26,7 +27,7 @@ public class Goods {
     private LocalDate goodsCreateAt;   // 상품 발행일
     private int goodsCount;            // 상품 총 판매수량
     private LocalDateTime goodsDate;   // 상품 등록일
-    private int goodsPagecount;        // 상품 페이지 수
-    private String goodsBooksize;      // 상품 크기
+    private int goodsPageCount;        // 상품 페이지 수
+    private String goodsBookSize;      // 상품 크기
 }
 
