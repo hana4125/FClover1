@@ -1,10 +1,17 @@
 package hello.fclover.domain;
 
-import java.math.BigInteger;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.Data;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 @Data
 public class Goods {
     private BigInteger goodsNo;        // 상품 일련번호
@@ -22,3 +29,4 @@ public class Goods {
     private int goodsPagecount;        // 상품 페이지 수
     private String goodsBooksize;      // 상품 크기
 }
+

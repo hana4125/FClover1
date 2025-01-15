@@ -9,8 +9,9 @@
         VALUES
             (#{sellerId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{businessNumber}, #{companyName})
     </insert>
-
+  
     <select id="selectSellerById">
         SELECT * FROM seller WHERE seller_id = #{sellerId}
     </select>
+
 </mapper>

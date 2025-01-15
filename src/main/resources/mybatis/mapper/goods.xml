@@ -4,6 +4,19 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
 
+    <insert id="goodsInsertText">
+            insert into Goods
+            (seller_id, cate_no, goods_name, goods_content, goods_price, goods_writer, seller_company, goods_create_at,
+              goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
+            values(#{sellerId}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{sellerCompany}, #{goodsCreateAt},
+                   #{goodsCount}, current_date , #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
+        </insert>
+        <select id="goodsNoselect">
+            select goods_no
+            from goods
+            where seller_id = #{sellerId} and goods_name=#{goodsName}
+        </select>
+
     <!-- 모든 카테고리에 있는 상품 조회 -->
     <select id="findAll" resultType="hello.fclover.domain.Goods">
         SELECT *
@@ -33,3 +46,4 @@
         WHERE goods_no = #{goods_no}
     </select>
 </mapper>
+
