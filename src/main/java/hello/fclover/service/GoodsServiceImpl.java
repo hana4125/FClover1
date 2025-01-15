@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -18,18 +17,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GoodsServiceImpl implements GoodsService {
-    private final GoodsMapper goodsDao;
+
+    private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageDao;
-
-    @Value("${goods.image.folder}")
-    private String saveFolder;
-
-    GoodsImage goodsImage = new GoodsImage();
-
+  
     @Override
     @Transactional
     public void goodsSingleInsert(Goods goods, List<MultipartFile> images, String sellerNumber) throws IOException {
@@ -41,8 +35,24 @@ public class GoodsServiceImpl implements GoodsService {
             goodsInsertImage(images, sellerNumber, goodsNo);
         }
     }
+    
+    @Override
+    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
+        int offset = (page - 1) * size;
+        return goodsMapper.findAll(cate_no, sort, offset, size);
+    }
 
-    private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {
+    @Override
+    public int getTotalGoodsCount(int cate_no) {
+        return goodsMapper.countGoods(cate_no);
+    }
+
+    @Override
+    public Goods findGoodsByNo(Long goodsNo) {
+        return goodsMapper.findGoodsById(goodsNo);
+    }
+  
+  private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {
         boolean IsFirstImage = true;
         //프로젝트 폴더 가져오기
         String projectFolder = System.getProperty("user.dir") + File.separator + saveFolder;
@@ -75,6 +85,7 @@ public class GoodsServiceImpl implements GoodsService {
             imageDao.goodsInsertImage(goodsImage);
         }
     }
+  
 private String imageReName(String fileName) {
     LocalDate today = LocalDate.now();
     // "yyyyMMdd" 포맷 지정
@@ -101,6 +112,5 @@ private String imageFolder(String projectFolder , String sellerNumber) {
 
     return imageFolder;
 }
-
 
 }

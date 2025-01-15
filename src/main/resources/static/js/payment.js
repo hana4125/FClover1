@@ -76,12 +76,7 @@ function paymentProcess() {
                         body: JSON.stringify(rsp) // Send the response object
                     });
 
-                    // console.log('==> 1. response : ', response);
                     console.log('==> 2. response : ', response.text());
-                    // console.log('==> 3. response : ', await response);
-                    // console.log('==> 4. response : ', await response.json())
-                    // const result = await response.json();
-                    // const result = await response.json();
                     const result = await response;
                     console.log("=====>payment.js의 result : " + result)
 

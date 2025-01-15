@@ -1,15 +1,16 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.AddressBook;
-import hello.fclover.domain.Member;
-import hello.fclover.domain.Payment;
-import hello.fclover.domain.PaymentReq;
+import hello.fclover.domain.*;
+import hello.fclover.mail.EmailMessage;
+import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
+import hello.fclover.service.NoticeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
@@ -21,9 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -37,6 +38,8 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+    private final EmailService emailService;
+    private final NoticeService noticeService;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -83,12 +86,61 @@ public class MemberController {
         return "user/userLogin";
     }
 
-    @GetMapping("/myPage")
-    public String myPageMain(Principal principal) {
+    @GetMapping("/find-id")
+    public String findIdPage() {
+        return "user/userFindId";
+    }
 
-        if (principal == null) {
-            return "redirect:/member/login";
+    @PostMapping("/find-id")
+    public String findId(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+
+        String memberId = memberService.findMemberId(member);
+        if (memberId == null) {
+            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
+            return "redirect:/member/find-id";
         }
+
+        redirectAttributes.addAttribute("memberId", memberId);
+        return "redirect:/member/find-id-ok";
+    }
+
+    @GetMapping("/find-id-ok")
+    public String findOkPage(@RequestParam(required = false) String memberId, Model model) {
+        if (memberId != null) {
+            Member member = memberService.findMemberById(memberId);
+            model.addAttribute("member", member);
+        }
+        return "user/userFindIdOk";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordPage() {
+        return "user/userResetPassword";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+        Integer memberNum = memberService.selectMemberResetPassword(member);
+        if (memberNum == null) {
+            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
+            return "redirect:/member/reset-password";
+        }
+        redirectAttributes.addFlashAttribute("message", "메일 발송 성공");
+
+        String randomNumber = EmailService.generateRandomNumber();
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(member.getEmail())
+                .subject("비밀번호 재설정")
+                .message("인증번호 : " + randomNumber)
+                .build();
+        emailService.sendMail(emailMessage);
+        return "redirect:/member/reset-password";
+    }
+
+    @GetMapping("/myPage")
+    public String myPageMain() {
+
         return "/user/mypage/userMyPageMain";
     }
 
@@ -96,10 +148,10 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memNum = member.getMemNum();
+        int memberNo = member.getMemberNo();
 
-        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
-        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
+        AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);
 
         model.addAttribute("defaultAddress", defaultAddress);
         model.addAttribute("addressBookList", addressBookList);
@@ -110,20 +162,20 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memNum = memberService.getMemNum(memberId);
-        addressBook.setMemNum(memNum);
+        int memberNo = memberService.getmemberNo(memberId);
+        addressBook.setMemberNo(memberNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/deleteAddressBook")
-    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
-        int result = memberService.checkDefaultAddress(addressNum);
+    public String deleteDeliveryAddress(@RequestParam int addressNo, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNo);
 
         if (result == 1) {
             redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
         } else {
-            memberService.removeAddressBook(addressNum);
+            memberService.removeAddressBook(addressNo);
         }
         return "redirect:/member/myPage/addressBook";
     }
@@ -132,8 +184,8 @@ public class MemberController {
 
     @Transactional
     @PostMapping("/defaultAddress")
-    public String defaultAddress(@RequestParam int addressNum) {
-        memberService.setDefaultAddress(addressNum);
+    public String defaultAddress(@RequestParam int addressNo) {
+        memberService.setDefaultAddress(addressNo);
         return "redirect:/member/myPage/addressBook";
     }
 
@@ -263,7 +315,7 @@ public class MemberController {
     public String socialMemberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-        memberService.updateMember(member);
+        memberService.updateSocialMember(member);
         return "redirect:/member/myPage/info";
     }
 
@@ -332,5 +384,91 @@ public class MemberController {
     }
 
 
-}
+    @GetMapping("/GoodsDetail")
+    public String GoodsDetail() {
+//ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
+        System.out.println("====");
+        return "/user/userGoodsDetail";
+    }
 
+    //공지사항
+    @GetMapping("/notice")
+    public String notice(
+            @RequestParam(defaultValue = "1") Integer page, Model m) {
+
+        int limit = 10;
+        int listcount = noticeService.getListCount();
+        List<Notice> list = noticeService.getBoardList(page, limit);
+
+        PaginationResult result = new PaginationResult(page, limit, listcount);
+        m.addAttribute("page", page);
+        m.addAttribute("maxpage", result.getMaxpage());
+        m.addAttribute("startpage", result.getStartpage());
+        m.addAttribute("endpage", result.getEndpage());
+        m.addAttribute("listcount", listcount);
+        m.addAttribute("noticelist", list);
+        m.addAttribute("limit", limit);
+        return "user/userNotice";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/notice/write")
+    public String noticeWrite() {
+        return "user/userWrite";
+    }
+
+    @PostMapping(value ="/notice/add")
+    public String noticeAdd(Notice notice) {
+        noticeService.insertNotice(notice);
+        return "redirect:/member/notice";
+    }
+
+    @GetMapping(value = "/notice/detail")
+    public ModelAndView Detail(
+            int num, ModelAndView mv,
+            HttpServletRequest request,
+            String beforeURL, HttpSession session) {
+
+        Notice notice = noticeService.getDetail(num);
+
+        if (notice == null) {
+            mv.setViewName("error/error");
+            mv.addObject("url",request.getRequestURL());
+            mv.addObject("message","상세보기 실패입니다.");
+        }else {
+            mv.setViewName("user/userNoticeDetail");
+            mv.addObject("notidata", notice);
+        }
+        return mv;
+    }
+
+    //공지사항 검색
+    @GetMapping(value = "/notice/noti_list")
+    public ModelAndView noticeList(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int limit,
+            ModelAndView mv,
+            @RequestParam(defaultValue = "") String search_word)
+    {
+        System.out.println("페이지: " + page);
+        System.out.println("검색어: " + search_word);
+
+        int listcount = noticeService.getSearchListCount(search_word);
+        List<Notice> list = noticeService.getSearchList( search_word, page, limit);
+        PaginationResult result = new PaginationResult(page, limit, listcount);
+
+        System.out.println("listcount = " + listcount);
+        System.out.println("noticelist = " + list);
+
+        mv.setViewName("user/userNotice");
+        mv.addObject("page", page);
+        mv.addObject("maxpage",result.getMaxpage());
+        mv.addObject("startpage",result.getStartpage());
+        mv.addObject("endpage",result.getEndpage());
+        mv.addObject("noticelist",list);
+        mv.addObject("search_word",search_word);
+        mv.addObject("limit",limit);
+        return mv;
+    }
+
+}

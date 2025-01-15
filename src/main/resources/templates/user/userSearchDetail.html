@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>상세검색</title>
+  <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.css}">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <script th:src="@{/js/bootstrap-datepicker.js}"></script>
+
+  <link href="/css/user/home.css" rel="stylesheet">
+  <link href="/css/user/searchBox.css" rel="stylesheet">
+  <style>
+    .wrapper {
+      position: relative;
+      min-width: 1440px;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    .wrapper .container_wrapper {
+      min-height: calc(100vh - 80px);
+    }
+
+    .wrapper .container_wrapper .contents_wrap {
+      padding-top: 50px;
+    }
+
+    .wrapper .container_wrapper .contents_wrap .contents_inner {
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+  </style>
+  <script th:inline="javascript">
+    $(function () {
+      $("#logo").click(function () {
+        location.href = "/";
+      });
+
+      $("#cart").click(function () {
+        location.href = "/cart";
+      });
+
+      $("#myPage").click(function () {
+        location.href = "/myPage";
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="wrapper contents_search_result" id="mainDiv">
+  <div th:replace="~{fragment/header :: header}"></div>
+  <main class="container_wrapper">
+
+
+    <script th:src="@{/js/search_detail.js}"></script>
+
+    <section class="contents_wrap" id="contents">
+      <div class="contents_inner">
+
+        <div class="title_wrap title_size_lg mb-4">
+          <p class="title_heading fs-3 fw-bold">상세검색</p>
+        </div>
+
+        <div class="tbl_row_wrap mb-3">
+          <form action="/search/searchDetailResult" id="detailSearchForm" method="get" role="form">
+            <input id="cnameHidden" name="cname" type="hidden" value="">
+            <input id="chrcHidden" name="chrcDetail" type="hidden" value="">
+            <input id="pbcmHidden" name="pbcmDetail" type="hidden" value="">
+            <input id="repKeywordHidden" name="repKeyword" type="hidden" value="">
+
+            <table class="table table-bordered">
+              <!-- 상세검색 테이블로 상품군, 상품명, 저자/역자, 출판사, 발행일, 가격을(를) 나타낸 표입니다. -->
+              <colgroup>
+                <col style="width: 140px;">
+                <col style="width: auto;">
+              </colgroup>
+              <tbody>
+              <tr>
+                <th scope="row">상품군</th>
+                <td>
+                  <div class="input-group" style="max-width: 222px;">
+                    <select class="form-select" id="cateSel" name="cate" title="상품군 카테고리 선택">
+                      <option value="전체@ALL">전체</option>
+                      <!-- TODO : 정해진 카테고리만큼 추가하기 OR 카테고리 목록 스크립트로 불러오기 -->
+                    </select>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row">
+                  <label class="form-label" for="cnameInput">상품명</label>
+                </th>
+                <td>
+                  <input class="form-control" id="cnameInput" placeholder="상품명을 입력해주세요." type="text">
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row">
+                  <label class="form-label" for="chrcDetailInput">저자/역자</label>
+                </th>
+                <td>
+                  <input class="form-control" id="chrcDetailInput" placeholder="저자/역자를 입력해주세요." type="text">
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row">
+                  <label class="form-label" for="pbcmDetailInput">출판사</label>
+                </th>
+                <td>
+                  <input class="form-control" id="pbcmDetailInput" placeholder="출판사를 입력해주세요." type="text">
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row">발행일</th>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <!-- 기간 선택 select -->
+                    <div style="max-width: 150px;">
+                      <select class="form-select" id="selMonInterval" title="발행일 기간 선택">
+                        <option value="1m">최근 1개월</option>
+                        <option value="2m">최근 2개월</option>
+                        <option value="3m">최근 3개월</option>
+                        <option value="6m">최근 6개월</option>
+                        <option value="">직접입력</option>
+                      </select>
+                    </div>
+                    <!-- 시작일 -->
+                    <div class="input-group" style="max-width: 200px;">
+                      <input class="form-control" id="rlseStr" placeholder="시작일 선택" title="시작일 선택" type="text">
+                      <button class="btn btn-outline-secondary datepicker" type="button">
+                        <!-- FIXME 이미지 주소 수정 필요 -->
+                        <img alt="날짜 선택"
+                             src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/datepicker_icon_button@2x.png"
+                             style="width: 20px; height: 20px;" title="날짜 선택">
+                      </button>
+                    </div>
+                    <span>~</span>
+                    <!-- 종료일 -->
+                    <div class="input-group" style="max-width: 200px;">
+                      <input class="form-control" id="rlseEnd" placeholder="종료일 선택" title="종료일 선택" type="text">
+                      <button class="btn btn-outline-secondary datepicker" type="button">
+                        <img
+                            alt="날짜 선택"
+                            src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/datepicker_icon_button@2x.png"
+                            style="width: 20px; height: 20px;"
+                            title="날짜 선택">
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row">가격</th>
+                <td>
+                  <div class="input-group" style="max-width: 350px;">
+                    <input
+                        class="form-control"
+                        id="saprmin"
+                        onkeyup="inputNumberFormat(this)"
+                        placeholder="0"
+                        title="최소 금액 입력"
+                        type="text">
+                    <span class="input-group-text">~</span>
+                    <input
+                        class="form-control"
+                        id="saprmax"
+                        onkeyup="inputNumberFormat(this)"
+                        placeholder="9,999,999"
+                        title="최대 금액 입력"
+                        type="text">
+                  </div>
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+          </form>
+        </div>
+
+        <div class="btn_wrap page_bottom">
+          <button
+              class="btn btn-lg btn-outline-primary me-2"
+              onclick="initValue();"
+              type="button">
+            <span class="text">초기화</span>
+          </button>
+          <a
+              class="btn btn-lg btn-primary"
+              onclick="goDetailSearchResult()">
+            <span class="text">상세검색</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

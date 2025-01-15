@@ -1,36 +1,50 @@
 package hello.fclover.controller;
 
+
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.Seller;
 import hello.fclover.service.GoodsService;
 import hello.fclover.service.SellerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import java.security.Principal;
 import java.io.IOException;
 import java.util.List;
 
 
 @Slf4j
 @Controller
-@RequestMapping(value = "/seller")
+
+@RequiredArgsConstructor
+@RequestMapping(value="/seller")
 public class SellerController {
     private final SellerService sellerService;
     private final GoodsService goodsService;
+    private final PasswordEncoder passwordEncoder;
 
-    //    private final CategoryService categoryService;
-    SellerController(SellerService sellerService, GoodsService goodsService) {
-        this.sellerService = sellerService;
-//        this.categoryService = categoryService;
-        this.goodsService = goodsService;
+    @ModelAttribute("seller")
+    public Seller addSellerToModel(Principal principal) {
+
+        if (principal != null) {
+            String sellerId = principal.getName();
+            return sellerService.findSellerById(sellerId);
+        }
+        return null;
+
     }
-
-    @GetMapping("/addSingleProduct")
+@GetMapping("/addSingleProduct")
     public String addSingleProduct(Model model, Goods goods) {
         //회사이름, 사업자 등록번호(hidden)
 //        String sellerCompany = sellerService.getCompanyName();
@@ -56,8 +70,6 @@ public class SellerController {
         System.out.println("goods:" + goods);
         goodsService.goodsSingleInsert(goods, images, SellerNumber);
         return "seller/sellerAddSingleProduct"; // 성공 후 상세 페이지로 이동
-    }
-
     @GetMapping("/productDetail")
     public String productDetail(Model model) {
         return "seller/sellerProductDetail";
@@ -65,18 +77,43 @@ public class SellerController {
 
 
     @GetMapping("/main")
-    public String signup() {
-        return "seller/sellerMypage";
+    public String signup(Principal principal) {
+
+        if (principal == null) {
+            return "redirect:/seller/login";
+        }
+
+        return "seller/sellerMain";
     }
 
-    @GetMapping("/sellerSignup")
-    public String sellerSignup() {
+    @GetMapping("/signup")
+    public String sellerSignupForm() {
         return "seller/sellerSignup";
     }
 
-    @GetMapping("/sellerLogin")
-    public String sellerLogin() {
-        return "seller/sellerLogin";
+    @PostMapping("/signupProcess")
+    public String sellerSignup(HttpServletRequest request) {
+
+        //이유는 모르겠지만 ModelAttribute가 안됨
+        Seller seller = new Seller();
+        seller.setSellerId(request.getParameter("sellerId"));
+        seller.setPassword(passwordEncoder.encode(request.getParameter("password")));
+        seller.setName(request.getParameter("name"));
+        seller.setEmail(request.getParameter("email"));
+        seller.setPhoneNumber(request.getParameter("phoneNumber"));
+        seller.setBusinessNumber(request.getParameter("businessNumber"));
+        seller.setCompanyName(request.getParameter("companyName"));
+
+        sellerService.signup(seller);
+        return "redirect:/seller/main";
     }
 
+    @GetMapping("/login")
+    public String sellerLoginForm(HttpSession session, Model model) {
+
+        model.addAttribute("message", session.getAttribute("sellerLoginfail"));
+        session.removeAttribute("sellerLoginfail");
+
+        return "seller/sellerLogin";
+    }
 }

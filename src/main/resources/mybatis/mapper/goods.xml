@@ -3,7 +3,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
-        <insert id="goodsInsertText">
+
+    <insert id="goodsInsertText">
             insert into Goods
             (seller_id, cate_no, goods_name, goods_content, goods_price, goods_writer, seller_company, goods_create_at,
               goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
@@ -15,4 +16,34 @@
             from goods
             where seller_id = #{sellerId} and goods_name=#{goodsName}
         </select>
+
+    <!-- 모든 카테고리에 있는 상품 조회 -->
+    <select id="findAll" resultType="hello.fclover.domain.Goods">
+        SELECT *
+        FROM goods
+        WHERE cate_no = #{cate_no}
+        ORDER BY
+        <choose>
+            <when test="'latest'.equals(sort)">goods_date DESC</when>
+            <when test="'sales'.equals(sort)">goods_count DESC</when>
+            <when test="'highPrice'.equals(sort)">goods_price DESC</when>
+            <when test="'lowPrice'.equals(sort)">goods_price ASC</when>
+            <otherwise>goods_date DESC</otherwise>
+        </choose>
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 전체 상품 수 계산 -->
+    <select id="countGoods" resultType="int">
+        SELECT COUNT(*)
+        FROM goods
+        WHERE cate_no = #{cate_no}
+    </select>
+
+    <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
+        SELECT *
+        FROM goods
+        WHERE goods_no = #{goods_no}
+    </select>
 </mapper>
+

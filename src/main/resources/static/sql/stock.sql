@@ -1,5 +1,6 @@
 CREATE TABLE `stock` (
-                               `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    #   stock_no 로 pk 수정
+                               `stock_no` bigint unsigned NOT NULL AUTO_INCREMENT,
                                `goods_no` int not NULL,
                                `goods_code` int,
                                 #초기수량
@@ -7,8 +8,8 @@ CREATE TABLE `stock` (
                                 #현재수량
                                 `product_stock` int DEFAULT NULL,
                                 `isSoldOut` varchar(3),
-                               PRIMARY KEY (`id`),
-                               UNIQUE KEY `id` (`id`)
+                               PRIMARY KEY (`stock_no`),
+                               UNIQUE KEY `id` (`stock_no`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 
 

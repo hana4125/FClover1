@@ -1,15 +1,18 @@
 package hello.fclover.controller;
 
 import hello.fclover.domain.Category;
+import hello.fclover.domain.Goods;
+import hello.fclover.domain.Member;
 import hello.fclover.service.CategoryService;
+import hello.fclover.service.GoodsService;
+import hello.fclover.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -19,19 +22,43 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final GoodsService goodsService;
+    private final MemberService memberService;
+
+    @ModelAttribute("member")
+    public Member addMemberToModel(Principal principal) {
+
+        if (principal != null) {
+            String memberId = principal.getName();
+            return memberService.findMemberById(memberId);
+        }
+        return null;
+    }
 
     @GetMapping("/{no}")
-    public String categoryDetail(@PathVariable("no") int cate_no, Model model) {
+    public String categoryDetail(@PathVariable("no") int cate_no,
+                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                                 Model model) {
 
         // 카테고리 데이터 가져오기
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
+        // 상품 목록 가져오기
+        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
+        model.addAttribute("goodsList", goodsList);
 
-        // 특정 카테고리 조회 (Optional)
-        Category category = categoryService.getCategoryById(cate_no);
-        model.addAttribute("category", category);
+        // 페이지네이션 정보 전달
+        int totalItems = goodsService.getTotalGoodsCount(cate_no);
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("sort", sort);
+        model.addAttribute("size", size);
         return "/user/userCategory"; // 카테고리 상세 페이지
-    }
+    } // goodsDetail
 }
 
 

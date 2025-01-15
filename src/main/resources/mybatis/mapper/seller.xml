@@ -3,9 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.SellerMapper">
+    <insert id="insertSeller">
+        INSERT INTO
+            seller (seller_id, password, name, email, phone_number, business_number, company_name)
+        VALUES
+            (#{sellerId}, #{password}, #{name}, #{email}, #{phoneNumber}, #{businessNumber}, #{companyName})
+    </insert>
+  
+    <select id="selectSellerById">
+        SELECT * FROM seller WHERE seller_id = #{sellerId}
+    </select>
 
-
-    <update id="save">
-
-    </update>
 </mapper>
