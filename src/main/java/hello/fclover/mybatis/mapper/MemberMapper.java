@@ -25,7 +25,7 @@ public interface MemberMapper {
 
     int insertAddressBook(AddressBook addressBook);
 
-    List<AddressBook> selectAddressBook(int memberNo);
+    List<AddressBook> selectAddressBook(Long memberNo);
 
     Member selectMember(String memberId, String password);
 
@@ -39,7 +39,7 @@ public interface MemberMapper {
 
     int selectmemberNo(String memberId);
 
-    AddressBook selectDefaultAddress(int memberNo);
+    AddressBook selectDefaultAddress(Long memberNo);
 
     int updateDefaultAddress(int addressId);
 

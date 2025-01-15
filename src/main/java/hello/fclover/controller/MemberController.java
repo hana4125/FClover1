@@ -148,7 +148,7 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memberNo = member.getMemberNo();
+        Long memberNo = member.getMemberNo();
 
         AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
         List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);

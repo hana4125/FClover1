@@ -67,6 +67,7 @@ public class SecurityConfig {
                         "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
                         "/member/reset-password").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")

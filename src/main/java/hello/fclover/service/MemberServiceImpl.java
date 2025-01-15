@@ -25,7 +25,7 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper dao;
-    private static final String UPLOAD_DIR = "src/main/resources/static/img/user/upload/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
 
     @Override
     public int signup(Member member) {
@@ -84,7 +84,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<AddressBook> getDeliveryAddress(int memberNo) {
+    public List<AddressBook> getDeliveryAddress(Long memberNo) {
         return dao.selectAddressBook(memberNo);
     }
 
@@ -104,7 +104,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public AddressBook getDefaultAddress(int memberNo) {
+    public AddressBook getDefaultAddress(Long memberNo) {
         return dao.selectDefaultAddress(memberNo);
     }
 

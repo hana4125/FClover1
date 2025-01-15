@@ -31,7 +31,7 @@ public interface MemberService {
 
     void setDefaultAddress(int addressId);
 
-    List<AddressBook> getDeliveryAddress(int memberNo);
+    List<AddressBook> getDeliveryAddress(Long memberNo);
 
     Member isMemberExists(String memberId, String password);
 
@@ -39,7 +39,7 @@ public interface MemberService {
 
     void removeAccount(String memberId);
 
-    AddressBook getDefaultAddress(int memberNo);
+    AddressBook getDefaultAddress(Long memberNo);
 
     int checkDefaultAddress(int addressNo);
 

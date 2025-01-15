@@ -249,7 +249,7 @@
           </div>
           <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
                th:unless="${member.profilePicture == null}">
-            <img th:src="@{|/images/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+            <img th:src="@{|/upload/${member.profilePicture}|}" alt="프로필 이미지">
           </div>
         </div>
       </div>
