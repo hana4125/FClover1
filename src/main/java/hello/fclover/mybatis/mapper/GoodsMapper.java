@@ -9,7 +9,10 @@ import java.util.List;
 
 @Mapper
 public interface GoodsMapper {
+    int goodsInsertText(Goods goods);
 
+    int goodsNoselect(String sellerId, String goodsName);
+  
     List<Goods> findAll(@Param("cate_no") int cateNo,
                         @Param("sort") String sort,
                         @Param("offset") int offset,
