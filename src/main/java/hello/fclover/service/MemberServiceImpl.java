@@ -29,17 +29,24 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int signup(Member member) {
+
         return dao.insertMember(member);
     }
 
     @Override
     public int getmemberNo(String memberId) {
-        return dao.selectmemberNo(memberId);
+        return dao.selectMemberNo(memberId);
     }
 
     @Override
     public Member findMemberById(String id) {
         return dao.selectMemberById(id);
+    }
+
+    @Override
+    public String isMemberIdDuplicate(String memberId) {
+
+        return dao.isMemberIdDuplicate(memberId);
     }
 
     @Override

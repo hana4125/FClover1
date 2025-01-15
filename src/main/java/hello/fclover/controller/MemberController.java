@@ -5,6 +5,7 @@ import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
+import hello.fclover.service.SellerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -36,10 +37,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
     private final EmailService emailService;
     private final NoticeService noticeService;
+    private static final int SIGNUP_SUCCESS = 1;
+    private static final int SIGNUP_FAILURE = 0;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -57,19 +61,25 @@ public class MemberController {
     }
 
     @PostMapping("/signupProcess")
-    public String signupProcess(@ModelAttribute("signupMember") Member member) {
+    public String signupProcess(@ModelAttribute("signupMember") Member member, RedirectAttributes redirectAttributes) {
+
+        String memberIdDuplicate = memberService.isMemberIdDuplicate(member.getMemberId());
+        String sellerIdDuplicate = sellerService.isSellerIdDuplicate(member.getMemberId());
+
+        if (memberIdDuplicate != null || sellerIdDuplicate != null) {
+            redirectAttributes.addFlashAttribute("message", "사용중인 아이디입니다.");
+            return "redirect:/member/signup";
+        }
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-
         int result = memberService.signup(member);
 
-        if (result == 1) {
+        if (result == SIGNUP_SUCCESS) {
             log.info("회원가입 완료");
             return "redirect:/";
         } else {
-            log.info("회원가입 실패");
-            return "error/error";
+            throw new RuntimeException("회원가입 실패");
         }
     }
 

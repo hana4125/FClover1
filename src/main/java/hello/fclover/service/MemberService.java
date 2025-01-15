@@ -15,6 +15,8 @@ public interface MemberService {
 
     Member findMemberById(String memberId);
 
+    String isMemberIdDuplicate(String memberId);
+
     String findMemberId(Member member);
 
     Integer selectMemberResetPassword(Member member);

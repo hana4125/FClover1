@@ -2,6 +2,7 @@ package hello.fclover.controller;
 
 
 import hello.fclover.domain.Seller;
+import hello.fclover.service.MemberService;
 import hello.fclover.service.SellerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -24,6 +26,7 @@ import java.security.Principal;
 @RequestMapping(value="/seller")
 public class SellerController {
 
+    private final MemberService memberService;
     private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
 
@@ -53,11 +56,21 @@ public class SellerController {
     }
 
     @PostMapping("/signupProcess")
-    public String sellerSignup(HttpServletRequest request) {
+    public String sellerSignup(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        String sellerId = request.getParameter("sellerId");
+
+        String memberIdDuplicate = memberService.isMemberIdDuplicate(sellerId);
+        String sellerIdDuplicate = sellerService.isSellerIdDuplicate(sellerId);
+
+        if (memberIdDuplicate != null || sellerIdDuplicate != null) {
+            redirectAttributes.addFlashAttribute("message", "사용중인 아이디입니다.");
+            return "redirect:/seller/signup";
+        }
 
         //이유는 모르겠지만 ModelAttribute가 안됨
         Seller seller = new Seller();
-        seller.setSellerId(request.getParameter("sellerId"));
+        seller.setSellerId(sellerId);
         seller.setPassword(passwordEncoder.encode(request.getParameter("password")));
         seller.setName(request.getParameter("name"));
         seller.setEmail(request.getParameter("email"));

@@ -7,4 +7,6 @@ public interface SellerService {
     int signup(Seller seller);
 
     Seller findSellerById(String sellerId);
+
+    String isSellerIdDuplicate(String sellerId);
 }

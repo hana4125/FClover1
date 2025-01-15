@@ -33,11 +33,13 @@ public interface MemberMapper {
 
     String selectPassword(String memberId);
 
+    String isMemberIdDuplicate(String memberId);
+
     Integer selectMemberResetPassword(Member member);
 
     void deleteMember(String memberId);
 
-    int selectmemberNo(String memberId);
+    int selectMemberNo(String memberId);
 
     AddressBook selectDefaultAddress(Long memberNo);
 

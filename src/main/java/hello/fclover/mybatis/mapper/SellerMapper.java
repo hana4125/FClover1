@@ -9,4 +9,6 @@ public interface SellerMapper {
     int insertSeller(Seller seller);
 
     Seller selectSellerById(String sellerId);
+
+    String isSellerIdDuplicate(String sellerId);
 }
