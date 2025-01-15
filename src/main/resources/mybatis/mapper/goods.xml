@@ -32,4 +32,29 @@
         FROM goods
         WHERE goods_no = #{goods_no}
     </select>
+
+
+    <!-- 키워드로 상품 검색 -->
+    <select id="findGoodsByKeyword" resultType="hello.fclover.domain.Goods">
+        SELECT
+            g.GOODS_NO AS goodsNo,
+            g.SELLER_NO AS sellerNo,
+            g.CATE_NO AS cateNo,
+            g.GOODS_NAME AS goodsName,
+            g.GOODS_CONTENT AS goodsContent,
+            g.GOODS_PRICE AS goodsPrice,
+            g.GOODS_WRITER AS goodsWriter,
+            s.company_name AS companyName,
+            g.GOODS_CREATE_AT AS goodsCreateAt,
+            g.GOODS_COUNT AS goodsCount
+        FROM GOODS g
+        JOIN seller s ON g.SELLER_NO = s.seller_no
+        WHERE
+            MATCH(g.GOODS_NAME, g.GOODS_CONTENT, g.GOODS_WRITER)
+            AGAINST (#{keyword} IN BOOLEAN MODE)
+            OR
+            MATCH(s.company_name)
+            AGAINST (#{keyword} IN BOOLEAN MODE)
+    </select>
+
 </mapper>
