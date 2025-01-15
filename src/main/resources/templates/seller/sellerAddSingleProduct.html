@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,7 +87,7 @@
 
             // 파일 목록 업데이트 함수
             function updateFileList() {
-                $('#fileInput').val('');
+
                 const fileListContainer = $('#fileListContainer');
                 fileListContainer.empty(); // 기존 목록 초기화
 
@@ -126,12 +126,104 @@
             // 상품 등록 폼 제출 처리
             $('form[name="addSingleProductForm"]').submit(function (event) {
                 event.preventDefault(); // 기본 제출 동작 중단
+                // 유효성 검사
+                if ($('input[name="goodsName"]').val().trim() == "") {
+                    alert("상품 이름을 입력하세요.");
+                    $("#goodsName").focus();
+                    return false;
+                }
+                const pricePattern = /^\d+$/;
+                if ($("#goodsPrice").val().trim() == "") {
+                    alert("상품 가격을 입력하세요.");
+                    $("#goodsPrice").focus();
+                    return false;
+                } else if (!pricePattern.test($("#goodsPrice").val().replace(/,/g, ""))) {
+                    alert("숫자만 입력하세요");
+                    $("#goodsPrice").focus();
+                    return false;
+                }
 
+                if (!$.isNumeric($("#goodsCount").val())) {
+                    alert("상품 수량을 정확히 입력하세요.");
+                    $("#goodsCount").focus();
+                    return false;
+                }
+
+                if ($("#goodsContent").val().trim() == "") {
+                    alert("상품 상세 설명을 작성하세요.");
+                    $("#goodsContent").focus();
+                    return false;
+                }
+
+                if ($("#goodsWriter").val().trim() == "") {
+                    alert("작가 이름을 작성하세요.");
+                    $("#goodsWriter").focus();
+                    return false;
+                }
+
+                if ($("#writerContent").val().trim() == "") {
+                    alert("작가 설명을 작성하세요.");
+                    $("#writerContent").focus();
+                    return false;
+                }
+
+                if ($("#goodsCreateAt").val().trim() == "") {
+                    alert("발행일자를 확인하세요.");
+                    $("#goodsCreateAt").focus();
+                    return false;
+                }
+
+                if ($("#goodsPageCount").val().trim() == "") {
+                    alert("쪽수를 작성하세요.");
+                    $("#goodsPageCount").focus();
+                    return false;
+                }
+
+                const bookPattern = /^\d{1,3}[*]\d{1,3}$/;
+                if ($("#goodsBookSize").val().trim() == "") {
+                    alert("크기를 작성하세요.");
+                    $("#goodsBookSize").focus();
+                    return false;
+                } else if (!bookPattern.test($("#goodsBookSize").val())) {
+                    alert("크기를 확인하세요. ex)10*10");
+                    return false;
+                }
+                const goodsImage = "uploadedFiles[0].name";
+                console.log(goodsImage);
                 // FormData 생성
-                const formData = new FormData(this);
+                const formData = new FormData();
+                //JSON 데이터 생성
+                const goodsData={
+                    goodsName: $("#goodsName").val(),
+                    sellerCompany: $("#sellerCompany").val(),
+                    goodsPrice: $("#goodsPrice").val(),
+                    goodsCount: $("#goodsCount").val(),
+                    cateNo: $("#cateNo").val(),
+                    goodsContent: $("#goodsContent").val(),
+                    goodsWriter: $("#goodsWriter").val(),
+                    writerContent: $("#writerContent").val(),
+                    goodsCreateAt: $("#goodsCreateAt").val(),
+                    goodsPageCount: $("#goodsPageCount").val(),
+                    goodsBookSize: $("#goodsBookSize").val()
+                };
+
+                formData.append("goods", new Blob([JSON.stringify(goodsData)], { type: "application/json" }));
 
                 // 업로드된 파일 추가
-                uploadedFiles.forEach(file => formData.append("goods_image", file));
+                uploadedFiles.forEach(file => formData.append("goodsImages", file));
+                // formData.forEach((value, key) => {
+                //     console.log(`${key}:`, value);
+                // });
+
+                console.log("FormData 내용:");
+                formData.forEach((value, key) => {
+                    if (value instanceof File) {
+                        console.log(`${key}: 파일 이름 - ${value.name}, 파일 크기 - ${value.size}`);
+                    } else {
+                        console.log("업로드된 파일들:", uploadedFiles);
+                        console.log(`${key}: ${value}`);
+                    }
+                });
 
                 // CSRF 토큰 처리
                 const csrfToken = $('meta[name="_csrf"]').attr("content");
@@ -147,80 +239,16 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function (response) {
+                    success: function () {
                         alert("상품이 성공적으로 등록되었습니다.");
-                        window.location.reload();
                     },
                     error: function (xhr, status, error) {
                         alert("상품 등록 중 오류가 발생했습니다.");
+                        console.error("에러 내용" ,xhr.responseText);
                         console.error("Error:", error);
                     }
                 });
 
-
-                // 유효성 검사
-                if ($('input[name="goods_name"]').val().trim() == "") {
-                    alert("상품 이름을 입력하세요.");
-                    $("#goods_name").focus();
-                    return false;
-                }
-
-                const pricePattern = /^\d+$/;
-                if ($("#goods_price").val().trim() == "") {
-                    alert("상품 가격을 입력하세요.");
-                    $("#goods_price").focus();
-                    return false;
-                } else if (!pricePattern.test($("#goods_price").val().replace(/,/g, ""))) {
-                    alert("숫자만 입력하세요");
-                    $("#goods_price").focus();
-                    return false;
-                }
-
-                if (!$.isNumeric($("#goods_count").val())) {
-                    alert("상품 수량을 정확히 입력하세요.");
-                    $("#goods_count").focus();
-                    return false;
-                }
-
-                if ($("#goods_content").val().trim() == "") {
-                    alert("상품 상세 설명을 작성하세요.");
-                    $("#goods_content").focus();
-                    return false;
-                }
-
-                if ($("#goods_writer").val().trim() == "") {
-                    alert("작가 이름을 작성하세요.");
-                    $("#goods_writer").focus();
-                    return false;
-                }
-
-                if ($("#writer_content").val().trim() == "") {
-                    alert("작가 설명을 작성하세요.");
-                    $("#writer_content").focus();
-                    return false;
-                }
-
-                if ($("#goods_create_at").val().trim() == "") {
-                    alert("발행일자를 확인하세요.");
-                    $("#goods_create_at").focus();
-                    return false;
-                }
-
-                if ($("#goods_pageCount").val().trim() == "") {
-                    alert("쪽수를 작성하세요.");
-                    $("#goods_pageCount").focus();
-                    return false;
-                }
-
-                const bookPattern = /^\d{1,3}[*]\d{1,3}$/;
-                if ($("#goods_bookSize").val().trim() == "") {
-                    alert("크기를 작성하세요.");
-                    $("#goods_bookSize").focus();
-                    return false;
-                } else if (!bookPattern.test($("#goods_bookSize").val())) {
-                    alert("크기를 확인하세요. ex)10*10");
-                    return false;
-                }
             });
         });
     </script>
@@ -236,17 +264,17 @@
             <!-- 상품 이름 -->
             <div class="col-md-4">
                 <div class="mb-3">
-                    <label for="goods_name" class="form-label">상품 이름</label>
-                    <input type="text" class="form-control" id="goods_name" name="goods_name" required>
+                    <label for="goodsName" class="form-label">상품 이름</label>
+                    <input type="text" class="form-control" id="goodsName" name="goodsName" required>
                 </div>
             </div>
             <!-- 출판사 -->
             <div class="col-md-3 offset-md-2">
                 <div class="mb-3">
-                    <label for="seller_company" class="form-label">출판사</label>
+                    <label for="sellerCompany" class="form-label">출판사</label>
                     <!--                    출판사는 판매자 member db에서 가져오는 걸로 수정해야함-->
-                    <input type="text" class="form-control" id="seller_company" name="seller_company"
-                           style="background-color:lightgray" value="출판사" readonly>
+                    <input type="text" class="form-control" id="sellerCompany" name="sellerCompany"
+                           style="background-color:lightgray" th:value="${sellerCompany}" readonly>
                 </div>
             </div>
         </div>
@@ -255,30 +283,25 @@
             <!-- 상품 가격, 상품 수량, 책 카테고리 -->
             <div class="col-md-2">
                 <div class="mb-3">
-                    <label for="goods_price" class="form-label">상품 가격</label>
-                    <input type="text" class="form-control" id="goods_price" name="goods_price" required>
+                    <label for="goodsPrice" class="form-label">상품 가격 (원)</label>
+                    <input type="text" class="form-control" id="goodsPrice" name="goodsPrice" required>
                 </div>
             </div>
 
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="goods_count" class="form-label">상품 수량</label>
-                    <input type="number" class="form-control" id="goods_count"
-                           name="goods_count" placeholder="예: 10" required>
+                    <label for="goodsCount" class="form-label">상품 수량 (권)</label>
+                    <input type="number" class="form-control" id="goodsCount"
+                           name="goodsCount" placeholder="예: 10" required>
                 </div>
             </div>
 
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="productCategory" class="form-label">책 카테고리</label>
-                    <select class="form-select" id="productCategory" name="productCategory" required>
-                        <!--                       타임리프로 수정 사항 -->
+                    <label for="cateNo" class="form-label">책 카테고리</label>
+                    <select class="form-select" id="cateNo" name="cateNo" required>
                         <option value="">카테고리 선택</option>
-                        <option value="0">소설</option>
-                        <option value="1">논픽션</option>
-                        <option value="2">역사</option>
-                        <option value="3">과학</option>
-                        <option value="4">판타지</option>
+                        <option value="1">카테고리 test</option>
                     </select>
                 </div>
             </div>
@@ -288,19 +311,20 @@
             <!-- 상품 상세 설명 -->
             <div class="col-md-9">
                 <div class="mb-3">
-                    <label for="goods_content" class="form-label">상품 상세 설명</label>
-                    <textarea class="form-control" id="goods_content" name="goods_content" rows="4"
+                    <label for="goodsContent" class="form-label">상품 상세 설명</label>
+                    <textarea class="form-control" id="goodsContent" name="goodsContent" rows="4"
                               required></textarea>
                 </div>
             </div>
         </div>
+
         <div class="mb-5"></div>
         <div class="row">
             <!-- 작가 이름 -->
             <div class="col-md-3">
                 <div class="mb-3">
-                    <label for="goods_writer" class="form-label">작가 이름</label>
-                    <input type="text" class="form-control" id="goods_writer" name="goods_writer" required>
+                    <label for="goodsWriter" class="form-label">작가 이름</label>
+                    <input type="text" class="form-control" id="goodsWriter" name="goodsWriter" required>
                 </div>
             </div>
         </div>
@@ -308,8 +332,8 @@
             <!-- 작가 설명 -->
             <div class="col-md-9">
                 <div class="mb-3">
-                    <label for="writer_content" class="form-label">작가 설명</label>
-                    <textarea class="form-control" id="writer_content" name="writer_content" rows="3"
+                    <label for="writerContent" class="form-label">작가 설명</label>
+                    <textarea class="form-control" id="writerContent" name="writerContent" rows="3"
                               required></textarea>
                 </div>
             </div>
@@ -319,8 +343,8 @@
             <!-- 발행일자 -->
             <div class="col-md-2">
                 <div class="mb-3">
-                    <label for="goods_create_at" class="form-label">발행일자</label>
-                    <input type="date" class="form-control" id="goods_create_at" name="goods_create_at" max="9999-12-31"
+                    <label for="goodsCreateAt" class="form-label">발행일자</label>
+                    <input type="date" class="form-control" id="goodsCreateAt" name="goodsCreateAt" max="9999-12-31"
                            required>
                 </div>
             </div>
@@ -328,8 +352,8 @@
             <!-- 쪽수 -->
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="goods_pageCount" class="form-label">쪽수</label>
-                    <input type="number" class="form-control" id="goods_pageCount" name="goods_pageCount"
+                    <label for="goodsPageCount" class="form-label">쪽수</label>
+                    <input type="number" class="form-control" id="goodsPageCount" name="goodsPageCount"
                            placeholder="예: 365"
                            required>
                 </div>
@@ -338,8 +362,8 @@
             <!-- 크기 -->
             <div class="col-md-2 offset-md-1">
                 <div class="mb-3">
-                    <label for="goods_bookSize" class="form-label">크기 (cm)</label>
-                    <input type="text" class="form-control" id="goods_bookSize" name="goods_bookSize"
+                    <label for="goodsBookSize" class="form-label">크기 (cm)</label>
+                    <input type="text" class="form-control" id="goodsBookSize" name="goodsBookSize"
                            placeholder="예: 14*21"
                            required>
                 </div>
@@ -349,7 +373,7 @@
         <div class="mb-3">
             <label class="form-label">상품 이미지 (최대 3개)</label>
             <!-- 숨겨진 파일 입력 -->
-            <input type="file" id="fileInput" class="form-control visually-hidden" name="goods_image" multiple
+            <input type="file" id="fileInput" class="form-control visually-hidden" name="goodsImage" multiple
                    accept="image/*">
             <!-- 커스텀 파일 선택 버튼 -->
             <button type="button" id="customFileButton" class="btn btn-primary">파일 선택</button>
