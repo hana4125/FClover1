@@ -1,7 +1,10 @@
 package hello.fclover.config;
 
 import hello.fclover.oauth2.service.CustomOAuth2UserService;
-import hello.fclover.security.*;
+import hello.fclover.security.LoginFailHandler;
+import hello.fclover.security.LoginSuccessHandler;
+import hello.fclover.security.SellerLoginFailHandler;
+import hello.fclover.security.SellerLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
-import java.security.Security;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -60,9 +60,10 @@ public class SecurityConfig {
                         .usernameParameter("memberId")
                         .passwordParameter("password")
                         .successHandler(loginSuccessHandler)
+                        .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess").permitAll()
+                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess", "/category/**", "/payments/**", "/wish/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
                 )
                 .oauth2Login(oauth2 -> oauth2

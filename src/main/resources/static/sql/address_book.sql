@@ -1,8 +1,8 @@
 CREATE TABLE address_book
 (
 
-    address_no    INT AUTO_INCREMENT PRIMARY KEY,
-    member_no        INT          NOT NULL,
+    address_no     BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_no      BIGINT       NOT NULL,
     address_name   VARCHAR(50)  NOT NULL,
     recipient_name VARCHAR(100) NOT NULL,
     phone_number   VARCHAR(20)  NOT NULL,

@@ -5,7 +5,7 @@
 <mapper namespace="hello.fclover.mybatis.mapper.CartMapper">
     <insert id="insertCart">
         INSERT INTO cart (goods_no, cart_quan, added_at)
-        VALUES (#{goods_no}, #{cart_quan}, NOW())
+        VALUES (#{goodsNo}, #{cart_quan}, NOW())
     </insert>
 
     <update id="updateCartQuantity">
