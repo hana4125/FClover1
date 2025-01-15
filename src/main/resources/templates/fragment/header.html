@@ -126,7 +126,6 @@
           <th:block th:if="${member == null && seller == null}">
             <a class="pe-2" href="/member/login">로그인</a>
             <a class="pe-2" href="/member/signup">회원가입</a>
-            <a class="pe-2" href="#">고객센터</a>
             <a class="pe-2" href="/seller/login">판매자 로그인</a>
             <a class="pe-2" href="/seller/signup">판매자 가입</a>
           </th:block>
@@ -136,6 +135,7 @@
               <button type="submit" class="pe-2">로그아웃</button>
             </form>
           </th:block>
+          <a class="pe-2" href="/member/notice">고객센터</a>
           <th:block th:if="${seller != null}">
             <a href="/member/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
             <form th:action="@{/seller/logout}" method="post">
