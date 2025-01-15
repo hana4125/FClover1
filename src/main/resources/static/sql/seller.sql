@@ -2,7 +2,7 @@ DROP TABLE seller;
 
 CREATE TABLE seller
 (
-    seller_no       BIGINT          AUTO_INCREMENT PRIMARY KEY,
+    seller_no       BIGINT       AUTO_INCREMENT PRIMARY KEY,
     seller_id       varchar(100) NOT NULL UNIQUE,
     password        varchar(100) DEFAULT NULL,
     name            varchar(20)  NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE seller
     admission_at    datetime     DEFAULT NULL,
     created_at      datetime     DEFAULT CURRENT_TIMESTAMP,
     updated_at      datetime     DEFAULT NULL,
-    FULLTEXT KEY ft_seller_index (company_name) WITH PARSER ngram
+    FULLTEXT KEY ft_idx_seller (company_name) WITH PARSER ngram
 ) ENGINE=InnoDB;
 SELECT * FROM seller;
 

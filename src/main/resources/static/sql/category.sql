@@ -2,8 +2,8 @@
 
 CREATE TABLE category
 (
-    cate_no int primary key not null,
-    cate_name varchar(20)
+    cate_no int primary key,
+    cate_name varchar(20) NOT NULL
 );
 
 insert into category (cate_no, cate_name) values
