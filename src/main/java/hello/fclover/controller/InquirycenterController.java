@@ -124,32 +124,39 @@ public class InquirycenterController {
     //문의사항
     @GetMapping("/question")
     public String question(
-            @RequestParam(defaultValue = "1") Integer page, Model m) {
+            @RequestParam(defaultValue = "1") Integer currentPage, Model m) {
 
         int limit = 10;
-        int listcount = questionService.ListCount();
-        List<Question> list = questionService.BoardList(page, limit);
+        int totalcount = questionService.TotalCount();
+        List<Question> questionlist = questionService.BoardList(currentPage, limit);
 
-        PaginationResult result = new PaginationResult(page, limit, listcount);
-        m.addAttribute("page", page);
-        m.addAttribute("maxpage", result.getMaxpage());
-        m.addAttribute("startpage", result.getStartpage());
-        m.addAttribute("endpage", result.getEndpage());
-        m.addAttribute("listcount", listcount);
-        m.addAttribute("questionlist", list);
+        PaginationResult rt = new PaginationResult(currentPage, limit, totalcount);
+        m.addAttribute("currentPage", currentPage);
+        m.addAttribute("maxpage", rt.getMaxpage());
+        m.addAttribute("startpage", rt.getStartpage());
+        m.addAttribute("endpage", rt.getEndpage());
+        m.addAttribute("totalcount", totalcount);
+        m.addAttribute("questionlist", questionlist);
         m.addAttribute("limit", limit);
         return "user/userQNA";
-    }
-
-    @PostMapping(value ="/question/plus")
-    public String noticeAdd(Question question) {
-        questionService.insertQuestion(question);
-        return "redirect:/inquiry/question";
     }
 
     @GetMapping(value = "/question/write")
     public String questionWrite() {
         return "user/userQNAWrite";
+    }
+
+    @PostMapping(value = "/question/plus")
+    public String noticeAdd(Question question, @RequestParam(required = false) Boolean qalert) {
+        // qalert 값이 null일 경우 "n"으로 설정
+        if (qalert == null) {
+            question.setQalert("n");
+        } else {
+            question.setQalert("y");
+        }
+
+        questionService.insertQuestion(question);
+        return "redirect:/inquiry/question";
     }
 
     //질문보기
