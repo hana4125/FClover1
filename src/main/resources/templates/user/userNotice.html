@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <link rel="icon" th:href="@{/img/user/favicon.png}">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
+  <link rel="stylesheet" href="/css/user/pagination.css">
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -22,7 +24,41 @@
       $("#myPage").click(function() {
         location.href="/myPage";
       })
-    })
+    });
+  </script>
+  <script th:inline="javascript">
+    $(function() {
+      // 검색 버튼 클릭 시
+      $(".search-btn").click(function() {
+        console.log("검색 버튼 클릭됨");
+        const searchWord = $("input[name='search_word']").val();
+        console.log("검색어:", searchWord);
+
+        if(searchWord.trim() === '') {
+          alert("검색어를 입력하세요");
+          $("input[name='search_word']").focus();
+          return false;
+        }
+
+        // 폼 제출
+        console.log("폼 제출 시도");
+        $("form").submit();
+      });
+
+      // Enter 키 입력 시에도 검색 실행
+      $("input[name='search_word']").keypress(function(e) {
+        if(e.keyCode === 13) {
+          e.preventDefault();
+          $(".search-btn").click();
+        }
+      });
+    });
+
+    function filterData() {
+      var selectedValue = document.getElementById('viewcount').value;
+      console.log("선택된 값: " + selectedValue);
+    }
+
   </script>
 </head>
 
@@ -36,7 +72,7 @@
     <!--div headwrap-->
     <section class="header-menu mt-4">
       <a href="#" class="home_link">home</a>
-      <a href="#" class="btn_sub_depth">고객센터</a>
+      <a href="/inquiry/notice" class="btn_sub_depth">고객센터</a>
     </section>
 
     <!--div container-->
@@ -52,15 +88,17 @@
             <div class="sd_wrap" style="width: 170px;">
               <ul class="list_category">
                 <li class="side_item">
-                  <a href="#" class="sd_link">메인</a>
+                  <a href="/" class="sd_link">메인</a>
                 </li>
-                <li class="side_item">공지사항</li>
                 <li class="side_item">
-                  <a href="#" class="sd_link">QnA</a>
+                  <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
+                <li class="side_item">
+                  <a href="/inquiry/question" class="sd_link">QnA</a>
                 </li>
               </ul>
             </div>
           </div>
+          <!-- cscenter -->
         </div>
       </div>
 
@@ -73,20 +111,20 @@
         </div>
 
         <!-- search box -->
-        <div class="info_search-box" style="height: 84px;">
-          <div class="input_btn_box">
-            <input name="search_word" type="text" class="form-control"
-                   placeholder="제목을 입력하세요" th:value="${search_word}" style="width: 408px; height: 44px;">
-            <button type="button" class="btn btn-primary" style="height: 44px">검색</button>
+        <form method="get" action="notice/noti_list">
+          <div class="info_search-box" style="height: 100px;">
+            <div class="input_btn_box">
+              <input type="hidden" name="search_field" value="title">
+              <input name="search_word" type="text" class="form-control"
+                     placeholder="제목을 검색하세요" th:value="${search_word}"
+                     style="width: 408px; height: 44px;">
+              <button type="submit" class="btn btn-primary" style="height: 32px">검색</button>
+            </div>
           </div>
-        </div>
-
+        </form>
         <!-- list_result_wrap -->
         <div>
-          <div class="list_result_wrap">
-            <p class="result_count">
-              <span class="ct_green">[[${listcount}]]</span>건
-            </p>
+          <div class="list_result_wrap mt-3">
             <div class="right_area">
               <div class="form_sel" style="width: 120px;"></div>
             </div>
@@ -95,6 +133,23 @@
 
         <!-- table wrap -->
         <div class="mt-5 tbl_col_wrap">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <p class="result_count">
+              <span class="ct_green">[[${listcount}]]</span>건
+            </p>
+
+            <th:block th:if="${listcount > 0}">
+              <div class="rows" style="width: 110px;">
+                <select class="form-control" id="viewcount" sec:onchange="filterData()">
+                  <option value="전체" selected>전체</option>
+                  <option value="공지사항">공지사항</option>
+                  <option value="이벤트">이벤트</option>
+                </select>
+              </div>
+            </th:block>
+          </div>
+
+
           <table class="table">
             <colgroup>
               <col style="width: 75px;">
@@ -111,42 +166,48 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>1</td>
-              <td>
-                [공지] 2025 교보문고 Prestige 회원 제도 개정 안내
-              </td>
-              <td>고객센터</td>
-              <td>2024.12.31</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                폭설로 인한 배송지연 우려 지역 안내 (12/2~)
-              </td>
-              <td>고객센터</td>
-              <td>2024.12.24</td>
-            </tr>
+            <th:block th:with="num=${listcount - (page - 1) * limit}">
+              <th:block th:each="b, iterStat : ${noticelist}">
+                <tr>
+                  <td><span th:text="${num - (iterStat.index)}"></span></td>
+                  <td>
+                    <div class="ntitle">
+                      <a th:href="@{/inquiry/notice/detail(num=${b.notiNo})}">
+                        <span th:text="${b.notiTitle}"></span>
+                      </a>
+                    </div>
+                  </td>
+                  <td><div th:text="${b.notiName}"></div></td>
+                  <td><div th:text="${#strings.substring(b.notiDate, 2, 10)}"></div></td>
+                </tr>
+              </th:block>
+            </th:block>
             </tbody>
           </table>
-        </div>
 
-        <!--pagination-->
-        <div class="pagination">
-          <button class="btn_page prev" disabled="disabled">
-            <span class="hidden"></span>
-          </button>
-          <div class="page_num">
-
+          <!--pagination-->
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice', '')}"/>
           </div>
-          <button class="btn_page next">
-            <span class="hidden"></span>
-          </button>
-        </div>
 
+          <!--admin 글쓰기-->
+          <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+              <a th:href="@{/inquiry/notice/write}">
+                <button type="button" class="btn btn-primary" style="height: 44px">글쓰기</button>
+              </a>
+            </th:block>
+          </div>
+          <!--admin 글쓰기-->
+        </div>
+        <!-- table wrap -->
       </div>
     </div>
+    <!-- main -->
   </div>
+  <!--div container-->
 </div>
+</div>
+<!-- aside -->
 </body>
 </html>

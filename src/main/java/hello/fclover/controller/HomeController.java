@@ -5,6 +5,7 @@ import hello.fclover.service.CategoryService;
 import hello.fclover.domain.Member;
 import hello.fclover.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
@@ -31,9 +33,13 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        // 카테고리 데이터 가져오기
+        return "redirect:/member/main";
+    }
+
+    @GetMapping("/member/main")
+    public String mainHome(Model model) {
         List<Category> categoryList = categoryService.getCategoryList();
-        model.addAttribute("categoryList", categoryList); // 모델에 데이터 추가
-        return "user/userHome"; // Thymeleaf 템플릿 반환
+        model.addAttribute("categoryList", categoryList);
+        return "user/userHome";
     }
 }

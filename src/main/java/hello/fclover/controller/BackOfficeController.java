@@ -1,20 +1,20 @@
 package hello.fclover.controller;
 
 
+import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
 import hello.fclover.service.BackOfficeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -41,6 +41,16 @@ public class BackOfficeController {
     @GetMapping("/deliveryReady")
     public String deliveryReady() {
         return "backOffice/boDeliveryReady";
+    }
+
+    //배송준비중 데이터 비동기처리
+    @GetMapping("/deliveryReadyAsync")
+    @ResponseBody
+    public List<Delivery> deliveryReadyAsync(ModelAndView mv) {
+        List<Delivery> list = backOfficeService.deliveryReadyOrderSearch();
+
+        System.out.println("=======>여기는 controller list = " + list);
+        return list;
     }
 
 
@@ -87,17 +97,51 @@ public class BackOfficeController {
         return payment;
     }
 
-//    //재고 감소
-//    @GetMapping("/StockCount")
-//    public String StockCount(Model model) {
-//        int goods_no = 3;
-//        int stockCount = backOfficeService.getProduct_stock(goods_no);
-//        int result =  backOfficeService.decrease(stockCount);
-//
-//
-//
-//        return "backOffice/boSellerSettlement";
-//    }
+    //결제완료페이지에서 [배송준비] 버튼 클릭 시
+    @GetMapping("/delivery/ready")
+    @ResponseBody
+    public  void  ready(@RequestParam Long orderId,@RequestParam String userId,Model model) {
+        System.out.println("test1");
+        //조회한 주문정보 기반으로 delivery테이블에 insert하기.
+        backOfficeService.InsertdeliveryReadyList(orderId,userId);
+
+    }
+
+
+    //운송장번호 등록
+    @PostMapping("/trackingNumber/submit")
+    @ResponseBody
+    public ResponseEntity<?> trackingNumberSubmit(@RequestBody Map<String,Object> requestBody) {
+
+        System.out.println("================>여기는 트래킹넘버 컨트롤러 ");
+
+        String deliNo = requestBody.get("deliNo").toString();
+        String deliNum = requestBody.get("deliveryNum").toString();
+        String deliCompany = "CJ대한통운";
+        String deliStatus = "배송중";
+
+
+        backOfficeService.insertTrackingNumber(Integer.valueOf(deliNo),Integer.valueOf(deliNum),deliCompany,deliStatus);
+
+
+        return ResponseEntity.ok().body("운송장 정보가 성공적으로 등록되었습니다.");
+
+    }
+
+
+    //배송중 상태인 데이터 불러오기 deliveryInTransitAsync
+    //배송준비중 데이터 비동기처리
+    @GetMapping("/deliveryInTransitAsync")
+    @ResponseBody
+    public List<Delivery> deliveryInTransitAsync() {
+        List<Delivery> inTransitList = backOfficeService.deliveryInTransitOrderSearch();
+
+        System.out.println("===========>여기는 컨트롤러 inTransitList = " + inTransitList);
+        return inTransitList;
+    }
+
+
+
 
 
 

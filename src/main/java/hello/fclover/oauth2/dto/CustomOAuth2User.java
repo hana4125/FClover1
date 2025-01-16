@@ -2,6 +2,7 @@ package hello.fclover.oauth2.dto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
@@ -21,18 +22,14 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        return List.of();
+        return authorities;
     }
 
     @Override
     public String getName() {
-
-        return oAuth2Response.getName();
-    }
-
-    public String getUsername() {
-
-        return oAuth2Response.getProvider() + " " + oAuth2Response.getName();
+        return oAuth2Response.getProvider() + "_" + oAuth2Response.getProviderId();
     }
 }

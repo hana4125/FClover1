@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>signup</title>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/css/user/signup.css">
+  <script>
+    $(function() {
+        $("#logo").click(function() {
+            location.href = "/";
+        })
+
+        $("#loginBtn").click(function() {
+            location.href = "/member/login";
+        })
+
+        $("#resetPasswordBtn").click(function() {
+            location.href = "/member/reset-password"
+        })
+    })
+  </script>
+</head>
+<body>
+<div class="container w-25 text-center">
+  <div class="mt-5">
+    <img id="logo" src="/images/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-3">
+  </div>
+  <div>
+    <img class="mt-5" src="/images/user/ok.png" alt="확인">
+  </div>
+  <div>
+    <h5 class="fw-bold mt-3 mb-5">입력하신 정보와 일치하는 결과입니다.</h5>
+  </div>
+  <hr>
+</div>
+<div class="container w-25">
+  <div class="fw-bold mt-5 mb-3">온라인 가입 정보</div>
+  <div class="fw-bold mb-3"><span th:text="${member.memberId}"></span></div>
+  <div class="mb-3">가입일 <span th:text="${#temporals.format(member.createdAt, 'yyyy-MM.')}"></span> | 인터넷 네잎클로버</div>
+</div>
+<div class="container w-25 text-center mt-5">
+  <button id="resetPasswordBtn" class="btn btn-outline-primary ps-4 pe-4 pt-2 pb-2">비밀번호 찾기</button>
+  <button id="loginBtn" class="btn btn-primary ps-4 pe-4 pt-2 pb-2">로그인</button>
+</div>
+</body>
+</html>
