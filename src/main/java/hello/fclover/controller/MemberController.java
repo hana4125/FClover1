@@ -102,16 +102,15 @@ public class MemberController {
     }
 
     @PostMapping("/find-id")
-    public String findId(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> findId(@RequestBody Map<String, String> formData) {
 
-        String memberId = memberService.findMemberId(member);
-        if (memberId == null) {
-            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
-            return "redirect:/member/find-id";
-        }
+        String name = formData.get("name");
+        String birthdate = formData.get("birthdate");
+        String email = formData.get("email");
 
-        redirectAttributes.addAttribute("memberId", memberId);
-        return "redirect:/member/find-id-ok";
+
+
+        return ResponseEntity.ok("아이디 찾기 성공");
     }
 
     @GetMapping("/find-id-ok")
