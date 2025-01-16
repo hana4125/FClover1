@@ -5,6 +5,7 @@ import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
+import hello.fclover.service.SellerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -36,11 +37,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
 
 
     private final EmailService emailService;
+    private final NoticeService noticeService;
+    private static final int SIGNUP_SUCCESS = 1;
+    private static final int SIGNUP_FAILURE = 0;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -58,19 +63,25 @@ public class MemberController {
     }
 
     @PostMapping("/signupProcess")
-    public String signupProcess(@ModelAttribute("signupMember") Member member) {
+    public String signupProcess(@ModelAttribute("signupMember") Member member, RedirectAttributes redirectAttributes) {
+
+        String memberIdDuplicate = memberService.isMemberIdDuplicate(member.getMemberId());
+        String sellerIdDuplicate = sellerService.isSellerIdDuplicate(member.getMemberId());
+
+        if (memberIdDuplicate != null || sellerIdDuplicate != null) {
+            redirectAttributes.addFlashAttribute("message", "사용중인 아이디입니다.");
+            return "redirect:/member/signup";
+        }
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-
         int result = memberService.signup(member);
 
-        if (result == 1) {
+        if (result == SIGNUP_SUCCESS) {
             log.info("회원가입 완료");
             return "redirect:/";
         } else {
-            log.info("회원가입 실패");
-            return "error/error";
+            throw new RuntimeException("회원가입 실패");
         }
     }
 
@@ -93,16 +104,15 @@ public class MemberController {
     }
 
     @PostMapping("/find-id")
-    public String findId(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> findId(@RequestBody Map<String, String> formData) {
 
-        String memberId = memberService.findMemberId(member);
-        if (memberId == null) {
-            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
-            return "redirect:/member/find-id";
-        }
+        String name = formData.get("name");
+        String birthdate = formData.get("birthdate");
+        String email = formData.get("email");
 
-        redirectAttributes.addAttribute("memberId", memberId);
-        return "redirect:/member/find-id-ok";
+
+
+        return ResponseEntity.ok("아이디 찾기 성공");
     }
 
     @GetMapping("/find-id-ok")
@@ -132,7 +142,7 @@ public class MemberController {
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(member.getEmail())
-                .subject("비밀번호 재설정")
+                .subject("[네잎클로버] 비밀번호 찾기를 위한 인증 메일이에요.")
                 .message("인증번호 : " + randomNumber)
                 .build();
         emailService.sendMail(emailMessage);
@@ -149,7 +159,7 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memberNo = member.getMemberNo();
+        Long memberNo = member.getMemberNo();
 
         AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
         List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);
