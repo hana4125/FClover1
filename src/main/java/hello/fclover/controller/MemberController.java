@@ -269,10 +269,10 @@ public class MemberController {
         return "redirect:/member/myPage/profile";
     }
 
-    @GetMapping("/myPage/purchaseHistory")
-    public String myPagePurchaseHistory() {
-        return "/user/mypage/userMyPagePurchaseHistory";
-    }
+//    @GetMapping("/myPage/purchaseHistory")
+//    public String myPagePurchaseHistory() {
+//        return "/user/mypage/userMyPagePurchaseHistory";
+//    }
 
     @GetMapping("/myPage/wishlist")
     public String myPageWishlist() {
@@ -327,6 +327,9 @@ public class MemberController {
 
     @GetMapping("/memberPay")
     public String sellerPay(Principal principal,Model model) {
+        if(principal==null){
+            return "redirect:/login";
+        }
         model.addAttribute("username", principal.getName());
         return "user/userPayments";
     }
@@ -392,7 +395,6 @@ public class MemberController {
 
     @GetMapping("/GoodsDetail")
     public String GoodsDetail() {
-//ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
         System.out.println("====");
         return "/user/userGoodsDetail";
     }

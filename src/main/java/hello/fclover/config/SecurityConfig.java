@@ -30,7 +30,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin((formLogin) -> formLogin.loginPage("/member/login")
+        http
+                .formLogin((formLogin) -> formLogin.loginPage("/member/login")
                 .loginProcessingUrl("/member/loginProcess")
                 .usernameParameter("memberId")
                 .passwordParameter("password")
