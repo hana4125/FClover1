@@ -141,7 +141,7 @@ public class MemberController {
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(member.getEmail())
-                .subject("비밀번호 재설정")
+                .subject("[네잎클로버] 비밀번호 찾기를 위한 인증 메일이에요.")
                 .message("인증번호 : " + randomNumber)
                 .build();
         emailService.sendMail(emailMessage);

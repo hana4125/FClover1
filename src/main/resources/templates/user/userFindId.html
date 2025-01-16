@@ -18,6 +18,10 @@
         if (message != null) {
             alert(message);
         }
+
+        $('#certificationBtn').on('click', function() {
+            $('#certificationNumber').css('display', 'flex');
+        });
     })
   </script>
 </head>
@@ -30,8 +34,13 @@
       <div class="d-flex fw-bold mt-3 mb-3">이메일로 찾기</div>
       <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름을 입력해 주세요.">
       <input type="text" class="form-control mb-3" id="birthdate" name="birthdate" placeholder="생년월일 8자리를 입력해 주세요.">
-      <input type="text" class="form-control mb-5" id="email" name="email" placeholder="이메일을 입력해 주세요.">
-      <input type="submit" class="form-control btn btn-success" value="확인">
+      <input type="text" class="form-control mb-3" id="email" name="email" placeholder="이메일을 입력해 주세요.">
+      <div class="d-flex" id="certificationNumber" style="display: none !important">
+        <input type="text" class="form-control mb-3 me-2" placeholder="인증번호 6자리">
+        <button type="button" class="btn btn-outline-primary w-50 h-100">인증번호 재발송</button>
+      </div>
+      <input type="submit" id="submitBtn" class="form-control btn btn-success" value="확인">
+      <button type="button" id="certificationBtn" class="mt-3 btn btn-sm btn-danger">인증버튼</button>
     </form>
   </div>
 </div>
