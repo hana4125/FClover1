@@ -20,3 +20,5 @@ CREATE TABLE QnA(
 DROP TABLE QnA;
 
 select * from QnA;
+
+ALTER TABLE QnA MODIFY COLUMN q_alert ENUM('y', 'n');
