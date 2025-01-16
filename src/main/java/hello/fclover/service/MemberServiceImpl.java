@@ -25,21 +25,28 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper dao;
-    private static final String UPLOAD_DIR = "src/main/resources/static/img/user/upload/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
 
     @Override
     public int signup(Member member) {
+
         return dao.insertMember(member);
     }
 
     @Override
-    public int getMemNum(String memberId) {
-        return dao.selectMemNum(memberId);
+    public int getmemberNo(String memberId) {
+        return dao.selectMemberNo(memberId);
     }
 
     @Override
     public Member findMemberById(String id) {
         return dao.selectMemberById(id);
+    }
+
+    @Override
+    public String isMemberIdDuplicate(String memberId) {
+
+        return dao.isMemberIdDuplicate(memberId);
     }
 
     @Override
@@ -84,8 +91,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<AddressBook> getDeliveryAddress(int memNum) {
-        return dao.selectAddressBook(memNum);
+    public List<AddressBook> getDeliveryAddress(Long memberNo) {
+        return dao.selectAddressBook(memberNo);
     }
 
     @Override
@@ -104,18 +111,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public AddressBook getDefaultAddress(int memNum) {
-        return dao.selectDefaultAddress(memNum);
+    public AddressBook getDefaultAddress(Long memberNo) {
+        return dao.selectDefaultAddress(memberNo);
     }
 
     @Override
-    public int checkDefaultAddress(int addressNum) {
-        return dao.selectIsDefault(addressNum);
+    public int checkDefaultAddress(int addressNo) {
+        return dao.selectIsDefault(addressNo);
     }
 
     @Override
-    public int removeAddressBook(int addressNum) {
-        return dao.deleteAddressBook(addressNum);
+    public int removeAddressBook(int addressNo) {
+        return dao.deleteAddressBook(addressNo);
     }
 
     @Override

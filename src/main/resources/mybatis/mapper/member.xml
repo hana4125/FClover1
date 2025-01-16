@@ -23,8 +23,12 @@
         SELECT member_id FROM member WHERE name = #{name} AND birthdate = #{birthdate} AND email = #{email}
     </select>
 
+    <select id="isMemberIdDuplicate">
+        SELECT member_id FROM member WHERE member_id = #{memberId}
+    </select>
+
     <select id="selectMemberResetPassword">
-        SELECT mem_num FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
+        SELECT member_no FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
     </select>
 
     <update id="updateProfile">
@@ -35,8 +39,8 @@
         UPDATE member SET profile_picture = null WHERE member_id = #{memberId}
     </update>
 
-    <select id="selectMemNum">
-        SELECT mem_num FROM member WHERE member_id = #{memberId}
+    <select id="selectMemberNo">
+        SELECT member_no FROM member WHERE member_id = #{memberId}
     </select>
 
     <select id="selectMember">
@@ -52,31 +56,31 @@
     </delete>
 
     <insert id="insertAddressBook">
-        INSERT INTO address_book (mem_num, address_name, recipient_name, phone_number, address)
-        VALUES (#{memNum}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
+        INSERT INTO address_book (member_no, address_name, recipient_name, phone_number, address)
+        VALUES (#{memberNo}, #{addressName},#{recipientName}, #{phoneNumber}, #{address})
     </insert>
 
     <select id="selectAddressBook">
-        SELECT * FROM address_book WHERE mem_num = #{memNum}
+        SELECT * FROM address_book WHERE member_no = #{memberNo}
     </select>
 
     <update id="updateDefaultAddress">
         UPDATE address_book
         SET is_default = CASE
-                             WHEN address_num = #{addressNum} THEN 1
+                             WHEN address_no = #{addressNo} THEN 1
                              ELSE 0
             END
     </update>
 
     <select id="selectDefaultAddress">
-        SELECT * FROM address_book WHERE mem_num = #{mem_num} AND is_default = 1
+        SELECT * FROM address_book WHERE member_no = #{member_no} AND is_default = 1
     </select>
 
     <select id="selectIsDefault">
-        SELECT is_default FROM address_book WHERE address_num = #{addressNum}
+        SELECT is_default FROM address_book WHERE address_no = #{addressNo}
     </select>
 
     <delete id="deleteAddressBook">
-        DELETE FROM address_book WHERE address_num = #{addressNum}
+        DELETE FROM address_book WHERE address_no = #{addressNo}
     </delete>
 </mapper>

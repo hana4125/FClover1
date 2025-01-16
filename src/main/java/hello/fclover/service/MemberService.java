@@ -5,16 +5,17 @@ import hello.fclover.domain.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 public interface MemberService {
 
     int signup(Member member);
 
-    int getMemNum(String memberId);
+    int getmemberNo(String memberId);
 
     Member findMemberById(String memberId);
+
+    String isMemberIdDuplicate(String memberId);
 
     String findMemberId(Member member);
 
@@ -32,7 +33,7 @@ public interface MemberService {
 
     void setDefaultAddress(int addressId);
 
-    List<AddressBook> getDeliveryAddress(int memNum);
+    List<AddressBook> getDeliveryAddress(Long memberNo);
 
     Member isMemberExists(String memberId, String password);
 
@@ -40,11 +41,11 @@ public interface MemberService {
 
     void removeAccount(String memberId);
 
-    AddressBook getDefaultAddress(int memNum);
+    AddressBook getDefaultAddress(Long memberNo);
 
-    int checkDefaultAddress(int addressNum);
+    int checkDefaultAddress(int addressNo);
 
-    int removeAddressBook(int addressNum);
+    int removeAddressBook(int addressNo);
 
     String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
 }

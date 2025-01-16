@@ -1,0 +1,17 @@
+.content-area {
+    min-height: 500px;
+
+}
+.button-group {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+.btn-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.notice-buttons {
+    margin-top: -10px;
+}

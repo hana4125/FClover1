@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.fclover.mybatis.mapper.QuestionMapper">
+
+    <select id="TotalCount" resultType="int">
+        select count(*) from QnA
+    </select>
+
+    <select id="BoardList" parameterType="map" resultType="Question">
+        SELECT q_no as qno,
+               q_name as qname,
+               q_create_at as qcreateat,
+               q_content as qcontent,
+               q_title as qtitle
+        FROM QnA
+        ORDER BY q_create_at DESC
+            LIMIT #{start}, #{limit}
+    </select>
+
+    <insert id="insertQuestion">
+        <selectKey resultType="int" order="BEFORE" keyProperty="qno" keyColumn="q_no">
+            select IFNULL(max(q_no), 0) + 1 from QnA
+        </selectKey>
+        insert into QnA
+        (q_no,q_create_at,
+        member_id, q_response_at,
+        q_name, q_type, q_file, q_title,
+        q_content,response_phone,response_email,
+        q_alert,q_re_ref,q_re_lev,q_re_seq)
+        values
+        (#{qno},now(),
+        #{memberid}, #{qresponseat},
+        #{qname},#{qtype},#{qfile},#{qtitle},
+        #{qcontent},#{responsephone},#{responseemail},
+        #{qalert},#{qreref},#{qrelev},#{qreseq})
+    </insert>
+
+    <select id="Detail" parameterType="int" resultType="Question">
+        SELECT q_no,
+               q_create_at,
+               member_id,
+               q_response_at,
+               q_name,
+               q_type,
+               q_file,
+               q_title,
+               q_content,
+               response_phone,
+               response_email,
+               q_alert,
+               q_re_ref,
+               q_re_lev,
+               q_re_seq
+        FROM QnA
+        WHERE q_no = #{num}
+    </select>
+
+
+</mapper>

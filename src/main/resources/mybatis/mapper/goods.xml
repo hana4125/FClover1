@@ -4,4 +4,69 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
 
+    <insert id="goodsInsertText">
+            insert into Goods
+            (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
+              goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
+            values(#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter},  #{goodsCreateAt},
+                   #{goodsCount}, current_date , #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
+        </insert>
+        <select id="goodsNoselect">
+            select goods_no
+            from goods
+            where seller_no = #{sellerNo} and goods_name=#{goodsName}
+        </select>
+
+    <!-- 모든 카테고리에 있는 상품 조회 -->
+    <select id="findAll" resultType="hello.fclover.domain.Goods">
+        SELECT *
+        FROM goods
+        WHERE cate_no = #{cate_no}
+        ORDER BY
+        <choose>
+            <when test="'latest'.equals(sort)">goods_date DESC</when>
+            <when test="'sales'.equals(sort)">goods_count DESC</when>
+            <when test="'highPrice'.equals(sort)">goods_price DESC</when>
+            <when test="'lowPrice'.equals(sort)">goods_price ASC</when>
+            <otherwise>goods_date DESC</otherwise>
+        </choose>
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 전체 상품 수 계산 -->
+    <select id="countGoods" resultType="int">
+        SELECT COUNT(*)
+        FROM goods
+        WHERE cate_no = #{cate_no}
+    </select>
+
+    <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
+        SELECT *
+        FROM goods
+        WHERE goods_no = #{goods_no}
+    </select>
+
+    <!-- 키워드로 상품 검색 -->
+    <select id="findGoodsByKeyword" resultType="hello.fclover.domain.Goods">
+        SELECT
+            g.GOODS_NO AS goodsNo,
+            g.SELLER_NO AS sellerNo,
+            g.CATE_NO AS cateNo,
+            g.GOODS_NAME AS goodsName,
+            g.GOODS_CONTENT AS goodsContent,
+            g.GOODS_PRICE AS goodsPrice,
+            g.GOODS_WRITER AS goodsWriter,
+            s.company_name AS companyName,
+            g.GOODS_CREATE_AT AS goodsCreateAt,
+            g.GOODS_COUNT AS goodsCount
+        FROM GOODS g
+        JOIN seller s ON g.SELLER_NO = s.seller_no
+        WHERE
+            MATCH(g.GOODS_NAME, g.GOODS_CONTENT, g.GOODS_WRITER)
+            AGAINST (#{keyword} IN BOOLEAN MODE)
+            OR
+            MATCH(s.company_name)
+            AGAINST (#{keyword} IN BOOLEAN MODE)
+    </select>
+
 </mapper>
