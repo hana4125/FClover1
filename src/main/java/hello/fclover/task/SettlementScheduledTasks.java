@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -38,7 +39,7 @@ public class SettlementScheduledTasks {
         this.settlementMapper = settlementMapper;
     }
 
-    //@Scheduled(cron "0 * * * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
     @SchedulerLock(name = "ScheduledTask_run")
     public void dailySettlement(){
         LocalDate yesterday = LocalDate.now().minusDays(1);
