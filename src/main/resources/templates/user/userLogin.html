@@ -19,16 +19,31 @@
               $("#remember-me").prop("checked", true);
           }
 
+          $("form").submit(function() {
+              const memberId = $("#memberId").val();
+              const password = $("#password").val();
+
+              if (memberId === "") {
+                  alert("아이디를 입력하세요");
+                  return false;
+              }
+
+              if (password === "") {
+                  alert("비밀번호를 입력하세요");
+                  return false;
+              }
+          })
       })
   </script>
 </head>
 <body>
 <div class="container w-25 text-center">
   <div class="mt-5">
-    <img id="logo" src="/img/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-5">
+    <img id="logo" src="/images/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-5">
     <form th:action="@{/member/loginProcess}" method="post">
       <input type="text" class="form-control mb-3" id="memberId" name="memberId" th:value="${rememberId}" placeholder="아이디">
       <input type="password" class="form-control mb-4" id="password" name="password" placeholder="비밀번호">
+      <input type="hidden" name="userType" value="member">
       <div id="message" style="color: red" th:text="${message}" class="text-start mb-1"></div>
       <input type="submit" class="form-control btn btn-success" value="로그인">
       <div class="d-flex mt-2">
@@ -43,8 +58,8 @@
     </form>
   </div>
   <div class="social-icon mt-5">
-    <a href="/oauth2/authorization/naver"><img src="/img/user/social/naver.png" alt="naver" class="ms-2 me-2"></a>
-    <a href="/oauth2/authorization/google"><img src="/img/user/social/google.png" alt="google" class="ms-2 me-2"></a>
+    <a href="/oauth2/authorization/naver"><img src="/images/user/social/naver.png" alt="naver" class="ms-2 me-2"></a>
+    <a href="/oauth2/authorization/google"><img src="/images/user/social/google.png" alt="google" class="ms-2 me-2"></a>
   </div>
 </div>
 </body>

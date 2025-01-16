@@ -1,14 +1,17 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Seller;
 import hello.fclover.domain.Settlement;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -28,4 +31,13 @@ public class SellerServiceImpl implements SellerService {
         return settlement;
     }
 
+    @Override
+    public int signup(Seller seller) {
+        return dao.insertSeller(seller);
+    }
+
+    @Override
+    public Seller findSellerById(String sellerId) {
+        return dao.selectSellerById(sellerId);
+    }
 }

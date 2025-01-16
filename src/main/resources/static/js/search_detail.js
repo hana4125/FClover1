@@ -5,7 +5,7 @@
 /** @todo selectmenu 메소드 대체하기 */
 $(function () {
   //출간일 날짜 조정
-  $("#selMonInterval").on('selectmenuchange', function () {
+  $("#selMonInterval").on('change', function () {
     adjustDate(this.value);
   });
 
@@ -14,8 +14,7 @@ $(function () {
 
   //날짜가 변경될 경우 직접입력으로 선택되는 이벤트
   $("#rlseStr, #rlseEnd").change(function () {
-    $("#selMonInterval").val("").selectmenu("refresh").trigger(
-        "selectmenuselect");
+    $("#selMonInterval").val("");
   });
 
   //시작 날짜 체크
@@ -72,26 +71,27 @@ $(function () {
     }
   });
 
-  $("#cateSel").on('selectmenuchange', function () {
-    if ($("#typeSel").val() == "") {
-      alert({
-        "title": "상품군을 선택해주세요.",
-        "confirm": {"label": "확인"}
-      });
-    }
+  // datepicker 설정
+  $(".datepicker").on("click", function () {
+    $(this).prev().datepicker({
+      format: "yyyy. mm. dd",
+      autoclose: true,
+      showOnFocus: false
+    });
+    $(this).prev().datepicker("update");
+    $(this).prev().datepicker("show");
   });
-
 });
 
 //상세검색 실행
 /** @todo 프론트에서 보내지는 양식에 맞춰 상세검색 로직 짜기 */
 function goDetailSearchResult() {
-  var cateVal = $("#cateSel").val();
+  let cateVal = $("#cateSel").val();
 
   //Input으로 끝나는 id객체중 맨 처음값이 대표 키워드로 설정되게 세팅
   $("input[id$='Input']").each(function (index, element) {
     if ($(this).val() != "") {
-      var repKeywordVal = $(this).val().trim();
+      let repKeywordVal = $(this).val().trim();
       $("#repKeywordHidden").val(repKeywordVal);
       $("#detailSearchForm").append(
           $('<input type="hidden" value="' + $(this).attr('id').replace(
@@ -100,13 +100,13 @@ function goDetailSearchResult() {
     }
   });
 
-  var cnameVal = checkKeyword($("#cnameInput").val().trim());
-  var chrcVal = checkKeyword($("#chrcDetailInput").val().trim());
-  var pbcmVal = checkKeyword($("#pbcmDetailInput").val().trim());
-  var combineVal = cnameVal + chrcVal + pbcmVal;
+  let cnameVal = checkKeyword($("#cnameInput").val().trim());
+  let chrcVal = checkKeyword($("#chrcDetailInput").val().trim());
+  let pbcmVal = checkKeyword($("#pbcmDetailInput").val().trim());
+  let combineVal = cnameVal + chrcVal + pbcmVal;
 
   if (combineVal == "") {
-    alert("상품명/저자/출판사/검색키워드(주제어)중 하나 이상을 입력해주세요");
+    alert("상품명/저자/출판사 중 하나 이상을 입력해주세요");
     return false;
   }
   if (($("#saprmin").val() != "" && $("#saprmax").val() == "") || ($(
@@ -150,11 +150,9 @@ function goDetailSearchResult() {
 
 //초기화
 function initValue() {
-  $("#cateSel").val("전체").selectmenu().selectmenu("refresh").trigger(
-      "selectmenuselect");
+  $("#cateSel").val("전체").change();
+  $("#selMonInterval").val("1m").change();
 
-  $("#selMonInterval").val("1m").selectmenu().selectmenu("refresh").trigger(
-      "selectmenuselect");
   adjustDate('1m');
   $("#saprmin").val("");
   $("#saprmax").val("");
@@ -167,15 +165,15 @@ function initValue() {
 //날짜 조정
 function adjustDate(param) {
 
-  var $startDt = $("#rlseStr");
-  var $endDt = $("#rlseEnd");
+  let $startDt = $("#rlseStr");
+  let $endDt = $("#rlseEnd");
 
-  var nowDate = new Date();
-  var yy = nowDate.getFullYear() + "";
-  var mm = nowDate.getMonth() + 1;
-  var mm2 = leadingZeros(mm, 2) + "";
-  var dd = leadingZeros(nowDate.getDate(), 2) + "";
-  var today = yy + ". " + mm2 + ". " + dd;
+  let nowDate = new Date();
+  let yy = nowDate.getFullYear() + "";
+  let mm = nowDate.getMonth() + 1;
+  let mm2 = leadingZeros(mm, 2) + "";
+  let dd = leadingZeros(nowDate.getDate(), 2) + "";
+  let today = yy + ". " + mm2 + ". " + dd;
 
   if (param == "all") {
     $startDt.val("");
@@ -201,11 +199,11 @@ function adjustDate(param) {
 }
 
 function leadingZeros(n, digits) {
-  var zero = '';
+  let zero = '';
   n = n.toString();
 
   if (n.length < digits) {
-    for (var i = 0; i < digits - n.length; i++) {
+    for (let i = 0; i < digits - n.length; i++) {
       zero += '0';
     }
   }
@@ -230,7 +228,7 @@ function uncomma(str) {
 
 // 검색어 체크
 function checkKeyword(text) {
-  var checkValue = text + "";
+  let checkValue = text + "";
   checkValue = checkValue.replace(/&/gi, "&amp;");
   checkValue = checkValue.replace(/\\/gi, "&#92;");
   checkValue = checkValue.replace(/</gi, "&lt;");

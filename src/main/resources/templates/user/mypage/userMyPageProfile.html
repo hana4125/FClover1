@@ -89,10 +89,10 @@
                 <th class="text-start align-top">프로필 이미지</th>
                 <td class="text-center align-top">
                   <div class="thumb-box border border-2 border-dark-subtle" th:if="${member.profilePicture == null}">
-                    <img src="/img/user/profile.png" class="preview" alt="기본 프로필 이미지">
+                    <img src="/images/user/profile.png" class="preview" alt="기본 프로필 이미지">
                   </div>
                   <div class="thumb-box border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-                    <img th:src="@{|/img/user/upload/${member.profilePicture}|}" class="preview" alt="업로드된 프로필 이미지">
+                    <img th:src="@{|/images/user/upload/${member.profilePicture}|}" class="preview" alt="업로드된 프로필 이미지">
                   </div>
                 </td>
                 <td></td>

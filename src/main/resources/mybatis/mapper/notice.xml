@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.fclover.mybatis.mapper.NoticeMapper">
+
+    <select id="getListCount" resultType="int">
+        select count(*) from NOTICE
+    </select>
+
+    <select id="getBoardList" parameterType="map" resultType="Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        ORDER BY noti_Date DESC
+            LIMIT #{start}, #{limit}
+    </select>
+
+    <insert id="insertNotice">
+        <selectKey resultType="int" order="BEFORE" keyProperty="notiNo" keyColumn="noti_No">
+            select IFNULL(max(noti_No), 0) + 1 from NOTICE
+        </selectKey>
+        insert into NOTICE
+        (noti_No,
+        noti_Title, noti_Name,
+        noti_Content, noti_Date)
+        values
+        (#{notiNo},
+        #{notiTitle}, #{notiName},
+        #{notiContent}, now())
+    </insert>
+
+    <select id="getDetail" parameterType="int" resultType="Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        WHERE noti_No = #{num}
+    </select>
+
+    <select id="getSearchList" parameterType="map" resultType="Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        WHERE noti_Title LIKE  #{search_word}
+        ORDER BY noti_Date DESC
+            LIMIT #{start}, #{size}
+    </select>
+
+
+    <select id="getSearchListCount" resultType="int">
+        select  count(*)
+        from NOTICE
+        <where>
+            <if test="search_word != null and search_word != ''">
+                noti_Title LIKE #{search_word}
+            </if>
+        </where>
+    </select>
+
+</mapper>

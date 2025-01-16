@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.fclover.mybatis.mapper.CartMapper">
+    <insert id="insertCart">
+        INSERT INTO cart (goods_no, cart_quan, added_at)
+        VALUES (#{goods_no}, #{cart_quan}, NOW())
+    </insert>
+
+    <update id="updateCartQuantity">
+        UPDATE cart
+        SET cart_quan = cart_quan + 1, added_at = NOW()
+        WHERE goods_no = #{goods_no}
+    </update>
+
+    <select id="isCartExists" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM cart
+        WHERE goods_no = #{goods_no}
+    </select>
+</mapper>

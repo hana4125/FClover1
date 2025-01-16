@@ -1,17 +1,16 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.AddressBook;
-import hello.fclover.domain.Member;
-import hello.fclover.domain.Payment;
-import hello.fclover.domain.PaymentReq;
+import hello.fclover.domain.*;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
+import hello.fclover.service.NoticeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import hello.fclover.service.PaymentService;
@@ -23,10 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
@@ -142,11 +140,8 @@ public class MemberController {
     }
 
     @GetMapping("/myPage")
-    public String myPageMain(Principal principal) {
+    public String myPageMain() {
 
-        if (principal == null) {
-            return "redirect:/member/login";
-        }
         return "/user/mypage/userMyPageMain";
     }
 
@@ -154,10 +149,10 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memNum = member.getMemNum();
+        int memberNo = member.getMemberNo();
 
-        AddressBook defaultAddress = memberService.getDefaultAddress(memNum);
-        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memNum);
+        AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
+        List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);
 
         model.addAttribute("defaultAddress", defaultAddress);
         model.addAttribute("addressBookList", addressBookList);
@@ -168,20 +163,20 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memNum = memberService.getMemNum(memberId);
-        addressBook.setMemNum(memNum);
+        int memberNo = memberService.getmemberNo(memberId);
+        addressBook.setMemberNo(memberNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
     }
 
     @GetMapping("/deleteAddressBook")
-    public String deleteDeliveryAddress(@RequestParam int addressNum, RedirectAttributes redirectAttributes) {
-        int result = memberService.checkDefaultAddress(addressNum);
+    public String deleteDeliveryAddress(@RequestParam int addressNo, RedirectAttributes redirectAttributes) {
+        int result = memberService.checkDefaultAddress(addressNo);
 
         if (result == 1) {
             redirectAttributes.addFlashAttribute("message", "기본 배송지는 삭제하실수 없습니다.");
         } else {
-            memberService.removeAddressBook(addressNum);
+            memberService.removeAddressBook(addressNo);
         }
         return "redirect:/member/myPage/addressBook";
     }
@@ -190,8 +185,8 @@ public class MemberController {
 
     @Transactional
     @PostMapping("/defaultAddress")
-    public String defaultAddress(@RequestParam int addressNum) {
-        memberService.setDefaultAddress(addressNum);
+    public String defaultAddress(@RequestParam int addressNo) {
+        memberService.setDefaultAddress(addressNo);
         return "redirect:/member/myPage/addressBook";
     }
 
@@ -396,6 +391,4 @@ public class MemberController {
         System.out.println("====");
         return "/user/userGoodsDetail";
     }
-
 }
-
