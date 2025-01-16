@@ -9,12 +9,13 @@ import java.util.List;
 
 public interface QuestionService {
 
+    int TotalCount();
 
-    int ListCount();
-
-    List<Question> BoardList(Integer page, int limit);
+    List<Question> BoardList(Integer currentPage, int limit);
 
     void insertQuestion(Question question);
 
     Question Detail(int no);
+
+
 }

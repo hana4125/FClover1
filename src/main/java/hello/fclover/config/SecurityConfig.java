@@ -60,7 +60,9 @@ public class SecurityConfig {
                                 "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
                                 "/member/reset-password", "/inquiry/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
-                        .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
+                        .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
+                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
+                               "/inquiry/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
                         .anyRequest().authenticated()
 
