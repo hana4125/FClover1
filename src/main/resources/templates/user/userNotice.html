@@ -72,7 +72,7 @@
     <!--div headwrap-->
     <section class="header-menu mt-4">
       <a href="#" class="home_link">home</a>
-      <a href="/member/notice" class="btn_sub_depth">고객센터</a>
+      <a href="/inquiry/notice" class="btn_sub_depth">고객센터</a>
     </section>
 
     <!--div container-->
@@ -91,9 +91,9 @@
                   <a href="/" class="sd_link">메인</a>
                 </li>
                 <li class="side_item">
-                  <a href="#" class="sd_link">공지사항</a></li>
+                  <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
                 <li class="side_item">
-                  <a href="/member/inquiry" class="sd_link">QnA</a>
+                  <a href="/inquiry/question" class="sd_link">QnA</a>
                 </li>
               </ul>
             </div>
@@ -172,7 +172,7 @@
                   <td><span th:text="${num - (iterStat.index)}"></span></td>
                   <td>
                     <div class="ntitle">
-                      <a th:href="@{/member/notice/detail(num=${b.notiNo})}">
+                      <a th:href="@{/inquiry/notice/detail(num=${b.notiNo})}">
                         <span th:text="${b.notiTitle}"></span>
                       </a>
                     </div>
@@ -187,13 +187,13 @@
 
           <!--pagination-->
           <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <th:block th:replace="~{fragment/paging :: paging('/member/notice', '')}"/>
+            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice', '')}"/>
           </div>
 
           <!--admin 글쓰기-->
           <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
             <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-              <a th:href="@{/member/notice/write}">
+              <a th:href="@{/inquiry/notice/write}">
                 <button type="button" class="btn btn-primary" style="height: 44px">글쓰기</button>
               </a>
             </th:block>

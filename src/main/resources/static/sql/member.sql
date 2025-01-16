@@ -1,7 +1,6 @@
 CREATE TABLE member
 (
-
-    member_no       INT AUTO_INCREMENT PRIMARY KEY,
+    member_no       BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id       VARCHAR(100) NOT NULL UNIQUE,
     password        VARCHAR(100),
     name            VARCHAR(100) NOT NULL,

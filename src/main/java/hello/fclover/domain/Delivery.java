@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Delivery {
 
-    private Long deliId;
+    private Long deliNo;
     private Long orderId;
     private String userId;
     private String deliStatus;
-    private BigDecimal deliNum;
-    private LocalDateTime deliCompany;
+    private int deliNum;
+    private String deliCompany;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

@@ -5,6 +5,7 @@ import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
+import hello.fclover.service.SellerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -36,10 +37,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+
+
     private final EmailService emailService;
     private final NoticeService noticeService;
+    private static final int SIGNUP_SUCCESS = 1;
+    private static final int SIGNUP_FAILURE = 0;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -57,19 +63,25 @@ public class MemberController {
     }
 
     @PostMapping("/signupProcess")
-    public String signupProcess(@ModelAttribute("signupMember") Member member) {
+    public String signupProcess(@ModelAttribute("signupMember") Member member, RedirectAttributes redirectAttributes) {
+
+        String memberIdDuplicate = memberService.isMemberIdDuplicate(member.getMemberId());
+        String sellerIdDuplicate = sellerService.isSellerIdDuplicate(member.getMemberId());
+
+        if (memberIdDuplicate != null || sellerIdDuplicate != null) {
+            redirectAttributes.addFlashAttribute("message", "사용중인 아이디입니다.");
+            return "redirect:/member/signup";
+        }
 
         String encPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encPassword);
-
         int result = memberService.signup(member);
 
-        if (result == 1) {
+        if (result == SIGNUP_SUCCESS) {
             log.info("회원가입 완료");
             return "redirect:/";
         } else {
-            log.info("회원가입 실패");
-            return "error/error";
+            throw new RuntimeException("회원가입 실패");
         }
     }
 
@@ -92,16 +104,15 @@ public class MemberController {
     }
 
     @PostMapping("/find-id")
-    public String findId(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> findId(@RequestBody Map<String, String> formData) {
 
-        String memberId = memberService.findMemberId(member);
-        if (memberId == null) {
-            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
-            return "redirect:/member/find-id";
-        }
+        String name = formData.get("name");
+        String birthdate = formData.get("birthdate");
+        String email = formData.get("email");
 
-        redirectAttributes.addAttribute("memberId", memberId);
-        return "redirect:/member/find-id-ok";
+
+
+        return ResponseEntity.ok("아이디 찾기 성공");
     }
 
     @GetMapping("/find-id-ok")
@@ -131,7 +142,7 @@ public class MemberController {
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(member.getEmail())
-                .subject("비밀번호 재설정")
+                .subject("[네잎클로버] 비밀번호 찾기를 위한 인증 메일이에요.")
                 .message("인증번호 : " + randomNumber)
                 .build();
         emailService.sendMail(emailMessage);
@@ -148,7 +159,7 @@ public class MemberController {
     public String myPageDeliveryAddressBook(Principal principal, Model model) {
         String memberId = principal.getName();
         Member member = memberService.findMemberById(memberId);
-        int memberNo = member.getMemberNo();
+        Long memberNo = member.getMemberNo();
 
         AddressBook defaultAddress = memberService.getDefaultAddress(memberNo);
         List<AddressBook> addressBookList = memberService.getDeliveryAddress(memberNo);
@@ -390,85 +401,4 @@ public class MemberController {
         System.out.println("====");
         return "/user/userGoodsDetail";
     }
-
-    //공지사항
-    @GetMapping("/notice")
-    public String notice(
-            @RequestParam(defaultValue = "1") Integer page, Model m) {
-
-        int limit = 10;
-        int listcount = noticeService.getListCount();
-        List<Notice> list = noticeService.getBoardList(page, limit);
-
-        PaginationResult result = new PaginationResult(page, limit, listcount);
-        m.addAttribute("page", page);
-        m.addAttribute("maxpage", result.getMaxpage());
-        m.addAttribute("startpage", result.getStartpage());
-        m.addAttribute("endpage", result.getEndpage());
-        m.addAttribute("listcount", listcount);
-        m.addAttribute("noticelist", list);
-        m.addAttribute("limit", limit);
-        return "user/userNotice";
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(value = "/notice/write")
-    public String noticeWrite() {
-        return "user/userWrite";
-    }
-
-    @PostMapping(value ="/notice/add")
-    public String noticeAdd(Notice notice) {
-        noticeService.insertNotice(notice);
-        return "redirect:/member/notice";
-    }
-
-    @GetMapping(value = "/notice/detail")
-    public ModelAndView Detail(
-            int num, ModelAndView mv,
-            HttpServletRequest request,
-            String beforeURL, HttpSession session) {
-
-        Notice notice = noticeService.getDetail(num);
-
-        if (notice == null) {
-            mv.setViewName("error/error");
-            mv.addObject("url",request.getRequestURL());
-            mv.addObject("message","상세보기 실패입니다.");
-        }else {
-            mv.setViewName("user/userNoticeDetail");
-            mv.addObject("notidata", notice);
-        }
-        return mv;
-    }
-
-    //공지사항 검색
-    @GetMapping(value = "/notice/noti_list")
-    public ModelAndView noticeList(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "3") int limit,
-            ModelAndView mv,
-            @RequestParam(defaultValue = "") String search_word)
-    {
-        System.out.println("페이지: " + page);
-        System.out.println("검색어: " + search_word);
-
-        int listcount = noticeService.getSearchListCount(search_word);
-        List<Notice> list = noticeService.getSearchList( search_word, page, limit);
-        PaginationResult result = new PaginationResult(page, limit, listcount);
-
-        System.out.println("listcount = " + listcount);
-        System.out.println("noticelist = " + list);
-
-        mv.setViewName("user/userNotice");
-        mv.addObject("page", page);
-        mv.addObject("maxpage",result.getMaxpage());
-        mv.addObject("startpage",result.getStartpage());
-        mv.addObject("endpage",result.getEndpage());
-        mv.addObject("noticelist",list);
-        mv.addObject("search_word",search_word);
-        mv.addObject("limit",limit);
-        return mv;
-    }
-
 }

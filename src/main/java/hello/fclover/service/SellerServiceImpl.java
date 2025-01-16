@@ -6,10 +6,12 @@ import hello.fclover.mybatis.mapper.SellerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -37,5 +39,10 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public Seller findSellerById(String sellerId) {
         return dao.selectSellerById(sellerId);
+    }
+
+    @Override
+    public String isSellerIdDuplicate(String sellerId) {
+        return dao.isSellerIdDuplicate(sellerId);
     }
 }

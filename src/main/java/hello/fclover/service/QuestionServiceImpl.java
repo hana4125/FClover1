@@ -2,9 +2,8 @@ package hello.fclover.service;
 
 
 
-import hello.fclover.domain.Inquiry;
-import hello.fclover.domain.Notice;
-import hello.fclover.mybatis.mapper.InquiryMapper;
+import hello.fclover.domain.Question;
+import hello.fclover.mybatis.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,9 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InquiryServiceImpl implements InquiryService {
+public class QuestionServiceImpl implements QuestionService {
 
-    private final InquiryMapper dao;
+    private final QuestionMapper dao;
 
 
     @Override
@@ -26,7 +25,7 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public List<Inquiry> BoardList(Integer page, int limit) {
+    public List<Question> BoardList(Integer page, int limit) {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
 
         int startrow=(page-1)*limit;
@@ -36,6 +35,15 @@ public class InquiryServiceImpl implements InquiryService {
         return dao.BoardList(map);
     }
 
+    @Override
+    public void insertQuestion(Question question) {
+        dao.insertQuestion(question);
+    }
+
+    @Override
+    public Question Detail(int no) {
+        return dao.Detail(no);
+    }
 
 
 }

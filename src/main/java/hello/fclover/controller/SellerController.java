@@ -1,30 +1,40 @@
 package hello.fclover.controller;
 
 
+import hello.fclover.domain.Goods;
 import hello.fclover.domain.Seller;
+import hello.fclover.service.MemberService;
+import hello.fclover.service.GoodsService;
 import hello.fclover.service.SellerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.math.BigInteger;
 import java.security.Principal;
+import java.io.IOException;
+import java.util.List;
 
 
 @Slf4j
 @Controller
+
 @RequiredArgsConstructor
 @RequestMapping(value="/seller")
 public class SellerController {
 
+    private final MemberService memberService;
     private final SellerService sellerService;
+    private final GoodsService goodsService;
     private final PasswordEncoder passwordEncoder;
 
     @ModelAttribute("seller")
@@ -36,6 +46,34 @@ public class SellerController {
         }
         return null;
     }
+@GetMapping("/addSingleProduct")
+    public String addSingleProduct(Model model, Goods goods) {
+
+        return "seller/sellerAddSingleProduct";
+    }
+    @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public String addSingleProductProcess(@RequestPart("goods") Goods goods,
+            @RequestPart("goodsImages") List<MultipartFile> images,
+                                          Principal principal) throws IOException {
+        System.out.println("컨트롤단");
+        for (MultipartFile file : images) {
+            System.out.println("goods:" + file.getOriginalFilename());
+        }
+
+        String sellerId = principal.getName();
+        Seller seller = sellerService.findSellerById(sellerId);
+        String businessNumber = seller.getBusinessNumber();
+
+        System.out.println("goods:" + goods);
+        goodsService.goodsSingleInsert(goods, images, businessNumber);
+        return "seller/sellerAddSingleProduct"; // 성공 후 상세 페이지로 이동
+
+    }
+    @GetMapping("/productDetail")
+    public String productDetail(Model model) {
+        return "seller/sellerProductDetail";
+    }
+
 
     @GetMapping("/main")
     public String signup(Principal principal) {
@@ -53,11 +91,21 @@ public class SellerController {
     }
 
     @PostMapping("/signupProcess")
-    public String sellerSignup(HttpServletRequest request) {
+    public String sellerSignup(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        String sellerId = request.getParameter("sellerId");
+
+        String memberIdDuplicate = memberService.isMemberIdDuplicate(sellerId);
+        String sellerIdDuplicate = sellerService.isSellerIdDuplicate(sellerId);
+
+        if (memberIdDuplicate != null || sellerIdDuplicate != null) {
+            redirectAttributes.addFlashAttribute("message", "사용중인 아이디입니다.");
+            return "redirect:/seller/signup";
+        }
 
         //이유는 모르겠지만 ModelAttribute가 안됨
         Seller seller = new Seller();
-        seller.setSellerId(request.getParameter("sellerId"));
+        seller.setSellerId(sellerId);
         seller.setPassword(passwordEncoder.encode(request.getParameter("password")));
         seller.setName(request.getParameter("name"));
         seller.setEmail(request.getParameter("email"));

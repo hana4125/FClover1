@@ -25,7 +25,7 @@ public interface MemberMapper {
 
     int insertAddressBook(AddressBook addressBook);
 
-    List<AddressBook> selectAddressBook(int memberNo);
+    List<AddressBook> selectAddressBook(Long memberNo);
 
     Member selectMember(String memberId, String password);
 
@@ -33,13 +33,15 @@ public interface MemberMapper {
 
     String selectPassword(String memberId);
 
+    String isMemberIdDuplicate(String memberId);
+
     Integer selectMemberResetPassword(Member member);
 
     void deleteMember(String memberId);
 
-    int selectmemberNo(String memberId);
+    int selectMemberNo(String memberId);
 
-    AddressBook selectDefaultAddress(int memberNo);
+    AddressBook selectDefaultAddress(Long memberNo);
 
     int updateDefaultAddress(int addressId);
 

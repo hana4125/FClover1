@@ -16,3 +16,5 @@ CREATE TABLE `delivery` (
 select* from delivery;
 
 drop table delivery;
+
+commit ;

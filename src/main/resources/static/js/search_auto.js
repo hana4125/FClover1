@@ -240,7 +240,7 @@ function goSearchKeywordPage(keyvalue){
 
 
   paramStr += "keyword="+encodeURIComponent(inkeyword);
-  location.href = autoSearchDomain + "search?"+paramStr;
+  location.href = "/search?"+paramStr;
 }
 
 function submitSearchKeywordPage() {
