@@ -64,7 +64,7 @@ public class SecurityConfig {
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
-                        .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
+                        .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
                         .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
                                "/inquiry/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")

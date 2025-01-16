@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
+  <link rel="stylesheet" href="/css/user/pagination.css">
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -55,6 +56,17 @@
     function filterData() {
       var selectedValue = document.getElementById('viewcount').value;
       console.log("선택된 값: " + selectedValue);
+
+      $.ajax({
+        url: '/inquiry/question',
+        method: 'GET',
+        data: {
+          viewcount: selectedValue
+        },
+        success: function(response) {
+          console.log("응답:", response);
+        }
+      });
     }
 
   </script>
@@ -109,7 +121,7 @@
         </div>
 
         <!-- search box -->
-        <form method="get" action="notice/noti_list">
+        <form method="get" action="/inquiry/question">
           <div class="info_search-box" style="height: 100px;">
             <div class="input_btn_box">
               <input type="hidden" name="search_field" value="title">
@@ -133,12 +145,12 @@
         <div class="mt-5 tbl_col_wrap">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <p class="result_count">
-              <span class="ct_green">[[${listcount}]]</span>건
+              <span class="ct_green">[[${totalcount}]]</span>건
             </p>
 
-            <th:block th:if="${listcount > 0}">
+            <th:block th:if="${totalcount > 0}">
               <div class="rows" style="width: 110px;">
-                <select class="form-control" id="viewcount" sec:onchange="filterData()">
+                <select class="form-control" id="viewcount" onchange="filterData()">
                   <option value="전체" selected>전체</option>
                   <option value="공지사항">공지사항</option>
                   <option value="이벤트">이벤트</option>
@@ -164,19 +176,19 @@
             </tr>
             </thead>
             <tbody>
-            <th:block th:with="no=${listcount - (page - 1) * limit}">
+            <th:block th:with="no=${totalcount - (currentPage - 1) * limit}">
               <th:block th:each="d, iterStat : ${questionlist}">
                 <tr>
                   <td><span th:text="${no - (iterStat.index)}"></span></td>
                   <td>
                     <div class="ntitle">
-                      <a th:href="@{/inquiry/question/detail(no=${d.qNo})}">
-                        <span th:text="${d.qTitle}"></span>
+                      <a th:href="@{/inquiry/question/detail(no=${d.qno})}">
+                        <span th:text="${d.qtitle}"></span>
                       </a>
                     </div>
                   </td>
-                  <td><div th:text="${d.qName}"></div></td>
-                  <td><div th:text="${#strings.substring(d.qCreateat, 2, 10)}"></div></td>
+                  <td><div th:text="${d.qname}"></div></td>
+                  <td><div th:text="${#strings.substring(d.qcreateat, 2, 10)}"></div></td>
                 </tr>
               </th:block>
             </th:block>
@@ -185,22 +197,14 @@
 
         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
             <a th:href="@{/inquiry/question/write}">
-              <button type="button" class="btn btn-primary" style="height: 44px">글쓰기</button>
+              <button type="button" class="btn btn-primary" style="height: 44px">문의하기</button>
             </a>
         </div>
 
         <!--pagination-->
-        <div class="pagination">
-          <button class="btn_page prev" disabled="disabled">
-            <span class="hidden"></span>
-          </button>
-          <div class="page_no">
-
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <th:block th:replace="~{fragment/paging2 :: paging2('/inquiry/question', '')}"/>
           </div>
-          <button class="btn_page next">
-            <span class="hidden"></span>
-          </button>
-        </div>
 
       </div>
     </div>
