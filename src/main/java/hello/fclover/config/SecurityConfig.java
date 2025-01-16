@@ -65,7 +65,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
                                 "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                                "/member/reset-password", "/inquiry/**", "/category/**").permitAll()
+                                "/member/reset-password", "/inquiry/**", "/member/category/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
                         .requestMatchers("/member/**").hasRole("MEMBER")
