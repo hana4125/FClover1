@@ -9,6 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+<!--  <meta name="_csrf" th:content="${_csrf.token}">-->
+<!--  <meta name="_csrf_header" th:content="${_csrf.headerName}">-->
 
   <title>Back Office </title>
 
@@ -106,7 +108,7 @@
           <h6 class="collapse-header">주문/배송상태</h6>
           <a class="collapse-item" href="#">결제취소</a>
           <a class="collapse-item" href="/bo/deliveryOrder">결제완료</a>
-          <a class="collapse-item" href="/bo/deliveryReady">상품준비중</a>
+<!--          <a class="collapse-item" href="/bo/deliveryReady">상품준비중</a>-->
           <a class="collapse-item" href="/bo/deliveryReady">배송준비중</a>
           <a class="collapse-item" href="/bo/deliveryInTransit">배송중</a>
           <a class="collapse-item" href="/bo/deliveryDone">배송완료</a>
@@ -234,6 +236,10 @@
 
         </table>
         <script>
+          // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+          // const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+
           $(document).ready(function() {
             // 데이터 테이블 초기화
             $('#paymentTable').DataTable({
@@ -260,7 +266,7 @@
                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
               },
               "columns": [
-                { "data": "deliId" },
+                { "data": "deliNo" },
                 { "data": "orderId" },
                 { "data": "userId" },
                 { "data": "deliStatus" },
@@ -268,21 +274,31 @@
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="cancel-btn" data-imp-uid="${row.impUid}">운송장 등록</button>`;
+                    return `<button class="submit-btn" data-imp-uid="${row.deliNo}">운송장 등록</button>`;
                   }
                 }
               ]
             });
           });
 
-          // 배송 취소 버튼 클릭 이벤트
-          $(document).on('click', '.cancel-btn', async function() {
-            const impUid = $(this).data('imp-uid');
-            const response = await fetch(`/api/payment/cancel/${impUid}`, {
-              method: 'GET',
+          // 운송장 등록 버튼 클릭 이벤트
+          $(document).on('click', '.submit-btn', async function() {
+            const deliveryNum = prompt("운송장 번호를 입력해주세요(숫자만 입력가능합니다.)");
+
+
+            const deliNo = $(this).data('imp-uid');
+
+            const response = await fetch(`/bo/trackingNumber/submit`, {
+              method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
-              }
+              },
+              body: JSON.stringify({
+                deliNo : deliNo,
+                deliveryNum: deliveryNum,
+              })
+
+
             });
 
             if (response.ok) {

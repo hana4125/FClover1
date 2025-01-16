@@ -11,21 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
-import javax.sql.DataSource;
-import java.security.Security;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
-    private final DataSource dataSource;
     private final LoginFailHandler loginFailHandler;
     private final LoginSuccessHandler loginSuccessHandler;
-
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -63,24 +56,28 @@ public class SecurityConfig {
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
+                                "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
+                                "/member/reset-password", "/inquiry/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
                         .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
                                "/inquiry/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
-
+                        .anyRequest().authenticated()
 
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout((lo) -> lo.logoutUrl("/member/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
+
 
         return http.build();
     }

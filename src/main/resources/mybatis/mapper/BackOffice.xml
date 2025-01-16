@@ -19,6 +19,15 @@
         insert into delivery(order_id,user_id,deli_status) values(#{orderId},#{userId},#{status})
     </insert>
     <select id="deliveryReadyOrderSearch">
-        select deli_id,order_id,user_id,deli_status,created_at from delivery
+        select deli_no,order_id,user_id,deli_status,created_at from delivery where deli_status='배송준비중'
+    </select>
+
+    <update id="insertTrackingNumber">
+        update delivery set deli_num=#{deliNum}, deli_company = #{deliCompany}, deli_status=#{deliStatus}
+        where deli_no = #{deliNo}
+    </update>
+
+    <select id="deliveryInTransitOrderSearch">
+        select deli_no,order_id,user_id,deli_status,created_at from delivery where deli_status='배송중'
     </select>
 </mapper>

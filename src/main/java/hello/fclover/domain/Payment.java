@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 public class Payment {
 
 
-    private Long id;// 결제 ID
-
-
+    private Long paymentsNo;// 결제 ID
     private Long partnerId;        // 파트너 ID (nullable)
     private String userId;           // 사용자 ID
     private Long orderId;          // 주문 ID
