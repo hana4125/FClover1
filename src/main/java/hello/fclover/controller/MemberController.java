@@ -3,33 +3,28 @@ package hello.fclover.controller;
 import hello.fclover.domain.*;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
-import hello.fclover.service.MemberService;
-import hello.fclover.service.NoticeService;
-import hello.fclover.service.SellerService;
+import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import hello.fclover.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -40,6 +35,8 @@ public class MemberController {
     private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+    private final CategoryService categoryService;
+    private final GoodsService goodsService;
 
 
     private final EmailService emailService;
@@ -400,5 +397,30 @@ public class MemberController {
 //ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
         System.out.println("====");
         return "/user/userGoodsDetail";
+    }
+
+    @GetMapping("/category/{no}")
+    public String categoryDetail(@PathVariable("no") int cate_no,
+                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                                 Model model) {
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+        // 상품 목록 가져오기
+        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 페이지네이션 정보 전달
+        int totalItems = goodsService.getTotalGoodsCount(cate_no);
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("sort", sort);
+        model.addAttribute("size", size);
+        return "/user/userCategory"; // 카테고리 상세 페이지
     }
 }
