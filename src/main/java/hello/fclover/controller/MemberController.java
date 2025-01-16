@@ -40,6 +40,8 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+
+
     private final EmailService emailService;
 
     @ModelAttribute("member")

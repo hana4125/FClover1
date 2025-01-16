@@ -15,4 +15,8 @@ public interface BackOfficeService {
     void InsertdeliveryReadyList(Long orderId, String userId);
 
     List<Delivery> deliveryReadyOrderSearch();
+
+    void insertTrackingNumber(int deliNo, int deliveryNum, String deliveryCompany,String deliStatus);
+
+    List<Delivery> deliveryInTransitOrderSearch();
 }
