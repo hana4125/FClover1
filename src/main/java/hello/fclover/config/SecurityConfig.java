@@ -1,7 +1,10 @@
 package hello.fclover.config;
 
 import hello.fclover.oauth2.service.CustomOAuth2UserService;
-import hello.fclover.security.*;
+import hello.fclover.security.LoginFailHandler;
+import hello.fclover.security.LoginSuccessHandler;
+import hello.fclover.security.SellerLoginFailHandler;
+import hello.fclover.security.SellerLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -12,13 +15,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.sql.DataSource;
+
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
+    private final DataSource dataSource;
     private final LoginFailHandler loginFailHandler;
     private final LoginSuccessHandler loginSuccessHandler;
+
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -48,34 +55,32 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                //.securityMatcher("/inquiry/**", "/member/**")
                 .formLogin((formLogin) -> formLogin.loginPage("/member/login")
                         .loginProcessingUrl("/member/loginProcess")
                         .usernameParameter("memberId")
                         .passwordParameter("password")
                         .successHandler(loginSuccessHandler)
+                        .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
-                        "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                        "/member/reset-password", "/inquiry/**").permitAll()
+                                "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
+                                "/member/reset-password", "/inquiry/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
                         .requestMatchers("/member/**").hasRole("MEMBER")
                         .anyRequest().authenticated()
-
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/")
                 )
                 .logout((lo) -> lo.logoutUrl("/member/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
-
 
         return http.build();
     }

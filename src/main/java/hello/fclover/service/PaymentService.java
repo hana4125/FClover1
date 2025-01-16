@@ -2,8 +2,6 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
-import hello.fclover.mybatis.mapper.PaymentMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,5 +16,4 @@ public interface PaymentService {
     int savePayment(Payment Payment);
 
     void cancelPayment(String uid);
-
 }
