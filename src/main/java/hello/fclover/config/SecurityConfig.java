@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess", "/category/**", "/payments/**", "/wish/**").permitAll()
+                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess", "/category/**", "/payments/**", "/wish/**", "/cart/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
                 )
                 .oauth2Login(oauth2 -> oauth2

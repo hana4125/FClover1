@@ -159,8 +159,10 @@
               heartIcon.attr("src", "/images/user/heart.png");
             }
           },
-          error: function () {
-            alert("찜 처리 중 오류가 발생했습니다.");
+          error: function (xhr, status, error) {
+            if (status === "parsererror") {
+              location.href = '/member/login'
+            }
           }
         });
       });
@@ -174,12 +176,14 @@
         const goodsNo = $(this).data("id");
 
         $.ajax({
-          url: "/cart",
+          url: "/cart/cartList",
           type: "POST",
-          headers: { [csrfHeader]: csrfToken }, // CSRF 사용시 헤더에 추가
+          // CSRF 토큰 헤더 설정
+          headers: { [csrfHeader]: csrfToken },
           data: { goodsNo: goodsNo },
           dataType: "json",
           success: function (response) {
+            // response.status 가 "added" 또는 "updated"
             if (response.status === "added") {
               const moveConfirm = confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
               if (moveConfirm) {
@@ -192,8 +196,10 @@
               }
             }
           },
-          error: function () {
-            alert("장바구니 처리 중 오류가 발생했습니다.");
+          error: function (xhr, status, error) {
+            if (status === "parsererror") {
+              location.href = '/member/login'
+            }
           }
         });
       });
@@ -286,7 +292,7 @@
             <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
             <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
               <div class="img-box">
-                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">
+<!--                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">-->
               </div>
             </a>
             <div class="item-info">

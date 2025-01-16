@@ -11,5 +11,5 @@ public class Wish {
 
     private BigInteger memberNo;      // 구매자 키
 
-    private BigInteger goodsNo;
+    private BigInteger goodsNo;       // 상품 키
 }

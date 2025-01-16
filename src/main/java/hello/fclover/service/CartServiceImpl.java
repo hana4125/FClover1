@@ -11,17 +11,8 @@ public class CartServiceImpl implements CartService {
     private final CartMapper cartMapper;
 
     @Override
-    public boolean checkExistInCart(Long goodsNo, Long memberNo) {
-        return cartMapper.isCartExists(goodsNo, memberNo);
-    }
-
-    @Override
-    public void addCart(Long goodsNo, Long memberNo) {
-        cartMapper.insertCart(goodsNo, memberNo);
-    }
-
-    @Override
-    public void updateCart(Long goodsNo, Long memberNo) {
-        cartMapper.updateCartQuantity(goodsNo, memberNo);
+    public int upsertCart(Long goodsNo, Long memberNo) {
+        // MyBatis 쿼리 실행
+        return cartMapper.upsertCart(goodsNo, memberNo);
     }
 }

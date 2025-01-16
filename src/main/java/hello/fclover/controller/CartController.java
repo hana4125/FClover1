@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -20,7 +20,6 @@ public class CartController {
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
-
         if (principal != null) {
             String memberId = principal.getName();
             return memberService.findMemberById(memberId);
@@ -28,26 +27,31 @@ public class CartController {
         return null;
     }
 
-    @PostMapping("/cart")
-    @ResponseBody
-    public Map<String, String> addToCart(@RequestParam("goodsNo") Long goodsNo,
-                                         Principal principal) {
-        String memberNo = principal.getName();
+    @PostMapping("/cartList")
+    public Map<String, String> addToCart(@ModelAttribute("member") Member member,
+                                         @RequestParam("goodsNo") Long goodsNo) {
+        // 로그인한 회원의 PK
+        Long memberNo = member.getMemberNo();
 
-        // 장바구니에 이미 해당 상품이 존재하는지 확인
-        boolean isExist = cartService.checkExistInCart(goodsNo, Long.valueOf(memberNo));
+        // Upsert(이미 있으면 수량 +1, 없으면 Insert)
+        int affectedRows = cartService.upsertCart(goodsNo, memberNo);
+
+        // MySQL에서 ON DUPLICATE KEY UPDATE 시
+        // 1) Insert 발생 시 → Affected Rows = 1
+        // 2) Update(값 변경) 발생 시 → Affected Rows = 2
+        // (만약 기존 값과 동일해 실제 업데이트가 없으면 0이 될 수도 있습니다만,
+        //  여기서는 2인 경우를 "updated"로 간주)
 
         String status;
-        if (!isExist) {
-            // 장바구니 신규 추가
-            cartService.addCart(goodsNo, Long.valueOf(memberNo));
-            status = "added";   // "상품이 장바구니에 담겼습니다." 처리
+        if (affectedRows == 1) {
+            // Insert 되었다고 보고
+            status = "added";
         } else {
-            // 이미 있는 상품이면 수량을 추가
-            cartService.updateCart(goodsNo, Long.valueOf(memberNo));
-            status = "updated"; // "장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다." 처리
+            // Update 되었다고 보고 (2, 혹은 0)
+            status = "updated";
         }
 
+        // JSON 형태로 응답
         Map<String, String> result = new HashMap<>();
         result.put("status", status);
         return result;

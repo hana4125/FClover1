@@ -12,4 +12,8 @@ drop table cart;
 
 select * from cart;
 
+ALTER TABLE cart
+    ADD UNIQUE KEY ux_cart_member_goods (member_no, goods_no);
+
+
 

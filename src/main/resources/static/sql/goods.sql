@@ -22,6 +22,10 @@ insert into GOODS values(1,1, 1,'GoodsName1','GoodsContent1',
                          20000,'writer1', 'company1', sysdate(),
                          1000, CURRENT_TIMESTAMP(), 300, 1,
                          'writerContent1', current_timestamp());
+insert into GOODS values(2,2, 1,'GoodsName2','GoodsContent2',
+                         30000,'writer2', 'company2', sysdate(),
+                         2000, CURRENT_TIMESTAMP(), 350, 2,
+                         'writerContent2', current_timestamp());
 commit ;
 
 drop table goods;

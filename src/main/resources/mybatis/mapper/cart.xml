@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.CartMapper">
-    <insert id="insertCart">
-        INSERT INTO cart (goods_no, cart_quan, added_at)
-        VALUES (#{goodsNo}, #{cart_quan}, NOW())
+
+    <!-- Upsert 쿼리: 이미 (goods_no, member_no)가 있으면 cart_quantity를 +1, 없으면 새로 insert -->
+    <insert id="upsertCart">
+        INSERT INTO cart (goods_no, member_no, cart_quantity)
+        VALUES (#{goodsNo}, #{memberNo}, 1)
+            ON DUPLICATE KEY UPDATE
+                                 cart_quantity = cart_quantity + 1
     </insert>
 
-    <update id="updateCartQuantity">
-        UPDATE cart
-        SET cart_quan = cart_quan + 1, added_at = NOW()
-        WHERE goods_no = #{goods_no}
-    </update>
-
-    <select id="isCartExists" resultType="boolean">
-        SELECT COUNT(1) > 0
-        FROM cart
-        WHERE goods_no = #{goods_no}
-    </select>
 </mapper>
