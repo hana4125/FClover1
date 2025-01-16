@@ -65,7 +65,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
                                 "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                                "/member/reset-password", "/inquiry/**").permitAll()
+                                "/member/reset-password", "/inquiry/**", "/category/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
                         .requestMatchers("/member/**").hasRole("MEMBER")
@@ -74,14 +74,13 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout((lo) -> lo.logoutUrl("/member/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
-
         return http.build();
     }
 
