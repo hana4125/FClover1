@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
                                 "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                                "/member/reset-password", "/inquiry/**").permitAll()
+                                "/member/reset-password", "/inquiry/**", "/member/category/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
                         .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
@@ -77,8 +77,6 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
-
-
         return http.build();
     }
 
