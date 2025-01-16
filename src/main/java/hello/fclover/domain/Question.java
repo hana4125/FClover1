@@ -2,15 +2,16 @@ package hello.fclover.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Setter
 @Getter
-public class Inquiry {
+public class Question {
     private int qno;
     private String qcreateat;
     private String memberid;
     private String qresponseat;
-    private String q_name;
+    private String qname;
     private String qtype;
     private String qfile;
     private String qtitle;
@@ -21,4 +22,5 @@ public class Inquiry {
     private int qreref;
     private int qrelev;
     private int qreseq;
+    private MultipartFile uploadfile;
 }
