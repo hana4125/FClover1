@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="/css/user/signup.css">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <script th:inline="javascript">
       $(function () {
           $("#logo").click(function () {
@@ -28,23 +30,51 @@
                   email: $("#email").val()
               }
 
+              let token = $("meta[name='_csrf']").attr("content");
+              let header = $("meta[name='_csrf_header']").attr("content");
+
               $.ajax({
                   url: '/member/find-id',
                   type: 'POST',
                   contentType: 'application/json',
-                  data: formData,
-                  success: function(response) {
-
+                  data: JSON.stringify(formData),
+                  beforeSend: function (xhr) {
+                      xhr.setRequestHeader(header, token);
                   },
-                  error: function(xhr, status, error) {
+                  success: function (response) {
+
+                      if (formData.name.trim() === '') {
+                          alert("이름을 입력하세요.");
+                      } else if (formData.birthdate.trim() === '') {
+                          alert("생년월일을 입력하세요.");
+                      } else if (formData.email.trim() === '') {
+                          alert("이메일을 입력하세요");
+                      } else if (response === '') {
+                          alert("일치하는 회원이 없습니다.");
+                      } else {
+                          alert("인증번호 발송되었습니다.");
+                          $.ajax({
+                              url: '/member/send-code',
+                              type: 'POST',
+                              beforeSend: function (xhr) {
+                                  xhr.setRequestHeader(header, token);
+                              },
+                              error: function (xhr, status, error) {
+                                  alert("콜백 오류 발생");
+                                  console.error(error);
+                              }
+                          })
+                          const newButton = $('<button type="button" id="confirmVerificationBtn" class="form-control btn btn-success">확인</button>');
+                          $("#sendVerificationCodeBtn").replaceWith(newButton);
+                          $('#certificationNumber').css('display', 'flex');  // 인증번호 입력 필드 보이게 함
+                      }
+                  },
+                  error: function (xhr, status, error) {
                       alert('아이디 찾기 요청에 실패했습니다.');
+                      console.log("실패");
                       console.error(error);
                   }
               })
-
-              const newButton = $('<button type="button" id="confirmVerificationBtn" class="form-control btn btn-success">확인</button>');
-              $(this).replaceWith(newButton);
-              $('#certificationNumber').css('display', 'flex');  // 인증번호 입력 필드 보이게 함
           });
 
           // "확인" 버튼 클릭 시

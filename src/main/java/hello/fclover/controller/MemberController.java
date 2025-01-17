@@ -103,16 +103,39 @@ public class MemberController {
         return "user/userFindId";
     }
 
+    @ResponseBody
     @PostMapping("/find-id")
-    public ResponseEntity<String> findId(@RequestBody Map<String, String> formData) {
+    public String findId(@RequestBody Map<String, String> formData) {
 
         String name = formData.get("name");
         String birthdate = formData.get("birthdate");
         String email = formData.get("email");
 
+        log.info("name: {}", name);
+        log.info("birthdate: {}", birthdate);
+        log.info("email: {}", email);
 
+        Member member = new Member();
 
-        return ResponseEntity.ok("아이디 찾기 성공");
+        member.setName(name);
+        member.setBirthdate(birthdate);
+        member.setEmail(email);
+
+        return memberService.findMemberId(member);
+    }
+
+    @ResponseBody
+    @PostMapping("/send-code")
+    public String sendCode() {
+
+        String randomNumber = EmailService.generateRandomNumber();
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to("sinmagic1@naver.com")
+                .subject("[네잎클로버] 아이디 찾기를 위한 인증 메일이에요.")
+                .message("인증번호 : " + randomNumber)
+                .build();
+        emailService.sendMail(emailMessage);
+        return null;
     }
 
     @GetMapping("/find-id-ok")
