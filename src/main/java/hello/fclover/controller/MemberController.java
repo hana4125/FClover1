@@ -196,7 +196,7 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memberNo = memberService.getmemberNo(memberId);
+        long memberNo = memberService.getmemberNo(memberId);
         addressBook.setMemberNo(memberNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
