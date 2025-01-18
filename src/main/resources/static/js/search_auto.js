@@ -240,7 +240,8 @@ function goSearchKeywordPage(keyvalue){
 
 
   paramStr += "keyword="+encodeURIComponent(inkeyword);
-  location.href = "/search?"+paramStr;
+  // location.href = "/search/searchKeyword?"+paramStr;
+  location.href = "http://localhost:5000/search/searchKeyword?keyword=111";
 }
 
 function submitSearchKeywordPage() {
