@@ -125,9 +125,8 @@ public class MemberController {
     }
 
     @ResponseBody
-    @PostMapping("/send-code")
-    public String sendCode() {
-
+    @PostMapping("/send-code-id")
+    public String sendCodeId() {
         String randomNumber = EmailService.generateRandomNumber();
         EmailMessage emailMessage = EmailMessage.builder()
                 .to("sinmagic1@naver.com")
@@ -152,24 +151,35 @@ public class MemberController {
         return "user/userResetPassword";
     }
 
+    @ResponseBody
     @PostMapping("/reset-password")
-    public String resetPassword(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
-        Integer memberNum = memberService.selectMemberResetPassword(member);
-        if (memberNum == null) {
-            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
-            return "redirect:/member/reset-password";
-        }
-        redirectAttributes.addFlashAttribute("message", "메일 발송 성공");
+    public Member resetPassword(@RequestBody Map<String, String> formData) {
+        String memberId = formData.get("memberId");
+        String name = formData.get("name");
+        String birthdate = formData.get("birthdate");
+        String email = formData.get("email");
 
+        Member member = new Member();
+
+        member.setMemberId(memberId);;
+        member.setName(name);
+        member.setBirthdate(birthdate);
+        member.setEmail(email);
+
+        return memberService.selectMemberResetPassword(member);
+    }
+
+    @ResponseBody
+    @PostMapping("/send-code-password")
+    public String sendCodePassword() {
         String randomNumber = EmailService.generateRandomNumber();
-
         EmailMessage emailMessage = EmailMessage.builder()
-                .to(member.getEmail())
+                .to("sinmagic1@naver.com")
                 .subject("[네잎클로버] 비밀번호 찾기를 위한 인증 메일이에요.")
                 .message("인증번호 : " + randomNumber)
                 .build();
         emailService.sendMail(emailMessage);
-        return "redirect:/member/reset-password";
+        return null;
     }
 
     @GetMapping("/myPage")

@@ -55,7 +55,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Integer selectMemberResetPassword(Member member) {
+    public Member selectMemberResetPassword(Member member) {
         return dao.selectMemberResetPassword(member);
     }
 

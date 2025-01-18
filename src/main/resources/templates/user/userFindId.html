@@ -54,7 +54,7 @@
                       } else {
                           alert("인증번호 발송되었습니다.");
                           $.ajax({
-                              url: '/member/send-code',
+                              url: '/member/send-code-id',
                               type: 'POST',
                               beforeSend: function (xhr) {
                                   xhr.setRequestHeader(header, token);

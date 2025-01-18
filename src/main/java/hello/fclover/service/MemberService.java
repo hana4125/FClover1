@@ -19,7 +19,7 @@ public interface MemberService {
 
     String findMemberId(Member member);
 
-    Integer selectMemberResetPassword(Member member);
+    Member selectMemberResetPassword(Member member);
 
     int updateMember(Member member);
 
