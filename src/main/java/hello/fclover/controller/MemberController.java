@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Controller
@@ -111,10 +112,6 @@ public class MemberController {
         String birthdate = formData.get("birthdate");
         String email = formData.get("email");
 
-        log.info("name: {}", name);
-        log.info("birthdate: {}", birthdate);
-        log.info("email: {}", email);
-
         Member member = new Member();
 
         member.setName(name);
@@ -126,24 +123,31 @@ public class MemberController {
 
     @ResponseBody
     @PostMapping("/send-code-id")
-    public String sendCodeId() {
-        String randomNumber = EmailService.generateRandomNumber();
+    public String sendCodeId(@RequestBody String email) {
+        String certCode = EmailService.generateRandomNumber();
         EmailMessage emailMessage = EmailMessage.builder()
-                .to("sinmagic1@naver.com")
+                .to(email)
                 .subject("[네잎클로버] 아이디 찾기를 위한 인증 메일이에요.")
-                .message("인증번호 : " + randomNumber)
+                .message("인증번호 : " + certCode)
                 .build();
-        emailService.sendMail(emailMessage);
-        return null;
+
+        emailService.asyncSendMail(emailMessage);
+        return certCode;
     }
 
+
     @GetMapping("/find-id-ok")
-    public String findOkPage(@RequestParam(required = false) String memberId, Model model) {
-        if (memberId != null) {
-            Member member = memberService.findMemberById(memberId);
-            model.addAttribute("member", member);
-        }
-        return "user/userFindIdOk";
+    public String findOkPage(@RequestParam String name, @RequestParam String birthdate, @RequestParam String email, Model model) {
+        Member member = new Member();
+        member.setName(name);
+        member.setBirthdate(birthdate);
+        member.setEmail(email);
+
+        String memberId = memberService.findMemberId(member);
+        Member findMember = memberService.findMemberById(memberId);
+        model.addAttribute("member", findMember);
+
+        return "/user/userFindIdOk";
     }
 
     @GetMapping("/reset-password")
@@ -169,17 +173,33 @@ public class MemberController {
         return memberService.selectMemberResetPassword(member);
     }
 
+    @GetMapping("/reset-password-ok")
+    public String resetPasswordOkPage(@RequestParam String memberId, Model model) {
+        Member member = memberService.findMemberById(memberId);
+        model.addAttribute("member", member);
+        return "user/userResetPasswordOk";
+    }
+
+    @PostMapping("/reset-password-ok")
+    public String resetPasswordOkProcess(@RequestParam String memberId, @RequestParam String newPassword, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findMemberById(memberId);
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberService.updateMember(member);
+        redirectAttributes.addFlashAttribute("message", "비밀번호가 변경되었습니다.");
+        return "redirect:/member/main";
+    }
+
     @ResponseBody
     @PostMapping("/send-code-password")
-    public String sendCodePassword() {
-        String randomNumber = EmailService.generateRandomNumber();
+    public String sendCodePassword(@RequestBody String email) {
+        String certCode = EmailService.generateRandomNumber();
         EmailMessage emailMessage = EmailMessage.builder()
-                .to("sinmagic1@naver.com")
+                .to(email)
                 .subject("[네잎클로버] 비밀번호 찾기를 위한 인증 메일이에요.")
-                .message("인증번호 : " + randomNumber)
+                .message("인증번호 : " + certCode)
                 .build();
-        emailService.sendMail(emailMessage);
-        return null;
+        emailService.asyncSendMail(emailMessage);
+        return certCode;
     }
 
     @GetMapping("/myPage")

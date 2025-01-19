@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="/css/user/searchBox.css">
     <script th:inline="javascript">
         $(function () {
+            let message = /*[[${message}]]*/ null;
+            if (message != null) {
+                alert(message);
+            }
+
             $("#logo").click(function () {
                 location.href = "/";
             })

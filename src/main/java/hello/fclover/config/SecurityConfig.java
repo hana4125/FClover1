@@ -56,9 +56,9 @@ public class SecurityConfig {
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
-                                "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                                "/member/send-code-id", "member/send-code-password", "/member/reset-password", "/inquiry/**").permitAll()
+                        .requestMatchers("/", "/member/main", "/member/login", "/member/signup", "/member/signupProcess",
+                                "/member/find-id", "/member/find-id-ok", "/member/send-code-id", "member/send-code-password",
+                                "/member/reset-password","/member/reset-password-ok", "/inquiry/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("MEMBER","ADMIN")
                         .requestMatchers("/member/**").hasRole("MEMBER")
