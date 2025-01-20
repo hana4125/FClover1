@@ -3,8 +3,8 @@ DROP TABLE GOODS;
 -- FK 설정해야 함
 CREATE TABLE GOODS
 (
-    GOODS_NO            bigint NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    SELLER_NO           bigint, #-판매자아이디
+    GOODS_NO            bigint AUTO_INCREMENT PRIMARY KEY ,
+    SELLER_NO           bigint not null, #-판매자아이디
     CATE_NO             INT, #--카테고리 번호
     GOODS_NAME          VARCHAR(30), #--상품명
     GOODS_CONTENT       VARCHAR(100), #--상품 설명
@@ -13,7 +13,7 @@ CREATE TABLE GOODS
     WRITER_CONTENT      VARCHAR(100),
     GOODS_CREATE_AT     DATE, #--상품발행일
     GOODS_COUNT         INT, #--상품 총 판매수량 (베스트/스테디셀러 확인위해 필요한 값)
-    GOODS_DATE          TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, #--상품 등록일
+    GOODS_DATE          TIMESTAMP DEFAULT CURRENT_TIMESTAMP, #--상품 등록일
     GOODS_PAGECOUNT     INT,
     GOODS_BOOKSIZE      VARCHAR(10),
     UPDATE_AT           DATE,
