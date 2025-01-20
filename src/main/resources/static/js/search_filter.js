@@ -19,10 +19,12 @@ $(function () {
     sales: "판매량순",
     highPrice: "높은가격순",
     lowPrice: "낮은가격순",
+    name: "상품명순"
   };
   const sizeTextMap = {
     "20": "20개씩 보기",
     "50": "50개씩 보기",
+    "100": "100개씩 보기"
   };
 
   $("#dropdownMenu").text(sortTextMap[currentSort] || "최신순");
