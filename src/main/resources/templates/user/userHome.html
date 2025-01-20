@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>home</title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
     <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery-3.7.1.js"></script>
@@ -10,6 +12,11 @@
     <link rel="stylesheet" href="/css/user/searchBox.css">
     <script th:inline="javascript">
         $(function () {
+            let message = /*[[${message}]]*/ null;
+            if (message != null) {
+                alert(message);
+            }
+
             $("#logo").click(function () {
                 location.href = "/";
             })
@@ -91,6 +98,7 @@
     </script>
 </head>
 <body>
+<div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success">
     <div class="container w-75">
@@ -210,7 +218,7 @@
             <li>
                 <span class="item-lank" style="font-size : 18px;">1</span>
                 <div class="item-image">
-                    <a href="#" class="show-detail">
+                    <a href="/member/GoodsDetail" class="show-detail">
                         <div class="img-box">
                             <img src="/images/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
                         </div>
@@ -218,7 +226,7 @@
                 </div>
                 <br>
                 <div class="item-info">
-                    <a href="#" class="show-detail">
+                    <a href="/member/GoodsDetail" class="show-detail">
                         <span class="item_name">소년이 온다</span>
                     </a><br>
                     <span class="item_author">한강 · 창비</span>
