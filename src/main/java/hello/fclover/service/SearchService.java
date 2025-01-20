@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface SearchService {
 
-    List<Goods> searchByKeyword(String keyword);
+    int countByKeyword(String keyword);
+
+    List<Goods> searchByKeyword(String keyword, String sort, int offset, int size);
 
     List<Goods> searchDetail(SearchDetailForm searchDetailForm);
 }

@@ -46,8 +46,21 @@
         WHERE goods_no = #{goods_no}
     </select>
 
-    <!-- 키워드로 상품 검색 -->
-    <select id="findGoodsByKeyword" resultType="hello.fclover.domain.Goods">
+    <!-- 키워드 검색 총 개수 조회-->
+    <select id="countGoodsByKeyword" resultType="int">
+        SELECT COUNT(*)
+        FROM GOODS g
+        JOIN seller s ON g.SELLER_NO = s.seller_no
+        WHERE
+            MATCH(g.GOODS_NAME, g.GOODS_CONTENT, g.GOODS_WRITER)
+            AGAINST (#{keyword} IN BOOLEAN MODE)
+            OR
+            MATCH(s.company_name)
+            AGAINST (#{keyword} IN BOOLEAN MODE)
+    </select>
+
+    <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
+    <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
         SELECT
             g.GOODS_NO AS goodsNo,
             g.SELLER_NO AS sellerNo,
@@ -67,6 +80,20 @@
             OR
             MATCH(s.company_name)
             AGAINST (#{keyword} IN BOOLEAN MODE)
+
+        <!-- 정렬 조건 분기 처리 -->
+        ORDER BY
+        <choose>
+            <when test="sort == 'latest'">g.GOODS_CREATE_AT DESC</when>
+            <when test="sort == 'sales'">g.GOODS_COUNT DESC</when>
+            <when test="sort == 'highPrice'">g.GOODS_PRICE DESC</when>
+            <when test="sort == 'lowPrice'">g.GOODS_PRICE ASC</when>
+            <when test="sort == 'name'">g.GOODS_NAME ASC</when>
+        </choose>
+
+        <!-- LIMIT & OFFSET -->
+        LIMIT #{size}
+        OFFSET #{offset}
     </select>
 
 </mapper>

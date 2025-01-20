@@ -22,14 +22,28 @@ public class SearchController {
 
     // 키워드 검색 기능
     @GetMapping("/searchKeyword")
-    public ModelAndView keywordSearch(@RequestParam("keyword") String keyword) {
+    public ModelAndView keywordSearch(@RequestParam("keyword") String keyword,
+            @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
 
         ModelAndView mv = new ModelAndView();
-        List<Goods> searchResults = searchService.searchByKeyword(keyword);
+
+        int totalCount = searchService.countByKeyword(keyword);
+
+        int offset = (page - 1) * size;
+
+        List<Goods> searchResults = searchService.searchByKeyword(keyword, sort, offset, size);
+
+        int totalPages = (int) Math.ceil((double) totalCount / size);
 
         mv.setViewName("user/userSearchResult");
         mv.addObject("searchResults", searchResults);
         mv.addObject("keyword", keyword);
+        mv.addObject("sort", sort);
+        mv.addObject("currentPage", page);
+        mv.addObject("totalPages", totalPages);
+        mv.addObject("size", size);
 
         return mv;
     }
@@ -39,7 +53,6 @@ public class SearchController {
     public String detailSearch() {
         return "user/userSearchDetail";
     }
-
 
     // 상세 검색 기능
 //    @GetMapping("/searchDetailResult")
