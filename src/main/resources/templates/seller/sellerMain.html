@@ -35,6 +35,9 @@
         $("#logo").click(function() {
             location.href ="/seller/main";
         })
+      $(".singleProduct").click(function(){
+        location.href = "addSingleProduct"
+      })
     })
   </script>
 </head>
@@ -106,7 +109,7 @@
             <h5 class="fw-bold">상품등록</h5>
             <ul class="list-unstyled">
               <li><a href="#">자동등록</a></li>
-              <li><a href="#">수동등록</a></li>
+              <li><a href="#" class="singleProduct">수동등록</a></li>
             </ul>
           </div>
         </div>
