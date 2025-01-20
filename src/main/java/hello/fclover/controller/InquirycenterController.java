@@ -44,7 +44,7 @@ public class InquirycenterController {
     //공지사항
     @GetMapping("/notice")
     public String notice(
-            @RequestParam(defaultValue = "1") Integer page, Model m) {
+            @RequestParam(defaultValue = "1") int page, Model m) {
 
         int limit = 10;
         int listcount = noticeService.getListCount();
@@ -73,6 +73,7 @@ public class InquirycenterController {
         return "redirect:/inquiry/notice";
     }
 
+    //공지사항 보기
     @GetMapping(value = "/notice/detail")
     public ModelAndView Detail(
             int num, ModelAndView mv,
@@ -147,20 +148,21 @@ public class InquirycenterController {
     }
 
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question, @RequestParam(required = false) Boolean qalert) {
+    public String noticeAdd(Question question, @RequestParam(required = false) String qalert) {
         // qalert 값이 null일 경우 "n"으로 설정
-        if (qalert == null) {
+        if (qalert == null || (!qalert.equalsIgnoreCase("y") && !qalert.equalsIgnoreCase("n"))) {
             question.setQalert("n");
         } else {
-            question.setQalert("y");
+
+            question.setQalert(qalert.equalsIgnoreCase("y") ? "y" : "n");
         }
 
         questionService.insertQuestion(question);
         return "redirect:/inquiry/question";
     }
 
-    //질문보기
-    @GetMapping(value = "/question/details")
+    //문의사항 보기
+    @GetMapping(value = "/question/detail")
     public ModelAndView questionDetail(
             int no, ModelAndView mv,
             HttpServletRequest request,
@@ -179,3 +181,5 @@ public class InquirycenterController {
         return mv;
     }
 }
+
+
