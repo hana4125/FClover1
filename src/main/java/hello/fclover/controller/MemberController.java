@@ -3,33 +3,29 @@ package hello.fclover.controller;
 import hello.fclover.domain.*;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
-import hello.fclover.service.MemberService;
-import hello.fclover.service.NoticeService;
-import hello.fclover.service.SellerService;
+import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import hello.fclover.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -40,6 +36,8 @@ public class MemberController {
     private final SellerService sellerService;
     private final PasswordEncoder passwordEncoder;
     private final PaymentService paymentService;
+    private final CategoryService categoryService;
+    private final GoodsService goodsService;
 
 
     private final EmailService emailService;
@@ -103,25 +101,50 @@ public class MemberController {
         return "user/userFindId";
     }
 
+    @ResponseBody
     @PostMapping("/find-id")
-    public ResponseEntity<String> findId(@RequestBody Map<String, String> formData) {
+    public String findId(@RequestBody Map<String, String> formData) {
 
         String name = formData.get("name");
         String birthdate = formData.get("birthdate");
         String email = formData.get("email");
 
+        Member member = new Member();
 
+        member.setName(name);
+        member.setBirthdate(birthdate);
+        member.setEmail(email);
 
-        return ResponseEntity.ok("아이디 찾기 성공");
+        return memberService.findMemberId(member);
     }
 
+    @ResponseBody
+    @PostMapping("/send-code-id")
+    public String sendCodeId(@RequestBody String email) {
+        String certCode = EmailService.generateRandomNumber();
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(email)
+                .subject("[네잎클로버] 아이디 찾기를 위한 인증 메일이에요.")
+                .message("인증번호 : " + certCode)
+                .build();
+
+        emailService.asyncSendMail(emailMessage);
+        return certCode;
+    }
+
+
     @GetMapping("/find-id-ok")
-    public String findOkPage(@RequestParam(required = false) String memberId, Model model) {
-        if (memberId != null) {
-            Member member = memberService.findMemberById(memberId);
-            model.addAttribute("member", member);
-        }
-        return "user/userFindIdOk";
+    public String findOkPage(@RequestParam String name, @RequestParam String birthdate, @RequestParam String email, Model model) {
+        Member member = new Member();
+        member.setName(name);
+        member.setBirthdate(birthdate);
+        member.setEmail(email);
+
+        String memberId = memberService.findMemberId(member);
+        Member findMember = memberService.findMemberById(memberId);
+        model.addAttribute("member", findMember);
+
+        return "/user/userFindIdOk";
     }
 
     @GetMapping("/reset-password")
@@ -129,24 +152,51 @@ public class MemberController {
         return "user/userResetPassword";
     }
 
+    @ResponseBody
     @PostMapping("/reset-password")
-    public String resetPassword(@ModelAttribute("findMember") Member member, RedirectAttributes redirectAttributes) {
-        Integer memberNum = memberService.selectMemberResetPassword(member);
-        if (memberNum == null) {
-            redirectAttributes.addFlashAttribute("message", "일치하는 회원 아이디가 없습니다.");
-            return "redirect:/member/reset-password";
-        }
-        redirectAttributes.addFlashAttribute("message", "메일 발송 성공");
+    public Member resetPassword(@RequestBody Map<String, String> formData) {
+        String memberId = formData.get("memberId");
+        String name = formData.get("name");
+        String birthdate = formData.get("birthdate");
+        String email = formData.get("email");
 
-        String randomNumber = EmailService.generateRandomNumber();
+        Member member = new Member();
 
+        member.setMemberId(memberId);;
+        member.setName(name);
+        member.setBirthdate(birthdate);
+        member.setEmail(email);
+
+        return memberService.selectMemberResetPassword(member);
+    }
+
+    @GetMapping("/reset-password-ok")
+    public String resetPasswordOkPage(@RequestParam String memberId, Model model) {
+        Member member = memberService.findMemberById(memberId);
+        model.addAttribute("member", member);
+        return "user/userResetPasswordOk";
+    }
+
+    @PostMapping("/reset-password-ok")
+    public String resetPasswordOkProcess(@RequestParam String memberId, @RequestParam String newPassword, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findMemberById(memberId);
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberService.updateMember(member);
+        redirectAttributes.addFlashAttribute("message", "비밀번호가 변경되었습니다.");
+        return "redirect:/member/main";
+    }
+
+    @ResponseBody
+    @PostMapping("/send-code-password")
+    public String sendCodePassword(@RequestBody String email) {
+        String certCode = EmailService.generateRandomNumber();
         EmailMessage emailMessage = EmailMessage.builder()
-                .to(member.getEmail())
+                .to(email)
                 .subject("[네잎클로버] 비밀번호 찾기를 위한 인증 메일이에요.")
-                .message("인증번호 : " + randomNumber)
+                .message("인증번호 : " + certCode)
                 .build();
-        emailService.sendMail(emailMessage);
-        return "redirect:/member/reset-password";
+        emailService.asyncSendMail(emailMessage);
+        return certCode;
     }
 
     @GetMapping("/myPage")
@@ -173,7 +223,7 @@ public class MemberController {
     @PostMapping("/addAddressBook")
     public String addDeliveryAddress(@ModelAttribute AddressBook addressBook, Principal principal) {
         String memberId = principal.getName();
-        int memberNo = memberService.getmemberNo(memberId);
+        long memberNo = memberService.getmemberNo(memberId);
         addressBook.setMemberNo(memberNo);
         memberService.addDeliveryAddress(addressBook);
         return "redirect:/member/myPage/addressBook";
@@ -400,5 +450,30 @@ public class MemberController {
 //ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
         System.out.println("====");
         return "/user/userGoodsDetail";
+    }
+
+    @GetMapping("/category/{no}")
+    public String categoryDetail(@PathVariable("no") int cate_no,
+                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                                 Model model) {
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+        // 상품 목록 가져오기
+        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 페이지네이션 정보 전달
+        int totalItems = goodsService.getTotalGoodsCount(cate_no);
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("sort", sort);
+        model.addAttribute("size", size);
+        return "/user/userCategory"; // 카테고리 상세 페이지
     }
 }

@@ -18,6 +18,8 @@ CREATE TABLE seller
 
 SELECT * FROM seller;
 
+commit;
+
 INSERT INTO seller
 (seller_id, password, name, email, phone_number, business_number, company_name, admission_at, updated_at)
 VALUES ('seller001', 'password123', '홍길동', 'hong@example.com', '010-1234-5678', '123-45-67890', '홍길동전자', '2023-01-15'
