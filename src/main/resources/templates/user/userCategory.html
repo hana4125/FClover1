@@ -11,6 +11,7 @@
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
+  <link rel="stylesheet" href="/css/user/gift.css">
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -38,7 +39,7 @@
       })
 
       $(".show-detail").click(function () {
-        location.href = "/goodsDetail";
+        location.href = "/member/GoodsDetail{no}";
       })
     })
 
@@ -290,14 +291,14 @@
           <input type="checkbox" class="item-checkbox mt-1 ms-1" style="width: 18px; height: 18px;">
           <div class="book-item mt-1">
             <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
-            <a th:href="@{/member/GoodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
+            <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
               <div class="img-box">
-                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">
+<!--                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">-->
               </div>
             </a>
             <div class="item-info">
               <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
-              <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+              <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
                 <span class="item-name" th:text="${goods.goodsName}"></span>
               </a>
               <br>

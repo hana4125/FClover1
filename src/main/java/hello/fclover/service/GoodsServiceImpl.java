@@ -5,11 +5,10 @@ import hello.fclover.domain.GoodsImage;
 import hello.fclover.mybatis.mapper.GoodsImageMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -25,7 +24,7 @@ public class GoodsServiceImpl implements GoodsService {
     private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageMapper;
   
-    @Value("${goods.image.folder}")
+//    @Value("${goods.image.folder}")
     String saveFolder;
     GoodsImage goodsImage = new GoodsImage();
     @Override
@@ -55,8 +54,8 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods findGoodsByNo(Long goodsNo) {
         return goodsMapper.findGoodsById(goodsNo);
     }
-  
-  private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {
+
+    private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {
         boolean IsFirstImage = true;
         //프로젝트 폴더 가져오기
         String projectFolder = System.getProperty("user.dir") + File.separator + saveFolder;

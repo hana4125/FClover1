@@ -25,7 +25,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.Map;
 
 @Slf4j
@@ -450,9 +449,12 @@ public class MemberController {
     }
 
 
-    @GetMapping("/GoodsDetail")
-    public String GoodsDetail() {
-        System.out.println("====");
+    @GetMapping("/goodsDetail/{no}")
+    public String goodsDetail(@PathVariable("no") Long goodsNo, Model model) {
+        // 카테고리 데이터 가져오기
+        Goods goods = goodsService.findGoodsByNo(goodsNo);
+
+        model.addAttribute("goods", goods);
         return "/user/userGoodsDetail";
     }
 
@@ -462,7 +464,6 @@ public class MemberController {
                                  @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
                                  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                  @RequestParam(value = "size", required = false, defaultValue = "20") int size,
-                                 Principal principal,
                                  Model model) {
 
         // 카테고리 데이터 가져오기
@@ -492,5 +493,11 @@ public class MemberController {
 
 
         return "/user/userCategory"; // 카테고리 상세 페이지
+    }
+
+    @GetMapping("/gift")
+    public String gift() {
+        System.out.println("====");
+        return "/user/gift";
     }
 }
