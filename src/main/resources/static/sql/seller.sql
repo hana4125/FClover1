@@ -17,6 +17,8 @@ CREATE TABLE seller
 ) ENGINE=InnoDB;
 SELECT * FROM seller;
 
+commit;
+
 -- DTO, TABLE 변경. 수정 필요
 INSERT INTO seller
 (seller_id, seller_pass , seller_name, seller_email, seller_phone, seller_number,

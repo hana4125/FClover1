@@ -26,7 +26,7 @@
       })
 
       $(".category-item").click(function () {
-        location.href = "/category/{no}";
+        location.href = "/member/category/{no}";
       })
 
       $(".best").click(function () {
@@ -242,7 +242,7 @@
       <!-- categoryList의 각 요소를 반복하여 출력 -->
       <li th:each="category : ${categoryList}">
         <!-- 카테고리 이름 출력 -->
-        <a th:href="@{/category/{no}(no=${category.cateNo})}"
+        <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
            th:text="${category.cateName}"
            class="category-item"></a>
       </li>

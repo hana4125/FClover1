@@ -29,12 +29,6 @@
         $("#idCheck").click(function() {
             alert("메일 발송 성공");
         })
-
-        const originalText = $("#memberId").text();
-        const visiblePart = originalText.slice(0,2);
-        const maskedPart = '*'.repeat(originalText.length - 2);
-
-        $("#memberId").text(visiblePart + maskedPart);
     })
   </script>
 </head>
@@ -44,7 +38,7 @@
     <img id="logo" src="/images/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-3">
   </div>
   <div>
-    <img class="mt-5" src="/images/user/ok.png" alt="확인">
+    <img class="mt-4" src="/images/user/ok.png" alt="확인">
   </div>
   <div>
     <h5 class="fw-bold mt-3 mb-5">입력하신 정보와 일치하는 결과입니다.</h5>
@@ -53,12 +47,10 @@
 </div>
 <div class="container w-20">
   <div class="fw-bold mt-5 mb-3">온라인 가입 정보</div>
-  <div class="fw-bold mb-3 d-flex">
+  <div class="fw-bold mb-3">
     <span id="memberId" th:text="${member.memberId}"></span>
-    <button class="btn btn-sm btn-outline-secondary ms-auto" id="idCheck">아이디 확인</button>
   </div>
   <div class="mb-3">가입일 <span th:text="${#temporals.format(member.createdAt, 'yyyy-MM.')}"></span> | 인터넷 네잎클로버</div>
-  <input type="text" placeholder="인증번호">
 </div>
 <div class="container w-20 text-center mt-5">
   <button id="resetPasswordBtn" class="btn btn-outline-primary ps-4 pe-4 pt-2 pb-2">비밀번호 찾기</button>

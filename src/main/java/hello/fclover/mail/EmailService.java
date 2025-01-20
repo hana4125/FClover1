@@ -3,6 +3,7 @@ package hello.fclover.mail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,9 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Service
-
+@Slf4j
 public class EmailService {
 
     private final JavaMailSender mailSender;
@@ -38,6 +40,16 @@ public class EmailService {
         return randomNumber.toString();
     }
 
+    // 비동기 방식
+    public void asyncSendMail(EmailMessage emailMessage) {
+        CompletableFuture.runAsync(() -> sendMail(emailMessage))
+                .exceptionally(throwable -> {
+                    log.error("Exception occurred: {}", throwable.getMessage());
+                    return null;
+                });
+    }
+
+    // 동기 방식
     public void sendMail(EmailMessage emailMessage)  {
         MimeMessage mimeMessage = mailSender.createMimeMessage(); // MimeMessage 객체 생성
         try {
