@@ -1,0 +1,3615 @@
+element.style {
+}
+.wrapper .container_wrapper {
+    min-height: calc(100vh - 80px);
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+main {
+    display: block;
+    unicode-bidi: isolate;
+}
+body {
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
+    min-width: 1440px;
+    color: #000;
+}
+.wrapper .container_wrapper .breadcrumb_wrap ~ .contents_wrap {
+    padding-top: 42px;
+}
+.wrapper .container_wrapper .contents_wrap {
+    padding-top: 50px;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+section {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: inherit;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+:-webkit-any(article, aside, nav, section) h1 {
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+}
+h1 {
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+.wrapper .container_wrapper .contents_wrap .contents_inner {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+
+aside {
+    display: block;
+    unicode-bidi: isolate;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+section {
+    display: block;
+    unicode-bidi: isolate;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap {
+    padding-bottom: 0;
+}
+
+.title_wrap.title_size_xxl {
+    padding-bottom: 30px;
+}
+.title_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.title_wrap.title_size_xxl .title_heading {
+    font-size: 30px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+}
+
+.title_wrap .title_heading {
+    display: inline-block;
+    position: relative;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap a.title_heading:after {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 9px 0 0 12px;
+    background-size: 24px 24px;
+    /*background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_plus_link@2x.png);*/
+    vertical-align: top;
+}
+.title_wrap.title_size_xxl .title_heading {
+    font-size: 30px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+}
+.title_wrap .title_heading {
+    display: inline-block;
+    position: relative;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+}
+body {
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
+    min-width: 1440px;
+    color: #000;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .snb_wrap .snb_title {
+    position: relative;
+    display: block;
+    padding-left: 12px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .snb_wrap .snb_title:before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 0;
+    display: block;
+    width: 6px;
+    height: 10px;
+    background-size: 6px 10px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/arw_snb_title@2x.png);
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .snb_wrap .snb_title {
+    position: relative;
+    display: block;
+    padding-left: 12px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+}
+ol, ul {
+    list-style: none;
+}
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap.sub_category .snb_wrap .snb_list .snb_item .snb_link {
+    color: #595959;
+}
+
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .snb_wrap .snb_list .snb_item .snb_link {
+    display: block;
+    position: relative;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.showcase_side_wrap {
+    margin-top: 50px;
+}
+.showcase_side_wrap .blurb_thumb_box {
+    border-radius: 10px;
+    overflow: hidden;
+}
+body {
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
+    min-width: 1440px;
+    color: #000;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap.sub_category .snb_wrap .snb_list .snb_item .snb_link {
+    color: #595959;
+}
+
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .snb_wrap .snb_list .snb_item .snb_link {
+    display: block;
+    position: relative;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+ol, ul {
+    list-style: none;
+}
+
+ul {
+    list-style-type: disc;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.wrapper .container_wrapper .contents_wrap.aside .section_wrap {
+    width: calc(100% - 216px);
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+section {
+    display: block;
+    unicode-bidi: isolate;
+}
+.tab_wrap {
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+
+.ui-tabs {
+    position: relative;
+    padding: .2em;
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.tab_wrap {
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+
+.ui-tabs {
+    position: relative;
+    padding: .2em;
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.tab_wrap.type_line > .tab_list_wrap {
+    height: 44px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #000;
+}
+
+.tab_wrap > .tab_list_wrap {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    width: 100%;
+    height: 72px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    border-bottom: 1px solid #d5d5d5;
+    box-sizing: border-box;
+    font-size: 0;
+}
+.tab_wrap > .tab_list_wrap .tabs {
+    display: inline-block;
+    flex: 1 1 auto;
+    position: relative;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: .2em .2em 0;
+}
+.ui-helper-reset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+}
+ol, ul {
+    list-style: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+.ui-helper-clearfix:after, .ui-helper-clearfix:before {
+    content: "";
+    display: table;
+    border-collapse: collapse;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item.ui-state-active {
+    border: 1px solid #000;
+    border-bottom: 0;
+}
+
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item {
+    min-width: 160px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #d5d5d5;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    transition: none;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item.ui-state-active, .tab_wrap > .tab_list_wrap .tabs .tab_item.active {
+    z-index: 2;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item:first-child {
+    padding: 0 30px 0 0;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    padding: 0 30px;
+    float: left;
+    background: none;
+    box-sizing: border-box;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: -1px;
+    padding-bottom: 1px;
+}
+.ui-tabs .ui-tabs-nav li {
+    list-style: none;
+    float: left;
+    position: relative;
+    top: 0;
+    margin: 1px .2em 0 0;
+    border-bottom-width: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item .tab_link {
+    padding: 0 23px;
+}
+
+.tab_wrap > .tab_list_wrap .tabs .tab_item.ui-state-active .tab_link, .tab_wrap > .tab_list_wrap .tabs .tab_item.active .tab_link {
+    cursor: pointer;
+    overflow: visible;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item .tab_link {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+    cursor: text;
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: left;
+    padding: .5em 1em;
+    text-decoration: none;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item.ui-state-active .tab_link .tab_text {
+    color: #000;
+    font-weight: 500;
+}
+
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item .tab_link .tab_text {
+    padding-bottom: 2px;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item.ui-state-active .tab_link .tab_text, .tab_wrap > .tab_list_wrap .tabs .tab_item.active .tab_link .tab_text {
+    color: #000;
+    font-weight: 700;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item .tab_link .tab_text {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    color: #767676;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    font-family: "Noto Sans KR", sans-serif;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item.ui-state-active .tab_link:after {
+    bottom: -2px;
+    background: #fff;
+}
+
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item .tab_link:after {
+    bottom: -2px;
+    transition: none;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item.ui-state-active .tab_link:after, .tab_wrap > .tab_list_wrap .tabs .tab_item.active .tab_link:after {
+    background-color: #000;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item .tab_link:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 3px;
+    background-color: transparent;
+    transition: background-color 0.3s ease-out;
+}
+
+.ui-helper-clearfix:after {
+    clear: both;
+}
+
+.ui-helper-clearfix:after, .ui-helper-clearfix:before {
+    content: "";
+    display: table;
+    border-collapse: collapse;
+}
+.tab_wrap .tab_content {
+    padding: 0;
+    background: #fff;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.ui-tabs .ui-tabs-panel {
+    display: block;
+    border-width: 0;
+    padding: 1em 1.4em;
+    background: 0 0;
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.list_sort_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+}
+.list_sort_wrap .right_area {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0;
+}
+.list_sort_wrap .form_sel:first-child, .list_sort_wrap .switch_list_btn_wrap:first-child {
+    margin-left: 0;
+}
+
+.list_sort_wrap .form_sel, .list_sort_wrap .switch_list_btn_wrap {
+    margin: 0 2px;
+}
+.form_sel.type_sm, .form_sel[data-class*=type_sm] {
+    width: 120px;
+}
+.form_sel {
+    display: inline-block;
+    width: 450px;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+/*select:not(:-internal-list-box) {*/
+/*    overflow: visible !important;*/
+/*}*/
+select {
+
+    text-rendering: auto;
+    color: fieldtext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    appearance: auto;
+    box-sizing: border-box;
+    align-items: center;
+    -webkit-rtl-ordering: logical;
+    background-color: field;
+    cursor: default;
+    margin: 0em;
+    white-space: pre;
+    border-width: 1px;
+    border-style: solid;
+    /*border-color: rgb(118, 118, 118), rgb(133, 133, 133);*/
+    border-image: initial;
+    border-radius: 0px;
+}
+option {
+    font-weight: normal;
+    display: block;
+    padding-block-start: 0px;
+    padding-block-end: 1px;
+    min-block-size: 1.2em;
+    padding-inline: 2px;
+    white-space: nowrap;
+}
+.switch_prod_wrap .prod_list {
+    padding-top: 30px;
+    border-top: 1px solid #d5d5d5;
+}
+
+.prod_list {
+    font-size: 0;
+}
+ol, ul {
+    list-style: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+ol {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item {
+    width: 100%;
+    margin: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.prod_list .prod_item:nth-child(6n+1) {
+    margin-left: 0;
+}
+.prod_list .prod_item {
+    display: inline-block;
+    width: 170px;
+    margin-left: 36px;
+    vertical-align: top;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .form_chk {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.prod_list .prod_item .form_chk, .prod_list .prod_item .form_rdo {
+    margin-bottom: 10px;
+}
+.form_rdo.no_label, .form_chk.no_label {
+    width: 22px;
+    height: 22px;
+    min-height: auto;
+}
+.form_rdo, .form_chk {
+    display: inline-block;
+    position: relative;
+    min-height: 22px;
+    vertical-align: top;
+}
+
+.form_rdo input, .form_chk input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 3px 4px;
+    padding: initial;
+    border: initial;
+}
+
+input {
+
+    text-rendering: auto;
+    color: fieldtext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    appearance: auto;
+    -webkit-rtl-ordering: logical;
+    cursor: text;
+    background-color: field;
+    margin: 0em;
+    padding: 1px 0px;
+    border-width: 2px;
+    border-style: inset;
+    /*border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));*/
+    border-image: initial;
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+.form_rdo.no_label input + label, .form_chk.no_label input + label {
+    position: static;
+    padding-left: 0;
+    font-size: 0;
+}
+
+.form_rdo input + label, .form_chk input + label {
+    display: inline-block;
+    position: relative;
+    padding: 2px 0 0 27px;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    line-height: 20px;
+    color: #000;
+    cursor: pointer;
+    vertical-align: top;
+    transition: color 0.2s ease-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+label {
+    cursor: pointer;
+}
+label {
+    cursor: default;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area {
+    max-width: 674px;
+}
+
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area {
+    flex: 0 1 auto;
+    align-items: flex-start;
+    max-width: 684px;
+}
+.prod_area.horizontal {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.prod_area.horizontal .prod_thumb_box.size_lg {
+    width: 142px;
+}
+
+.prod_area.horizontal .prod_thumb_box {
+    overflow: hidden;
+    flex-shrink: 0;
+    width: 100px;
+}
+.prod_area .prod_thumb_box.size_lg {
+    width: 170px;
+}
+.prod_area .prod_thumb_box {
+    position: relative;
+    overflow: hidden;
+    width: 142px;
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.prod_area.horizontal .prod_thumb_box.size_lg {
+    width: 142px;
+}
+
+.prod_area.horizontal .prod_thumb_box {
+    overflow: hidden;
+    flex-shrink: 0;
+    width: 100px;
+}
+.prod_area .prod_thumb_box.size_lg {
+    width: 170px;
+}
+.prod_area .prod_thumb_box {
+    position: relative;
+    overflow: hidden;
+    width: 142px;
+}
+.prod_area .prod_thumb_box .prod_link {
+    display: block;
+    height: 100%;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.prod_area .prod_thumb_box .img_box {
+    overflow: hidden;
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    border: 1px solid #eaeaea;
+}
+.prod_area.horizontal .prod_thumb_box.size_lg .img_box img {
+    max-height: calc((142px - 2px)* 1.618 - 10px);
+}
+
+.prod_area.horizontal .prod_thumb_box .img_box img {
+    max-height: calc((100px - 2px)* 1.618 - 10px);
+}
+.prod_area .prod_thumb_box.size_lg .img_box img {
+    max-height: calc((170px - 2px)* 1.618 - 10px);
+}
+.prod_area .prod_thumb_box .img_box img {
+    width: 100%;
+    max-height: calc((100% - 2px)* 1.618 - 10px);
+}
+.prod_area .prod_thumb_box img {
+    width: 100%;
+}
+img {
+    vertical-align: middle;
+}
+img, fieldset {
+    border: 0;
+}
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+.prod_area .prod_thumb_box .prod_viewer_control {
+    margin-top: 4px;
+    font-size: 0;
+    text-align: center;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area .prod_info_box {
+    overflow: hidden;
+}
+
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area .prod_info_box {
+    overflow: visible;
+    padding-top: 10px;
+}
+.prod_area.horizontal .prod_info_box {
+    overflow: hidden;
+    margin-left: 16px;
+}
+.prod_area .prod_info_box {
+}
+.switch_prod_wrap .prod_area .prod_info_box .prod_name_group {
+    position: relative;
+    font-size: 0;
+}
+.switch_prod_wrap .prod_area .prod_info_box .prod_name_group .auto_overflow_contents {
+    max-height: calc((23px* 2) + 1px);
+}
+
+.switch_prod_wrap .auto_overflow_wrap .auto_overflow_contents {
+    position: relative;
+}
+.auto_overflow_wrap .auto_overflow_contents {
+    overflow: hidden;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area .prod_info_box .prod_info {
+    height: auto;
+}
+
+.switch_prod_wrap .prod_area .prod_info_box .prod_name_group .auto_overflow_contents .prod_info {
+    font-size: 15px;
+    line-height: 23px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+}
+.switch_prod_wrap .prod_area .prod_info_box .prod_name_group .prod_info {
+    word-break: normal;
+}
+.prod_area .prod_info_box .prod_info {
+    display: block;
+    height: 100%;
+    font-size: 0;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.prod_area .prod_info_box .prod_name {
+    display: block;
+    display: -webkit-box;
+    overflow: hidden;
+    max-height: 46px;
+    line-height: 23px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /*text-overflow: -o-ellipsis-lastline;*/
+    white-space: normal;
+    word-break: break-all;
+    font-size: 15px;
+    line-height: 23px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area .prod_info_box .prod_author, .switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area .prod_info_box .prod_last_update, .switch_prod_wrap.view_type_list .prod_list .prod_item .prod_area .prod_info_box .popular_prod_name {
+    height: auto;
+    max-height: none;
+    -webkit-box-orient: inherit;
+    -webkit-line-clamp: inherit;
+}
+
+.prod_area .prod_info_box .prod_author, .prod_area .prod_info_box .prod_author a, .prod_area .prod_info_box .prod_last_update, .prod_area .prod_info_box .prod_last_update a, .prod_area .prod_info_box .popular_prod_name, .prod_area .prod_info_box .popular_prod_name a {
+    color: #595959;
+}
+.prod_area .prod_info_box .prod_author, .prod_area .prod_info_box .prod_last_update, .prod_area .prod_info_box .popular_prod_name {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+    display: block;
+    display: -webkit-box;
+    overflow: hidden;
+    max-height: 38px;
+    line-height: 19px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /*text-overflow: -o-ellipsis-lastline;*/
+    white-space: normal;
+    word-break: break-all;
+}
+
+.prod_area .prod_info_box .prod_author, .prod_area .prod_info_box .prod_author a, .prod_area .prod_info_box .prod_last_update, .prod_area .prod_info_box .prod_last_update a, .prod_area .prod_info_box .popular_prod_name, .prod_area .prod_info_box .popular_prod_name a {
+    color: #595959;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.prod_area .prod_info_box .prod_price {
+    display: block;
+    margin-top: 12px;
+    font-size: 0;
+}
+.prod_area .prod_info_box .prod_price .percent {
+    display: inline-block;
+    margin-right: 3px;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+    color: #4dac27;
+    vertical-align: top;
+}
+.prod_area .prod_info_box .prod_price .price {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: top;
+}
+.prod_area .prod_info_box .prod_price .price .val {
+    font-weight: 700;
+}
+
+.prod_area .prod_info_box .prod_price .price .val, .prod_area .prod_info_box .prod_price .price .unit {
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+
+.prod_area .prod_info_box .prod_price .price .val, .prod_area .prod_info_box .prod_price .price .unit {
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+
+.prod_area .prod_info_box .prod_price .price_normal {
+    display: inline-block;
+    margin: 3px 0 0 2px;
+    font-size: 0;
+    vertical-align: top;
+}
+.prod_area .prod_info_box .prod_price .price_normal .text {
+    font-size: 0;
+}
+.prod_area .prod_info_box .prod_price .price_normal .val {
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+    color: #767676;
+}
+
+s {
+    text-decoration: line-through;
+}
+.prod_area .prod_info_box .prod_price .gap {
+    font-size: 0;
+}
+.prod_area .prod_info_box .prod_price .gap + .point {
+    padding: 2px 0 0;
+}
+
+.prod_area .prod_info_box .prod_price .point {
+    display: inline-block;
+    padding: 3px 0 0 3px;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+    color: #595959;
+    vertical-align: top;
+}
+.prod_area .prod_info_box .prod_price .gap + .point:before {
+    content: "";
+    display: inline-block;
+    width: 1px;
+    height: 7px;
+    margin: 6px 6px 0;
+    background-color: #d5d5d5;
+    vertical-align: top;
+}
+.prod_area .prod_info_box .prod_introduction {
+    margin-top: 20px;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+    color: #595959;
+    display: block;
+    display: -webkit-box;
+    overflow: hidden;
+    max-height: 38px;
+    line-height: 19px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /*text-overflow: -o-ellipsis-lastline;*/
+    white-space: normal;
+    word-break: break-all;
+    word-break: break-all;
+}
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+.switch_prod_wrap.view_type_list .prod_area .prod_info_box .prod_bottom {
+    margin-top: 0;
+}
+
+.prod_area .prod_info_box .prod_bottom {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    margin-top: 10px;
+}
+.switch_prod_wrap.view_type_list .prod_area .prod_info_box .prod_introduction + .prod_bottom .review_summary_wrap {
+    margin-top: 20px;
+}
+
+.switch_prod_wrap.view_type_list .prod_area .prod_info_box .prod_bottom .review_summary_wrap {
+    margin-top: 16px;
+}
+.prod_area .prod_info_box .prod_bottom .review_summary_wrap {
+    margin-top: 0;
+}
+.prod_area .prod_info_box .review_summary_wrap {
+    margin-top: 16px;
+}
+.review_summary_wrap {
+    display: block;
+    font-size: 0;
+}
+.review_klover_box {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: top;
+}
+
+.review_klover_text.font_size_xxs {
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+
+.review_klover_text {
+    display: inline-block;
+    position: relative;
+    padding-left: 19px;
+    color: #000;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    vertical-align: top;
+}
+.review_klover_text:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_klover_sm@2x.png) center no-repeat;
+    background-size: 14px 14px;
+}
+
+.switch_prod_wrap.view_type_list .prod_area .prod_info_box .prod_bottom .btn_wish_icon {
+    display: none;
+}
+
+.prod_area .prod_info_box .prod_bottom .review_summary_wrap + .btn_wish_icon {
+    margin-left: auto;
+}
+.prod_area .prod_info_box .prod_bottom .btn_wish_icon {
+    flex-shrink: 0;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.btn_wish_icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    vertical-align: top;
+    transition: background 0.2s ease-out;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+button {
+    appearance: auto;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+
+.prod_area .prod_info_box .prod_bottom .btn_wish_icon:not(.active) .ico_wish {
+    opacity: 0.3;
+}
+
+.switch_prod_wrap .btn_wish_icon:not(.active) .ico_wish {
+    opacity: 0.3;
+}
+button[class^=btn_] [class^=ico_], a[class^=btn_] [class^=ico_] {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.btn_wish_icon .ico_wish {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h18@2x.png) center no-repeat;
+    background-size: 18px 18px;
+    vertical-align: top;
+}
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    /*font: 0 / 0 Arial;*/
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_order_state {
+    flex-shrink: 0;
+    width: 108px;
+    margin-left: 35px;
+    margin-top: 48px;
+    text-align: center;
+}
+.badge_sm.badge_pill {
+    padding: 3px 7px 0;
+    border-radius: 20px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+.badge_primary {
+    color: #474c98;
+    border: 1px solid #ededf7;
+    background: #ededf7;
+}
+.badge_sm {
+    min-height: 20px;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+[class^=badge_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.badge_sm.badge_pill {
+    padding: 3px 7px 0;
+    border-radius: 20px;
+    line-height: 1;
+    font-weight: 400;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+.badge_primary {
+    color: #474c98;
+    border: 1px solid #ededf7;
+    background: #ededf7;
+}
+.badge_sm {
+    min-height: 20px;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+[class^=badge_] {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: top;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_order_state .order_state_desc {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_order_state .order_state_desc {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+strong {
+    font-weight: bold;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_btn_wrap {
+    flex-shrink: 0;
+    width: 135px;
+    margin-left: auto;
+    text-align: right;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_btn_wrap .btn_wish_icon {
+    margin-bottom: 24px;
+}
+
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.btn_wish_icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    vertical-align: top;
+    transition: background 0.2s ease-out;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    appearance: auto;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+.switch_prod_wrap .btn_wish_icon:not(.active) .ico_wish {
+    opacity: 0.3;
+}
+
+button[class^=btn_] [class^=ico_], a[class^=btn_] [class^=ico_] {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.btn_wish_icon .ico_wish {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h18@2x.png) center no-repeat;
+    background-size: 18px 18px;
+    vertical-align: top;
+}
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    /*font: 0 / 0 Arial;*/
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap {
+    width: 170px;
+    padding-right: 46px;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
+    display: block;
+}
+aside {
+    display: block;
+    unicode-bidi: isolate;
+}
+.wrapper .container_wrapper .contents_wrap.aside .contents_inner {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.wrapper .container_wrapper .contents_wrap .contents_inner {
+    width: 1200px;
+    margin: 0 auto;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap {
+    padding-bottom: 0;
+}
+
+.title_wrap.title_size_xxl {
+    padding-bottom: 30px;
+}
+.title_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.title_wrap.title_size_xxl .title_heading {
+    font-size: 30px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+}
+
+.title_wrap .title_heading {
+    display: inline-block;
+    position: relative;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap a.title_heading:after {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 9px 0 0 12px;
+    background-size: 24px 24px;
+    /*background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_plus_link@2x.png);*/
+    vertical-align: top;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap {
+    padding-bottom: 0;
+}
+
+.title_wrap.title_size_xxl {
+    padding-bottom: 30px;
+}
+.title_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.tab_wrap > .tab_list_wrap .tabs {
+    display: inline-block;
+    flex: 1 1 auto;
+    position: relative;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: .2em .2em 0;
+}
+.ui-helper-reset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+}
+ol, ul {
+    list-style: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item.ui-state-active {
+    border: 1px solid #000;
+    border-bottom: 0;
+}
+
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item {
+    min-width: 160px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #d5d5d5;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    transition: none;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item.ui-state-active, .tab_wrap > .tab_list_wrap .tabs .tab_item.active {
+    z-index: 2;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item:first-child {
+    padding: 0 30px 0 0;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    padding: 0 30px;
+    float: left;
+    background: none;
+    box-sizing: border-box;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: -1px;
+    padding-bottom: 1px;
+}
+.ui-tabs .ui-tabs-nav li {
+    list-style: none;
+    float: left;
+    position: relative;
+    top: 0;
+    margin: 1px .2em 0 0;
+    border-bottom-width: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item ~ .tab_item {
+    margin-left: -1px;
+}
+
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item {
+    min-width: 160px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #d5d5d5;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    transition: none;
+}
+.tab_wrap > .tab_list_wrap .tabs .tab_item {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    padding: 0 30px;
+    float: left;
+    background: none;
+    box-sizing: border-box;
+}
+.ui-tabs .ui-tabs-nav li {
+    list-style: none;
+    float: left;
+    position: relative;
+    top: 0;
+    margin: 1px .2em 0 0;
+    border-bottom-width: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item .tab_link {
+    padding: 0 23px;
+}
+
+.tab_wrap > .tab_list_wrap .tabs .tab_item .tab_link {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: left;
+    padding: .5em 1em;
+    text-decoration: none;
+}
+.tab_wrap.type_line > .tab_list_wrap .tabs .tab_item .tab_link .tab_text {
+    padding-bottom: 2px;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+}
+
+.tab_wrap > .tab_list_wrap .tabs .tab_item .tab_link .tab_text {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    color: #767676;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    font-family: "Noto Sans KR", sans-serif;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+}
+.list_sort_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+}
+.list_sort_wrap .right_area {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0;
+}
+.list_sort_wrap .form_sel:first-child, .list_sort_wrap .switch_list_btn_wrap:first-child {
+    margin-left: 0;
+}
+
+.list_sort_wrap .form_sel, .list_sort_wrap .switch_list_btn_wrap {
+    margin: 0 2px;
+}
+.form_sel.type_sm, .form_sel[data-class*=type_sm] {
+    width: 120px;
+}
+.form_sel {
+    display: inline-block;
+    width: 450px;
+}
+.form_sel.type_sm .ui-selectmenu-button .ui-selectmenu-text, .form_sel[data-class*=type_sm] .ui-selectmenu-button .ui-selectmenu-text {
+    font-size: 13px;
+    line-height: 36px;
+}
+
+.form_sel .ui-selectmenu-button .ui-selectmenu-text {
+    font-size: 14px;
+    line-height: 42px;
+    letter-spacing: -0.01em;
+    color: #000;
+    font-family: "Noto Sans KR", sans-serif;
+}
+.ui-selectmenu-text {
+    display: block;
+    margin-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.list_sort_wrap .form_sel, .list_sort_wrap .switch_list_btn_wrap {
+    margin: 0 2px;
+}
+
+.form_sel.type_sm, .form_sel[data-class*=type_sm] {
+    width: 120px;
+}
+.form_sel {
+    display: inline-block;
+    width: 450px;
+}
+.form_sel.type_sm .ui-selectmenu-button, .form_sel[data-class*=type_sm] .ui-selectmenu-button {
+    width: 100%;
+    height: 38px;
+}
+
+.form_sel .ui-selectmenu-button {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    padding: 0 14px;
+    background-color: #fff;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-out, border-radius 0.2s ease-out;
+    outline: none;
+}
+.ui-selectmenu-button.ui-button {
+    text-align: left;
+    white-space: nowrap;
+    width: 14em;
+}
+.ui-button, .ui-button:active, .ui-button:hover, .ui-button:link, .ui-button:visited {
+    text-decoration: none;
+}
+.ui-button {
+    padding: .4em 1em;
+    display: inline-block;
+    line-height: normal;
+    margin-right: .1em;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: visible;
+}
+.ui-button, .ui-menu-icons {
+    position: relative;
+}
+.list_sort_wrap .form_sel:last-child, .list_sort_wrap .switch_list_btn_wrap:last-child {
+    margin-right: 0;
+}
+
+.list_sort_wrap .form_sel, .list_sort_wrap .switch_list_btn_wrap {
+    margin: 0 2px;
+}
+.switch_list_btn_wrap {
+    display: inline-block;
+    width: 75px;
+    font-size: 0;
+    vertical-align: top;
+}
+.list_result_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    -ms-flex-align: end;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.wrapper .container_wrapper .pagination, .dialog_wrapper .pagination {
+    display: block;
+    text-align: center;
+    font-size: 0;
+    margin-top: 30px;
+}
+
+.list_result_wrap .pagination {
+    margin: 0 0 18px 0;
+}
+
+.wrapper .container_wrapper .pagination .btn_page.prev, .dialog_wrapper .pagination .btn_page.prev {
+    background: url(	https://contents.kyobobook.co.kr/resources/fo/images/common/ink/btn_pagination_prev@2x.png) center no-repeat;
+    background-size: 24px 24px;
+}
+
+.wrapper .container_wrapper .pagination .btn_page, .dialog_wrapper .pagination .btn_page {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    vertical-align: top;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+a[disabled], a[aria-disabled=true], a.disabled, button[disabled], button[aria-disabled=true], button.disabled {
+    pointer-events: none !important;
+    cursor: default !important;
+    text-decoration: none !important;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+
+
+button {
+    appearance: auto;
+
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+a[disabled] *, a[aria-disabled=true] *, a.disabled *, button[disabled] *, button[aria-disabled=true] *, button.disabled * {
+    text-decoration: none !important;
+}
+.wrapper .container_wrapper .pagination .page_num, .dialog_wrapper .pagination .page_num {
+    display: inline-block;
+    margin: 0 8px;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.wrapper .container_wrapper .pagination .page_num .btn_page_num.active, .dialog_wrapper .pagination .page_num .btn_page_num.active {
+    color: #fff;
+    font-weight: 700;
+    background-color: #767676;
+}
+
+.wrapper .container_wrapper .pagination .page_num .btn_page_num, .dialog_wrapper .pagination .page_num .btn_page_num {
+    min-width: 24px;
+    height: 24px;
+    padding: 5px 4px 6px 4px;
+    font-size: 13px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-family: "Roboto", sans-serif;
+    color: #767676;
+    border-radius: 12px;
+    background-color: transparent;
+    /*transform: color 0.2s ease-out, font-weight 0.2s ease-out, background 0.2s ease-out;*/
+}
+.wrapper .container_wrapper .pagination .page_num .btn_page_num, .wrapper .container_wrapper .pagination .page_num .text_ellipsis, .dialog_wrapper .pagination .page_num .btn_page_num, .dialog_wrapper .pagination .page_num .text_ellipsis {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.wrapper .container_wrapper .pagination .page_num .text_ellipsis, .dialog_wrapper .pagination .page_num .text_ellipsis {
+    width: 10px;
+    height: 2px;
+    margin: 11px 8px 0;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_ellipsis@2x.png) 0% 0% no-repeat;
+    background-size: 10px 2px;
+}
+
+.wrapper .container_wrapper .pagination .page_num .btn_page_num, .wrapper .container_wrapper .pagination .page_num .text_ellipsis, .dialog_wrapper .pagination .page_num .btn_page_num, .dialog_wrapper .pagination .page_num .text_ellipsis {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    /*font: 0 / 0 Arial;*/
+}
+.wrapper .container_wrapper .pagination .page_num .btn_page_num ~ .btn_page_num, .dialog_wrapper .pagination .page_num .btn_page_num ~ .btn_page_num {
+    margin-left: 8px;
+}
+
+.wrapper .container_wrapper .pagination .page_num .btn_page_num, .dialog_wrapper .pagination .page_num .btn_page_num {
+    min-width: 24px;
+    height: 24px;
+    padding: 5px 4px 6px 4px;
+    font-size: 13px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-family: "Roboto", sans-serif;
+    color: #767676;
+    border-radius: 12px;
+    background-color: transparent;
+    /*transform: color 0.2s ease-out, font-weight 0.2s ease-out, background 0.2s ease-out;*/
+}
+.wrapper .container_wrapper .pagination .page_num .btn_page_num, .wrapper .container_wrapper .pagination .page_num .text_ellipsis, .dialog_wrapper .pagination .page_num .btn_page_num, .dialog_wrapper .pagination .page_num .text_ellipsis {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.wrapper .container_wrapper .pagination, .dialog_wrapper .pagination {
+    display: block;
+    text-align: center;
+    font-size: 0;
+    margin-top: 30px;
+}
+
+.list_result_wrap .pagination {
+    margin: 0 0 18px 0;
+}
+.wrapper .container_wrapper .pagination .btn_page.next, .dialog_wrapper .pagination .btn_page.next {
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/btn_pagination_next@2x.png) center no-repeat;
+    background-size: 24px 24px;
+}
+
+.wrapper .container_wrapper .pagination .btn_page, .dialog_wrapper .pagination .btn_page {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    vertical-align: top;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+button {
+    appearance: auto;
+
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+.list_result_wrap .right_area {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    -ms-flex-align: end;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    margin-bottom: 11px;
+}
+.list_result_wrap .right_area .item_group:first-child {
+    margin-left: 0;
+}
+.list_result_wrap .right_area .item_group {
+    margin: 0 5px;
+    font-size: 0;
+}
+.list_result_wrap .right_area .item_group .form_chk, .list_result_wrap .right_area .item_group .form_rdo {
+    margin-top: 8px;
+}
+
+.list_result_wrap .right_area .form_chk, .list_result_wrap .right_area .form_rdo {
+    align-self: center;
+    margin: 0 20px 0 0;
+}
+.list_result_wrap .form_chk {
+    margin-bottom: 19px;
+}
+.form_rdo, .form_chk {
+    display: inline-block;
+    position: relative;
+    min-height: 22px;
+    vertical-align: top;
+}
+.form_rdo input, .form_chk input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+user agent stylesheet
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 3px 4px;
+    padding: initial;
+    border: initial;
+}
+input {
+
+    text-rendering: auto;
+    color: fieldtext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    appearance: auto;
+    -webkit-rtl-ordering: logical;
+    cursor: text;
+    background-color: field;
+    margin: 0em;
+    padding: 1px 0px;
+    border-width: 2px;
+    border-style: inset;
+    /*border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));*/
+    border-image: initial;
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+.form_rdo input + label, .form_chk input + label {
+    display: inline-block;
+    position: relative;
+    padding: 2px 0 0 27px;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    line-height: 20px;
+    color: #000;
+    cursor: pointer;
+    vertical-align: top;
+    transition: color 0.2s ease-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+label {
+    cursor: pointer;
+}
+label {
+    cursor: default;
+}
+.form_chk input + label:before {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    transition: border-color 0.2s ease-out, background-color 0.2s ease-out;
+}
+
+.form_rdo input + label:before, .form_rdo input + label:after, .form_chk input + label:before, .form_chk input + label:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+.list_result_wrap .right_area .form_chk + .switch_list_btn_wrap, .list_result_wrap .right_area .form_chk + .form_search_box, .list_result_wrap .right_area .form_chk + .btn_filter, .list_result_wrap .right_area .form_chk + .form_sel, .list_result_wrap .right_area .form_chk + .btn_sm, .list_result_wrap .right_area .form_chk + .btn_wish, .list_result_wrap .right_area .form_rdo + .switch_list_btn_wrap, .list_result_wrap .right_area .form_rdo + .form_search_box, .list_result_wrap .right_area .form_rdo + .btn_filter, .list_result_wrap .right_area .form_rdo + .form_sel, .list_result_wrap .right_area .form_rdo + .btn_sm, .list_result_wrap .right_area .form_rdo + .btn_wish {
+    margin-left: 0;
+}
+
+.list_result_wrap .right_area .switch_list_btn_wrap, .list_result_wrap .right_area .form_search_box, .list_result_wrap .right_area .btn_filter, .list_result_wrap .right_area .form_sel, .list_result_wrap .right_area .btn_sm, .list_result_wrap .right_area .btn_wish, .list_result_wrap .right_area .form_filter_box {
+    margin: 0 2px;
+}
+.btn_wish.size_sm {
+    width: 38px;
+    height: 38px;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.btn_wish {
+    width: 44px;
+    height: 44px;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 42px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+button {
+    appearance: auto;
+
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+.btn_wish.size_sm .ico_wish {
+    margin-top: 9px;
+}
+
+button[class^=btn_] [class^=ico_], a[class^=btn_] [class^=ico_] {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.btn_wish .ico_wish {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-top: 12px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h18@2x.png) center no-repeat;
+    background-size: 18px 18px;
+    vertical-align: top;
+    transition: background 0.2s ease-out;
+}
+
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    /*font: 0 / 0 Arial;*/
+}
+.list_result_wrap .right_area .switch_list_btn_wrap:last-child, .list_result_wrap .right_area .form_search_box:last-child, .list_result_wrap .right_area .btn_filter:last-child, .list_result_wrap .right_area .form_sel:last-child, .list_result_wrap .right_area .btn_sm:last-child, .list_result_wrap .right_area .btn_wish:last-child, .list_result_wrap .right_area .form_filter_box:last-child {
+    margin-right: 0;
+}
+
+.list_result_wrap .right_area .switch_list_btn_wrap, .list_result_wrap .right_area .form_search_box, .list_result_wrap .right_area .btn_filter, .list_result_wrap .right_area .form_sel, .list_result_wrap .right_area .btn_sm, .list_result_wrap .right_area .btn_wish, .list_result_wrap .right_area .form_filter_box {
+    margin: 0 2px;
+}
+a.btn_line_gray, button.btn_line_gray {
+    color: #000;
+    background: #fff;
+    border: 1px solid #ccc;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+a.btn_sm, button.btn_sm {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 38px;
+    padding: 0 13px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+button {
+    appearance: auto;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+a.btn_sm .ico_cart, button.btn_sm .ico_cart {
+    width: 14px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_cart@2x.png) center no-repeat;
+    background-size: 14px 19px;
+}
+
+a.btn_sm [class^=ico_], button.btn_sm [class^=ico_] {
+    height: 19px;
+    margin-right: 3px;
+}
+button[class^=btn_] [class^=ico_], a[class^=btn_] [class^=ico_] {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.list_result_wrap .right_area .switch_list_btn_wrap:first-child, .list_result_wrap .right_area .form_search_box:first-child, .list_result_wrap .right_area .btn_filter:first-child, .list_result_wrap .right_area .form_sel:first-child, .list_result_wrap .right_area .btn_sm:first-child, .list_result_wrap .right_area .btn_wish:first-child, .list_result_wrap .right_area .form_filter_box:first-child {
+    margin-left: 0;
+}
+
+.list_result_wrap .right_area .switch_list_btn_wrap, .list_result_wrap .right_area .form_search_box, .list_result_wrap .right_area .btn_filter, .list_result_wrap .right_area .form_sel, .list_result_wrap .right_area .btn_sm, .list_result_wrap .right_area .btn_wish, .list_result_wrap .right_area .form_filter_box {
+    margin: 0 2px;
+}
+a.btn_line_gray, button.btn_line_gray {
+    color: #000;
+    background: #fff;
+    border: 1px solid #ccc;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+a.btn_sm, button.btn_sm {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 38px;
+    padding: 0 13px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+a.btn_sm .ico_excel, button.btn_sm .ico_excel {
+    width: 14px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_excel@2x.png) center no-repeat;
+    background-size: 14px 19px;
+}
+
+a.btn_sm [class^=ico_], button.btn_sm [class^=ico_] {
+    height: 19px;
+    margin-right: 3px;
+}
+button[class^=btn_] [class^=ico_], a[class^=btn_] [class^=ico_] {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+a.btn_filter:before, button.btn_filter:before {
+    display: block;
+    content: "";
+    width: 14px;
+    height: 14px;
+    margin: 0 3px 0 0;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/icon_filter@2x.png) center no-repeat;
+    background-size: 14px 14px;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.list_filter_wrap {
+    display: none;
+    position: relative;
+    padding: 20px 180px 20px 20px;
+    border-top: 1px solid #d5d5d5;
+}
+
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+/*ul {*/
+/*    display: block;*/
+/*    list-style-type: disc;*/
+/*    margin-block-start: 1em;*/
+/*    margin-block-end: 1em;*/
+/*    margin-inline-start: 0px;*/
+/*    margin-inline-end: 0px;*/
+/*    padding-inline-start: 40px;*/
+/*    unicode-bidi: isolate;*/
+/*}*/
+a.btn_filter:before, button.btn_filter:before {
+    display: block;
+    content: "";
+    width: 14px;
+    height: 14px;
+    margin: 0 3px 0 0;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/icon_filter@2x.png) center no-repeat;
+    background-size: 14px 14px;
+}
+ol, ul {
+     list-style: none;
+ }
+.list_result_wrap .right_area .switch_list_btn_wrap:last-child, .list_result_wrap .right_area .form_search_box:last-child, .list_result_wrap .right_area .btn_filter:last-child, .list_result_wrap .right_area .form_sel:last-child, .list_result_wrap .right_area .btn_sm:last-child, .list_result_wrap .right_area .btn_wish:last-child, .list_result_wrap .right_area .form_filter_box:last-child {
+    margin-right: 0;
+}
+
+.list_result_wrap .right_area .switch_list_btn_wrap, .list_result_wrap .right_area .form_search_box, .list_result_wrap .right_area .btn_filter, .list_result_wrap .right_area .form_sel, .list_result_wrap .right_area .btn_sm, .list_result_wrap .right_area .btn_wish, .list_result_wrap .right_area .form_filter_box {
+    margin: 0 2px;
+}
+a.btn_filter, button.btn_filter {
+    position: relative;
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    padding: 7px 14px;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+button{
+    appearance: auto;
+    /*text-rendering: auto;*/
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    /*display: inline-block;*/
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    /*background-color: buttonface;*/
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    /*border-style: outset;*/
+    /*border-color: buttonborder;*/
+    border-image: initial;
+}button[class^=btn_] .text, a[class^=btn_] .text {
+     display: inline-block;
+     position: relative;
+     vertical-align: top;
+ }
+
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+/**, ::after, ::before {*/
+/*    box-sizing: border-box;*/
+/*}*/
+.form_sel.type_sm .ui-selectmenu-button .ui-selectmenu-icon, .form_sel[data-class*=type_sm] .ui-selectmenu-button .ui-selectmenu-icon {
+    top: 14px;
+}
+
+.form_sel .ui-selectmenu-button .ui-selectmenu-icon {
+    position: absolute;
+    right: 14px;
+    top: 17px;
+    width: 9px;
+    height: 8px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 9px 8px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/arw_select@2x.png);
+    transform: rotate(0);
+    transition: transform 0.2s ease-out;
+}
+.ui-selectmenu-icon.ui-icon {
+    float: right;
+    margin-top: 0;
+}
+.ui-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -.25em;
+    position: relative;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+.form_sel.type_sm .ui-selectmenu-button .ui-selectmenu-text, .form_sel[data-class*=type_sm] .ui-selectmenu-button .ui-selectmenu-text {
+    font-size: 13px;
+    line-height: 36px;
+}
+
+.form_sel .ui-selectmenu-button .ui-selectmenu-text {
+    font-size: 14px;
+    line-height: 42px;
+    letter-spacing: -0.01em;
+    color: #000;
+    font-family: "Noto Sans KR", sans-serif;
+}
+.ui-selectmenu-text {
+    display: block;
+    margin-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form_sel.type_sm .ui-selectmenu-button, .form_sel[data-class*=type_sm] .ui-selectmenu-button {
+    width: 100%;
+    height: 38px;
+}
+
+.form_sel .ui-selectmenu-button {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    padding: 0 14px;
+    background-color: #fff;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-out, border-radius 0.2s ease-out;
+    outline: none;
+}
+.ui-selectmenu-button.ui-button {
+    text-align: left;
+    white-space: nowrap;
+    width: 14em;
+}
+.ui-button, .ui-button:active, .ui-button:hover, .ui-button:link, .ui-button:visited {
+    text-decoration: none;
+}
+.ui-button {
+    padding: .4em 1em;
+    display: inline-block;
+    line-height: normal;
+    margin-right: .1em;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: visible;
+}
+.ui-button, .ui-menu-icons {
+    position: relative;
+}
+.form_sel.type_sm .ui-selectmenu-button .ui-selectmenu-icon, .form_sel[data-class*=type_sm] .ui-selectmenu-button .ui-selectmenu-icon {
+    top: 14px;
+}
+
+.form_sel .ui-selectmenu-button .ui-selectmenu-icon {
+    position: absolute;
+    right: 14px;
+    top: 17px;
+    width: 9px;
+    height: 8px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 9px 8px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/arw_select@2x.png);
+    transform: rotate(0);
+    transition: transform 0.2s ease-out;
+}
+.ui-selectmenu-icon.ui-icon {
+    float: right;
+    margin-top: 0;
+}
+.ui-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -.25em;
+    position: relative;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+.form_sel.type_sm .ui-selectmenu-button .ui-selectmenu-text, .form_sel[data-class*=type_sm] .ui-selectmenu-button .ui-selectmenu-text {
+    font-size: 13px;
+    line-height: 36px;
+}
+
+.form_sel .ui-selectmenu-button .ui-selectmenu-text {
+    font-size: 14px;
+    line-height: 42px;
+    letter-spacing: -0.01em;
+    color: #000;
+    font-family: "Noto Sans KR", sans-serif;
+}
+.ui-selectmenu-text {
+    display: block;
+    margin-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap {
+    padding-bottom: 0;
+}
+
+.title_wrap.title_size_xxl {
+    padding-bottom: 30px;
+}
+.title_wrap {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.wrapper .container_wrapper .contents_wrap.aside .aside_wrap .aside_header .title_wrap a.title_heading:after {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 9px 0 0 12px;
+    background-size: 24px 24px;
+    /*background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_plus_link@2x.png);*/
+    vertical-align: top;
+}
+
+a.btn_light_gray, button.btn_light_gray {
+    color: #fff;
+    background: #767676;
+    border: 1px solid #767676;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+a.btn_primary, button.btn_primary, a.btn_line_primary.active, button.btn_line_primary.active {
+    color: #fff;
+    background: #5055b1;
+    border: 1px solid #5055b1;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_btn_wrap .btn_wrap.full {
+    width: 110px;
+    margin-left: auto;
+}
+
+.btn_wrap {
+    display: block;
+    font-size: 0;
+    text-align: center;
+}
+.btn_wrap.full [class^=btn_] {
+    width: 100%;
+    min-width: auto;
+}
+a.btn_sm, button.btn_sm {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 38px;
+    padding: 0 13px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_btn_wrap {
+    flex-shrink: 0;
+    width: 135px;
+    margin-left: auto;
+    text-align: right;
+}
+.switch_prod_wrap.view_type_list .prod_list .prod_item .prod_btn_wrap .btn_wrap.full {
+    width: 110px;
+    margin-left: auto;
+}
+
+.btn_wrap {
+    display: block;
+    font-size: 0;
+    text-align: center;
+}
+a.btn_sm, button.btn_sm {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 38px;
+    padding: 0 13px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+.btn_wrap.full [class^=btn_] + [class^=btn_] {
+    margin: 6px 0 0;
+}
+
+.btn_wrap.full [class^=btn_] {
+    width: 100%;
+    min-width: auto;
+}
+.btn_wrap [class^=btn_] + [class^=btn_] {
+    margin-left: 6px;
+}
+a.btn_primary, button.btn_primary, a.btn_line_primary.active, button.btn_line_primary.active {
+    color: #fff;
+    background: #5055b1;
+    border: 1px solid #5055b1;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+a.btn_sm, button.btn_sm {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 38px;
+    padding: 0 13px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.btn_wrap {
+    display: block;
+    font-size: 0;
+    text-align: center;
+}

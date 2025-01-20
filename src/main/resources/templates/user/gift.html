@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="/css/user/home.css">
+    <link rel="stylesheet" href="/css/user/searchBox.css">
+    <link rel="stylesheet" href="/css/user/bestItem.css">
+    <link rel="stylesheet" href="/css/user/gift.css">
+    <script th:inline="javascript">
+        $(function () {
+            $("#logo").click(function () {
+                location.href = "/";
+            })
+
+            $("#cart").click(function () {
+                location.href = "/cart";
+            })
+
+            $("#myPage").click(function () {
+                location.href = "/myPage";
+            })
+
+            $("#categoryItem").click(function () {
+                location.href = "/member/category";
+            })
+
+            $(".show-plus").click(function () {
+                location.href = "/member/bestSeller";
+            })
+
+            $(".best").click(function () {
+                location.href = "/member/bestSeller";
+            })
+
+            $(".new").click(function () {
+                location.href = "/member/newItems";
+            })
+
+            $(".buy-now-btn").click(function () {
+                location.href = "";
+            })
+
+            $(".show-detail").click(function () {
+                location.href = "";
+            })
+        })
+
+        $(document).ready(function () {
+            $(".dropdown-view").click(function () {
+                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
+                $("#dropdownView").text(selectedText); // 드롭다운 버튼 텍스트 변경
+            })
+
+            // 전체 선택 체크박스 제어
+            $("#selectAll").change(function () {
+                const isChecked = $(this).is(":checked"); // 전체 선택 체크박스의 상태
+                $(".item-checkbox").prop("checked", isChecked); // 모든 개별 체크박스의 상태를 변경
+            });
+
+            // 개별 체크박스 변경 시 전체 선택 체크박스 상태 업데이트
+            $(".item-checkbox").change(function () {
+                const totalCheckboxes = $(".item-checkbox").length; // 전체 체크박스 개수
+                const checkedCheckboxes = $(".item-checkbox:checked").length; // 체크된 체크박스 개수
+
+                // 모든 항목이 체크되었는지 확인
+                $("#selectAll").prop("checked", totalCheckboxes === checkedCheckboxes);
+            });
+        })
+
+        // 카테고리 버튼 동작
+        $(function () {
+            $("#category").click(function () {
+                const category = $(this).find(".category");
+                const closeIcon = $(this).find(".close-icon");
+
+                if (category.hasClass("open")) {
+                    // 햄버거 버튼으로 복귀
+                    category.removeClass("open");
+                    closeIcon.addClass("d-none");
+                    category.removeClass("d-none");
+                    $(this).css("background-color", "white");
+                    $("#categoryView").hide(); // 카테고리 전체보기 숨기기
+                } else {
+                    // X 버튼으로 전환
+                    category.addClass("open");
+                    closeIcon.removeClass("d-none");
+                    category.addClass("d-none");
+                    $(this).css("background-color", "black");
+                    $("#categoryView").show(); // 카테고리 전체보기 보이기
+                }
+            })
+        })
+
+        // 찜 버튼 동작
+        $(function () {
+            $(".heart").click(function () {
+                const checkedItems = $(".item-checkbox:checked").length; // 체크된 박스 개수 확인
+
+                if (checkedItems > 0) {
+                    // 체크된 상품이 1개 이상일 경우
+                    alert("찜 설정 되었어요.");
+                } else {
+                    // 체크된 상품이 없을 경우
+                    alert("선택된 상품이 없습니다.");
+                }
+            })
+        })
+
+        // 장바구니 버튼 동작
+        $(function () {
+            $(".cart").click(function () {
+                const checkedItems = $(".item-checkbox:checked").length; // 체크된 상품 수
+                const alreadyInCart = false; // 이미 장바구니에 담긴 상품 여부 (예제용: 실제로 서버와 통신하여 확인 필요)
+
+                if (checkedItems > 0) {
+                    if (alreadyInCart) {
+                        // 장바구니에 이미 담긴 상품이 있을 경우
+                        if (confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?")) {
+                            // 확인 버튼 클릭 시 장바구니 페이지로 이동
+                            location.href = "/member/cart";
+                        }
+                    } else {
+                        // 새로운 상품을 장바구니에 추가하는 경우
+                        if (confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+                            // 확인 버튼 클릭 시 장바구니 페이지로 이동
+                            location.href = "/member/cart";
+                        }
+                    }
+                } else {
+                    // 선택된 상품이 없을 경우
+                    alert("선택된 상품이 없습니다.");
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="bg-success">
+    <div class="container w-75">
+        <div class="header-menu mt-4 d-flex align-items-center">
+            <button class="btn btn-light me-3" id="category">
+        <span class="category d-flex flex-column justify-content-center align-items-center">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </span>
+                <span class="close-icon d-none">&times;</span>
+            </button>
+            <a href="#" class="best ps-5 pe-5">베스트</a>
+            <a href="#" class="new ps-5 pe-5">신상품</a>
+            <a href="#" class="ps-5 pe-5">이벤트</a>
+        </div>
+
+
+
+    </div>
+</div>
+<div class="wrapper" id="mainDiv">
+<main class="container_wrapper">
+    <section class="contents_wrap aside">
+        <h1 class="hidden">영미소설 | 국내도서 - 교보문고</h1>
+        <div class="contents_inner">
+
+            <aside class="aside_wrap sub_category">
+                <div class="aside_header">
+                    <div class="title_wrap title_size_xxl">
+
+
+                        <a href="https://product.kyobobook.co.kr/KOR" class="title_heading">국내도서</a>
+
+
+                    </div>
+                </div>
+                <div class="aside_body">
+                    <div class="snb_wrap">
+
+
+                        <a href="https://product.kyobobook.co.kr/category/KOR/01" class="snb_title">영미소설</a>
+
+                        <ul class="snb_list">
+
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010301" class="snb_link">
+                                    영미소설일반
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010303" class="snb_link">
+                                    고전소설/문학선
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010305" class="snb_link">
+                                    역사소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010307" class="snb_link">
+                                    SF/과학소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010309" class="snb_link">
+                                    판타지소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010311" class="snb_link">
+                                    공포/호러소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010312" class="snb_link">
+                                    미스터리/스릴러소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010315" class="snb_link">
+                                    로맨스소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010317" class="snb_link">
+                                    청소년소설
+                                </a>
+                            </li>
+                            <li class="snb_item">
+                                <a href="https://product.kyobobook.co.kr/category/KOR/010325" class="snb_link">
+                                    드라마/영화소설
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="showcase_side_wrap">
+                        <div class="blurb_thumb_box" id="lnb_adv">
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </aside>
+            <section id="contents" class="section_wrap">
+
+
+
+
+                    <div id="homeTabAll" class="tab_content ui-tabs-panel ui-corner-bottom ui-widget-content" data-type="all" style="" aria-labelledby="ui-id-41" role="tabpanel" aria-hidden="false">
+                        <div class="list_sort_wrap">
+                            <div class="right_area">
+
+
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+                                    <select title="목록 보기 유형 선택" id="allSort" style="display: none;">
+                                        <option value="new">최신순</option>
+                                        <option value="sel">판매량순</option>
+                                        <option value="mxv">높은가격순</option>
+                                        <option value="minv">낮은가격순</option>
+                                    </select><span tabindex="0" id="allSort-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget" aria-activedescendant="ui-id-52" aria-labelledby="ui-id-52" aria-disabled="false"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">최신순</span></span>
+                                </div>
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+
+                                    <select title="목록 보기 유형 선택" id="allPer" style="display: none;">
+                                        <option value="20">20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                    </select><span tabindex="0" id="allPer-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget" aria-activedescendant="ui-id-56" aria-labelledby="ui-id-56" aria-disabled="false"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">20개씩 보기</span></span>
+
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list_result_wrap">
+
+                            <div class="pagination" id="allTopPagi"><button class="btn_page prev" disabled="disabled"><span class="hidden">이전</span></button><div class="page_num"><a href="#" class="btn_page_num active" data-index="0" data-role="first" title="현재페이지">1</a><span class="text_ellipsis hidden">...</span><a href="#" class="btn_page_num" data-index="2" data-role="middle">2</a><a href="#" class="btn_page_num" data-index="3" data-role="middle">3</a><a href="#" class="btn_page_num" data-index="4" data-role="middle">4</a><a href="#" class="btn_page_num" data-index="5" data-role="middle">5</a><a href="#" class="btn_page_num" data-index="6" data-role="middle">6</a><a href="#" class="btn_page_num" data-index="7" data-role="middle">7</a><span class="text_ellipsis">...</span><a href="#" class="btn_page_num" data-index="9" data-role="last">35</a></div><button class="btn_page next"><span class="hidden">다음</span></button></div>
+
+
+
+
+
+
+                            <div class="right_area">
+                                <div class="item_group">
+            <span class="form_chk">
+
+
+                        <input id="chkAllAllChk" type="checkbox">
+                        <label for="chkAllAllChk">전체선택</label>
+
+
+
+
+
+
+
+            </span>
+                                    <!-- DESC : 찜하기 버튼 활성화 시 button.btn_wish 영역 [active] class 추가 -->
+
+
+                                    <button type="button" class="btn_wish size_sm mobonWish" data-kbbfn="wish-item-list" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-list="#homeTabAll .prod_list">
+                                        <span class="ico_wish"></span>
+                                        <span class="hidden">찜하기</span>
+                                    </button>
+                                    <button type="button" class="btn_sm btn_line_gray mobonCart" data-kbbfn="cart-item" data-kbbfn-cartlist="#homeTabAll .prod_list" data-kbbfn-cartallcheck="#homeTabAll #chkAllBestChk">
+                                        <span class="ico_cart"></span>
+                                        <span class="text">장바구니</span>
+                                    </button>
+
+
+
+
+
+
+
+                                </div>
+                                <div class="item_group">
+
+
+
+                                    <button type="button" class="btn_filter" id="btnTabAllFilter">
+                                        <span class="text">필터</span>
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- 카테고리 필터(PC) -->
+                        <div id="tabAllFilterWrap" class="list_filter_wrap">
+                            <div class="title_wrap title_size_def">
+                                <p class="title_heading">혜택/조건</p>
+                            </div>
+                            <div class="list_filter_option">
+                                <div class="list_filter_option_bunddle">
+                    <span class="form_chk">
+                        <input id="isEvent" name="isEvent" type="checkbox">
+                        <label for="isEvent">이벤트</label>
+                    </span>
+                                    <span class="form_chk">
+                        <input id="isPackage" name="isPackage" type="checkbox">
+                        <label for="isPackage">패키지</label>
+                    </span>
+                                    <span class="form_chk">
+                        <input id="isMDPicked" name="isMDPicked" type="checkbox">
+                        <label for="isMDPicked">MD PICK</label>
+                    </span>
+                                </div>
+                            </div>
+                            <div class="util_filter">
+                                <button type="button" class="btn_reset" id="btnAllFilterReset">
+                                    <span class="ico_reset"></span>
+                                    <span class="text">필터 초기화</span>
+                                </button>
+                                <button type="button" class="btn_xs btn_light_gray" id="btnAllFilterSearch">
+                                    <span class="text">적용</span>
+                                </button>
+                            </div>
+                            <button type="button" class="btn_filter_close" id="btnAllFilterClose">
+                                <span class="hidden">닫기</span>
+                            </button>
+                        </div>
+
+
+
+                        <div class="switch_prod_wrap view_type_list">
+                            <ol class="prod_list" style=""><li class="prod_item" data-binding="true" data-id="S000215562627"><div class="form_chk no_label"><input id="chkAll11" type="checkbox"><label for="chkAll11"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215562627"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="시간의 계곡" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791130662596.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791130662596.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215562627" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215562627"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215562627" class="prod_info">
+                      <span class="prod_name">
+                          시간의 계곡
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=스콧 알렉산더 하워드">스콧 알렉산더 하워드</a>
+     ·
+    다산책방
+    <span class="date"> · 2025.01.17</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">16,200</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">18,000원</s></span><span class="gap">|</span><span class="point">900p</span></div><p class="prod_introduction">동쪽으로는 20년 후의 미래, 서쪽으로는 20년 전의 과거의 시간이 흐르는 동일한 마을이 있다. 마을과 마을 사이는 철책으로 단절되어 있어 마음대로 이동할 수 없다. 오직 사랑하는 사람을 잃었을 때의 슬픔을 달래기 위해서만, 고위 공무원인 자문관의 허가를 받아서 비밀리에 과거나 미래의 마을을 방문할 수 있도록 정해져 있다. 하지만 어렸을 때 아버지를 여읜 오딜 오잔은 다른 마을을 방문할 기회가 생기더라도 가지 않을 것이라고, 과거나 미래를 방문한다고 해도 진정한 위로는 받을 수 없다고 믿는다. 그러던 어느 날, 오딜은 우연히 동쪽 마을에서 온 방문객을 목격하고 곧 그들이 에드메의 부모님인 것을 알아챈다. 다른 누구도 아닌, 오딜이 사랑하는 에드메의 죽음이 곧 예정되어 있다는 사실을 알게 된 것이다. 예정된 사건을 막으면 시간의 흐름을 바꾸고 마을 전체에 걸쳐 혼돈과 절멸을 초래할 수 있기에 오딜은 쉽게 행동에 나서지 못한다. 오딜은 사랑하는 사람을 살리는 것과 질서에 순응하는 것 사이에서 어떤 선택을 해야 할지 고민하는데…….</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215562627" data-kbbfn-bid="9791130662596"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215562627" data-kbbfn-bid="9791130662596"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215562627" data-kbbfn-bid="9791130662596" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215562627" data-kbbfn-bid="9791130662596" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215562423"><div class="form_chk no_label"><input id="chkAll12" type="checkbox"><label for="chkAll12"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215562423"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="거짓말에 귀 기울일 것" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193324424.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193324424.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215562423" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215562423"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215562423" class="prod_info">
+                      <span class="prod_name">
+
+      <span class="prod_label">예약판매</span> 거짓말에 귀 기울일 것
+
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=에이미 틴터라">에이미 틴터라</a>
+     ·
+    북플라자
+    <span class="date"> · 2025.01.20</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">16,200</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">18,000원</s></span><span class="gap">|</span><span class="point">900p</span></div><p class="prod_introduction">어느 날 아침, 루시는 피를 뒤집어쓴 채 길에서 발견된다. 다들 루시가 안 좋은 일을 당했을 거라 생각했다. 절친인 새비의 시신이 발견되기 전까지는. 루시가 가장 유력한 살인 용의자가 됐지만 목격자도 직접적인 증거도 없었다. 루시는 당시의 일을 전혀 기억하지 못했다. 결국 미궁에 빠진 사건을 뒤로 한 채 루시는 고향을 떠나 새로운 인생을 시작한다.
+                                하지만 5년 후, 미제 사건을 해결해 유명해진 한 팟캐스트에서 새비 살인사건을 다시 파헤치기 시작하면서 사건의 가장 유력한 용의자였던 루시의 일상은 처참히 무너진다. 남자친구에게 차이고, 직장에서 해고되고, 주변 사람들까지 수군거리기 시작하는데….</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215562423" data-kbbfn-bid="9791193324424"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill "><span class="text"></span></span><p class="order_state_desc"><p class="order_state_desc"> <span class="fw_bold">1/20(월) </span><br>출고예정</p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215562423" data-kbbfn-bid="9791193324424"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215562423" data-kbbfn-bid="9791193324424" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215562423" data-kbbfn-bid="9791193324424" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215557362"><div class="form_chk no_label"><input id="chkAll13" type="checkbox"><label for="chkAll13"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215557362"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="처단" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791192385310.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791192385310.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215557362" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215557362" class="prod_info">
+                      <span class="prod_name">
+
+      <span class="prod_label">예약판매</span> 처단
+
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=리 차일드">리 차일드</a>
+     ·
+    오픈하우스
+    <span class="date"> · 2025.01.20</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">16,650</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">18,500원</s></span><span class="gap">|</span><span class="point">920p</span></div><p class="prod_introduction">전 세계적으로 인기를 끌고 있는 드라마 시리즈 「리처」 시즌 3의 오픈을 앞두고, 드라마의 원작이자 잭 리처 컬렉션 일곱 번째 작품인 〈처단〉을 출간한다.
+                                이 소설의 원제는 ‘PERSUADER’로, 주로 사용하는 사전적 의미는 ‘설득자’인데, 속어로 ‘강요나 강제하는 것(무기)’을 뜻하기도 한다. 원래 리처의 시그니처는 맨주먹 액션이지만 전직 군인답게 총기를 다루는 실력 또한 상당한 수준이다. 이번 작품에서는 유독 다양한 총기류가 언급되는데, 그중 가장 무자비한 파괴력을 지닌 무기로 ‘persuader’가 사용된다. 작가는 이 총의 이름을 제목으로 따온 듯하나, 오픈하우스에서는 좀 더 소설의 내용과 맞닿은 제목을 고심하다가 ‘처단’이라는 짧지만 강력한 한 단어로 최종 결정하게 되었다. 처단받아야 할 인물이 많은 현 시국과 여러 면에서 상통하는 작품이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215557362" data-kbbfn-bid="9791192385310"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill "><span class="text"></span></span><p class="order_state_desc"><p class="order_state_desc"> <span class="fw_bold">1/20(월) </span><br>출고예정</p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215557362" data-kbbfn-bid="9791192385310"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215557362" data-kbbfn-bid="9791192385310" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215557362" data-kbbfn-bid="9791192385310" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215552377"><div class="form_chk no_label"><input id="chkAll14" type="checkbox"><label for="chkAll14"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215552377"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="닥터 메리골드의 처방전" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788998427559.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788998427559.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215552377" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215552377"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215552377" class="prod_info">
+                      <span class="prod_name">
+                          닥터 메리골드의 처방전
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=찰스 디킨스">찰스 디킨스 외</a>
+     ·
+    B612북스
+    <span class="date"> · 2025.01.15</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">15,120</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">16,800원</s></span><span class="gap">|</span><span class="point">840p</span></div><p class="prod_introduction">찰스 디킨스가 편집한 크리스마스 특별 판 중 마지막 작품(1865). 닥터 메리골드는 가난한 노점상으로, 끔찍한 상황을 겪은 후 입양한 딸 소피와 함께 행복을 찾는다. 그리고 청각장애인이자 언어장애인인 딸이 읽고 소통하는 법을 배울 수 있도록 다양한 이야기를 모아 ‘처방전’이라는 이름으로 책을 만든다. 디킨스와 다른 빅토리아 시대 저명한 작가 5명이 쓴 이 처방전은 도둑, 납치, 주술 등 모험과 로맨스에 관한 이야기다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">10</span><a class="review_desc" href="https://product.kyobobook.co.kr/detail/S000215552377#ReviewList1">(1개의 리뷰)</a></span><span class="gap">/</span><span class="review_quotes_text font_size_xxs">최고예요</span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552377" data-kbbfn-bid="9788998427559"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552377" data-kbbfn-bid="9788998427559"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552377" data-kbbfn-bid="9788998427559" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552377" data-kbbfn-bid="9788998427559" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215552089"><div class="form_chk no_label"><input id="chkAll15" type="checkbox"><label for="chkAll15"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215552089"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="킬리만자로의 눈" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791141608774.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791141608774.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215552089" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215552089"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215552089" class="prod_info">
+                      <span class="prod_name">
+                          킬리만자로의 눈
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=어니스트 헤밍웨이">어니스트 헤밍웨이</a>
+     ·
+    문학동네
+    <span class="date"> · 2025.01.15</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">12,600</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">14,000원</s></span><span class="gap">|</span><span class="point">700p</span></div><p class="prod_introduction">미국 모더니즘 문학의 선구자 어니스트 헤밍웨이
+                                그 독보적 미학의 정수가 담긴 대표 단편선
+
+                                헤밍웨이 이후의 작가들은 “그를 모방하거나 그를 피하기”라고 할 정도로 헤밍웨이가 남긴 문학적 유산은 거대하다. 특히 기자로 일하며 간결하고 드라이한 스타일을 구축한 헤밍웨이는 독보적인 하드보일드 문체로 유명하다. 복잡한 문장 대신 대화와 동작, 침묵 등 생략을 통해 자신의 뜻을 전달하려 했던 그의 스타일은 『노인과 바다』 『태양은 다시 뜬다』 『무기여 잘 있거라』 등의 장편소설보다 오히려 단편소설에서 진가를 발휘한다고 평가받기도 한다.
+                                문학동네 세계문학전집 257번으로 출간된 『킬리만자로의 눈』에는 초기 단편 「인디언 마을」부터 마지막 단편 「프랜시스 머콤버의 짧고 행복한 삶」까지 헤밍웨이의 필치가 가장 잘 드러난 작품 12편을 모았다. 헤밍웨이는 서구의 기존 제도에 의문을 제기하는 모더니즘 사조를 토대로 자신만의 개성을 만들어나갔고, “빙산의 움직임이 위엄 있는 것은 그 팔분의 일만이 물위에 있기 때문”이라며 생략의 미학을 추구했다. 수록작 「인디언 마을」 「하얀 코끼리 같은 산」 「이제 내 몸을 뉘며」 「깨끗하고 불이 환한 곳」 등에서 이러한 헤밍웨이 미학의 본질을 만나볼 수 있다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552089" data-kbbfn-bid="9791141608774"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552089" data-kbbfn-bid="9791141608774"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552089" data-kbbfn-bid="9791141608774" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552089" data-kbbfn-bid="9791141608774" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215552067"><div class="form_chk no_label"><input id="chkAll16" type="checkbox"><label for="chkAll16"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215552067"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="카산드라의 여자들" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791171713127.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791171713127.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215552067" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215552067"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215552067" class="prod_info">
+                      <span class="prod_name">
+                          카산드라의 여자들
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=그웬 E. 커비">그웬 E. 커비</a>
+     ·
+    위즈덤하우스
+    <span class="date"> · 2025.01.16</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">15,300</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">17,000원</s></span><span class="gap">|</span><span class="point">850p</span></div><p class="prod_introduction">신랄하고 유쾌하며, 현실적이면서 환상적인 소설들로 마거릿 애트우드를 소환하며 캐시 애커, 찰스 백스터, 앤 카슨, 레이먼드 카버 등의 작가를 배출한 푸시카트 문학상에 두 번 노미네이트된 그웬 E. 커비의 데뷔 소설집 《카산드라의 여자들》이 위즈덤하우스에서 출간되었다.
+                                《카산드라의 여자들》은 고대 그리스 신화 속 트로이의 공주 ‘카산드라’부터 먼 미래, 여자에게 안전한 세상을 만들고자 남자를 공격하는 방사능 바퀴벌레를 개발한 발명가까지 시공간을 종횡무진하는 히로인들의 이야기 21편을 담았다. 각 단편에는 불안해하고 두려워하고 창피해하고 슬퍼하고 분노하면서도 결국에는 자신의 자리를 마련하고야 마는 여성 인물들이 등장하며 소설과 편지, 맛집 애플리케이션 후기와 설명서 등의 형식을 빌려 읽는 재미를 더했다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552067" data-kbbfn-bid="9791171713127"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552067" data-kbbfn-bid="9791171713127"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552067" data-kbbfn-bid="9791171713127" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552067" data-kbbfn-bid="9791171713127" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215552037"><div class="form_chk no_label"><input id="chkAll17" type="checkbox"><label for="chkAll17"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215552037"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="위싱 머신" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791194293569.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791194293569.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215552037" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215552037"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215552037" class="prod_info">
+                      <span class="prod_name">
+
+      <span class="prod_label">예약판매</span> 위싱 머신
+
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=소피 쿠슨스">소피 쿠슨스</a>
+     ·
+    오팬하우스
+    <span class="date"> · 2025.01.21</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">16,200</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">18,000원</s></span><span class="gap">|</span><span class="point">900p</span></div><p class="prod_introduction">뉴욕타임스 베스트셀러 작가 소피 쿠슨스가 전하는 현재의 소중함과 진정한 행복의 의미를 찾아가는 유쾌하고 따스한 이야기, 《위싱 머신》이 모모에서 출간되었다. “마음을 따뜻하게 하는 예술 작품”, “인생의 방향을 잃은 적 있는 사람에게 필요한 책”, “매혹적인 이야기와 미친 전개” 등의 추천평과 더불어 다수의 독자와 평론가로부터 로맨틱하고 감동적인 이야기라는 찬사를 받고 출간 즉시 수천 개의 독자 리뷰를 얻으며 단숨에 화제의 도서로 자리매김했다.
+                                영화 〈빅〉, 〈패밀리 맨〉, 〈프리키 프라이데이〉를 떠올리게 하는 이 책은 타임슬립을 통해 원하던 인생을 경험하는 독창적이고 매력적인 스토리를 특유의 유머러스함으로 풀어내며 페이지터너로써의 역할을 충실히 한다. 마지막 페이지를 덮을 땐 마치 한 편의 영화를 본 듯한 벅찬 감동에 마음을 울리는 《위싱 머신》. 막막한 현실에 인생이 내 맘 같지 않아 힘든 이들에게 따뜻한 위로를 건네며 그럼에도 소중한 지금 이 순간의 가치를 일깨워준다.
+
+                                스물여섯 루시 영의 삶은 바람 앞에 촛불이다. 물이 새는 천장과 목욕광 윗집의 콜라보는 새벽잠을 깨우고, 말뿐인 승진과 잔심부름을 벗어나지 못하는 비참한 회사 생활, 그놈의 돈 때문에 뭉친 공동생활에 부적합한 하우스메이트들까지. 게다가 나만 빼고 잘나가는 친구들 틈에서 느끼는 이 감정은… 자격지심이 분명하다. 그래서 우연히 만난 소원 기계에 간절히 빌었다. 제발, 이 거지 같은 상황에서 벗어나 인생의 전성기로 건너뛰게 해달라고.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552037" data-kbbfn-bid="9791194293569"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill "><span class="text"></span></span><p class="order_state_desc"><p class="order_state_desc"> <span class="fw_bold">1/21(화) </span><br>출고예정</p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215552037" data-kbbfn-bid="9791194293569"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552037" data-kbbfn-bid="9791194293569" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215552037" data-kbbfn-bid="9791194293569" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215529316"><div class="form_chk no_label"><input id="chkAll18" type="checkbox"><label for="chkAll18"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215529316"><span class="img_box"><img data-kbbfn="s3-image" loading="lazy" alt="스타터 빌런(Starter Villain)" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193367094.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193367094.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215529316" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215529316"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215529316" class="prod_info">
+                      <span class="prod_name">
+                          스타터 빌런(Starter Villain)
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=존 스칼지">존 스칼지</a>
+     ·
+    구픽
+    <span class="date"> · 2024.12.31</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">16,200</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">18,000원</s></span><span class="gap">|</span><span class="point">900p</span></div><p class="prod_introduction">‘노인의 전쟁’ 시리즈, ‘상호의존성단’ 시리즈, 『레드 셔츠』 등의 작품을 발표한 인기 SF 소설가, 특유의 유머와 날카로운 통찰력으로 엄청난 팬덤을 보유한 존 스칼지의 2023년작 『스타터 빌런』은 길고양이를 키우며 대출금을 걱정하는 임시 교사 찰리가 얼굴도 기억나지 않는 삼촌의 ‘슈퍼 빌런’ 사업을 물려받으면서 펼쳐지는 기발한 이야기를 담고 있다. 엄청난 규모의 비밀 기지, 고도의 기술로 무장한 동물 파트너들에게 둘러싸인 채 슈퍼 빌런 사업에 대한 업무를 숙지해나가야 하는 찰리. 냉혹한 자본주의 속에서 악당으로 살아남기 위한 방법을 배우는 것과 동시에 강력한 라이벌과 맞서고 돌고래 노동조합과도 원만한 협상을 이끌어내야 한다.
+                                존 스칼지는 소위 “자본주의 빌런”들이 부와 권력을 독점하며 자신들만의 제국을 만들어가는 구조에 대해 본질적으로 풍자하며, 최고의 지적 수준을 가진 고양이들과 노동조합을 결성한 돌고래들이라는 귀엽지만 능동적인 동물들을 통해 혁명적 시각에도 한 걸음 나아간다. 특히 동물 해방권과 노동조합에 대한 이러한 접근은 독자들이 보다 쉽게 사회적 메시지를 받아들일 수 있는 중요한 장치이다. 또한 인간과 동물의 관계, 자본주의의 본질적인 문제, 소득 불평등, 노사 문제 등 다양한 사회적 주제를 코믹하게 풀어낸다. 현대 사회의 다양한 이슈에 관심 있는 독자라면 즐거움을 느낄 수 밖에 없는 작품이다.
+                                존 스칼지의 작품을 읽어본 독자라면 이 작품에도 당연히 매료될 것이고, 이 책을 통해 처음 접하는 독자라면 빠른 전개와 날카로운 유머, 권력구조를 비꼬는 주제의식에 새로운 즐거움을 느낄 수 있을 것이다. 물론 최고의 동물 파트너 캐릭터들의 귀여움은 덤이다.
+                                출간 즉시 〈뉴욕 타임스〉 베스트셀러 리스트에 오른 이 작품은 2024년 SF 최고의 영예인 휴고상, 로커스상 최종 후보에 올랐으며 드래곤상과 미국 도서관 협회에서 주관하는 YA 부문 상인 알렉스상을 수상했다. 2024년 초, 라이언 레이놀즈 주연으로 영화화가 확정되어 현재 각색 작업 중이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215529316" data-kbbfn-bid="9791193367094"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215529316" data-kbbfn-bid="9791193367094"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215529316" data-kbbfn-bid="9791193367094" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215529316" data-kbbfn-bid="9791193367094" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215529190"><div class="form_chk no_label"><input id="chkAll19" type="checkbox"><label for="chkAll19"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215529190"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="폴란드인" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791198966407.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791198966407.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215529190" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215529190"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215529190" class="prod_info">
+                      <span class="prod_name">
+                          폴란드인
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=J. M. 쿳시">J. M. 쿳시</a>
+     ·
+    말하는나무
+    <span class="date"> · 2025.01.27</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">16,020</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">17,800원</s></span><span class="gap">|</span><span class="point">890p</span></div><p class="prod_introduction">세련되고 애수 어린 러브 스토리, 정밀하고 선명하며 아름다운 산문. 『추락』의 묵직한 감동을 잇는 사랑과 이별, 삶과 죽음, 쇼팽의 음악에 관한 잊을 수 없는 이야기.
+
+                                “나는 당신의 이름을 입술에 머금고 죽을 겁니다.”
+                                음악이 사람을 더 좋게 만든다고 생각하는, 바르셀로나의 음악 서클 여인 베아트리스와 그녀에게 첫눈에 반한 쇼팽 전문 폴란드 피아니스트. 두 사람 사이에 벌어지는 은밀한 사랑 이야기가 간결하지만 팽팽하게 감긴 스프링 같은 산문으로 그려진다. 곧 마음 깊은 곳의 에너지를 폭발시키는 놀라운 반전이 기다리고 있다.
+                                이 소설은 원제 『The Pole(폴란드인)』이 상징하는 것처럼 폴란드 출신 작곡가 쇼팽의 사랑 이야기가 기저에 깔려 있다. 쇼팽과 그의 연인 상드가 도피 여행을 한 마요르카에서 남녀 주인공의 관계가 전환점을 갖는다.
+                                피아니스트가 주인공이어서 음악 소설처럼 읽히기도 한다. 쇼팽 음악을 바흐 풍으로 담담하게 해석하는 폴란드 피아니스트, 그리고 그의 음악과 대비되는 여러 음악가들이 소설 속으로 유입된다. 클래식 음악을 좋아하는 이들을 사로잡는 흥미로운 요소가 곳곳에 숨어 있다.
+                                이 소설은 또 단테의 『새로운 인생』과 『신곡』에 나오는 단테와 베아트리체 이야기가 하나의 원형으로 등장한다. 단테의 스토리는 남성의 시각에서 쓴 것이지만, 『폴란드인』은 뮤즈인 여성의 시각에서 쓴 것이어서 큰 차이가 있다.
+                                J.M. 쿳시는 의심할 여지 없이, 우리 시대의 가장 영향력 있는-그리고 도발적인-작가 중 한 사람이다. 그는 『폴란드인』에서 특유의 통찰력과 날카로운 위트를 갖고 불가사의한 로맨스의 본질을 드러낸다. 최고의 소설에서 만나는 다양한 감동의 순간을 환기하는 잊을 수 없는 작품이다.
+
+                                영어로 쓰였지만 스페인어로 먼저 출간
+
+                                쿳시는 남아프리카공화국의 아프리칸스어가 모국어이지만 영어로 글을 써와 영어권 소설가로 분류된다. 『폴란드인』도 원래 영어로 쓰였으나 2022년 스페인어로 번역되어 아르헨티나에서 영어권보다 1년 먼저 출간되었다. 그는 헤이문학축제에서 그 이유를 이렇게 밝혔다.
+                                “나는 영어가 세계를 점령하는 방식이 싫습니다. 나는 그것이 발을 딛는 곳마다 소수의 언어를 으스러뜨리는 방식이 싫습니다. 나는 그것이 세계적이라는 주장, 즉 세상이 영어로 정확하게 반영된다는 검증되지 않은 주장이 싫습니다. 나는 이 상황이 영어 원어민들에게 조성하는 오만함이 싫습니다. 따라서 나는 영어의 주도권에 저항하기 위해서 내가 할 수 있는 작은 것을 하는 것입니다.”</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215529190" data-kbbfn-bid="9791198966407"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill "><span class="text"></span></span><p class="order_state_desc"><p class="order_state_desc"> <span class="fw_bold">1/22(수) </span><br>출고예정</p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215529190" data-kbbfn-bid="9791198966407"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215529190" data-kbbfn-bid="9791198966407" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215529190" data-kbbfn-bid="9791198966407" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215150858"><div class="form_chk no_label"><input id="chkAll110" type="checkbox"><label for="chkAll110"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215150858"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="동물 농장(Animal Farm)" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788976047076.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788976047076.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215150858" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215150858"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215150858" class="prod_info">
+                      <span class="prod_name">
+                          동물 농장(Animal Farm)
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=조지 오웰">조지 오웰</a>
+     ·
+    문예춘추사
+    <span class="date"> · 2024.01.20</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">8,820</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">9,800원</s></span><span class="gap">|</span><span class="point">490p</span></div><p class="prod_introduction">“모든 동물은 평등하다.
+                                그러나 어떤 동물은 다른 동물보다 더 평등하다.”
+
+                                자신이 직접 치열하게 경험한 일들을 바탕으로 작품을 써온 오웰은 급변하는 세계정세를 지켜보면서 권력의 속성과 정치적 권모술수를 꿰뚫는 날카로운 시각을 갖고 있었다. 민주적 사회주의를 지향했던 그는 러시아 혁명 이후 권력욕에 의해 이상이 변질되고 지배층이 군림하며 부패해가는 과정을 지켜보면서 커다란 실망과 환멸을 맛보았고, 이를 《동물 농장》을 통해 우회적으로 비판한 것이다. 오웰은 이상향이었던 동물 농장이 전체주의적 공포 사회로 변모해가는 과정, 혁명 초기에 정립된 칠계명을 권력층에게 유리하도록 조금씩 바꿔나가면서 대중의 기억을 조작하는 과정을 효과적으로 그려내고 있다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">10</span><a class="review_desc" href="https://product.kyobobook.co.kr/detail/S000215150858#ReviewList1">(5개의 리뷰)</a></span><span class="gap">/</span><span class="review_quotes_text font_size_xxs">최고예요</span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215150858" data-kbbfn-bid="9788976047076"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215150858" data-kbbfn-bid="9788976047076"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215150858" data-kbbfn-bid="9788976047076" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215150858" data-kbbfn-bid="9788976047076" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215133320"><div class="form_chk no_label"><input id="chkAll111" type="checkbox"><label for="chkAll111"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215133320"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="여자 없는 남자들" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788931024326.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788931024326.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215133320" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215133320"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215133320" class="prod_info">
+                      <span class="prod_name">
+                          여자 없는 남자들
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=어니스트 헤밍웨이">어니스트 헤밍웨이</a>
+     ·
+    문예출판사
+    <span class="date"> · 2025.01.15</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">9,000</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">10,000원</s></span><span class="gap">|</span><span class="point">500p</span></div><p class="prod_introduction">상실과 고독, 폭력 속에 살아가며 여자에게 초연한
+                                각양각색의 ‘여자 없는 남자들’을 그려낸 열네 편의 이야기
+
+                                《여자 없는 남자들》은 퓰리처상과 노벨문학상을 수상한 현대 미국문학의 거장 헤밍웨이의 대표 단편선이다. 무라카미 하루키가 영감을 받아 동명의 단편집을 낸 것으로도 잘 알려진 이 책은 1927년 헤밍웨이 자신이 열네 편의 단편을 단행본으로 엮어 출판한 원본을 그대로 최초 완역해 더 의미가 깊다.
+
+                                《여자 없는 남자들》은 헤밍웨이의 작품 세계에서 이정표와 같은 작품이었다. 《해는 다시 떠오른다》를 통해 그는 이미 뛰어난 필력을 지닌 소설가로 자리매김하게 되었지만, 이 두 번째 단편소설집을 통해 헤밍웨이는 몇 페이지의 공간 안에서 필멸의 존재로서 인간 삶의 절대적인 진실성을 드러내는 장면을 재현해냈다.
+
+                                등장인물들은 투우사, 군인, 권투선수, 노동자, 술꾼, 총잡이 등이다. 헤밍웨이는 이 작품집에서 여자와의 관계에 초연한 남자들, 죽음을 두려워하면서도 과감히 맞서는 존재들을 그린다. 각 인물은 겉으로는 강인하고 무감각해 보이지만, 그 내면에는 허무와 갈등, 상실의 아픔이 짙게 드리워져 있다. 이러한 남자들의 이야기는 사실과 허구, 죽음과 생명, 고독과 연대 사이에서 끊임없이 충돌하며 헤밍웨이 특유의 예술적 조화를 이루어낸다.
+
+                                헤밍웨이가 작품 속에 그려낸 남자들의 모습은 부드러움과 강인함, 죽음과 생명, 여자와 남자, 전쟁과 평화 사이에서 갈등을 겪던 1920년대 헤밍웨이 자신의 모습이기도 하다. 독자들은 독특한 남자들의 이야기를 엮은 이 단편선을 통해 단문의 진수를 보여주며 독자적인 문학의 기틀을 마련한 헤밍웨이가 빚어낸 간결하고도 힘찬 단편문학의 묘미를 느낄 수 있다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215133320" data-kbbfn-bid="9788931024326"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215133320" data-kbbfn-bid="9788931024326"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215133320" data-kbbfn-bid="9788931024326" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215133320" data-kbbfn-bid="9788931024326" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215132983"><div class="form_chk no_label"><input id="chkAll112" type="checkbox"><label for="chkAll112"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215132983"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="진주" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788931024159.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788931024159.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215132983" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215132983"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215132983" class="prod_info">
+                      <span class="prod_name">
+                          진주
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=존 스타인벡">존 스타인벡</a>
+     ·
+    문예출판사
+    <span class="date"> · 2025.01.15</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">10,800</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">12,000원</s></span><span class="gap">|</span><span class="point">600p</span></div><p class="prod_introduction">“커다란 진주알. 달처럼 완벽했다.”
+                                멕시코 민담에서 영감을 얻어 탄생한
+                                존 스타인벡의 짧지만 가장 빛나는 작품!
+
+
+                                《진주》는 퓰리처상과 노벨문학상을 수상한 현대 미국 문학의 상징 존 스타인벡이 멕시코 민담을 소재로 집필한 작품이다. 아내 후아나와 어린 아들 코요티토를 둔 젊은 가장 키노는 아름답고 거대한 진주를 발견한다. 그는 가족을 위해 진주를 팔아 돈을 마련하려 하지만, 탐욕에 사로잡힌 장사꾼들은 키노를 속여 헐값에 진주를 사들이려 하고, 급기야 진주를 강탈하려는 이들까지 모여드는데…….
+
+                                스타인벡이 ‘흑과 백이 뚜렷한 우화’라고 설명한 바와 같이 이 소설에서는 인간 욕망의 무상함이라는 주제가 단순하고도 무해한 자연의 삶과 탐욕적이고 구원이 없는 세속의 삶이라는 이분법적 구도 안에서 풍성한 상징과 함께 서정적으로 펼쳐진다.
+
+                                주인공 키노가 어떻게 자연과 화합하는 세계에서 점차 멀어지고, 끊임없는 의심과 점증하는 폭력으로 가득 찬 세계로 진입하는지, 선과 악, 조화로운 자연과 공포로 가득 찬 자연, 친밀하고 안전한 관계와 위협과 폭력의 관계를 구분 짓는 경계가 어떻게 미묘하게 변화하는지를 살펴보다 보면 어느덧 이 짧지만 강렬한 소설에 깊이 빠져들게 된다.
+
+                                문예출판사에서 한국어판 정식 출판 계약을 맺고 전문번역가 김승욱의 섬세하고 유려한 번역으로 새롭게 선보이는 《진주》는 멕시코를 대표하는 현대 화가 호세 오로스코의 토속적 감각이 특징적인 삽화가 수록돼 독서의 몰입도를 한층 높인다. 또한 고전을 새로운 시각으로 읽어내는 전남대학교 영어영문학과 강의혁 교수의 충실한 해설이 독자를 보다 풍성한 감상으로 이끌 것이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">10</span><a class="review_desc" href="https://product.kyobobook.co.kr/detail/S000215132983#ReviewList1">(1개의 리뷰)</a></span><span class="gap">/</span><span class="review_quotes_text font_size_xxs">최고예요</span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215132983" data-kbbfn-bid="9788931024159"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215132983" data-kbbfn-bid="9788931024159"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215132983" data-kbbfn-bid="9788931024159" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215132983" data-kbbfn-bid="9788931024159" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215132982"><div class="form_chk no_label"><input id="chkAll113" type="checkbox"><label for="chkAll113"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215132982"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="위대한 개츠비" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788931024333.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788931024333.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215132982" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215132982"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215132982" class="prod_info">
+                      <span class="prod_name">
+                          위대한 개츠비
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=프랜시스 스콧 피츠제럴드">프랜시스 스콧 피츠제럴드</a>
+     ·
+    문예출판사
+    <span class="date"> · 2025.01.15</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">7,200</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">8,000원</s></span><span class="gap">|</span><span class="point">400p</span></div><p class="prod_introduction">《위대한 개츠비》는 1925년에 발간된 스콧 피츠제럴드의 장편 소설로 눈부신 예술적 성공, 완벽한 소설이라는 찬사를 받은 작가의 대표작이다. 타고난 외모와 부, 사회적 성공에 기대 방탕한 생활을 한 작가의 자전적 요소가 담겼다. 피츠제럴드는 《위대한 개츠비》를 두고 “지금까지 나온 미국 소설 가운데 가장 훌륭한 소설이 될 것”이라고 호언장담했고 이 예언은 결국 적중했다. 아메리칸드림의 명암, 물질문명의 타락, 계급과 부의 문제를 처연할 정도로 낭만적인 사랑 이야기와 결부한 이 작품은 1920년대 미국이라는 특정한 시공간을 배경으로 했는데도 미국을 넘어 전 세계의 독자에게 사랑받고 있다.
+
+                                그러나 뒤늦은 영광이었다. 데뷔작 《낙원의 이쪽》의 성공 이후 피츠제럴드는 개츠비처럼 꿈에 부풀었다. 후속작 《위대한 개츠비》가 작가 생활의 확고한 기반이 되어주리라 확신했다. 그러나 《위대한 개츠비》는 《낙원의 이쪽》의 절반도 팔리지 않았다. 그리고 빠르게 잊혔다. 이후 그는 시나리오 작가로 일하며 몇몇 작품을 더 발표했지만 그 어떤 것도 큰 호응을 얻지는 못했다. 그가 알코올 중독과 병고에 시달리다 심장마비로 사망한 후 재평가되기 시작해 불후의 걸작으로 자리 잡은 《위대한 개츠비》의 여정은 작가의 생애, 그리고 개츠비와 닮은 구석이 있다. 한 시대의 영광과 모순을 한데 응축하여 질주하다 스러진다는 점이 그렇다. 《위대한 개츠비》가 정말 위대하다면, 그 이유는 스스로를 산화하여 시대의 환희와 한계를 가감 없이 보여주었다는 데 있을 것이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215132982" data-kbbfn-bid="9788931024333"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215132982" data-kbbfn-bid="9788931024333"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215132982" data-kbbfn-bid="9788931024333" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215132982" data-kbbfn-bid="9788931024333" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215131116"><div class="form_chk no_label"><input id="chkAll114" type="checkbox"><label for="chkAll114"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215131116"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="데드 스페이스" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791170525295.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791170525295.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215131116" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215131116"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215131116" class="prod_info">
+                      <span class="prod_name">
+                          데드 스페이스
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=칼리 월리스">칼리 월리스</a>
+     ·
+    황금가지
+    <span class="date"> · 2025.01.03</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">15,300</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">17,000원</s></span><span class="gap">|</span><span class="point">850p</span></div><p class="prod_introduction">탐정으로 변신한 인공지능 전문가의 활약이 펼쳐지는 SF 스릴러 『데드 스페이스』가 황금가지에서 출간되었다. 『데드 스페이스』의 무대는 거대 자본이 막강한 영향력을 행사하는 우주의 외딴 소행성이다. 테러 사고로 신체 대부분을 기계로 대체하는 수술을 받고 살아났지만 막대한 빚을 갚기 위해 보안분석가가 된 주인공은 인공지능이 관리하는 폐쇄적인 기지에서 벌어진 살인 사건을 수사하던 중 뜻밖에도 자신이 겪은 사고 이전의 삶과 얽혀 있는 거대한 음모의 진상에 다가간다. 밀실 살인 추리물과 같은 흥미진진한 도입부로 시작하는 『데드 스페이스』는 SF와 미스터리 요소를 탁월하게 결합해 속도감과 긴장감이 넘치는 전개를 보이며 이야기의 재미를 놓치지 않는 한편, 이윤을 추구하는 기업의 횡포와 노동 착취, 인공지능의 진화처럼 현대 사회를 관통하는 다양한 주제를 담아냈다. 영화화가 확정된 첫 성인 SF 소설 『구원의 날』로 주목받은 작가 칼리 월리스는 본작으로 윌리엄 깁슨, 팀 파워스, 팻 머피 등의 거장들이 거쳐 간 필립 K. 딕 상을 수상하며 SF계의 신성으로 자리매김했다.
+
+                                ■줄거리
+
+                                인공지능 전문가 헤스터 말리의 삶은 우주선을 덮친 테러 때문에 완전히 뒤바뀌었다. 신체 대부분을 기계로 대체하는 수술을 받고 거대 기업의 보안관으로서 일한 지도 일 년, 헤스터는 과거에 같은 테러에 휘말렸던 옛 동료의 사망 소식을 듣고 광산 기지가 있는 소행성 ‘니무에’로 향한다. 그리고 그곳에서 의문스러운 죽음의 진상과 함께, 숨겨져 있던 위험한 비밀과 맞닥뜨린다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">9.5</span><a class="review_desc" href="https://product.kyobobook.co.kr/detail/S000215131116#ReviewList1">(10개의 리뷰)</a></span><span class="gap">/</span><span class="review_quotes_text font_size_xxs">재밌어요</span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215131116" data-kbbfn-bid="9791170525295"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215131116" data-kbbfn-bid="9791170525295"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215131116" data-kbbfn-bid="9791170525295" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215131116" data-kbbfn-bid="9791170525295" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215112738"><div class="form_chk no_label"><input id="chkAll115" type="checkbox"><label for="chkAll115"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215112738"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="한낮의 열기(The Heat of the Day)" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788932912936.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9788932912936.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215112738" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215112738"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215112738" class="prod_info">
+                      <span class="prod_name">
+                          한낮의 열기(The Heat of the Day)
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=엘리자베스 보엔">엘리자베스 보엔</a>
+     ·
+    열린책들
+    <span class="date"> · 2025.01.10</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">19,620</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">21,800원</s></span><span class="gap">|</span><span class="point">1,090p</span></div><p class="prod_introduction">〈가장 지적인 누아르〉라는 찬사를 받는 작품이자, 20세기 영국 문학에 커다란 족적을 남긴 엘리자베스 보엔의 대표작&nbsp;『한낮의 열기』가 영문학자 정연희 씨의 번역으로 열린책들에서 출간되었다. 보엔은 언어에 대한 날카로운 감각, 풍성하고 깊은 심미안으로 사물과 풍경을 해부하는 문체, 격동적인 시대 속 여성의 삶과 심리를 속속들이 탐구하는 예리한 지성으로 영국을 대표하는 작가로 자리매김했다.
+                                국내 초역으로 선보이는&nbsp;『한낮의 열기』는 2차 세계 대전 당시 런던의 풍경과 분위기, 사람들의 요동치는 관계와 내면의 심리를 섬세하게 묘사한 작품으로 발표되자마자 문단과 대중의 뜨거운 주목과 찬사를 받았다.
+                                스릴러가 섞인 누아르적&nbsp;전개가 돋보이는 이 독특한 전쟁 소설은 전쟁이라는 거대한 폭력이 우리에게 남긴 상흔, 〈뜯겨 나간 감각〉으로 살아가는 인간들의 내면을 심도 있게 탐구한다. 이 작품은 돌이킬 수 없이 지나가 버린 시대에 바치는 비가이자, 상실을 안고 살아가는 인간의 존재 방식에 질문을 던지는 명작으로 여전히 회자되고 있다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">9.29</span><a class="review_desc" href="https://product.kyobobook.co.kr/detail/S000215112738#ReviewList1">(4개의 리뷰)</a></span><span class="gap">/</span><span class="review_quotes_text font_size_xxs">최고예요</span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215112738" data-kbbfn-bid="9788932912936"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215112738" data-kbbfn-bid="9788932912936"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215112738" data-kbbfn-bid="9788932912936" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215112738" data-kbbfn-bid="9788932912936" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215102014"><div class="form_chk no_label"><input id="chkAll116" type="checkbox"><label for="chkAll116"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215102014"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="해리 포터와 비밀의 방" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193790663.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193790663.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215102014" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215102014" class="prod_info">
+                      <span class="prod_name">
+                          해리 포터와 비밀의 방
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=J.K. 롤링">J.K. 롤링</a>
+     ·
+    문학수첩
+    <span class="date"> · 2025.01.17</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">23,850</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">26,500원</s></span><span class="gap">|</span><span class="point">1,320p</span></div><p class="prod_introduction">1997년 영국에서 출간된 이래 《해리 포터》 시리즈는 지금까지 200개국 이상 80개의 언어로 번역되고 출간되어 5억 부 이상을 판매했다. 국내에서도 1999년 《해리 포터와 마법사의 돌》의 출간을 필두로 지금까지 약 1,500만 부가 판매되었으며, 현재에도 독자들에게 변함없는 사랑을 받고 있다. 이 시리즈는 여덟 편의 영화로도 제작되어 전 세계 곳곳에서 흥행을 거두었고, 영화와 관련된 새로운 도서가 출간되고 테마 파크가 조성되는 등 놀라운 기현상을 빚어냈다.
+                                뿐만 아니라 《해리 포터》 시리즈에서 또 다른 작품들이 문화상품으로 파생되어 지금도 꾸준히 독자들을 만나고 있다. ‘해리 포터’의 다음 세대인 자녀들의 이야기를 다룬 《해리 포터와 저주 받은 아이》는 시나리오로 출간된 이후 연극으로 만들어져 영국을 시작으로 미국, 호주, 독일, 캐나다 등 세계 곳곳에서 열띤 호응을 얻으며 공연 중이고, 《해리 포터》의 세계관이 확장된 《신비한 동물 사전》 시리즈는 계속해서 영화로 제작되고 있다. 이제 《해리 포터》는 소설이라는 단순한 문학 장르에 머무르지 않고 ‘21세기를 대표하는 시대의 아이콘’으로 불리며 일종의 사회문화 현상으로 받아들여지고 있다.
+                                이번에 출간하는 《해리 포터》 시리즈는 지난 2019년에 새로운 번역을 선보인 버전이다. 7권 《해리 포터와 죽음의 성물》로 완간된 기존의 《해리 포터》 시리즈는 빈틈없는 소설적 구성과 생생한 캐릭터 그리고 마법 세계를 정교하게 묘사하며 풍부한 상상력이 돋보이면서도 정밀한 세계관을 구축해 나갔다. 하지만 지금까지 출간된 책들은 J.K. 롤링이 펼쳐 나가는 판타지 세계의 규모가 어느 정도이며 그 속에 어떠한 소설적 장치를 심어 놓았는지 알 수 없는 상태에서 번역 작업이 이루어졌다. 또한 1~7편 모두 완결성을 갖추었지만, 시리즈의 특성상 편과 편을 이어 주며 작품 전체를 관통하는 서사의 개연성과 완결성은 마지막 편이 출간된 이후에나 파악할 수밖에 없었다. 그러다 보니 작가가 어느 장면에 복선을 깔아 두었고, 어느 장면이 작가가 창조한 세계관을 이해하는 중요한 역할을 하는지 의미를 파악하며 번역하기에는 한계가 있었다.
+                                이 《해리 포터》 시리즈에는 J.K. 롤링이 작품 속에 이룩해놓은 문학적 성취가 완벽하게 구현되어 있다. 복선과 반전을 선사하는 문학적 장치들을 보다 정교하고 세련되게 다듬었으며, 인물들 사이의 관계나 그들의 숨겨진 비밀 그리고 성격이 도드라지는 말투의 미세한 뉘앙스까지 점검했다. 《해리 포터》의 세계에 처음 발을 들여놓는 독자는 물론, 그동안 《해리 포터》의 세계를 즐겨 찾아왔던 독자 모두에게 완성도 높은 만족과 감동을 선사할 것이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215102014" data-kbbfn-bid="9791193790663"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215102014" data-kbbfn-bid="9791193790663"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215102014" data-kbbfn-bid="9791193790663" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215102014" data-kbbfn-bid="9791193790663" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215102011"><div class="form_chk no_label"><input id="chkAll117" type="checkbox"><label for="chkAll117"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215102011"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="해리 포터와 마법사의 돌" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193790656.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791193790656.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215102011" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215102011" class="prod_info">
+                      <span class="prod_name">
+                          해리 포터와 마법사의 돌
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=J.K. 롤링">J.K. 롤링</a>
+     ·
+    문학수첩
+    <span class="date"> · 2025.01.15</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">23,850</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">26,500원</s></span><span class="gap">|</span><span class="point">1,320p</span></div><p class="prod_introduction">1997년 영국에서 출간된 이래 《해리 포터》 시리즈는 지금까지 200개국 이상 80개의 언어로 번역되고 출간되어 5억 부 이상을 판매했다. 국내에서도 1999년 《해리 포터와 마법사의 돌》의 출간을 필두로 지금까지 약 1,500만 부가 판매되었으며, 현재에도 독자들에게 변함없는 사랑을 받고 있다. 이 시리즈는 여덟 편의 영화로도 제작되어 전 세계 곳곳에서 흥행을 거두었고, 영화와 관련된 새로운 도서가 출간되고 테마 파크가 조성되는 등 놀라운 기현상을 빚어냈다.
+                                뿐만 아니라 《해리 포터》 시리즈에서 또 다른 작품들이 문화상품으로 파생되어 지금도 꾸준히 독자들을 만나고 있다. ‘해리 포터’의 다음 세대인 자녀들의 이야기를 다룬 《해리 포터와 저주 받은 아이》는 시나리오로 출간된 이후 연극으로 만들어져 영국을 시작으로 미국, 호주, 독일, 캐나다 등 세계 곳곳에서 열띤 호응을 얻으며 공연 중이고, 《해리 포터》의 세계관이 확장된 《신비한 동물 사전》 시리즈는 계속해서 영화로 제작되고 있다. 이제 《해리 포터》는 소설이라는 단순한 문학 장르에 머무르지 않고 ‘21세기를 대표하는 시대의 아이콘’으로 불리며 일종의 사회문화 현상으로 받아들여지고 있다.
+                                이번에 출간하는 《해리 포터》 시리즈는 지난 2019년에 새로운 번역을 선보인 버전이다. 7권 《해리 포터와 죽음의 성물》로 완간된 기존의 《해리 포터》 시리즈는 빈틈없는 소설적 구성과 생생한 캐릭터 그리고 마법 세계를 정교하게 묘사하며 풍부한 상상력이 돋보이면서도 정밀한 세계관을 구축해 나갔다. 하지만 지금까지 출간된 책들은 J.K. 롤링이 펼쳐 나가는 판타지 세계의 규모가 어느 정도이며 그 속에 어떠한 소설적 장치를 심어 놓았는지 알 수 없는 상태에서 번역 작업이 이루어졌다. 또한 1~7편 모두 완결성을 갖추었지만, 시리즈의 특성상 편과 편을 이어 주며 작품 전체를 관통하는 서사의 개연성과 완결성은 마지막 편이 출간된 이후에나 파악할 수밖에 없었다. 그러다 보니 작가가 어느 장면에 복선을 깔아 두었고, 어느 장면이 작가가 창조한 세계관을 이해하는 중요한 역할을 하는지 의미를 파악하며 번역하기에는 한계가 있었다.
+                                이 《해리 포터》 시리즈에는 J.K. 롤링이 작품 속에 이룩해놓은 문학적 성취가 완벽하게 구현되어 있다. 복선과 반전을 선사하는 문학적 장치들을 보다 정교하고 세련되게 다듬었으며, 인물들 사이의 관계나 그들의 숨겨진 비밀 그리고 성격이 도드라지는 말투의 미세한 뉘앙스까지 점검했다. 《해리 포터》의 세계에 처음 발을 들여놓는 독자는 물론, 그동안 《해리 포터》의 세계를 즐겨 찾아왔던 독자 모두에게 완성도 높은 만족과 감동을 선사할 것이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">10</span><a class="review_desc" href="https://product.kyobobook.co.kr/detail/S000215102011#ReviewList1">(1개의 리뷰)</a></span><span class="gap">/</span><span class="review_quotes_text font_size_xxs">최고예요</span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215102011" data-kbbfn-bid="9791193790656"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215102011" data-kbbfn-bid="9791193790656"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215102011" data-kbbfn-bid="9791193790656" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215102011" data-kbbfn-bid="9791193790656" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215070080"><div class="form_chk no_label"><input id="chkAll118" type="checkbox"><label for="chkAll118"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215070080"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="베스트 오브 레이 브래드버리" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791166688614.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791166688614.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215070080" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215070080"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215070080" class="prod_info">
+                      <span class="prod_name">
+                          베스트 오브 레이 브래드버리
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=레이 브래드버리">레이 브래드버리</a>
+     ·
+    아작
+    <span class="date"> · 2025.01.10</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">22,320</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">24,800원</s></span><span class="gap">|</span><span class="point">1,240p</span></div><p class="prod_introduction">전설로 전해오던 레이 브래드버리의 초기 단편집,
+                                《멜랑콜리의 묘약》 《온 여름을 이 하루에》 8년 만의 합본 개정판
+
+                                “차라리 밖에서 죽는 게 낫겠어요. 거긴 시원한 바람이 머리카락이라도 날려주겠죠.” 이름 모를 병을 앓는 소녀. 그녀의 가족은 거리의 뭇사람들에게 소녀의 병을 치유할 묘약을 묻고, 지나던 노파는 혀를 차며 말한다. “멜랑콜리의 묘약이 필요해….” 온갖 제안이 검은 바다처럼 들끓고, 마지막으로 얼굴이며 옷에 검댕이 잔뜩 묻었지만 미소만은 ‘어둠 속에서 작은 언월도처럼’ 빛나는 거리의 청소부가 찾아오는데….
+
+                                “화성의 사막에 앉아 지구를 바라본 시인”, 설명이 필요 없는 단편의 제왕이자 20세기 SF 문학의 거장, 《화씨 451》의 작가 레이 브래드버리. 전설로만 전해오던 레이 브래드버리의 초기 단편집 《멜랑콜리의 묘약》 《온 여름을 이 하루에》 8년 만의 합본 개정판.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215070080" data-kbbfn-bid="9791166688614"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215070080" data-kbbfn-bid="9791166688614"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215070080" data-kbbfn-bid="9791166688614" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215070080" data-kbbfn-bid="9791166688614" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215069903"><div class="form_chk no_label"><input id="chkAll119" type="checkbox"><label for="chkAll119"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215069903"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="전사들 그래픽 노블 세트" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791165183714.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791165183714.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215069903" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215069903" class="prod_info">
+                      <span class="prod_name">
+                          전사들 그래픽 노블 세트
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=에린 헌터">에린 헌터 외</a>
+     ·
+    가람어린이
+    <span class="date"> · 2024.12.31</span></span><div class="prod_price"><span class="percent">10%</span><span class="price"><span class="val">105,300</span><span class="unit">원</span></span><span class="price_normal"><span class="text">정가</span><s class="val">117,000원</s></span><span class="gap">|</span><span class="point">5,850p</span></div><p class="prod_introduction">『전사들』 시리즈는 영어권 지역에서 천만 부 이상 판매되며 뉴욕 타임스 베스트셀러 목록에 무려 116주 동안 머물러 화제가 된 베스트셀러이다. 이번에 나온 『변화의 바람』은 『전사들: 그래픽 노블』 시리즈의 일곱 번째 이야기로, 바람족 부지도자 머드클로가 주인공으로 등장한다. ‘위대한 여정’ 끝에 새로운 영역에 자리 잡은 종족 고양이들, 그중에서도 특히 톨스타의 죽음 이후로 새로운 지도자가 탄생하기까지의 바람족 이야기가 그려진다.
+                                『전사들: 그래픽 노블』 시리즈에서는 그동안 에린 헌터의 묘사를 통해 머릿속으로만 상상해 왔던 전사 고양이들이 개성 넘치는 모습으로 생동감 있게 살아난다. 에린 헌터의 『전사들』 시리즈에 열광하는 독자들은 만화적 상상력과 묘사가 더해진 『전사들: 그래픽 노블』에 흠뻑 빠져들 수밖에 없을 것이다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215069903" data-kbbfn-bid="9791165183714"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill "><span class="text"></span></span><p class="order_state_desc"><p class="order_state_desc"> <span class="fw_bold">1/21(화) </span><br>출고예정</p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215069903" data-kbbfn-bid="9791165183714"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215069903" data-kbbfn-bid="9791165183714" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215069903" data-kbbfn-bid="9791165183714" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li><li class="prod_item" data-binding="true" data-id="S000215064178"><div class="form_chk no_label"><input id="chkAll120" type="checkbox"><label for="chkAll120"><span class="hidden">상품선택</span></label></div><div class="prod_area horizontal"><div class="prod_thumb_box size_lg"><a class="prod_link" href="https://product.kyobobook.co.kr/detail/S000215064178"><span class="img_box no_img"><img data-kbbfn="s3-image" loading="lazy" alt="아이리쉬 헤리티지" src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791163722434.jpg" data-src="https://contents.kyobobook.co.kr/sih/fit-in/300x0/pdt/9791163722434.jpg"></span></a><div class="prod_viewer_control"><a href="https://product.kyobobook.co.kr/detail/S000215064178" target="_blank" class="btn_prod_viewer"><span class="ico_blank"></span><span class="text">새창보기</span></a><button type="button" class="btn_prod_viewer" data-kbbfn="preview-item" data-kbbfn-pid="S000215064178"><span class="ico_preview"></span><span class="text">미리보기</span></button></div></div><div class="prod_info_box"><div class="auto_overflow_wrap prod_name_group">
+                                <div class="auto_overflow_contents">
+                                    <div class="auto_overflow_inner">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000215064178" class="prod_info">
+                      <span class="prod_name">
+                          아이리쉬 헤리티지
+                      </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><span class="prod_author"><a href="https://search.kyobobook.co.kr/search?keyword=임보라">임보라</a>
+     ·
+    전북대학교출판문화원
+    <span class="date"> · 2024.12.01</span></span><div class="prod_price"><span class="price"><span class="val">16,000</span><span class="unit">원</span></span><span class="gap">|</span><span class="point">800p</span></div><p class="prod_introduction">이 책을 통해 저자는 아일랜드의 문학, 문화, 역사, 예술 등을 탐구함으로써 아일랜드에 대한 이해를 넓히고 이들 통해 인간의 삶 전반에 대한 고찰로까지 사유의 지평을 넓혀 보고자 한다. 본 저서는 아일랜드의 다양한 면모가 우리의 삶에 시사하는 바가 상당하다는 것을 효과적으로 보여준다.</p><div class="prod_bottom"><div class="review_summary_wrap type_sm"><span class="review_klover_box"><span class="review_klover_text font_size_xxs">0.0</span></span></div><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215064178" data-kbbfn-bid="9791163722434"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button></div></div></div><div class="prod_order_state"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span><p class="order_state_desc"><p class="order_state_desc"><strong class="blue">내일(1/21,화 오전 7시 전) 도착</strong></p></p></div><div class="prod_btn_wrap"><button class="btn_wish_icon" type="button" data-kbbfn="wish-item" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-id="S000215064178" data-kbbfn-bid="9791163722434"><span class="ico_wish"></span><span class="hidden">관심 등록</span></button><div class="btn_wrap full"><a class="btn_light_gray btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="002" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215064178" data-kbbfn-bid="9791163722434" data-kbbfn-adult="0"><span class="text">장바구니</span></a><a class="btn_primary btn_sm" data-kbbfn="cart-item" data-kbbfn-spbcode="001" data-kbbfn-dvsncode="KOR" data-kbbfn-grpcode="SGK" data-kbbfn-pid="S000215064178" data-kbbfn-bid="9791163722434" data-kbbfn-adult="0"><span class="text">바로구매</span></a></div></div></li></ol>
+
+                            <div class="pagination" id="allBottomPagi" style=""><button class="btn_page prev" disabled="disabled"><span class="hidden">이전</span></button><div class="page_num"><a href="#" class="btn_page_num active" data-index="0" data-role="first" title="현재페이지">1</a><span class="text_ellipsis hidden">...</span><a href="#" class="btn_page_num" data-index="2" data-role="middle">2</a><a href="#" class="btn_page_num" data-index="3" data-role="middle">3</a><a href="#" class="btn_page_num" data-index="4" data-role="middle">4</a><a href="#" class="btn_page_num" data-index="5" data-role="middle">5</a><a href="#" class="btn_page_num" data-index="6" data-role="middle">6</a><a href="#" class="btn_page_num" data-index="7" data-role="middle">7</a><span class="text_ellipsis">...</span><a href="#" class="btn_page_num" data-index="9" data-role="last">35</a></div><button class="btn_page next"><span class="hidden">다음</span></button></div>
+
+
+
+
+
+
+                            <div class="no_data has_line" style="display: none;"><div class="no_data_desc">데이터를 불러오는 중입니다.</div></div></div>
+
+                    </div>
+
+                    <div id="homeTabBest" class="tab_content ui-tabs-panel ui-corner-bottom ui-widget-content" data-type="best" style="display: none;" aria-labelledby="ui-id-42" role="tabpanel" aria-hidden="true">
+                        <div class="list_sort_wrap">
+                            <div class="right_area">
+
+
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+
+
+                                    <select title="목록 보기 유형 선택" id="bestPer" style="display: none;">
+                                        <option value="20">20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                    </select><span tabindex="0" id="bestPer-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-12" aria-labelledby="ui-id-12" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">20개씩 보기</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list_result_wrap">
+
+
+                            <div class="pagination" id="bestTopPagi"></div>
+
+
+
+
+
+                            <div class="right_area">
+                                <div class="item_group">
+            <span class="form_chk">
+
+
+
+                        <input id="chkAllBestChk" type="checkbox">
+                        <label for="chkAllBestChk">전체선택</label>
+
+
+
+
+
+
+            </span>
+                                    <!-- DESC : 찜하기 버튼 활성화 시 button.btn_wish 영역 [active] class 추가 -->
+
+
+
+                                    <button type="button" class="btn_wish size_sm mobonWish" data-kbbfn="wish-item-list" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-list="#homeTabBest .prod_list">
+                                        <span class="ico_wish"></span>
+                                        <span class="hidden">찜하기</span>
+                                    </button>
+                                    <button type="button" class="btn_sm btn_line_gray mobonCart" data-kbbfn="cart-item" data-kbbfn-cartlist="#homeTabBest .prod_list" data-kbbfn-cartallcheck="#homeTabBest #chkAllBestChk">
+                                        <span class="ico_cart"></span>
+                                        <span class="text">장바구니</span>
+                                    </button>
+
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="switch_prod_wrap view_type_list">
+                            <ol class="prod_list" style="display: none;"></ol>
+
+
+                            <div class="pagination" id="bestBottomPagi" style="display: none;"></div>
+
+
+
+
+
+                            <div class="no_data has_line"><div class="no_data_desc">데이터를 불러오는 중입니다.</div></div></div>
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div id="homeTabNew" class="tab_content ui-tabs-panel ui-corner-bottom ui-widget-content" data-type="new" style="display: none;" aria-labelledby="ui-id-43" role="tabpanel" aria-hidden="true">
+                        <div class="list_sort_wrap">
+                            <div class="right_area">
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+                                    <select title="목록 보기 유형 선택" id="newSort" style="display: none;">
+                                        <option value="new">최신순</option>
+                                        <option value="sel">판매량순</option>
+                                        <option value="mxv">높은가격순</option>
+                                        <option value="minv">낮은가격순</option>
+                                    </select><span tabindex="0" id="newSort-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-14" aria-labelledby="ui-id-14" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">최신순</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+                                </div>
+
+
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+
+
+
+                                    <select title="목록 보기 유형 선택" id="newPer" style="display: none;">
+                                        <option value="20">20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                    </select><span tabindex="0" id="newPer-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-18" aria-labelledby="ui-id-18" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">20개씩 보기</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list_result_wrap">
+
+
+
+                            <div class="pagination" id="newTopPagi"></div>
+
+
+
+
+                            <div class="right_area">
+                                <div class="item_group">
+            <span class="form_chk">
+
+
+
+
+                        <input id="chkAllNewChk" type="checkbox">
+                        <label for="chkAllNewChk">전체선택</label>
+
+
+
+
+
+            </span>
+                                    <!-- DESC : 찜하기 버튼 활성화 시 button.btn_wish 영역 [active] class 추가 -->
+
+
+
+
+                                    <button type="button" class="btn_wish size_sm mobonWish" data-kbbfn="wish-item-list" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-list="#homeTabNew .prod_list">
+                                        <span class="ico_wish"></span>
+                                        <span class="hidden">찜하기</span>
+                                    </button>
+                                    <button type="button" class="btn_sm btn_line_gray mobonCart" data-kbbfn="cart-item" data-kbbfn-cartlist="#homeTabNew .prod_list" data-kbbfn-cartallcheck="#homeTabBest #chkAllNewChk">
+                                        <span class="ico_cart"></span>
+                                        <span class="text">장바구니</span>
+                                    </button>
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="switch_prod_wrap view_type_list">
+                            <ol class="prod_list" style="display: none;"></ol>
+
+
+
+                            <div class="pagination" id="newBottomPagi" style="display: none;"></div>
+
+
+
+
+                            <div class="no_data has_line"><div class="no_data_desc">데이터를 불러오는 중입니다.</div></div></div>
+                        <script>
+                            /**
+                             * GA 엑셀 다운로드 클릭
+                             */
+                            function pushDataLayerForDownExcel () {
+                                window.dataLayer.push({ ecommerce: null })
+                                window.dataLayer.push({
+                                    event: 'item_event',
+                                    event_name: 'click_element',
+                                    ecommerce: {
+                                        title: 'Excel다운로드',
+                                        type: 'Excel다운로드 버튼'
+                                    }
+                                })
+                            }
+                        </script>
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div id="homeTabReview" class="tab_content ui-tabs-panel ui-corner-bottom ui-widget-content" data-type="review" style="display: none;" aria-labelledby="ui-id-44" role="tabpanel" aria-hidden="true">
+                        <div class="list_sort_wrap">
+                            <div class="right_area">
+
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+                                    <select title="목록 보기 유형 선택" id="reviewSort" style="display: none;">
+                                        <option value="grd">평점순</option>
+                                        <option value="rvw" selected="">리뷰순</option>
+                                        <option value="new">신규등록순</option>
+                                    </select><span tabindex="0" id="reviewSort-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-21" aria-labelledby="ui-id-21" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">리뷰순</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+                                </div>
+
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+
+
+
+
+                                    <select title="목록 보기 유형 선택" id="reviewPer" style="display: none;">
+                                        <option value="20">20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                    </select><span tabindex="0" id="reviewPer-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-23" aria-labelledby="ui-id-23" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">20개씩 보기</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list_result_wrap">
+
+
+
+
+                            <div class="pagination" id="reviewTopPagi"></div>
+
+
+
+                            <div class="right_area">
+                                <div class="item_group">
+            <span class="form_chk">
+
+
+
+
+
+                        <input id="chkAllReviewChk" type="checkbox">
+                        <label for="chkAllReviewChk">전체선택</label>
+
+
+
+
+            </span>
+                                    <!-- DESC : 찜하기 버튼 활성화 시 button.btn_wish 영역 [active] class 추가 -->
+
+
+
+
+
+                                    <button type="button" class="btn_wish size_sm mobonWish" data-kbbfn="wish-item-list" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-list="#homeTabReview .prod_list">
+                                        <span class="ico_wish"></span>
+                                        <span class="hidden">찜하기</span>
+                                    </button>
+                                    <button type="button" class="btn_sm btn_line_gray mobonCart" data-kbbfn="cart-item" data-kbbfn-cartlist="#homeTabReview .prod_list" data-kbbfn-cartallcheck="#homeTabBest #chkAllReviewChk">
+                                        <span class="ico_cart"></span>
+                                        <span class="text">장바구니</span>
+                                    </button>
+
+
+
+
+                                </div>
+                                <div class="item_group">
+                                    <button type="button" class="btn_sm btn_line_gray excel_down" onclick="pushDataLayerForDownExcel()">
+                                        <span class="ico_excel"></span>
+                                        <span class="text">Excel다운로드</span>
+                                    </button>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="switch_prod_wrap view_type_list">
+                            <ol class="prod_list" style="display: none;"></ol>
+
+
+
+
+                            <div class="pagination" id="reviewBottomPagi" style="display: none;"></div>
+
+
+
+                            <div class="no_data has_line"><div class="no_data_desc">데이터를 불러오는 중입니다.</div></div></div>
+                        <script>
+                            /**
+                             * GA 엑셀 다운로드 클릭
+                             */
+                            function pushDataLayerForDownExcel () {
+                                window.dataLayer.push({ ecommerce: null })
+                                window.dataLayer.push({
+                                    event: 'item_event',
+                                    event_name: 'click_element',
+                                    ecommerce: {
+                                        title: 'Excel다운로드',
+                                        type: 'Excel다운로드 버튼'
+                                    }
+                                })
+                            }
+                        </script>
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div id="homeTabCast" class="tab_content ui-tabs-panel ui-corner-bottom ui-widget-content" data-type="cast" style="display: none;" aria-labelledby="ui-id-45" role="tabpanel" aria-hidden="true">
+                        <div class="list_sort_wrap">
+                            <div class="right_area">
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+                                    <select title="목록 보기 유형 선택" id="castSort" style="display: none;">
+                                        <option value="new">최신순</option>
+                                        <option value="sel">판매량순</option>
+                                        <option value="mxv">높은가격순</option>
+                                        <option value="minv">낮은가격순</option>
+                                    </select><span tabindex="0" id="castSort-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-25" aria-labelledby="ui-id-25" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">최신순</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+                                </div>
+
+
+
+                                <div class="form_sel type_sm" data-class="type_sm">
+
+
+
+
+
+                                    <select title="목록 보기 유형 선택" id="castPer" style="display: none;">
+                                        <option value="20">20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                    </select><span tabindex="0" id="castPer-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-haspopup="true" title="목록 보기 유형 선택" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-29" aria-labelledby="ui-id-29" aria-disabled="false" style="position: relative;"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">20개씩 보기</span><div dir="ltr" class="resize-sensor" style="position: absolute; inset: -10px 0px 0px -10px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></span>
+
+
+                                </div>
+                                <!-- DESC : data-target 리스트형/썸네일형 제어되는 해당 상품 리스트 타겟지정 필요(#{tabid} .switch_prod_wrap) -->
+
+
+
+
+
+                                <div class="switch_list_btn_wrap" data-target="#homeTabCast .switch_prod_wrap">
+                                    <button type="button" class="btn_sm btn_line_gray ico_list active" data-type="list">
+                                        <span class="hidden">리스트형 으로 보기</span>
+                                    </button>
+                                    <button type="button" class="btn_sm btn_line_gray ico_img" data-type="img">
+                                        <span class="hidden">이미지형 으로 보기</span>
+                                    </button>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="list_result_wrap">
+
+
+
+
+
+                            <div class="pagination" id="castTopPagi"></div>
+
+
+                            <div class="right_area">
+                                <div class="item_group">
+            <span class="form_chk">
+
+
+
+
+
+
+                        <input id="chkAllCastChk" type="checkbox">
+                        <label for="chkAllCastChk">전체선택</label>
+
+
+
+            </span>
+                                    <!-- DESC : 찜하기 버튼 활성화 시 button.btn_wish 영역 [active] class 추가 -->
+
+
+
+
+
+
+                                    <button type="button" class="btn_wish size_sm mobonWish" data-kbbfn="wish-item-list" data-kbbfn-myrcode="001" data-kbbfn-nbopcode="001" data-kbbfn-list="#homeTabCast .prod_list">
+                                        <span class="ico_wish"></span>
+                                        <span class="hidden">찜하기</span>
+                                    </button>
+                                    <button type="button" class="btn_sm btn_line_gray mobonCart" data-kbbfn="cart-item" data-kbbfn-cartlist="#homeTabCast .prod_list" data-kbbfn-cartallcheck="#homeTabBest #chkAllCastChk">
+                                        <span class="ico_cart"></span>
+                                        <span class="text">장바구니</span>
+                                    </button>
+
+
+
+                                </div>
+                                <div class="item_group">
+                                    <button type="button" class="btn_sm btn_line_gray excel_down" onclick="pushDataLayerForDownExcel()">
+                                        <span class="ico_excel"></span>
+                                        <span class="text">Excel다운로드</span>
+                                    </button>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="switch_prod_wrap view_type_list">
+                            <ol class="prod_list" style="display: none;"></ol>
+
+
+
+
+
+                            <div class="pagination" id="castBottomPagi" style="display: none;"></div>
+
+
+                            <div class="no_data has_line"><div class="no_data_desc">데이터를 불러오는 중입니다.</div></div></div>
+
+
+                    </div>
+
+
+
+
+            </section>
+        </div>
+    </section>
+</main>
+</div>
+</body>
+</html>

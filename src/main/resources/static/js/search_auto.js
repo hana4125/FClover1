@@ -43,6 +43,7 @@ const SCF = {
     return null; // user != null && user.model != null ? user.model.sub : "";
   }
 };
+
 let gapTime = 175;
 let prevSearchKeyword = SCF.getSearchKeyword();
 
@@ -81,7 +82,8 @@ $(function() {
   });
 
   // 검색버튼 클릭시 이벤트
-  $(".search-btn").click(function(){
+  $(".search-btn").click(function(e){
+    e.preventDefault();
     if($("#searchKeyword").val() == ""){
       alert("검색어를 입력해 주세요!");
     }else{
@@ -94,6 +96,7 @@ $(function() {
     //엔터키 이벤트 검색 가능 상태 변경
     keydown: function (key) {    //엔터키가 검색어창에서 눌려진 상태면 검색 호출 가능 상태로 변경 - 레이어 팝업창 확인누를 시 엔터키 이벤트 호출 방지
       if(key.keyCode == 13){
+        key.preventDefault();
         enterKeySubmitFlag = true;
       }
     },
@@ -112,7 +115,7 @@ $(function() {
             let _caller = setTimeout(function(e){
               //console.log("SendAutoKeyword : " + _keyword);
               prevSearchKeyword = _keyword;
-              sendAutoKeyword(_keyword);
+              //sendAutoKeyword(_keyword); // 나중에 구현
             }, gapTime);
             autoKeywordCaller.push(_caller);
           }
@@ -240,7 +243,7 @@ function goSearchKeywordPage(keyvalue){
 
 
   paramStr += "keyword="+encodeURIComponent(inkeyword);
-  location.href = "/search?"+paramStr;
+  location.href = "/search/searchKeyword?"+paramStr;
 }
 
 function submitSearchKeywordPage() {
@@ -569,6 +572,7 @@ function getRcntKeywordNoList() {
 // }
 
 //실시간 급등 검색어
+/*
 function riseCall(age,gender) {
   $.ajax({
     type: "GET",
@@ -680,4 +684,4 @@ function getRiseCallYmdStr(date){
   let dateTemp = date.split(".");
   return dateTemp[1].trim()+"."+dateTemp[2].trim()+" "+dateTemp[3].trim();
 }
-
+*/

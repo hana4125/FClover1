@@ -11,7 +11,7 @@ public interface MemberService {
 
     int signup(Member member);
 
-    int getmemberNo(String memberId);
+    long getmemberNo(String memberId);
 
     Member findMemberById(String memberId);
 
@@ -19,7 +19,7 @@ public interface MemberService {
 
     String findMemberId(Member member);
 
-    Integer selectMemberResetPassword(Member member);
+    Member selectMemberResetPassword(Member member);
 
     int updateMember(Member member);
 
