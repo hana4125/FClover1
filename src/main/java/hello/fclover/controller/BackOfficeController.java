@@ -2,17 +2,23 @@ package hello.fclover.controller;
 
 
 import hello.fclover.domain.Delivery;
+import hello.fclover.domain.Member;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
 import hello.fclover.service.BackOfficeService;
+import hello.fclover.service.MemberService;
+import hello.fclover.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +30,21 @@ import java.util.Map;
 public class BackOfficeController {
 
     private final BackOfficeService backOfficeService;
+    private final MemberService memberService;
+    private final SellerService sellerService;
+    private final PasswordEncoder passwordEncoder;
+    private static final int SIGNUP_SUCCESS = 1;
+    private static final int SIGNUP_FAILURE = 0;
+
+    @ModelAttribute("admin")
+    public Member addAdminToModel(Principal principal) {
+
+        if (principal != null) {
+            String memberId = principal.getName();
+            return memberService.findMemberById(memberId);
+        }
+        return null;
+    }
 
     @GetMapping("/main")
     public String main1() {
@@ -36,8 +57,30 @@ public class BackOfficeController {
     }
 
     @GetMapping("/signup")
-    public String signup() {
+    public String signupForm() {
         return "backOffice/boSignup";
+    }
+
+    @PostMapping("/signupProcess")
+    public String signup(@ModelAttribute("signupMember") Member member, RedirectAttributes redirectAttributes) {
+        String memberIdDuplicate = memberService.isMemberIdDuplicate(member.getMemberId());
+        String sellerIdDuplicate = sellerService.isSellerIdDuplicate(member.getMemberId());
+
+        if (memberIdDuplicate != null || sellerIdDuplicate != null) {
+            redirectAttributes.addFlashAttribute("message", "사용중인 아이디입니다.");
+            return "redirect:/bo/signup";
+        }
+
+        String encPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encPassword);
+        int result = memberService.signup(member);
+
+        if (result == SIGNUP_SUCCESS) {
+            log.info("회원가입 완료");
+            return "redirect:/bo/login";
+        } else {
+            throw new RuntimeException("회원가입 실패");
+        }
     }
 
     //주문완료

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -45,22 +46,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain adminFilterChain(HttpSecurity http, AdminLoginSuccessHandler adminLoginSuccessHandler, AdminLoginFailHandler adminLoginFailHandler) throws Exception {
 
         http
                 .securityMatcher("/bo/**")
-                .formLogin((formLogin) -> formLogin.loginPage("/bo/login")
+                .formLogin((formLogin) -> formLogin
+                        .loginPage("/bo/login")
                         .loginProcessingUrl("/bo/loginProcess")
                         .usernameParameter("memberId")
                         .passwordParameter("password")
-                        .successHandler(loginSuccessHandler)
-                        .failureHandler(loginFailHandler))
+                        .successHandler(adminLoginSuccessHandler)
+                        .failureHandler(adminLoginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/bo/login", "bo/signup").permitAll()
+                        .requestMatchers("/bo/login", "bo/signup", "/bo/signupProcess").permitAll()
                         .requestMatchers("/bo/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .logout((lo) -> lo.logoutUrl("/bo/logout")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/bo/logout", "GET"))
                         .logoutSuccessUrl("/bo/login")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
