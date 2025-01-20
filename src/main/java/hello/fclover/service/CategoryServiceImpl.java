@@ -15,7 +15,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    @Cacheable(value = "Category.findAll")
+    @Cacheable(value = "CategoryMapper.findAll")
     public List<Category> getCategoryList() {
         // 모든 카테고리 가져오기
         return categoryMapper.findAll();
