@@ -21,7 +21,7 @@ public class SearchController {
     private final SearchService searchService;
 
     // 키워드 검색 기능
-    @GetMapping
+    @GetMapping("/searchKeyword")
     public ModelAndView keywordSearch(@RequestParam("keyword") String keyword) {
 
         ModelAndView mv = new ModelAndView();

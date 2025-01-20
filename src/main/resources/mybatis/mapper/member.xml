@@ -28,7 +28,7 @@
     </select>
 
     <select id="selectMemberResetPassword">
-        SELECT member_no FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
+        SELECT * FROM member WHERE member_id = #{memberId} AND name = #{name} AND birthdate = #{birthdate} AND email = #{email}
     </select>
 
     <update id="updateProfile">
