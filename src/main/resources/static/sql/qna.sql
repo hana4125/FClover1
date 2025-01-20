@@ -2,7 +2,7 @@ CREATE TABLE QnA(
     q_no int,
     q_create_at date,
     member_id varchar(20),
-    q_response_at date,
+    q_response_at date, #답변일
     q_name varchar(30),
     q_type varchar(20),
     q_file varchar(255),
