@@ -35,7 +35,7 @@ public interface MemberMapper {
 
     String isMemberIdDuplicate(String memberId);
 
-    Integer selectMemberResetPassword(Member member);
+    Member selectMemberResetPassword(Member member);
 
     void deleteMember(String memberId);
 
