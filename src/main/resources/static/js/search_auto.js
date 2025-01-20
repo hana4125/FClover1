@@ -43,6 +43,7 @@ const SCF = {
     return null; // user != null && user.model != null ? user.model.sub : "";
   }
 };
+
 let gapTime = 175;
 let prevSearchKeyword = SCF.getSearchKeyword();
 
@@ -95,6 +96,7 @@ $(function() {
     //엔터키 이벤트 검색 가능 상태 변경
     keydown: function (key) {    //엔터키가 검색어창에서 눌려진 상태면 검색 호출 가능 상태로 변경 - 레이어 팝업창 확인누를 시 엔터키 이벤트 호출 방지
       if(key.keyCode == 13){
+        key.preventDefault();
         enterKeySubmitFlag = true;
       }
     },
@@ -113,7 +115,7 @@ $(function() {
             let _caller = setTimeout(function(e){
               //console.log("SendAutoKeyword : " + _keyword);
               prevSearchKeyword = _keyword;
-              sendAutoKeyword(_keyword);
+              //sendAutoKeyword(_keyword); // 나중에 구현
             }, gapTime);
             autoKeywordCaller.push(_caller);
           }
