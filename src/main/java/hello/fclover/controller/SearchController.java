@@ -1,7 +1,9 @@
 package hello.fclover.controller;
 
+import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.dto.SearchDetailForm;
+import hello.fclover.service.CategoryService;
 import hello.fclover.service.SearchService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SearchController {
 
     private final SearchService searchService;
+    private final CategoryService categoryService;
 
     // 키워드 검색 기능
     @GetMapping("/searchKeyword")
@@ -50,8 +53,16 @@ public class SearchController {
 
 
     @GetMapping("/searchDetail")
-    public String detailSearch() {
-        return "user/userSearchDetail";
+    public ModelAndView detailSearch() {
+
+        ModelAndView mv = new ModelAndView();
+
+        List<Category> categoryList = categoryService.getCategoryList();
+
+        mv.setViewName("user/userSearchDetail");
+        mv.addObject("categoryList", categoryList);
+
+        return mv;
     }
 
     // 상세 검색 기능
