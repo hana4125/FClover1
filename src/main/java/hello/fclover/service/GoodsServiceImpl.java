@@ -1,5 +1,8 @@
 package hello.fclover.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
 import hello.fclover.mybatis.mapper.GoodsImageMapper;
