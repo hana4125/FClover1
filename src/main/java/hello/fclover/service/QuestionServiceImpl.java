@@ -20,15 +20,15 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public int ListCount() {
-        return dao.ListCount();
+    public int TotalCount() {
+        return dao.TotalCount();
     }
 
     @Override
-    public List<Question> BoardList(Integer page, int limit) {
+    public List<Question> BoardList(Integer currentPage, int limit) {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
 
-        int startrow=(page-1)*limit;
+        int startrow=(currentPage - 1)*limit;
         map.put("start", startrow);
         map.put("limit", limit);
 

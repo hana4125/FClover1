@@ -10,11 +10,12 @@ import java.util.List;
 @Mapper
 public interface QuestionMapper {
 
-    int ListCount();
+    int TotalCount();
 
     List<Question> BoardList(HashMap<String, Integer> map);
 
     void insertQuestion(Question question);
 
     Question Detail(int no);
+
 }
