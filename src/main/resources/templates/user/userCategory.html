@@ -290,9 +290,9 @@
           <input type="checkbox" class="item-checkbox mt-1 ms-1" style="width: 18px; height: 18px;">
           <div class="book-item mt-1">
             <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
-            <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+            <a th:href="@{/member/GoodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
               <div class="img-box">
-<!--                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">-->
+                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">
               </div>
             </a>
             <div class="item-info">
@@ -305,7 +305,13 @@
             </div>
           </div>
           <div class="icon ms-auto mb-4">
-              <img src="/images/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">
+            <img
+                    th:src="${wishlistGoodsNos.contains(goods.goodsNo) ? '/images/user/redHeart.png' : '/images/user/heart.png'}"
+                    class="heart me-2"
+                    th:data-id="${goods.goodsNo}"
+                    width="36"
+                    height="36"
+                    alt="찜">
               <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="장바구니">
           </div>
           <!-- 바로구매 버튼 -->
