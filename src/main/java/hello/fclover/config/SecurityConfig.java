@@ -45,10 +45,33 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
 
         http
-                //.securityMatcher("/inquiry/**", "/member/**")
+                .securityMatcher("/bo/**")
+                .formLogin((formLogin) -> formLogin.loginPage("/bo/login")
+                        .loginProcessingUrl("/bo/loginProcess")
+                        .usernameParameter("memberId")
+                        .passwordParameter("password")
+                        .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailHandler))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/bo/login", "bo/signup").permitAll()
+                        .requestMatchers("/bo/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .logout((lo) -> lo.logoutUrl("/bo/logout")
+                        .logoutSuccessUrl("/bo/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
+        return http.build();
+    }
+
+    @Bean
+    public SecurityFilterChain memberFilterChain(HttpSecurity http) throws Exception {
+
+        http
                 .formLogin((formLogin) -> formLogin.loginPage("/member/login")
                         .loginProcessingUrl("/member/loginProcess")
                         .usernameParameter("memberId")
@@ -59,16 +82,10 @@ public class SecurityConfig {
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup", "/member/signupProcess",
                                 "/member/find-id", "/member/find-id-ok", "/member/send-code-id", "member/send-code-password",
                                 "/member/reset-password","/member/reset-password-ok", "/inquiry/**", "/member/category/**").permitAll()
-                        .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
-                                "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                                "/member/reset-password", "/inquiry/**", "/member/category/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
-                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
-                               "/inquiry/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
                         .anyRequest().authenticated()
-
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")

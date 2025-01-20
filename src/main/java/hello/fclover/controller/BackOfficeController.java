@@ -30,6 +30,15 @@ public class BackOfficeController {
         return "backOffice/boMain";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "backOffice/boLogin";
+    }
+
+    @GetMapping("/signup")
+    public String signup() {
+        return "backOffice/boSignup";
+    }
 
     //주문완료
     @GetMapping("/deliveryOrder")
@@ -52,7 +61,6 @@ public class BackOfficeController {
         System.out.println("=======>여기는 controller list = " + list);
         return list;
     }
-
 
     //배송중
     @GetMapping("/deliveryInTransit")
@@ -107,7 +115,6 @@ public class BackOfficeController {
 
     }
 
-
     //운송장번호 등록
     @PostMapping("/trackingNumber/submit")
     @ResponseBody
@@ -128,7 +135,6 @@ public class BackOfficeController {
 
     }
 
-
     //배송중 상태인 데이터 불러오기 deliveryInTransitAsync
     //배송준비중 데이터 비동기처리
     @GetMapping("/deliveryInTransitAsync")
@@ -139,10 +145,4 @@ public class BackOfficeController {
         System.out.println("===========>여기는 컨트롤러 inTransitList = " + inTransitList);
         return inTransitList;
     }
-
-
-
-
-
-
 }
