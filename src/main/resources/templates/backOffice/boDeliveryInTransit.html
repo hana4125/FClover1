@@ -240,6 +240,7 @@
               "paging": true,
               "searching": true,
               "ordering": true,
+              scrollX : true,
               "info": true,
               "language": {
                 "lengthMenu": "_MENU_ 개씩 보기",
@@ -268,7 +269,7 @@
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="cancel-btn" data-imp-uid="${row.impUid}">배송완료</button>`;
+                    return `<button class="deliveryDone-btn" data-deliNo="${row.deliNo}">배송완료</button>`;
                   }
                 }
               ]
@@ -276,9 +277,9 @@
           });
 
           // 배송 취소 버튼 클릭 이벤트
-          $(document).on('click', '.cancel-btn', async function() {
-            const impUid = $(this).data('imp-uid');
-            const response = await fetch(`/api/payment/cancel/${impUid}`, {
+          $(document).on('click', '.deliveryDone-btn', async function() {
+            const deliNo = $(this).data('deliNo');
+            const response = await fetch(`/bo/delivery/DoneClick?deliNo=${deliNo}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json'

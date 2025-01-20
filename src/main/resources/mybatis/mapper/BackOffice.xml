@@ -30,4 +30,12 @@
     <select id="deliveryInTransitOrderSearch">
         select deli_no,order_id,user_id,deli_status,created_at from delivery where deli_status='배송중'
     </select>
+
+    <select id="deliveryDoneSearch">
+        select deli_no,order_id,user_id,deli_status,created_at from delivery where deli_status='배송완료'
+    </select>
+    <update id="changeDeliveryDoneStatus">
+        update delivery set deli_status=#{deliStatus}
+        where deli_no = #{deliNo}
+    </update>
 </mapper>

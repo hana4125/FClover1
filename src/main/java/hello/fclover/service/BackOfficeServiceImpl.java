@@ -67,4 +67,16 @@ public class BackOfficeServiceImpl implements BackOfficeService {
         return deliveries;
     }
 
+    @Override
+    public List<Delivery> deliveryDoneOrderSearch() {
+        List<Delivery> deliveries = dao.deliveryDoneSearch();
+        return deliveries;
+    }
+
+    @Override
+    public void changeDeliveryDoneStatus(int deliNo) {
+        String deliStatus = "배송완료";
+        dao.changeDeliveryDoneStatus(deliNo,deliStatus);
+    }
+
 }

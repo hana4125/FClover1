@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -33,11 +33,11 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageMapper;
-
     private AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     String bucket;
+
     GoodsImage goodsImage = new GoodsImage();
 
     @Override
