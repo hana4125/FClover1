@@ -21,7 +21,7 @@ public interface GoodsMapper {
 
     int countGoods(int cate_no);
 
-    Goods findGoodsById(long goods_no);
+    Goods findGoodsById(long goodsNo);
 
     int countGoodsByKeyword(String keyword);
 

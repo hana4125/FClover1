@@ -1,11 +1,10 @@
 package hello.fclover.controller;
 
 
+import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.Seller;
-import hello.fclover.service.MemberService;
-import hello.fclover.service.GoodsService;
-import hello.fclover.service.SellerService;
+import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,13 +29,15 @@ import java.util.List;
 @Controller
 
 @RequiredArgsConstructor
-@RequestMapping(value="/seller")
+@RequestMapping(value = "/seller")
 public class SellerController {
 
     private final MemberService memberService;
     private final SellerService sellerService;
     private final GoodsService goodsService;
+    private final CartService cartService;
     private final PasswordEncoder passwordEncoder;
+    private final CategoryService categoryService;
 
     @ModelAttribute("seller")
     public Seller addSellerToModel(Principal principal) {
@@ -46,14 +48,17 @@ public class SellerController {
         }
         return null;
     }
-@GetMapping("/addSingleProduct")
-    public String addSingleProduct(Model model, Goods goods) {
 
+    @GetMapping("/addSingleProduct")
+    public String addSingleProduct(Model model, Goods goods) {
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
         return "seller/sellerAddSingleProduct";
     }
+
     @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String addSingleProductProcess(@RequestPart("goods") Goods goods,
-            @RequestPart("goodsImages") List<MultipartFile> images,
+                                          @RequestPart("goodsImages") List<MultipartFile> images,
                                           Principal principal) throws IOException {
         System.out.println("컨트롤단");
         for (MultipartFile file : images) {
@@ -62,13 +67,15 @@ public class SellerController {
 
         String sellerId = principal.getName();
         Seller seller = sellerService.findSellerById(sellerId);
+        BigInteger sellerNo = BigInteger.valueOf(seller.getSellerNo());
+        goods.setSellerNo(sellerNo);
         String businessNumber = seller.getBusinessNumber();
 
         System.out.println("goods:" + goods);
         goodsService.goodsSingleInsert(goods, images, businessNumber);
-        return "seller/sellerAddSingleProduct"; // 성공 후 상세 페이지로 이동
-
+        return "redirect:/seller/main";
     }
+
     @GetMapping("/productDetail")
     public String productDetail(Model model) {
         return "seller/sellerProductDetail";
