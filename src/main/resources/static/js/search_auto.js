@@ -81,7 +81,8 @@ $(function() {
   });
 
   // 검색버튼 클릭시 이벤트
-  $(".search-btn").click(function(){
+  $(".search-btn").click(function(e){
+    e.preventDefault();
     if($("#searchKeyword").val() == ""){
       alert("검색어를 입력해 주세요!");
     }else{
@@ -240,8 +241,7 @@ function goSearchKeywordPage(keyvalue){
 
 
   paramStr += "keyword="+encodeURIComponent(inkeyword);
-  // location.href = "/search/searchKeyword?"+paramStr;
-  location.href = "http://localhost:5000/search/searchKeyword?keyword=111";
+  location.href = "/search/searchKeyword?"+paramStr;
 }
 
 function submitSearchKeywordPage() {
@@ -570,6 +570,7 @@ function getRcntKeywordNoList() {
 // }
 
 //실시간 급등 검색어
+/*
 function riseCall(age,gender) {
   $.ajax({
     type: "GET",
@@ -681,4 +682,4 @@ function getRiseCallYmdStr(date){
   let dateTemp = date.split(".");
   return dateTemp[1].trim()+"."+dateTemp[2].trim()+" "+dateTemp[3].trim();
 }
-
+*/
