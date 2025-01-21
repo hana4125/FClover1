@@ -18,32 +18,32 @@
         </select>
 
     <!-- 모든 카테고리에 있는 상품 조회 -->
-    <select id="findAll" resultType="hello.fclover.domain.Goods">
-        SELECT *
-        FROM goods
-        WHERE cate_no = #{cate_no}
-        ORDER BY
-        <choose>
-            <when test="'latest'.equals(sort)">goods_date DESC</when>
-            <when test="'sales'.equals(sort)">goods_count DESC</when>
-            <when test="'highPrice'.equals(sort)">goods_price DESC</when>
-            <when test="'lowPrice'.equals(sort)">goods_price ASC</when>
-            <otherwise>goods_date DESC</otherwise>
-        </choose>
-        LIMIT #{offset}, #{size}
-    </select>
+<!--    <select id="findAll" resultType="hello.fclover.domain.Goods">-->
+<!--        SELECT *-->
+<!--        FROM goods-->
+<!--        WHERE cate_no = #{cate_no}-->
+<!--        ORDER BY-->
+<!--        <choose>-->
+<!--            <when test="'latest'.equals(sort)">goods_date DESC</when>-->
+<!--            <when test="'sales'.equals(sort)">goods_count DESC</when>-->
+<!--            <when test="'highPrice'.equals(sort)">goods_price DESC</when>-->
+<!--            <when test="'lowPrice'.equals(sort)">goods_price ASC</when>-->
+<!--            <otherwise>goods_date DESC</otherwise>-->
+<!--        </choose>-->
+<!--        LIMIT #{offset}, #{size}-->
+<!--    </select>-->
 
     <!-- 전체 상품 수 계산 -->
     <select id="countGoods" resultType="int">
         SELECT COUNT(*)
         FROM goods
-        WHERE cate_no = #{cate_no}
+        WHERE cate_no = #{cateNo}
     </select>
 
     <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
         SELECT *
         FROM goods
-        WHERE goods_no = #{goods_no}
+        WHERE goods_no = #{goodsNo}
     </select>
 
     <!-- 키워드로 상품 검색 -->
@@ -67,6 +67,36 @@
             OR
             MATCH(s.company_name)
             AGAINST (#{keyword} IN BOOLEAN MODE)
+    </select>
+
+    <!-- 찜 상태를 포함한 상품 조회 SQL 매핑 추가 -->
+    <select id="findGoodsWithWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.cate_no AS cateNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        WHERE
+        a.cate_no = #{cateNo}
+        ORDER BY
+        <choose>
+            <when test="'latest' == sort">a.goods_date DESC</when>
+            <when test="'sales' == sort">a.goods_count DESC</when>
+            <when test="'highPrice' == sort">a.goods_price DESC</when>
+            <when test="'lowPrice' == sort">a.goods_price ASC</when>
+            <otherwise>a.goods_date DESC</otherwise>
+        </choose>
+        LIMIT #{offset}, #{size}
     </select>
 
 </mapper>

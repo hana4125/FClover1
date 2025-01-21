@@ -34,6 +34,11 @@ create schema fClover;
 
 SELECT cate_no, cate_name FROM category;
 
+SELECT *
+FROM goods left outer join wish
+on CATE_NO = 1;
+
+select * from wish;
 
 
 

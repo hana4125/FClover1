@@ -3,6 +3,7 @@ package hello.fclover.service;
 import hello.fclover.domain.Category;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +15,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
+    @Cacheable(value = "categoryList")
     public List<Category> getCategoryList() {
         // 모든 카테고리 가져오기
         return categoryMapper.findAll();
+    }
+
+    @Override
+    public Category getCategoryByNo(int cateNo) {
+        return categoryMapper.findTitle(cateNo);
     }
 }

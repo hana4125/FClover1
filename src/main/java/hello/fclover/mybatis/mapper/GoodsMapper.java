@@ -13,10 +13,11 @@ public interface GoodsMapper {
 
     int goodsNoselect(String sellerNo, String goodsName);
   
-    List<Goods> findAll(@Param("cate_no") int cateNo,
-                        @Param("sort") String sort,
-                        @Param("offset") int offset,
-                        @Param("size") int size);
+//    List<Goods> findAll(@Param("memberNo") Long memberNo,
+//                        @Param("cate_no") int cateNo,
+//                        @Param("sort") String sort,
+//                        @Param("offset") int offset,
+//                        @Param("size") int size);
 
     int countGoods(int cate_no);
 
@@ -25,4 +26,13 @@ public interface GoodsMapper {
     List<Goods> findGoodsByKeyword(@Param("keyword") String keyword);
 
     List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
+
+    // 찜 상태를 포함한 상품 조회 메서드 추가
+    List<Goods> findGoodsWithWishStatus(
+            @Param("memberNo") Long memberNo,
+            @Param("cateNo") Integer cateNo,
+            @Param("sort") String sort,
+            @Param("offset") Integer offset,
+            @Param("size") Integer size
+    );
 }

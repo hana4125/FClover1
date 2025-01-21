@@ -38,21 +38,27 @@ public class GoodsServiceImpl implements GoodsService {
             goodsInsertImage(images, sellerNumber, goodsNo);
         }
     }
-    
-    @Override
-    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
-        int offset = (page - 1) * size;
-        return goodsMapper.findAll(cate_no, sort, offset, size);
-    }
+
+//    @Override
+//    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
+//        int offset = (page - 1) * size;
+//        return goodsMapper.findAll(cate_no, sort, offset, size);
+//    }
 
     @Override
-    public int getTotalGoodsCount(int cate_no) {
-        return goodsMapper.countGoods(cate_no);
+    public int getTotalGoodsCount(int cateNo) {
+        return goodsMapper.countGoods(cateNo);
     }
 
     @Override
     public Goods findGoodsByNo(Long goodsNo) {
         return goodsMapper.findGoodsById(goodsNo);
+    }
+
+    @Override
+    public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
+        int offset = (page - 1) * size;
+        return goodsMapper.findGoodsWithWishStatus(memberNo, cateNo, sort, offset, size);
     }
 
     private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {
@@ -115,5 +121,7 @@ private String imageFolder(String projectFolder , String sellerNumber) {
 
     return imageFolder;
 }
+
+
 
 }

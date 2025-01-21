@@ -9,5 +9,7 @@ import java.util.List;
 public interface CategoryMapper {
     // 모든 카테고리 조회
     List<Category> findAll();
+
+    Category findTitle(int cateNo);
 }
 
