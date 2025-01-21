@@ -57,5 +57,29 @@
         WHERE q_no = #{num}
     </select>
 
+    <select id="getCommentList" resultType="Question">
+        select *
+        from( select rownum rnum, num, id, content, reg_date, board_num
+              from( select num, id, content, reg_date, board_num
+                    from comments
+                    where board_num = #{board_num} order by reg_date desc ) )
+        where rnum between #{start} and #{end}
+    </select>
 
+    <insert id="commentsInsert">
+        insert into comments
+        values (com_seq.nextval, #{id}, #{content}, sysdate, #{board_num})
+    </insert>
+
+
+    <update id="commentsUpdate">
+        update comments
+        set content=#{content}
+        where num = #{num}
+    </update>
+
+    <delete id="commentsDelete">
+        delete comments
+        where num = #{num}
+    </delete>
 </mapper>

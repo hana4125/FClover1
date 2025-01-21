@@ -139,18 +139,18 @@
             <version>5.10.0</version>
         </dependency>
 
-        <!-- Spring Retry -->
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
+<!--&lt;!&ndash;         &lt;!&ndash; Spring Retry &ndash;&gt; &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.retry</groupId>-->
+<!--            <artifactId>spring-retry</artifactId>-->
+<!--        </dependency>-->
 
-        <!-- Spring Aspects -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
-        </dependency>
-
+<!--        &lt;!&ndash; Spring Aspects &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-aspects</artifactId>-->
+<!--        </dependency>-->
+<!-- &ndash;&gt;-->
         <!-- https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter -->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
@@ -192,6 +192,26 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>3.23.2</version>
         </dependency>-->
+        <!-- JSON 라이브러리 -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20230227</version>
+        </dependency>
+
+        <!-- Spring Boot Test 라이브러리 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.4.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!--카페인 캐시-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>3.1.5</version>  <!-- 최신 버전으로 변경 가능 -->
+        </dependency>
 
     </dependencies>
 

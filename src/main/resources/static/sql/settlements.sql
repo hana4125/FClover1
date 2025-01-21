@@ -12,3 +12,4 @@ CREATE TABLE `settlements` (
 
 commit;
 
+select * from settlements;
