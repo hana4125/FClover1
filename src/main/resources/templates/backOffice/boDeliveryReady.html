@@ -246,6 +246,7 @@
               "paging": true,
               "searching": true,
               "ordering": true,
+              scrollX : true,
               "info": true,
               "language": {
                 "lengthMenu": "_MENU_ 개씩 보기",
@@ -288,7 +289,7 @@
 
             const deliNo = $(this).data('imp-uid');
 
-            const response = await fetch(`/bo/trackingNumber/submit`, {
+            const response = await fetch(`/bo/delivery/trackingNumberClick`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

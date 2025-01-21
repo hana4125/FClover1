@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
@@ -93,7 +93,7 @@
                 <li class="side_item">
                   <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
                 <li class="side_item">
-                  <a href="/inquiry/question" class="sd_link">QnA</a>
+                  <a href="/inquiry/question" class="sd_link">문의하기</a>
                 </li>
               </ul>
             </div>
@@ -140,7 +140,7 @@
 
             <th:block th:if="${listcount > 0}">
               <div class="rows" style="width: 110px;">
-                <select class="form-control" id="viewcount" sec:onchange="filterData()">
+                <select class="form-control" id="viewcount" th:onchange="filterData()">
                   <option value="전체" selected>전체</option>
                   <option value="공지사항">공지사항</option>
                   <option value="이벤트">이벤트</option>
@@ -166,8 +166,9 @@
             </tr>
             </thead>
             <tbody>
-            <th:block th:with="num=${listcount - (page - 1) * limit}">
-              <th:block th:each="b, iterStat : ${noticelist}">
+            <th:block th:with="num=${(listcount != null && listcount > 0) ? listcount - (page - 1) * limit : 1}">
+
+            <th:block th:each="b, iterStat : ${noticelist}">
                 <tr>
                   <td><span th:text="${num - (iterStat.index)}"></span></td>
                   <td>

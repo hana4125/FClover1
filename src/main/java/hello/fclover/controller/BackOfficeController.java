@@ -98,7 +98,7 @@ public class BackOfficeController {
     //배송준비중 데이터 비동기처리
     @GetMapping("/deliveryReadyAsync")
     @ResponseBody
-    public List<Delivery> deliveryReadyAsync(ModelAndView mv) {
+    public List<Delivery> deliveryReadyAsync() {
         List<Delivery> list = backOfficeService.deliveryReadyOrderSearch();
 
         System.out.println("=======>여기는 controller list = " + list);
@@ -149,17 +149,16 @@ public class BackOfficeController {
     }
 
     //결제완료페이지에서 [배송준비] 버튼 클릭 시
-    @GetMapping("/delivery/ready")
+    @GetMapping("/delivery/readyClick")
     @ResponseBody
     public  void  ready(@RequestParam Long orderId,@RequestParam String userId,Model model) {
-        System.out.println("test1");
-        //조회한 주문정보 기반으로 delivery테이블에 insert하기.
+        log.info("============controller /delivery/ready : orderId = " + orderId + ", userId = " + userId);
         backOfficeService.InsertdeliveryReadyList(orderId,userId);
 
     }
 
     //운송장번호 등록
-    @PostMapping("/trackingNumber/submit")
+    @PostMapping("/delivery/trackingNumberClick")
     @ResponseBody
     public ResponseEntity<?> trackingNumberSubmit(@RequestBody Map<String,Object> requestBody) {
 
@@ -179,11 +178,29 @@ public class BackOfficeController {
     }
 
     //배송중 상태인 데이터 불러오기 deliveryInTransitAsync
-    //배송준비중 데이터 비동기처리
     @GetMapping("/deliveryInTransitAsync")
     @ResponseBody
     public List<Delivery> deliveryInTransitAsync() {
         List<Delivery> inTransitList = backOfficeService.deliveryInTransitOrderSearch();
+
+        System.out.println("===========>여기는 컨트롤러 inTransitList = " + inTransitList);
+        return inTransitList;
+    }
+
+    //배송중 페이지에서 [배송완료] 버튼 눌렀을 시
+    @GetMapping("/delivery/DoneClick")
+    @ResponseBody
+    public ResponseEntity<?> deliveryInTransitClick(@RequestBody int deliNo) {
+        backOfficeService.changeDeliveryDoneStatus(deliNo);
+        return ResponseEntity.ok().body("배송완료상태로 변경완료되었습니다.");
+    }
+
+
+    //배송완료 상태인 데이터 불러오기 deliveryDoneAsync
+    @GetMapping("/deliveryDoneAsync")
+    @ResponseBody
+    public List<Delivery> deliveryDoneAsync() {
+        List<Delivery> inTransitList = backOfficeService.deliveryDoneOrderSearch();
 
         System.out.println("===========>여기는 컨트롤러 inTransitList = " + inTransitList);
         return inTransitList;

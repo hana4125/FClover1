@@ -360,7 +360,7 @@
             const orderId = $(this).data('order-id');
             const userId = $(this).data('user-id');
 
-            const response = await fetch(`/bo/delivery/ready?orderId=${orderId}&userId=${userId}`, {
+            const response = await fetch(`/bo/delivery/readyClick?orderId=${orderId}&userId=${userId}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json'
