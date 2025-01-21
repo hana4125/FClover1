@@ -141,7 +141,7 @@
                                     사은품인 경우 [ type_cover ] class 추가(사은품은 이미지 background로 처리되므로, 반드시 사은품 전용 DOM구조를 사용할 것)
                                 -->
                                 <div class="prod_area horizontal">
-                                    <div class="prod_thumb_box size_sm">
+                                    <div class="prod_thumb_box size_sm" >
 
                                         <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_link" data-order-commoditylink="">
 
@@ -153,51 +153,22 @@
 
 
                                     </div>
-                                    <div class="prod_info_box size_sm">
-
-
-                                        <!-- 교보문고 배송 중 바로배송인 경우 20231222 -->
-                                        <!-- 배송지 변경여부 체크 추가 20240112 -->
-
-
-
-
-                                        <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_info" data-order-commoditylink="">
-
-                                            <!-- DESC : 주문/배송 상세일때는 [prod_name] 에 [ellipsis_none] 클래스 추가 (상품명 전체노출됨) -->
-                                            <span class="prod_name">
-                                        <!--
-
-                                            [교보문고굿즈] [교보문고굿즈]The Scent of PAGE : 디퓨저 100ml
-                                        -->
-                                        [교보문고굿즈]The Scent of PAGE : 디퓨저 100ml
-                                    </span><!-- 수정 220428 [ellipsis_single] class 삭제 -->
+                                    <div class="prod_info_box size_sm" style="flex-grow: 1;">
+                                        <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_info" data-order-commoditylink="" >
+                                            <span class="prod_name">[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml</span>
 
                                         </a>
 
-                                        <ul class="prod_option_list">
 
-                                            <!-- 221006 컬쳐의 경우 컬쳐구성상품행사일자, 회차순번, 상품명, 좌석등급명, 금액, 수량으로 표기 start -->
+
+                                        <ul class="prod_option_list">
 
                                             <li class="option_item">
                                                 <span class="text">수량 : </span><span class="val">1</span>
 
                                             </li>
 
-                                            <!-- 221006 컬쳐의 경우 컬쳐구성상품행사일자, 회차순번, 상품명, 좌석등급명, 금액, 수량으로 표기 end -->
-
-                                            <!-- 각인있을때만 노출 -->
-
-
-
-                                            <!-- //각인있을때만 노출 -->
-
                                         </ul>
-
-                                        <!-- 분철일 경우, 교환신청/반품신청 불가 -->
-
-
-                                        <!-- 해외주문도서 주문 동의 시, 문구 추가 -->
 
                                     </div>
                                 </div>
@@ -206,7 +177,7 @@
                             <td>
                         <span class="price">
 
-                            <span class="val" th:text="${list.paymentAmount}">29,800</span>
+                            <span class="val" th:text="${list.paymentAmount}"></span>
                             <span class="unit">원</span>
 
 
@@ -236,15 +207,24 @@
 
                                 </div>
                             </td>
-<!--                            <td>-->
-<!--                                <div class="btn_wrap full" data-event-detail="review">-->
+                            <td>
+                                <div class="btn_wrap full" data-event-detail="review">
 
-<!--                                    <button type="button" data-role="btn-dialog" data-target="#postReview_S000201372723" data-kbbfn="ui-review-form" data-kbbfn-type="klover" data-kbbfn-role="post" data-kbbfn-prod-title="[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml" data-kbbfn-prod-pid="S000201372723" data-kbbfn-prod-code="PBC" data-kbbfn-prod-age="0" data-kbbfn-prod-bid="5200000000214" data-kbbfn-prod-imageurl="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg" class="btn_sm btn_line_primary">-->
-<!--                                        <span class="text">리뷰 작성</span>-->
-<!--                                    </button>-->
+                                    <button type="button" data-role="btn-dialog" data-target="#postReview_S000001975837" data-kbbfn="ui-review-form" data-kbbfn-type="klover" data-kbbfn-role="post" data-kbbfn-prod-title="[국내도서]친절한 SQL 튜닝" data-kbbfn-prod-pid="S000001975837" data-kbbfn-prod-code="KOR" data-kbbfn-prod-age="0" data-kbbfn-prod-bid="9791196395704" data-kbbfn-prod-imageurl="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/9791196395704.jpg" class="btn_sm btn_line_primary">
+                                        <span class="text">리뷰 작성</span>
+                                    </button>
 
-<!--                                </div>-->
-<!--                            </td>-->
+<!--                                    <button type="button" class="btn_sm btn_line_gray" data-order-commodity-returnedgoods-application-button=""><span class="text">반품신청</span></button>-->
+
+
+
+
+
+
+
+
+                                </div>
+                            </td>
                         </tr>
 
                         </tbody>

@@ -478,4 +478,10 @@ public class MemberController {
         model.addAttribute("size", size);
         return "/user/userCategory"; // 카테고리 상세 페이지
     }
+
+
+    @GetMapping("/gift")
+    public String gift() {
+        return "user/gift";
+    }
 }
