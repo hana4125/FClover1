@@ -139,7 +139,7 @@
             <version>5.10.0</version>
         </dependency>
 
-        <!-- Spring Retry -->
+<!--         <!-- Spring Retry -->
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
@@ -150,7 +150,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
         </dependency>
-
+ -->
         <!-- https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter -->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
