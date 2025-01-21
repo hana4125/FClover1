@@ -2,6 +2,7 @@ package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Goods;
 import hello.fclover.dto.SearchDetailForm;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,9 +21,11 @@ public interface GoodsMapper {
 
     int countGoods(int cate_no);
 
-    Goods findGoodsById(long goods_no);
+    Goods findGoodsById(long goodsNo);
 
-    List<Goods> findGoodsByKeyword(@Param("keyword") String keyword);
+    int countGoodsByKeyword(String keyword);
+
+    List<Goods> findGoodsByKeyword(Map<String, Object> params);
 
     List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
 }

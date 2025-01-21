@@ -19,4 +19,8 @@ public interface BackOfficeService {
     void insertTrackingNumber(int deliNo, int deliveryNum, String deliveryCompany,String deliStatus);
 
     List<Delivery> deliveryInTransitOrderSearch();
+
+    List<Delivery> deliveryDoneOrderSearch();
+
+    void changeDeliveryDoneStatus(int deliNo);
 }

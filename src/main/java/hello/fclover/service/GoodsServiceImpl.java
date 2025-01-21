@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -42,7 +43,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     @Transactional
     public void goodsSingleInsert(Goods goods, List<MultipartFile> images, String sellerNumber) throws IOException {
-        System.out.println("serviceImpl");
         int result = goodsMapper.goodsInsertText(goods);
         Long goodsNo = goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName());
         System.out.println(goodsNo);
@@ -116,20 +116,9 @@ public class GoodsServiceImpl implements GoodsService {
                 objectMetadata.setContentType(image.getContentType());
                 objectMetadata.setContentLength(image.getSize());
                 objectMetadata.setHeader("filename", image.getOriginalFilename());
-                imageUrl = bucket  + File.separator + imageSaveFolder;
-                amazonS3.putObject(bucket, imageDBName, image.getInputStream(), objectMetadata);
                 amazonS3.putObject(new PutObjectRequest(bucket + imageSaveFolder, imageDBName, image.getInputStream(), objectMetadata));
 
-
-//                    String originalFilename = image.getOriginalFilename();
-//
-//                    ObjectMetadata metadata = new ObjectMetadata();
-//                    metadata.setContentLength(image.getSize());
-//                    metadata.setContentType(image.getContentType());
-//
-//                    amazonS3.putObject(bucket, originalFilename, image.getInputStream(), metadata);
-//                System.out.println("amazonS3 = " + amazonS3.getUrl(bucket, originalFilename).toString());
-
+                imageUrl = bucket  + File.separator + imageSaveFolder;
 
             }
             if (IsFirstImage) {

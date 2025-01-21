@@ -21,4 +21,8 @@ public interface BackOfficeMapper {
     void insertTrackingNumber(int deliNo, int deliNum, String deliCompany,String deliStatus);
 
     List<Delivery> deliveryInTransitOrderSearch();
+
+    List<Delivery> deliveryDoneSearch();
+
+    void changeDeliveryDoneStatus(int deliNo, String deliStatus);
 }

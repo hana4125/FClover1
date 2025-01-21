@@ -9,14 +9,13 @@ import lombok.ToString;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
+import lombok.Data;
+
 @Data
 public class Goods {
-    private Long goodsNo;        // 상품 일련번호
-    private Long sellerNo;       // 판매자 번호
-    private int cateNo;            // 카테고리 번호
+    private Long goodsNo;              // 상품 일련번호
+    private Long sellerNo;             // 판매자 번호
+    private Integer cateNo;            // 카테고리 번호
     private String goodsName;          // 상품 명
     private String goodsContent;       // 상품 설명
     private int goodsPrice;            // 상품 가격

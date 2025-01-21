@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.Map;
 
 @Slf4j
@@ -38,6 +38,7 @@ public class MemberController {
     private final PaymentService paymentService;
     private final CategoryService categoryService;
     private final GoodsService goodsService;
+    private final WishService wishService;
 
 
     private final EmailService emailService;
@@ -324,10 +325,10 @@ public class MemberController {
         return "redirect:/member/myPage/profile";
     }
 
-    @GetMapping("/myPage/purchaseHistory")
-    public String myPagePurchaseHistory() {
-        return "/user/mypage/userMyPagePurchaseHistory";
-    }
+//    @GetMapping("/myPage/purchaseHistory")
+//    public String myPagePurchaseHistory() {
+//        return "/user/mypage/userMyPagePurchaseHistory";
+//    }
 
     @GetMapping("/myPage/wishlist")
     public String myPageWishlist() {
@@ -382,6 +383,9 @@ public class MemberController {
 
     @GetMapping("/memberPay")
     public String sellerPay(Principal principal,Model model) {
+        if(principal==null){
+            return "redirect:/login";
+        }
         model.addAttribute("username", principal.getName());
         return "user/userPayments";
     }
@@ -445,15 +449,18 @@ public class MemberController {
     }
 
 
-    @GetMapping("/GoodsDetail")
-    public String GoodsDetail() {
-//ㅎㄱㅇㅎㄹㅇㅎㄹㅇㅎㅇㄹ
-        System.out.println("====");
+    @GetMapping("/goodsDetail/{no}")
+    public String goodsDetail(@PathVariable("no") Long goodsNo, Model model) {
+        // 카테고리 데이터 가져오기
+        Goods goods = goodsService.findGoodsByNo(goodsNo);
+
+        model.addAttribute("goods", goods);
         return "/user/userGoodsDetail";
     }
 
     @GetMapping("/category/{no}")
     public String categoryDetail(@PathVariable("no") int cate_no,
+                                 @ModelAttribute("member") Member member,
                                  @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
                                  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                  @RequestParam(value = "size", required = false, defaultValue = "20") int size,
@@ -474,6 +481,23 @@ public class MemberController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
+
+        if (member != null) {
+            Long memberNo = member.getMemberNo();
+            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
+            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
+        } else {
+            // If the user is not logged in, pass an empty list
+            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
+        }
+
+
         return "/user/userCategory"; // 카테고리 상세 페이지
+    }
+
+    @GetMapping("/gift")
+    public String gift() {
+        System.out.println("====");
+        return "/user/gift";
     }
 }

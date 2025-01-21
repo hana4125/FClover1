@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>home</title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
     <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery-3.7.1.js"></script>
@@ -94,6 +96,7 @@
     </script>
 </head>
 <body>
+<div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success">
     <div class="container w-75">
@@ -136,7 +139,8 @@
     <div class="prod_detail_header">
         <br>
         <br>
-        <h1 style="text-align: center;">소년이 온다</h1>
+<!--        <h1 style="text-align: center;">소년이 온다</h1>-->
+            <h1 style="text-align: center;"><span class="item-name" th:text="${goods.goodsName}"></span></h1>
 <!--        <span class="prod_desc" style="text-align: center;">한강 장편소설 | 2024 노벨 문학상 수상작가</span>-->
 
 
@@ -269,8 +273,8 @@
                                         <div class="author">
 
 
-                                            <a href="https://search.kyobobook.co.kr/search?keyword=한강&amp;chrcCode=1000646901">한강</a>
-
+<!--                                            <a href="https://search.kyobobook.co.kr/search?keyword=한강&amp;chrcCode=1000646901">한강</a>-->
+                                                <a href="https://search.kyobobook.co.kr/search?keyword=한강&amp;chrcCode=1000646901" th:text="${goods.goodsWriter}"></a>
 
 
                                             저자(글)
@@ -296,12 +300,13 @@
 
                             <div class="prod_info_text publish_date">
 
-                                <a href="https://search.kyobobook.co.kr/search?keyword=창비&amp;pbcmCode=PB17777" class="btn_publish_link">창비</a>
-
+<!--                                <a href="https://search.kyobobook.co.kr/search?keyword=창비&amp;pbcmCode=PB17777" class="btn_publish_link">창비</a>-->
+                                <a href="https://search.kyobobook.co.kr/search?keyword=창비&amp;pbcmCode=PB17777" class="btn_publish_link"></a>
 
                                 ·
 
-                                2014년 05월 19일
+<!--                                2014년 05월 19일-->
+                                <span class="item-create-at" th:text="${goods.goodsCreateAt}"></span>
 
 
                             </div>
@@ -779,7 +784,7 @@
                             <a href="#" id="direct" type="button" class="btn_lg btn_line_primary" style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px; background-color: transparent; border: 2px solid #5055b1; color : #5055b1;font-size: 14px;">
                                 <span class="text" style="display: inline-block; text-align: center;">장바구니</span>
                             </a>
-                            <a href="#" id="buy" type="button" class="btn_lg btn_primary" style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px;  border: none; color: white; font-size: 14px;">
+                            <a href="/member/memberPay" id="buy" type="button" class="btn_lg btn_primary" style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px;  border: none; color: white; font-size: 14px;">
                                 <span class="text" style="display: inline-block; text-align: center;">바로구매</span>
                             </a>
                         </div>
