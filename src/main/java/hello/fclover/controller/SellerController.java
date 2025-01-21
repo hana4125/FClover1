@@ -17,8 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.math.BigInteger;
 import java.security.Principal;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ public class SellerController {
 
         String sellerId = principal.getName();
         Seller seller = sellerService.findSellerById(sellerId);
-        BigInteger sellerNo = BigInteger.valueOf(seller.getSellerNo());
+        long sellerNo = seller.getSellerNo();
         goods.setSellerNo(sellerNo);
         String businessNumber = seller.getBusinessNumber();
 

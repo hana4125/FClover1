@@ -20,7 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -45,7 +44,7 @@ public class GoodsServiceImpl implements GoodsService {
     public void goodsSingleInsert(Goods goods, List<MultipartFile> images, String sellerNumber) throws IOException {
         int result = goodsMapper.goodsInsertText(goods);
 
-        int goodsNo = goodsMapper.goodsNoselect(String.valueOf(goods.getSellerNo()), goods.getGoodsName());
+        int goodsNo = goodsMapper.goodsNoselect(Long.valueOf(goods.getSellerNo()), goods.getGoodsName());
         System.out.println(goodsNo);
         if (result > 0 && images.size() > 0) {
             goodsInsertImage(images, sellerNumber, goodsNo);
@@ -133,7 +132,7 @@ public class GoodsServiceImpl implements GoodsService {
             //파일 업로드
             image.transferTo(new File(imageUrl, imageDBName));
 
-            goodsImage.setGoodsNo(BigInteger.valueOf(goodsNo));
+            goodsImage.setGoodsNo(Long.valueOf(goodsNo));
             goodsImage.setGoodsUrl(imageUrl);
             goodsImage.setGoodsImageName(imageDBName);
             //상품 이미지 저장.
