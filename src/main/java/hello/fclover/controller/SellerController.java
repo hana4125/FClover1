@@ -67,7 +67,7 @@ public class SellerController {
 
         String sellerId = principal.getName();
         Seller seller = sellerService.findSellerById(sellerId);
-        BigInteger sellerNo = BigInteger.valueOf(seller.getSellerNo());
+        Long sellerNo = seller.getSellerNo();
         goods.setSellerNo(sellerNo);
         String businessNumber = seller.getBusinessNumber();
 

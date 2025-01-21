@@ -35,7 +35,7 @@ public class GoodsServiceImpl implements GoodsService {
     private final GoodsImageMapper imageMapper;
     private AmazonS3 amazonS3;
 
-    @Value("${cloud.aws.s3.bucket}")
+//    @Value("${cloud.aws.s3.bucket}")
     String bucket;
 
     GoodsImage goodsImage = new GoodsImage();
