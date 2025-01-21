@@ -9,4 +9,9 @@
             values(#{goodsNo}, #{goodsImageName}, #{goodsUrl}, #{isMain})
         </insert>
 
+        <select id="findAllGoodsImage" resultType="map">
+            select goods_image_name, goods_url
+            from goods_image
+            where goods_no=#{goodsNo}
+        </select>
 </mapper>

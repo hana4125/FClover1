@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.Map;
 
 @Slf4j
@@ -38,6 +38,7 @@ public class MemberController {
     private final PaymentService paymentService;
     private final CategoryService categoryService;
     private final GoodsService goodsService;
+    private final WishService wishService;
 
 
     private final EmailService emailService;
@@ -476,12 +477,23 @@ public class MemberController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
+
+        if (member != null) {
+            Long memberNo = member.getMemberNo();
+            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
+            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
+        } else {
+            // If the user is not logged in, pass an empty list
+            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
+        }
+
+
         return "/user/userCategory"; // 카테고리 상세 페이지
     }
 
-
     @GetMapping("/gift")
     public String gift() {
-        return "user/gift";
+        System.out.println("====");
+        return "/user/gift";
     }
 }

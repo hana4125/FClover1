@@ -193,9 +193,8 @@
                 // FormData 생성
                 const formData = new FormData();
                 //JSON 데이터 생성
-                const goodsData={
+                const goodsData = {
                     goodsName: $("#goodsName").val(),
-                    sellerCompany: $("#sellerCompany").val(),
                     goodsPrice: $("#goodsPrice").val(),
                     goodsCount: $("#goodsCount").val(),
                     cateNo: $("#cateNo").val(),
@@ -207,7 +206,7 @@
                     goodsBookSize: $("#goodsBookSize").val()
                 };
 
-                formData.append("goods", new Blob([JSON.stringify(goodsData)], { type: "application/json" }));
+                formData.append("goods", new Blob([JSON.stringify(goodsData)], {type: "application/json"}));
 
                 // 업로드된 파일 추가
                 uploadedFiles.forEach(file => formData.append("goodsImages", file));
@@ -241,20 +240,45 @@
                     contentType: false,
                     success: function () {
                         alert("상품이 성공적으로 등록되었습니다.");
+                        location.href = "main"
                     },
                     error: function (xhr, status, error) {
                         alert("상품 등록 중 오류가 발생했습니다.");
-                        console.error("에러 내용" ,xhr.responseText);
+                        console.error("에러 내용", xhr.responseText);
                         console.error("Error:", error);
                     }
                 });
 
             });
+            $(".addCancel").click(function () {
+                location.href = "main"
+            })
         });
     </script>
 
 </head>
 <body>
+
+<div class="bg-light mb-3">
+    <div class="container w-75">
+        <div class="top-menu d-flex justify-content-end">
+            <th:block th:if="${seller == null}">
+                <a class="pe-2" href="/member/login">로그인</a>
+                <a class="pe-2" href="/member/signup">회원가입</a>
+                <a class="pe-2" href="#">고객센터</a>
+                <a class="pe-2" href="/seller/login">판매자 로그인</a>
+                <a class="pe-2" href="/seller/signup">판매자 가입</a>
+            </th:block>
+            <th:block th:if="${seller != null}">
+                <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+                <form th:action="@{/seller/logout}" method="post">
+                    <button type="submit" class="pe-2">로그아웃</button>
+                </form>
+            </th:block>
+        </div>
+    </div>
+</div>
+
 <div class="container mt-5">
     <h2 class="text mb-4">상품 단일 등록</h2>
     <!-- 상품 등록 폼 시작 -->
@@ -274,7 +298,7 @@
                     <label for="sellerCompany" class="form-label">출판사</label>
                     <!--                    출판사는 판매자 member db에서 가져오는 걸로 수정해야함-->
                     <input type="text" class="form-control" id="sellerCompany" name="sellerCompany"
-                           style="background-color:lightgray" th:value="${sellerCompany}" readonly>
+                           style="background-color:lightgray" th:value="${seller.companyName}" readonly>
                 </div>
             </div>
         </div>
@@ -301,7 +325,10 @@
                     <label for="cateNo" class="form-label">책 카테고리</label>
                     <select class="form-select" id="cateNo" name="cateNo" required>
                         <option value="">카테고리 선택</option>
-                        <option value="1">카테고리 test</option>
+                        <th:block th:each="category : ${categoryList}">
+                            <!-- 카테고리 이름 출력 -->
+                            <option th:value="${category.cateNo}">[[${category.cateName}]]</option>
+                        </th:block>
                     </select>
                 </div>
             </div>
@@ -386,7 +413,7 @@
 
         <div class="text-center col-md-6 offset-5 ">
             <button type="submit" class="btn btn-primary">상품 등록</button>
-            <button type="reset" class="btn btn-secondary">등록 취소</button>
+            <button type="reset" class="addCancel btn btn-secondary">등록 취소</button>
         </div>
     </form>
     <!-- 상품 등록 폼 끝 -->

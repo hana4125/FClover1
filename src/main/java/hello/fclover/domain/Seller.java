@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class Seller {
 
-    private int sellerNo;                // `id` (auto incremented primary key)
+    private Long sellerNo;                // `id` (auto incremented primary key)
     private String sellerId;        // `seller_id` (varchar(20))
     private String password;      // `seller_pass` (varchar(50))
     private String name;      // `seller_name` (varchar(100))

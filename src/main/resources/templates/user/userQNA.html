@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
   <link rel="stylesheet" href="/css/user/pagination.css">
+  <link rel="icon" th:href="@{/images/user/favicon.png}">
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -102,7 +103,7 @@
                 <li class="side_item">
                   <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
                 <li class="side_item">
-                  <a href="/inquiry/question" class="sd_link">QnA</a>
+                  <a href="/inquiry/question" class="sd_link">문의하기</a>
                 </li>
               </ul>
             </div>
@@ -115,7 +116,7 @@
       <div style="width: 80%; height: 100vh;" class="customer_wrap">
         <!--title_wrap-->
         <div class="title_wrap title_size">
-          <h1 class="title_heading">QnA</h1>
+          <h1 class="title_heading">문의하기</h1>
           <div class="right_area"></div>
         </div>
 
@@ -196,7 +197,7 @@
 
         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
             <a th:href="@{/inquiry/question/write}">
-              <button type="button" class="btn btn-primary" style="height: 44px">문의하기</button>
+              <button type="button" class="btn btn-primary" style="width:93px; height: 36px; font-size: 13px;">문의하기</button>
             </a>
         </div>
 
