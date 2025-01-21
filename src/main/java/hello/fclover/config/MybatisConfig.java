@@ -1,5 +1,7 @@
 package hello.fclover.config;
 
+import static org.apache.ibatis.type.JdbcType.NULL;
+
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.ExecutorType;
@@ -27,7 +29,7 @@ public class MybatisConfig {
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setDefaultExecutorType(ExecutorType.SIMPLE);
         configuration.setMapUnderscoreToCamelCase(true);
-        configuration.setJdbcTypeForNull(null);
+        configuration.setJdbcTypeForNull(NULL);
 
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
@@ -54,7 +56,7 @@ public class MybatisConfig {
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setDefaultExecutorType(ExecutorType.BATCH);
         configuration.setMapUnderscoreToCamelCase(true);
-        configuration.setJdbcTypeForNull(null);
+        configuration.setJdbcTypeForNull(NULL);
 
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
