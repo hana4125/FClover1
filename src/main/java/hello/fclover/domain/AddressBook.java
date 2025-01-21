@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class AddressBook {
 
     private Long addressNo;
-    private long memberNo;
+    private Long memberNo;
     private String addressName;
     private String recipientName;
     private String phoneNumber;
