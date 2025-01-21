@@ -28,4 +28,12 @@ public interface GoodsMapper {
     List<Goods> findGoodsByKeyword(Map<String, Object> params);
 
     List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
+
+    long countAll();
+
+    void insertGoods(@Param("goods") List<Goods> goods);
+
+    // 인덱스 활성화, 비활성화용
+    // void dropFullTextIndex();
+    // void createFullTextIndex();
 }

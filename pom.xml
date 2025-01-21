@@ -193,6 +193,13 @@
             <version>3.23.2</version>
         </dependency>-->
 
+        <!-- 상품 더미데이터 생성을 위한 라이브러리 -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
