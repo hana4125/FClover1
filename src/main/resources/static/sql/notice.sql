@@ -16,8 +16,3 @@ TRUNCATE TABLE NOTICE;
 
 commit;
 
-update notice
-set noti_Title = '제목',
-    noti_Name = '이름',
-    noti_Content='내용'
-where noti_No = 1;
