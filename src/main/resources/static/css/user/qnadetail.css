@@ -1,0 +1,42 @@
+.content-area {
+    background-color: #f6f6f6;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+
+.title_heading {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.info_case {
+    font-size: 14px;
+    color: #666;
+}
+
+.gap {
+    margin: 0 10px;
+}
+
+.comment-container {
+    margin-top: 20px;
+}
+
+.btn-primary {
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#message {
+    margin-top: 10px;
+}
+
+#write {
+    float: right;
+}

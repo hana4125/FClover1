@@ -22,7 +22,6 @@ public class WishController {
     public Member addMemberToModel(Principal principal) {
         if (principal != null) {
             String memberId = principal.getName();
-
             return memberService.findMemberById(memberId);
         }
         return null;
