@@ -449,18 +449,14 @@ public class MemberController {
     }
 
 
-    @GetMapping("/goodsDetail/{no}")
-    public String goodsDetail(@PathVariable("no") Long goodsNo, Model model) {
-        // 카테고리 데이터 가져오기
-        Goods goods = goodsService.findGoodsByNo(goodsNo);
-
-        model.addAttribute("goods", goods);
+    @GetMapping("/GoodsDetail")
+    public String GoodsDetail() {
+        System.out.println("====");
         return "/user/userGoodsDetail";
     }
 
     @GetMapping("/category/{no}")
     public String categoryDetail(@PathVariable("no") int cate_no,
-                                 @ModelAttribute("member") Member member,
                                  @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
                                  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                  @RequestParam(value = "size", required = false, defaultValue = "20") int size,

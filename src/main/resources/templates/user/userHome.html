@@ -10,6 +10,7 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
+    <link rel="stylesheet" href="/css/user/category.css">
     <script th:inline="javascript">
         $(function () {
             let message = /*[[${message}]]*/ null;
@@ -118,18 +119,7 @@
 </div>
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
-    <h4 class="text-center mb-3">카테고리</h4><br>
-    <div class="category-list">
-        <ul class="list-unstyled">
-            <!-- categoryList의 각 요소를 반복하여 출력 -->
-            <li th:each="category : ${categoryList}">
-                <!-- 카테고리 이름 출력 -->
-                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
-                   th:text="${category.cateName}"
-                   class="category-item"></a>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="~{fragment/category :: category}"></div>
 </div>
 
 <div class="container w-75 d-flex">
