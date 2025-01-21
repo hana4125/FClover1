@@ -153,7 +153,7 @@
         <form class="d-flex search-box" id="searchBarToggle">
           <input aria-label="Search" class="form-control me-2 search-text border-0" placeholder="찾고 싶은 도서를 검색해 보세요!"
                  type="text" id="searchKeyword" name="keyword" autocomplete="off">
-          <button class="btn p-0 m-0 search-btn" type="submit">
+          <button class="btn p-0 m-0 search-btn" type="button">
             <img alt="검색" height="36" src="/images/user/search.png" width="36">
           </button>
         </form>
@@ -227,7 +227,7 @@
               <div class="util_button_area">
                 <!-- TODO : 주소 설정해야 함 -->
                 <a class="btn-sm" th:href="@{#}">도움말</a>
-                <a class="btn-sm" th:href="@{/search/detailSearch}">상세검색</a>
+                <a class="btn-sm" th:href="@{/search/searchDetail}">상세검색</a>
               </div>
               <button class="btn btn-sm close-dropdown" type="button">닫기</button>
             </div>
@@ -250,7 +250,7 @@
           </div>
           <div class="thumb-box-header header-profile myPage border border-2 border-dark-subtle"
                th:unless="${member.profilePicture == null}">
-            <img th:src="@{|/images/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+            <img th:src="@{|/upload/${member.profilePicture}|}" alt="프로필 이미지">
           </div>
         </div>
       </div>

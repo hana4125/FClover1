@@ -25,16 +25,17 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper dao;
-    private static final String UPLOAD_DIR = "src/main/resources/static/img/user/upload/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
 
     @Override
     public int signup(Member member) {
+
         return dao.insertMember(member);
     }
 
     @Override
-    public int getmemberNo(String memberId) {
-        return dao.selectmemberNo(memberId);
+    public long getmemberNo(String memberId) {
+        return dao.selectMemberNo(memberId);
     }
 
     @Override
@@ -43,12 +44,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public String isMemberIdDuplicate(String memberId) {
+
+        return dao.isMemberIdDuplicate(memberId);
+    }
+
+    @Override
     public String findMemberId(Member member) {
         return dao.selectMemberId(member);
     }
 
     @Override
-    public Integer selectMemberResetPassword(Member member) {
+    public Member selectMemberResetPassword(Member member) {
         return dao.selectMemberResetPassword(member);
     }
 
@@ -84,7 +91,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<AddressBook> getDeliveryAddress(int memberNo) {
+    public List<AddressBook> getDeliveryAddress(Long memberNo) {
         return dao.selectAddressBook(memberNo);
     }
 
@@ -104,7 +111,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public AddressBook getDefaultAddress(int memberNo) {
+    public AddressBook getDefaultAddress(Long memberNo) {
         return dao.selectDefaultAddress(memberNo);
     }
 

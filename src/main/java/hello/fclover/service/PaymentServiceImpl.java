@@ -3,11 +3,8 @@ package hello.fclover.service;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
 import hello.fclover.mybatis.mapper.PaymentMapper;
-import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.util.PaymentClient;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +16,7 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentMapper dao;
     private final PaymentClient paymentClient;
+    private final PaymentMapper paymentMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -64,7 +62,4 @@ public class PaymentServiceImpl implements PaymentService {
         // status 필드를 "cancel"로 변경
         payment.setStatus("cancel");
     }
-
-
-
 }

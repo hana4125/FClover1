@@ -15,6 +15,12 @@
           border-radius: 0 6px 6px 0;
       }
   </style>
+  <script th:inline="javascript">
+    const message = /*[[${message}]]*/ null;
+    if (message != null) {
+        alert(message);
+    }
+  </script>
   <script>
       $(function () {
           $("#logo").click(function() {

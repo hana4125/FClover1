@@ -37,7 +37,7 @@
                 <img src="/images/user/profile.png" alt="기본 프로필 이미지">
               </div>
               <div class="thumb-box profile border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-                <img th:src="@{|/images/user/upload/${member.profilePicture}|}" alt="프로필 이미지">
+                <img th:src="@{|/upload/${member.profilePicture}|}" alt="프로필 이미지">
               </div>
               <span class="badge profile text-bg-danger rounded-circle opacity-75" style="position: relative; left: 50px; bottom: 25px; cursor: pointer"><img width="15" height="20" src="/images/user/edit.png"></span>
             </div>
@@ -62,7 +62,6 @@
         <h5 class="fw-bold">쇼핑내역</h5>
         <ul class="list-unstyled">
           <li><a href="/member/myPage/orderDelivery">주문/배송</a></li>
-          <li><a href="/member/myPage/purchaseHistory">구매 내역</a></li>
         </ul>
       </div>
 
@@ -71,6 +70,7 @@
         <h5 class="fw-bold">라이브러리</h5>
         <ul class="list-unstyled">
           <li><a href="/member/myPage/wishlist">찜 목록</a></li>
+          <li><a href="/member/myPage/purchaseHistory">내 쿠폰 조회</a></li>
         </ul>
       </div>
 

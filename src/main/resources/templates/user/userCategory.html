@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>home</title>
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
+  <link rel="stylesheet" href="/css/user/gift.css">
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -23,7 +27,7 @@
       })
 
       $(".category-item").click(function () {
-        location.href = "/category/{no}";
+        location.href = "/member/category/{no}";
       })
 
       $(".best").click(function () {
@@ -35,7 +39,7 @@
       })
 
       $(".show-detail").click(function () {
-        location.href = "/goodsDetail";
+        location.href = "/member/GoodsDetail{no}";
       })
     })
 
@@ -108,75 +112,99 @@
       });
     })
 
-      // 카테고리 버튼 동작
-      $(function () {
-        $("#category").click(function () {
-          const category = $(this).find(".category");
-          const closeIcon = $(this).find(".close-icon");
-
-          if (category.hasClass("open")) {
-            // 햄버거 버튼으로 복귀
-            category.removeClass("open");
-            closeIcon.addClass("d-none");
-            category.removeClass("d-none");
-            $(this).css("background-color", "white");
-            $("#categoryView").hide(); // 카테고리 전체보기 숨기기
-          } else {
-            // X 버튼으로 전환
-            category.addClass("open");
-            closeIcon.removeClass("d-none");
-            category.addClass("d-none");
-            $(this).css("background-color", "black");
-            $("#categoryView").show(); // 카테고리 전체보기 보이기
-          }
-        })
-      })
-
-    // 찜 버튼 동작
+    // 카테고리 버튼 동작
     $(function () {
-      $(".heart").click(function () {
-        // const checkedItems = $(".item-checkbox:checked").length; // 체크된 박스 개수 확인
-        const heartButton = $(this);
-        const isLiked = heartButton.attr("src") === "/img/user/redHeart.png";
-        // if (checkedItems > 0) {
-        // 체크된 상품이 1개 이상일 경우
-        if (isLiked) {
-          // 찜 해제 동작
-          alert("찜 해제 되었어요.");
-          heartButton.attr("src", "/img/user/heart.png"); // 원래 하트 이미지로 변경
+      $("#category").click(function () {
+        const category = $(this).find(".category");
+        const closeIcon = $(this).find(".close-icon");
+        if (category.hasClass("open")) {
+          // 햄버거 버튼으로 복귀
+          category.removeClass("open");
+          closeIcon.addClass("d-none");
+          category.removeClass("d-none");
+          $(this).css("background-color", "white");
+          $("#categoryView").hide(); // 카테고리 전체보기 숨기기
         } else {
-          // 찜 설정 동작
-          alert("찜 설정 되었어요.");
-          heartButton.attr("src", "/img/user/redHeart.png"); // 빨간 하트 이미지로 변경
+          // X 버튼으로 전환
+          category.addClass("open");
+          closeIcon.removeClass("d-none");
+          category.addClass("d-none");
+          $(this).css("background-color", "black");
+          $("#categoryView").show(); // 카테고리 전체보기 보이기
         }
-        // } else {
-        // 체크된 상품이 없을 경우
-        //   alert("선택된 상품이 없습니다.");
-        // }
       })
     })
 
-    // 장바구니 버튼 동작
     $(function () {
-      $(".cart").click(function () {
-        // const checkedItems = $(".item-checkbox:checked").length; // 체크된 상품 수
-        // const alreadyInCart = false; // 이미 장바구니에 담긴 상품 여부 (예제용: 실제로 서버와 통신하여 확인 필요)
+      // 찜 버튼 클릭 시
+      $(".heart").click(function () {
+        // CSRF 토큰
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-        // if (checkedItems > 0) {
-        //   if (alreadyInCart) {
-        //     // 장바구니에 이미 담긴 상품이 있을 경우
-        //     if (confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?")) {
-        //       // 확인 버튼 클릭 시 장바구니 페이지로 이동
-        //       location.href = "/member/cart";
-        //     }
-        //   } else {
-            // 새로운 상품을 장바구니에 추가하는 경우
-            if (confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?")) {
-              // 확인 버튼 클릭 시 장바구니 페이지로 이동
-              location.href = "/member/cart";
+        const goodsNo = $(this).data("id");
+        const heartIcon = $(this);
+
+        $.ajax({
+          url: "/wish/wishlist",
+          type: "POST",
+          headers: { [csrfHeader]: csrfToken}, // CSRF 사용시 헤더에 추가
+          data: { goodsNo: goodsNo },
+          dataType: "json",
+          success: function (response) {
+            if (response.status === "added") {
+              alert("찜 설정 되었습니다.");
+              heartIcon.attr("src", "/images/user/redHeart.png");
+            } else if (response.status === "removed") {
+              alert("찜 해제 되었습니다.");
+              heartIcon.attr("src", "/images/user/heart.png");
             }
-      })
-    })
+          },
+          error: function (xhr, status, error) {
+            if (status === "parsererror") {
+              location.href = '/member/login'
+            }
+          }
+        });
+      });
+
+      // 장바구니 버튼 클릭 시
+      $(".cart").click(function () {
+        // CSRF 토큰
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        const goodsNo = $(this).data("id");
+
+        $.ajax({
+          url: "/cart/cartList",
+          type: "POST",
+          // CSRF 토큰 헤더 설정
+          headers: { [csrfHeader]: csrfToken },
+          data: { goodsNo: goodsNo },
+          dataType: "json",
+          success: function (response) {
+            // response.status 가 "added" 또는 "updated"
+            if (response.status === "added") {
+              const moveConfirm = confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
+              if (moveConfirm) {
+                location.href = "/member/cart";
+              }
+            } else if (response.status === "updated") {
+              const moveConfirm = confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?");
+              if (moveConfirm) {
+                location.href = "/member/cart";
+              }
+            }
+          },
+          error: function (xhr, status, error) {
+            if (status === "parsererror") {
+              location.href = '/member/login'
+            }
+          }
+        });
+      });
+    });
 
     $(function () {
       $(".buy-now-btn").click(function () {
@@ -189,6 +217,7 @@
   </script>
 </head>
 <body>
+<div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success">
   <div class="container w-75">
@@ -214,7 +243,7 @@
       <!-- categoryList의 각 요소를 반복하여 출력 -->
       <li th:each="category : ${categoryList}">
         <!-- 카테고리 이름 출력 -->
-        <a th:href="@{/category/{no}(no=${category.cateNo})}"
+        <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
            th:text="${category.cateName}"
            class="category-item"></a>
       </li>
@@ -262,14 +291,14 @@
           <input type="checkbox" class="item-checkbox mt-1 ms-1" style="width: 18px; height: 18px;">
           <div class="book-item mt-1">
             <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
-            <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+            <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
               <div class="img-box">
-                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">
+<!--                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">-->
               </div>
             </a>
             <div class="item-info">
               <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
-              <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+              <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
                 <span class="item-name" th:text="${goods.goodsName}"></span>
               </a>
               <br>
@@ -277,8 +306,14 @@
             </div>
           </div>
           <div class="icon ms-auto mb-4">
-            <img src="/img/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">
-            <img src="/img/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="장바구니">
+            <img
+                    th:src="${wishlistGoodsNos.contains(goods.goodsNo) ? '/images/user/redHeart.png' : '/images/user/heart.png'}"
+                    class="heart me-2"
+                    th:data-id="${goods.goodsNo}"
+                    width="36"
+                    height="36"
+                    alt="찜">
+              <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="장바구니">
           </div>
           <!-- 바로구매 버튼 -->
           <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매</button>

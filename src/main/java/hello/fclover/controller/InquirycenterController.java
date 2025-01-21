@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.patterns.TypePatternQuestions;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +44,7 @@ public class InquirycenterController {
     //공지사항
     @GetMapping("/notice")
     public String notice(
-            @RequestParam(defaultValue = "1") Integer page, Model m) {
+            @RequestParam(defaultValue = "1") int page, Model m) {
 
         int limit = 10;
         int listcount = noticeService.getListCount();
@@ -75,6 +73,7 @@ public class InquirycenterController {
         return "redirect:/inquiry/notice";
     }
 
+    //공지사항 보기
     @GetMapping(value = "/notice/detail")
     public ModelAndView Detail(
             int num, ModelAndView mv,
@@ -126,27 +125,21 @@ public class InquirycenterController {
     //문의사항
     @GetMapping("/question")
     public String question(
-            @RequestParam(defaultValue = "1") Integer page, Model m) {
+            @RequestParam(defaultValue = "1") Integer currentPage, Model m) {
 
         int limit = 10;
-        int listcount = questionService.ListCount();
-        List<Question> list = questionService.BoardList(page, limit);
+        int totalcount = questionService.TotalCount();
+        List<Question> questionlist = questionService.BoardList(currentPage, limit);
 
-        PaginationResult result = new PaginationResult(page, limit, listcount);
-        m.addAttribute("page", page);
-        m.addAttribute("maxpage", result.getMaxpage());
-        m.addAttribute("startpage", result.getStartpage());
-        m.addAttribute("endpage", result.getEndpage());
-        m.addAttribute("listcount", listcount);
-        m.addAttribute("questionlist", list);
+        PaginationResult rt = new PaginationResult(currentPage, limit, totalcount);
+        m.addAttribute("currentPage", currentPage);
+        m.addAttribute("maxpage", rt.getMaxpage());
+        m.addAttribute("startpage", rt.getStartpage());
+        m.addAttribute("endpage", rt.getEndpage());
+        m.addAttribute("totalcount", totalcount);
+        m.addAttribute("questionlist", questionlist);
         m.addAttribute("limit", limit);
-        return "user/userQnA";
-    }
-
-    @PostMapping(value ="/question/plus")
-    public String noticeAdd(Question question) {
-        questionService.insertQuestion(question);
-        return "redirect:/inquiry/question";
+        return "user/userQNA";
     }
 
     @GetMapping(value = "/question/write")
@@ -154,8 +147,22 @@ public class InquirycenterController {
         return "user/userQNAWrite";
     }
 
-    //질문보기
-    @GetMapping(value = "/question/details")
+    @PostMapping(value = "/question/plus")
+    public String noticeAdd(Question question, @RequestParam(required = false) String qalert) {
+        // qalert 값이 null일 경우 "n"으로 설정
+        if (qalert == null || (!qalert.equalsIgnoreCase("y") && !qalert.equalsIgnoreCase("n"))) {
+            question.setQalert("n");
+        } else {
+
+            question.setQalert(qalert.equalsIgnoreCase("y") ? "y" : "n");
+        }
+
+        questionService.insertQuestion(question);
+        return "redirect:/inquiry/question";
+    }
+
+    //문의사항 보기
+    @GetMapping(value = "/question/detail")
     public ModelAndView questionDetail(
             int no, ModelAndView mv,
             HttpServletRequest request,
@@ -174,3 +181,5 @@ public class InquirycenterController {
         return mv;
     }
 }
+
+

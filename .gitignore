@@ -107,6 +107,3 @@ gradle-app.setting
 
 # intellij
 .idea
-
-#이미지 파일
-src/main/resources/static/images/user/upload/*

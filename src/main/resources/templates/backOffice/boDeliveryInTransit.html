@@ -171,9 +171,9 @@
           <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+              <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${admin.name}">Admin</span>
               <img class="img-profile rounded-circle"
-                   src="img/undraw_profile.svg">
+                   src="/images/user/profile.png">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -191,7 +191,7 @@
                 Activity Log
               </a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+              <a class="dropdown-item" href="/bo/logout" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
               </a>
@@ -240,6 +240,7 @@
               "paging": true,
               "searching": true,
               "ordering": true,
+              scrollX : true,
               "info": true,
               "language": {
                 "lengthMenu": "_MENU_ 개씩 보기",
@@ -268,7 +269,7 @@
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="cancel-btn" data-imp-uid="${row.impUid}">배송완료</button>`;
+                    return `<button class="deliveryDone-btn" data-deliNo="${row.deliNo}">배송완료</button>`;
                   }
                 }
               ]
@@ -276,9 +277,9 @@
           });
 
           // 배송 취소 버튼 클릭 이벤트
-          $(document).on('click', '.cancel-btn', async function() {
-            const impUid = $(this).data('imp-uid');
-            const response = await fetch(`/api/payment/cancel/${impUid}`, {
+          $(document).on('click', '.deliveryDone-btn', async function() {
+            const deliNo = $(this).data('deliNo');
+            const response = await fetch(`/bo/delivery/DoneClick?deliNo=${deliNo}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json'

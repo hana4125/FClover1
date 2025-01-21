@@ -4,16 +4,16 @@
 
 <mapper namespace="hello.fclover.mybatis.mapper.QuestionMapper">
 
-    <select id="ListCount" resultType="int">
+    <select id="TotalCount" resultType="int">
         select count(*) from QnA
     </select>
 
     <select id="BoardList" parameterType="map" resultType="Question">
         SELECT q_no as qno,
-               q_create_at as qcreateat,
                q_name as qname,
+               q_create_at as qcreateat,
                q_content as qcontent,
-               q_create_at as qcreateat
+               q_title as qtitle
         FROM QnA
         ORDER BY q_create_at DESC
             LIMIT #{start}, #{limit}
@@ -57,5 +57,29 @@
         WHERE q_no = #{num}
     </select>
 
+    <select id="getCommentList" resultType="Question">
+        select *
+        from( select rownum rnum, num, id, content, reg_date, board_num
+              from( select num, id, content, reg_date, board_num
+                    from comments
+                    where board_num = #{board_num} order by reg_date desc ) )
+        where rnum between #{start} and #{end}
+    </select>
 
+    <insert id="commentsInsert">
+        insert into comments
+        values (com_seq.nextval, #{id}, #{content}, sysdate, #{board_num})
+    </insert>
+
+
+    <update id="commentsUpdate">
+        update comments
+        set content=#{content}
+        where num = #{num}
+    </update>
+
+    <delete id="commentsDelete">
+        delete comments
+        where num = #{num}
+    </delete>
 </mapper>

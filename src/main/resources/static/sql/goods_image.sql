@@ -8,3 +8,6 @@ create Table goods_image(
   foreign key (goods_no) references goods(goods_no)
 );
 select * from goods_image;
+
+commit;
+

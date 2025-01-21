@@ -3,16 +3,19 @@ package hello.fclover.mail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Service
-
+@Slf4j
 public class EmailService {
 
     private final JavaMailSender mailSender;
@@ -37,7 +40,17 @@ public class EmailService {
         return randomNumber.toString();
     }
 
-    public void sendMail(EmailMessage emailMessage) {
+    // 비동기 방식
+    public void asyncSendMail(EmailMessage emailMessage) {
+        CompletableFuture.runAsync(() -> sendMail(emailMessage))
+                .exceptionally(throwable -> {
+                    log.error("Exception occurred: {}", throwable.getMessage());
+                    return null;
+                });
+    }
+
+    // 동기 방식
+    public void sendMail(EmailMessage emailMessage)  {
         MimeMessage mimeMessage = mailSender.createMimeMessage(); // MimeMessage 객체 생성
         try {
             // MimeMessageHelper를 사용하여 보다 쉽게 MimeMessage를 구성할 수 있다.
@@ -53,12 +66,12 @@ public class EmailService {
             mimeMessageHelper.setText(emailMessage.getMessage(), true);
 
             // 이메일 발신자 설정
-            mimeMessageHelper.setFrom(new InternetAddress(from + "@naver.com"));
+            mimeMessageHelper.setFrom(new InternetAddress(from + "@naver.com" ,"네잎클로버", "UTF-8"));
 
             // 이메일 보내기
             mailSender.send(mimeMessage);
 
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }
