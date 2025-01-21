@@ -33,7 +33,7 @@ public class GoodsServiceImpl implements GoodsService {
     private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageMapper;
 
-    private AmazonS3 amazonS3;
+    private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     String bucket;
@@ -42,9 +42,9 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     @Transactional
     public void goodsSingleInsert(Goods goods, List<MultipartFile> images, String sellerNumber) throws IOException {
+        System.out.println("serviceImpl");
         int result = goodsMapper.goodsInsertText(goods);
-
-        int goodsNo = goodsMapper.goodsNoselect(Long.valueOf(goods.getSellerNo()), goods.getGoodsName());
+        Long goodsNo = goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName());
         System.out.println(goodsNo);
         if (result > 0 && images.size() > 0) {
             goodsInsertImage(images, sellerNumber, goodsNo);
@@ -116,9 +116,20 @@ public class GoodsServiceImpl implements GoodsService {
                 objectMetadata.setContentType(image.getContentType());
                 objectMetadata.setContentLength(image.getSize());
                 objectMetadata.setHeader("filename", image.getOriginalFilename());
+                imageUrl = bucket  + File.separator + imageSaveFolder;
+                amazonS3.putObject(bucket, imageDBName, image.getInputStream(), objectMetadata);
                 amazonS3.putObject(new PutObjectRequest(bucket + imageSaveFolder, imageDBName, image.getInputStream(), objectMetadata));
 
-                imageUrl = bucket  + File.separator + imageSaveFolder;
+
+//                    String originalFilename = image.getOriginalFilename();
+//
+//                    ObjectMetadata metadata = new ObjectMetadata();
+//                    metadata.setContentLength(image.getSize());
+//                    metadata.setContentType(image.getContentType());
+//
+//                    amazonS3.putObject(bucket, originalFilename, image.getInputStream(), metadata);
+//                System.out.println("amazonS3 = " + amazonS3.getUrl(bucket, originalFilename).toString());
+
 
             }
             if (IsFirstImage) {
@@ -129,8 +140,8 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsImage.setIsMain("S");
             }
             System.out.println("goodsImage = " + goodsImage.getIsMain());
-            //파일 업로드
-            image.transferTo(new File(imageUrl, imageDBName));
+//            //로컬 파일 업로드
+//            image.transferTo(new File(imageUrl, imageDBName));
 
             goodsImage.setGoodsNo(Long.valueOf(goodsNo));
             goodsImage.setGoodsUrl(imageUrl);
