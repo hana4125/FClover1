@@ -455,45 +455,45 @@ public class MemberController {
         return "/user/userGoodsDetail";
     }
 
-    @GetMapping("/category/{no}")
-    public String categoryDetail(@PathVariable("no") int cate_no,
-                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
-                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
-                                 Model model) {
-
-        // 카테고리 데이터 가져오기
-        List<Category> categoryList = categoryService.getCategoryList();
-        model.addAttribute("categoryList", categoryList);
-        // 상품 목록 가져오기
-        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
-        model.addAttribute("goodsList", goodsList);
-
-        // 페이지네이션 정보 전달
-        int totalItems = goodsService.getTotalGoodsCount(cate_no);
-        int totalPages = (int) Math.ceil((double) totalItems / size);
-
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("sort", sort);
-        model.addAttribute("size", size);
-
-        if (member != null) {
-            Long memberNo = member.getMemberNo();
-            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
-            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
-        } else {
-            // If the user is not logged in, pass an empty list
-            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
-        }
-
-
-        return "/user/userCategory"; // 카테고리 상세 페이지
-    }
-
-    @GetMapping("/gift")
-    public String gift() {
-        System.out.println("====");
-        return "/user/gift";
-    }
+//    @GetMapping("/category/{no}")
+//    public String categoryDetail(@PathVariable("no") int cate_no,
+//                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+//                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+//                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+//                                 Model model) {
+//
+//        // 카테고리 데이터 가져오기
+//        List<Category> categoryList = categoryService.getCategoryList();
+//        model.addAttribute("categoryList", categoryList);
+//        // 상품 목록 가져오기
+//        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
+//        model.addAttribute("goodsList", goodsList);
+//
+//        // 페이지네이션 정보 전달
+//        int totalItems = goodsService.getTotalGoodsCount(cate_no);
+//        int totalPages = (int) Math.ceil((double) totalItems / size);
+//
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", totalPages);
+//        model.addAttribute("sort", sort);
+//        model.addAttribute("size", size);
+//
+//        if (member != null) {
+//            Long memberNo = member.getMemberNo();
+//            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
+//            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
+//        } else {
+//            // If the user is not logged in, pass an empty list
+//            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
+//        }
+//
+//
+//        return "/user/userCategory"; // 카테고리 상세 페이지
+//    }
+//
+//    @GetMapping("/gift")
+//    public String gift() {
+//        System.out.println("====");
+//        return "/user/gift";
+//    }
 }
