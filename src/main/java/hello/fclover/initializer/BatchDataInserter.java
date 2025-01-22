@@ -33,7 +33,7 @@ public class BatchDataInserter {
      */
     public void insertLargeDataParallel(int totalCount, int chunkSize, int threadCount) {
         log.info("대용량 데이터 병렬 삽입 시작 - totalCount={}, chunkSize={}, threadCount={}", totalCount, chunkSize, threadCount);
-
+        long startTime = System.currentTimeMillis();
         // Iterator 로 Chunk 단위 Book 생성
         Iterator<List<Goods>> chunkIterator = dummyDataGenerator.generateGoodsInChunks(totalCount, chunkSize);
 
@@ -84,6 +84,9 @@ public class BatchDataInserter {
         }
 
         executor.shutdown();
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
         log.info("모든 chunk가 삽입됨 totalChunk={}", chunkIndex);
+        log.info("삽입된 데이터의 개수: {}개, 소요 시간: {} ms", totalCount, totalTime);
     }
 }
