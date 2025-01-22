@@ -101,7 +101,7 @@
                   <a href="/" class="sd_link">메인</a>
                 </li>
                 <li class="side_item">
-                  <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
+                  <a href="/inquiry/notice/noti_list" class="sd_link">공지사항</a></li>
                 <li class="side_item">
                   <a href="/inquiry/question" class="sd_link">문의하기</a>
                 </li>
@@ -148,15 +148,7 @@
               <span class="ct_green">[[${totalcount}]]</span>건
             </p>
 
-            <th:block th:if="${totalcount > 0}">
-              <div class="rows" style="width: 110px;">
-                <select class="form-control" id="viewcount" onchange="filterData()">
-                  <option value="전체" selected>전체</option>
-                  <option value="공지사항">공지사항</option>
-                  <option value="이벤트">이벤트</option>
-                </select>
-              </div>
-            </th:block>
+
           </div>
 
 

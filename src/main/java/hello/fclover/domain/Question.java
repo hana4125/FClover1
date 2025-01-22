@@ -10,7 +10,6 @@ public class Question {
     private int qno;
     private String qcreateat;
     private String memberid;
-    private String qresponseat;
     private String qname;
     private String qtype;
     private String qfile;
@@ -23,4 +22,9 @@ public class Question {
     private int qrelev;
     private int qreseq;
     private MultipartFile uploadfile;
+
+
+    private int cno;
+    private String ccontent;
+    private String cresponseat;
 }

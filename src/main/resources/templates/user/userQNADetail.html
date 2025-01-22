@@ -57,7 +57,7 @@
                   <a href="/" class="sd_link">메인</a>
                 </li>
                 <li class="side_item">
-                  <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
+                  <a href="/inquiry/notice/noti_list" class="sd_link">공지사항</a></li>
                 <li class="side_item">
                   <a href="/inquiry/question" class="sd_link">문의하기</a>
                 </li>
@@ -71,7 +71,7 @@
     <div class="flex-grow-1" style="max-width: 800px; margin: 0 auto;">
       <div class="content-wrapper px-4">
         <div>
-        <span class="qna_kind" th:text="${questiondata.qtype}"></span>
+        <span class="qna_kind" th:text="${qValue}"></span>
         </div>
         <div>
         <p class="title_heading" th:text="${questiondata.qtitle}"></p>
@@ -82,10 +82,11 @@
           <span class="date" th:text="${questiondata.qcreateat}"></span>
           <hr>
         </div>
-        <div class="content-area mb-4" th:text="${questiondata.qcontent}">
-          <!--여기 사진 나오게 만들기-->
-          <button class="update_btn">수정</button>
-          <button class="delete_btn" data-toggle="modal" data-target="#myModal">삭제</button>
+        <div class="content-area mb-4">
+          <div th:text="${questiondata.qcontent}" class="mb-3"></div>
+          <div th:if="${questiondata.qfile != null}" class="mt-2">
+            <img th:src="@{'/display/image?filename=' + ${questiondata.qfile}}" class="question-image">
+          </div>
         </div>
 
 
@@ -94,14 +95,7 @@
           <button id="write" class="btn btn-primary float-right">답변 작성</button>
           <textarea rows="3" class="form-control" id="content" maxlength="300"></textarea>
           </th:block>
-          <table class="table">
-            <thead>
-            <tr>
 
-            </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
           <div id="message"></div>
         </div>
 
