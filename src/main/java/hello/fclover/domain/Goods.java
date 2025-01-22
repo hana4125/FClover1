@@ -3,11 +3,15 @@ package hello.fclover.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Goods {
     private Long goodsNo;              // 상품 일련번호
     private Long sellerNo;             // 판매자 번호
