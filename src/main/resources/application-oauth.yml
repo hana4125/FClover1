@@ -14,6 +14,7 @@ spring:
             scope:
               - profile
               - email
+            redirect-uri: http://ec2-15-164-212-63.ap-northeast-2.compute.amazonaws.com:5000/login/oauth2/code/google
 
           naver:
             client-id: ENC(8lpicoAlvXa3VOLlgvISDhvdiSwZ/Ezhoe2b41gdIbqkqZctCqbJkLnwJmLCdVXO8K4T3d7UyQuidNQ5wAGBdA==)
