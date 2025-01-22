@@ -52,7 +52,7 @@
     SELECT COUNT(*)
     FROM GOODS g
            JOIN seller s ON g.SELLER_NO = s.seller_no
-    WHERE MATCH(g.GOODS_NAME, g.GOODS_CONTENT, g.GOODS_WRITER)
+    WHERE MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
                 AGAINST(#{keyword} IN BOOLEAN MODE)
        OR MATCH(s.company_name)
                 AGAINST(#{keyword} IN BOOLEAN MODE)
@@ -74,11 +74,97 @@
     FROM GOODS g
     JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE
-    MATCH(g.GOODS_NAME, g.GOODS_CONTENT, g.GOODS_WRITER)
+    MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
     AGAINST (#{keyword} IN BOOLEAN MODE)
     OR
     MATCH(s.company_name)
     AGAINST (#{keyword} IN BOOLEAN MODE)
+
+    <!-- 정렬 조건 분기 처리 -->
+    ORDER BY
+    <choose>
+      <when test="sort == 'latest'">g.GOODS_CREATE_AT DESC</when>
+      <when test="sort == 'sales'">g.GOODS_COUNT DESC</when>
+      <when test="sort == 'highPrice'">g.GOODS_PRICE DESC</when>
+      <when test="sort == 'lowPrice'">g.GOODS_PRICE ASC</when>
+      <when test="sort == 'name'">g.GOODS_NAME ASC</when>
+    </choose>
+
+    <!-- LIMIT & OFFSET -->
+    LIMIT #{size}
+    OFFSET #{offset}
+  </select>
+
+  <!-- 상세 검색 개수 쿼리 -->
+  <select id="countGoodsByParam" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM GOODS g
+    JOIN seller s ON g.SELLER_NO = s.seller_no
+    WHERE 1 = 1
+
+    <!-- 검색 조건 분기 -->
+    <if test="name != null and name != ''">
+      AND MATCH(g.GOODS_NAME)
+      AGAINST (#{name} IN BOOLEAN MODE)
+    </if>
+    <if test="writer != null and writer != ''">
+      AND MATCH(g.GOODS_WRITER)
+      AGAINST (#{writer} IN BOOLEAN MODE)
+    </if>
+    <if test="companyName != null and companyName != ''">
+      AND MATCH(s.company_name)
+      AGAINST (#{companyName} IN BOOLEAN MODE)
+    </if>
+    <if test="cate != null and cate != 0">
+      AND g.CATE_NO = #{cate}
+    </if>
+    <if test="minPrice != null and maxPrice != null">
+      AND g.GOODS_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+    </if>
+    <if test="startDate != null and endDate != null">
+      AND g.GOODS_CREATE_AT BETWEEN #{startDate} AND #{endDate}
+    </if>
+  </select>
+
+  <!-- 상세 검색 쿼리 -->
+  <select id="findGoodsByParam" parameterType="map" resultType="hello.fclover.domain.Goods">
+    SELECT
+    g.GOODS_NO AS goodsNo,
+    g.SELLER_NO AS sellerNo,
+    g.CATE_NO AS cateNo,
+    g.GOODS_NAME AS goodsName,
+    g.GOODS_CONTENT AS goodsContent,
+    g.GOODS_PRICE AS goodsPrice,
+    g.GOODS_WRITER AS goodsWriter,
+    s.company_name AS companyName,
+    g.GOODS_CREATE_AT AS goodsCreateAt,
+    g.GOODS_COUNT AS goodsCount
+    FROM GOODS g
+    JOIN seller s ON g.SELLER_NO = s.seller_no
+    WHERE 1 = 1
+
+    <!-- 검색 조건 분기 -->
+    <if test="name != null and name != ''">
+      AND MATCH(g.GOODS_NAME)
+      AGAINST (#{name} IN BOOLEAN MODE)
+    </if>
+    <if test="writer != null and writer != ''">
+      AND MATCH(g.GOODS_WRITER)
+          AGAINST (#{writer} IN BOOLEAN MODE)
+    </if>
+    <if test="companyName != null and companyName != ''">
+      AND MATCH(s.company_name)
+      AGAINST (#{companyName} IN BOOLEAN MODE)
+    </if>
+    <if test="cate != null and cate != 0">
+      AND g.CATE_NO = #{cate}
+    </if>
+    <if test="minPrice != null and maxPrice != null">
+      AND g.GOODS_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+    </if>
+    <if test="startDate != null and endDate != null">
+      AND g.GOODS_CREATE_AT BETWEEN #{startDate} AND #{endDate}
+    </if>
 
     <!-- 정렬 조건 분기 처리 -->
     ORDER BY
