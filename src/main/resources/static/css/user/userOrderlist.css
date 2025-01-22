@@ -920,3 +920,537 @@ a.btn_lg, button.btn_lg {
     letter-spacing: -0.01em;
     font-weight: 700;
 }
+
+.tbl_prod_wrap.type_myroom .tbl_prod tbody tr td.prod .prod_area, .tbl_prod_wrap.type_notify .tbl_prod tbody tr td.prod .prod_area {
+    align-items: center;
+}
+
+.tbl_prod_wrap .tbl_prod tbody td.prod .prod_area {
+    align-items: flex-start;
+}
+.prod_area.horizontal {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+;
+    display: -webkit-flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+.prod_area {
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.prod_area .prod_thumb_box .prod_link {
+    display: block;
+    height: 100%;
+}
+.tbl_prod_wrap.type_myroom .tbl_prod tbody tr td ~ td, .tbl_prod_wrap.type_notify .tbl_prod tbody tr td ~ td {
+    border-left: none;
+}
+
+.tbl_prod_wrap.type_myroom .tbl_prod tbody tr td, .tbl_prod_wrap.type_notify .tbl_prod tbody tr td {
+    padding: 24px 10px;
+    border-bottom: none;
+}
+.tbl_prod_wrap .tbl_prod tbody td ~ td {
+    border-left: 1px solid #eaeaea;
+}
+.tbl_prod_wrap .tbl_prod tbody td {
+    position: relative;
+    padding: 24px;
+    text-align: center;
+    border-bottom: 1px solid #eaeaea;
+}
+th, td {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+td {
+    display: table-cell;
+    vertical-align: inherit;
+    unicode-bidi: isolate;
+}
+.tbl_prod_wrap.type_myroom .tbl_prod tbody tr td .btn_wrap.full .btn_sm, .tbl_prod_wrap.type_notify .tbl_prod tbody tr td .btn_wrap.full .btn_sm {
+    position: relative;
+    padding: 0 10px 1px;
+}
+
+.btn_wrap.full [class^=btn_] {
+    width: 100%;
+    min-width: auto;
+}
+a.btn_line_primary, button.btn_line_primary {
+    color: #474c98;
+    border: 1px solid #5055b1;
+    background: #fff;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+a.btn_sm, button.btn_sm {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+;
+    display: -webkit-inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    height: 38px;
+    padding: 0 13px 1px;
+    border-radius: 6px;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content .tab_wrap.category {
+    display: inline-block;
+    position: relative;
+    padding-left: 180px;
+    height: 370px;
+    min-height: 205px;
+    max-height: calc(100vh - 435px);
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.tab_wrap {
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+.ui-tabs {
+    position: relative;
+    padding: .2em;
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content .tab_wrap.category .tab_content {
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content {
+    height: calc(100% - 54px);
+    min-height: 200px;
+}
+.tab_wrap .tab_content {
+    padding: 0;
+    background: #fff;
+    box-sizing: border-box;
+    outline: none;
+}
+.ui-tabs .ui-tabs-panel {
+    display: block;
+    border-width: 0;
+    padding: 1em 1.4em;
+    background: 0 0;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content.has_banner .custom_scroll_wrap {
+    display: inline-block;
+    width: calc(100% - 220px);
+}
+
+.custom_scroll_wrap {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+[data-simplebar] {
+    position: relative;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+}
+
+.simplebar-wrapper {
+    overflow: hidden;
+    width: inherit;
+    height: inherit;
+    max-width: inherit;
+    max-height: inherit;
+}
+.simplebar-height-auto-observer-wrapper {
+    box-sizing: inherit !important;
+    height: 100%;
+    width: 100%;
+    max-width: 1px;
+    position: relative;
+    float: left;
+    max-height: 1px;
+    overflow: hidden;
+    z-index: -1;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+    flex-grow: inherit;
+    flex-shrink: 0;
+    flex-basis: 0;
+}
+
+.simplebar-height-auto-observer {
+    box-sizing: inherit;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1000%;
+    width: 1000%;
+    min-height: 1px;
+    min-width: 1px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+.simplebar-mask {
+    direction: inherit;
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: auto !important;
+    height: auto !important;
+    z-index: 0;
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area {
+    display: inline-block;
+    width: calc(100% - 220px);
+    vertical-align: top;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+.btn_arw_link {
+    display: inline-block;
+    font-size: 15px;
+    line-height: 23px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+    vertical-align: top;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+button[class^=btn_] .text, a[class^=btn_] .text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.btn_arw_link:after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 2px 0 0 6px;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/arw_anb_category_all@2x.png) 0% 0% no-repeat;
+    background-size: 16px 16px;
+    vertical-align: top;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .btn_arw_link + .fold_box_wrap.category {
+    margin-top: 17px;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .col_area {
+    display: inline-block;
+    width: calc((100% - 100px) / 3);
+    vertical-align: top;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .fold_box_list {
+    font-size: 0;
+}
+
+ol, ul {
+    list-style: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .fold_box_list .fold_box {
+    display: block;
+    width: 100%;
+    background-color: #fff;
+    border: none;
+    vertical-align: top;
+}
+
+.fold_box_wrap .fold_box {
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .fold_box_list .fold_box .fold_box_header {
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    padding: 0 10px 0 0;
+    cursor: auto;
+}
+
+.fold_box_wrap .fold_box .fold_box_header {
+    position: relative;
+    padding: 21px 30px 20px 23px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 23px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+}
+.fold_box_wrap .fold_box .fold_box_header, .fold_box_wrap .fold_box .fold_box_contents {
+    padding: 0 23px;
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .fold_box_list .fold_box .fold_box_header .btn_fold {
+    width: 19px;
+    left: inherit;
+    right: 0;
+}
+
+.fold_box_wrap .fold_box .fold_box_header .btn_fold {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+button[class^=btn_], a[class^=btn_] {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+button {
+    appearance: auto;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    line-height: 0;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    /*font: 0 / 0 Arial;*/
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .fold_box_list .fold_box .fold_box_header:after {
+    width: 11px;
+    height: 11px;
+    right: 1px;
+    background-size: 11px 11px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_fold_menu_plus@2x.png);
+}
+
+.fold_box_wrap .fold_box .fold_box_header:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 11px;
+    height: 7px;
+    right: 20px;
+    top: 50%;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/arw_fold_toggle@2x.png) 0% 0% no-repeat;
+    background-size: 11px 7px;
+    transform: translateY(-50%);
+}
+.wrapper .header_wrapper .header_inner .gnb_wrap .anb_wrap .anb_area > .tab_wrap .tab_content.anb_category .anb_category_inner .tab_wrap.category .tab_content .category_view_area .fold_box_wrap.category .fold_box_list .fold_box .fold_box_header {
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    padding: 0 10px 0 0;
+    cursor: auto;
+}
+.fold_box_wrap .fold_box .fold_box_header {
+    position: relative;
+    padding: 21px 30px 20px 23px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 23px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+}
+.fold_box_wrap .fold_box .fold_box_contents {
+    height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.fold_box_wrap .fold_box .fold_box_header, .fold_box_wrap .fold_box .fold_box_contents {
+    padding: 0 23px;
+}
+ol, ul {
+    list-style: none;
+}
+
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+ul ul {
+    list-style-type: circle;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}

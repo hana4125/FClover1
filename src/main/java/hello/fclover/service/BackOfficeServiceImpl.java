@@ -8,12 +8,14 @@ import hello.fclover.mybatis.mapper.BackOfficeMapper;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BackOfficeServiceImpl implements BackOfficeService {
@@ -36,7 +38,8 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     @Override
     public void InsertdeliveryReadyList(Long orderId, String userId) {
 
-         String status = "ready";
+        log.info("==============> 여기는 백오피스컨트롤러 orderId: " + orderId + " userId: " + userId);
+         String status = "배송준비중";
 
           dao.insertDeliveryReadyList(orderId,userId,status);
     }
