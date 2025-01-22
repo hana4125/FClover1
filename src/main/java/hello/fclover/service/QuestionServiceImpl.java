@@ -59,7 +59,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("q_no", q_no);
-        map.put("start", startrow);
+        map.put("start", startrow -1);
         map.put("end", endrow);
         return dao.getCommentList(map);
     }
