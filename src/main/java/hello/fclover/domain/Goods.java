@@ -22,5 +22,6 @@ public class Goods {
     private int goodsPageCount;        // 상품 페이지 수
     private String goodsBookSize;      // 상품 크기
     private String wishStatus; // 'Y' 또는 'N'
+    private int rowNum; // 상품 순위
 }
 

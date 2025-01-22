@@ -9,13 +9,17 @@ import java.util.List;
 public interface GoodsService {
    void goodsSingleInsert(Goods goods, List<MultipartFile> images, String SellerNumber) throws IOException;
 
-//    List<Goods> getGoodsList(int cateNo, String sort, int page, int size);
-
     int getTotalGoodsCount(int cateNo);
+
+    int getTotalBestGoodsCount();
 
     Goods findGoodsByNo(Long goodsNo);
 
     // 찜 상태를 포함한 상품 목록 조회 메서드 추가
     List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size);
+
+    List<Goods> getGoodsList();
+
+    List<Goods> getGoodsWishStatus(Long memberNo, int page, int size);
 }
 

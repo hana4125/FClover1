@@ -339,10 +339,10 @@ public class MemberController {
         return "/user/userCart";
     }
 
-    @GetMapping("/bestSeller")
-    public String bestSeller() {
-        return "/user/userBestseller";
-    }
+//    @GetMapping("/bestSeller")
+//    public String bestSeller() {
+//        return "/user/userBestseller";
+//    }
 
     @GetMapping("/steadySeller")
     public String steadySeller() {
@@ -483,10 +483,6 @@ public class MemberController {
         List<Goods> goodsList = goodsService.getGoodsWithWishStatusList(memberNo, cateNo, sort, page, size);
         model.addAttribute("goodsList", goodsList);
 
-        // 상품 목록 가져오기
-//        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
-//        model.addAttribute("goodsList", goodsList);
-
         // 페이지네이션 정보 전달
         int totalItems = goodsService.getTotalGoodsCount(cateNo);
         int totalPages = (int) Math.ceil((double) totalItems / size);
@@ -496,6 +492,36 @@ public class MemberController {
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
         return "/user/userCategory"; // 카테고리 상세 페이지
+    }
+
+    @GetMapping("/bestSeller")
+    public String bestSeller(@ModelAttribute("member") Member member,
+                             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                             @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                             Model model) {
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 찜 상태가 포함된 상품 목록 조회
+        List<Goods> goodsList = goodsService.getGoodsWishStatus(memberNo, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 페이지네이션 정보 전달
+        int totalItems = goodsService.getTotalBestGoodsCount();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("size", size);
+        return "/user/userBestseller"; // 베스트 상세 페이지
     }
 
     @GetMapping("/gift")

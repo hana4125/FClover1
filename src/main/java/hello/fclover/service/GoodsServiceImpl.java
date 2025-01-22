@@ -51,6 +51,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public int getTotalBestGoodsCount() {
+        return goodsMapper.countBestGoods();
+    }
+
+    @Override
     public Goods findGoodsByNo(Long goodsNo) {
         return goodsMapper.findGoodsById(goodsNo);
     }
@@ -59,6 +64,17 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findGoodsWithWishStatus(memberNo, cateNo, sort, offset, size);
+    }
+
+    @Override
+    public List<Goods> getGoodsList() {
+        return goodsMapper.findByRank();
+    }
+
+    @Override
+    public List<Goods> getGoodsWishStatus(Long memberNo, int page, int size) {
+        int offset = (page - 1) * size;
+        return goodsMapper.findGoodsWishStatus(memberNo, offset, size);
     }
 
     private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {

@@ -17,27 +17,16 @@
             where seller_no = #{sellerNo} and goods_name=#{goodsName}
         </select>
 
-    <!-- 모든 카테고리에 있는 상품 조회 -->
-<!--    <select id="findAll" resultType="hello.fclover.domain.Goods">-->
-<!--        SELECT *-->
-<!--        FROM goods-->
-<!--        WHERE cate_no = #{cate_no}-->
-<!--        ORDER BY-->
-<!--        <choose>-->
-<!--            <when test="'latest'.equals(sort)">goods_date DESC</when>-->
-<!--            <when test="'sales'.equals(sort)">goods_count DESC</when>-->
-<!--            <when test="'highPrice'.equals(sort)">goods_price DESC</when>-->
-<!--            <when test="'lowPrice'.equals(sort)">goods_price ASC</when>-->
-<!--            <otherwise>goods_date DESC</otherwise>-->
-<!--        </choose>-->
-<!--        LIMIT #{offset}, #{size}-->
-<!--    </select>-->
-
     <!-- 전체 상품 수 계산 -->
     <select id="countGoods" resultType="int">
         SELECT COUNT(*)
         FROM goods
         WHERE cate_no = #{cateNo}
+    </select>
+
+    <select id="countBestGoods" resultType="int">
+        SELECT COUNT(*)
+        FROM goods
     </select>
 
     <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
@@ -99,4 +88,34 @@
         LIMIT #{offset}, #{size}
     </select>
 
+    <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        ORDER BY
+        goods_count DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="findByRank" resultType="hello.fclover.domain.Goods">
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS row_num,
+            goods_no,
+            goods_name,
+            goods_writer
+        FROM goods
+        ORDER BY
+            goods_count DESC;
+    </select>
 </mapper>

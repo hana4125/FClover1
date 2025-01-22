@@ -21,6 +21,8 @@ public interface GoodsMapper {
 
     int countGoods(int cate_no);
 
+    int countBestGoods();
+
     Goods findGoodsById(long goodsNo);
 
     List<Goods> findGoodsByKeyword(@Param("keyword") String keyword);
@@ -35,4 +37,12 @@ public interface GoodsMapper {
             @Param("offset") Integer offset,
             @Param("size") Integer size
     );
+
+    List<Goods> findGoodsWishStatus(
+            @Param("memberNo") Long memberNo,
+            @Param("offset") Integer offset,
+            @Param("size") Integer size
+    );
+
+    List<Goods> findByRank();
 }
