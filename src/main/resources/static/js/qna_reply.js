@@ -75,12 +75,12 @@ $(function () {
 		$(".float-left").text("300");
 
 		if (buttonText == "등록") { // 댓글을 추가하는 경우
-			url = "/inquiry/add";
+			url = "/inquiry/add",
 			data = {
 				"ccontent": content,
-				"memberid": $("#loginid").text(),
+				"memberid": $("body > div:nth-child(1) > div.bg-light.mb-3 > div > div > a:nth-child(1) > span").text(),
 				"qno": $("#board_num").val()
-			};
+			}
 		} else { // 댓글을 수정하는 경우
 			url = "/inquiry/update";
 			data = {

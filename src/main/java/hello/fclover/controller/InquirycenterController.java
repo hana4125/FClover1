@@ -177,8 +177,8 @@ public class InquirycenterController {
     //문의사항 댓글
     @PostMapping(value = "/qlist")
     @ResponseBody
-    public Map<String, Object> CommentList(int q_no, int page) {
-        List<Question> qlist = questionService.getCommentList(q_no, page);
+    public Map<String, Object> CommentList(int qno, int page) {
+        List<Question> qlist = questionService.getCommentList(qno, page);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("qlist", qlist);
@@ -187,16 +187,19 @@ public class InquirycenterController {
     }
 
     @PostMapping(value = "/add")
+    @ResponseBody
     public int commentAdd(Question c) {
         return questionService.commentsInsert(c);
     }
 
     @PostMapping(value = "/update")
+    @ResponseBody
     public int commentUpdate(Question co) {
         return questionService.commentsUpdate(co);
     }
 
     @PostMapping(value = "/delete")
+    @ResponseBody
     public int commentDelete(int num) {
         return questionService.commentDelete(num);
     }

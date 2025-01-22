@@ -88,7 +88,7 @@
         <div class="content-area mb-4">
           <div th:text="${questiondata.qcontent}" class="mb-3"></div>
           <div th:if="${questiondata.qfile != null}" class="mt-2">
-            <img th:src="|/upload${questiondata.qfile}|" >
+            <img th:src="|/upload${questiondata.qfile}|" style="width:100px;">
 <!--<img th:src="@{'/display/image?filename=' + ${questiondata.qfile}}" class="question-image">-->
           </div>
         </div>
@@ -96,7 +96,7 @@
       <!--QnA 댓글 -->
         <div id="comment">
           <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-          <button id="write" class="btn btn-primary float-right">답변 작성</button>
+          <button id="write" class="btn btn-primary float-right">등록</button>
           <textarea rows="3" class="form-control" id="content" maxlength="300"></textarea>
           </th:block>
           <table class="table">
@@ -104,7 +104,10 @@
             </tbody>
           </table>
           <div id="message"></div>
+          <input type="hidden" name="num" th:value="${param.no}" id="board_num">
         </div>
+
+
 
       <!-- 공지사항 버튼-->
   <div class="d-flex justify-content-center mt-4">
