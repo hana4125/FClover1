@@ -8,7 +8,7 @@ on:
 
 #--------- 추가1
 env:
-  PROJECT_NAME: fclover #프로젝트 이름
+  PROJECT_NAME: FClover #프로젝트 이름
   BUCKET_NAME: fclover-goods-image #s3에 설정한 버킷이름
   CODE_DEPLOY_APP_NAME: FClover_cicd #codeDeploy의 애플리케이션 이름
   DEPLOYMENT_GROUP_NAME: fclover-instance #codeDeploy의 배포그룹 이름
