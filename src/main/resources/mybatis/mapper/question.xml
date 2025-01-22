@@ -66,24 +66,28 @@
     <select id="getCommentList" resultType="Question">
         SELECT *
         FROM (
-                 SELECT c_no, member_id, content, c_response_at, q_no
+                 SELECT c_no as cno,
+                        member_id as memberid,
+                        c_content as ccontent,
+                        c_response_at as cresponseat,
+                        q_no as qno
                  FROM comments
-                 WHERE q_no = #{qno}
+                 WHERE q_no = #{q_no}
                  ORDER BY c_response_at DESC
-                 LIMIT #{start}, #{end}
+                     LIMIT #{start}, #{end}
              ) AS result
     </select>
 
     <insert id="commentsInsert">
         INSERT INTO comments (member_id, c_content, c_response_at, q_no)
-        VALUES (#{id}, #{content}, NOW(), #{board_num});
+        VALUES (#{memberid}, #{ccontent}, NOW(), #{qno});
     </insert>
 
 
 
     <update id="commentsUpdate">
         update comments
-        set content=#{content}
+        set c_content=#{ccontent}
         where c_no = #{cno}
     </update>
 

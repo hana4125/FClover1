@@ -1,6 +1,4 @@
 package hello.fclover.controller;
-
-
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
 import hello.fclover.domain.PaginationResult;
@@ -17,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -179,8 +176,9 @@ public class InquirycenterController {
 
     //문의사항 댓글
     @PostMapping(value = "/qlist")
-    public Map<String, Object> CommentList(int board_num, int page) {
-        List<Question> qlist = questionService.getCommentList(board_num, page);
+    @ResponseBody
+    public Map<String, Object> CommentList(int q_no, int page) {
+        List<Question> qlist = questionService.getCommentList(q_no, page);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("qlist", qlist);
