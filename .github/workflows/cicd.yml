@@ -32,8 +32,8 @@ jobs:
         run: ./mvnw clean install -DskipTests
 
 #----------추가2
-      - name: Make JAR File
-        run: jar -qq -r ./$GITHUB_SHA.jar target/*.jar
+      - name: Rename JAR File
+        run: mv target/*.jar ./$GITHUB_SHA.jar
         shell: bash
 
       - name: Configure AWS credentials
