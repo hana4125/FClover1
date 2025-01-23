@@ -3,7 +3,7 @@
 REPOSITORY=/home/ubuntu/fclover
 cd $REPOSITORY
 
-APP_NAME=FClover_cicd
+APP_NAME=FClover
 #JAR_NAME=$(ls $REPOSITORY/target/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_NAME=$(find $REPOSITORY/target/ -name "*.*-SNAPSHOT.jar" | sort | tail -n 1)
 JAR_PATH=$REPOSITORY/target/$JAR_NAME
