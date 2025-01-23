@@ -415,7 +415,7 @@ public class MemberController {
 
         model.addAttribute("orderId", orderId);
 
-        return "user/mypage/userOrderListDetail";
+        return "user/mypage/userOrderlistDetail";
     }
 
     //포트원 결제
