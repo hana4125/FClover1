@@ -14,7 +14,6 @@ spring:
             scope:
               - profile
               - email
-
           naver:
             client-id: ENC(8lpicoAlvXa3VOLlgvISDhvdiSwZ/Ezhoe2b41gdIbqkqZctCqbJkLnwJmLCdVXO8K4T3d7UyQuidNQ5wAGBdA==)
             client-secret: ENC(kpSclERDaSXREEGPaxEsDACUq6nnKaqV6pIlko7+urOX4uQnfIpK9AT5HwI9MpPn)
