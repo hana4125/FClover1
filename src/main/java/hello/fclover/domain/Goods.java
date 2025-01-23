@@ -1,6 +1,12 @@
 package hello.fclover.domain;
 
-import java.math.BigInteger;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Goods {
-    private BigInteger goodsNo;              // 상품 일련번호
+    private Long goodsNo;              // 상품 일련번호
     private Long sellerNo;             // 판매자 번호
     private Integer cateNo;            // 카테고리 번호
     private String goodsName;          // 상품 명
