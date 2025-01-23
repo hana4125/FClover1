@@ -13,16 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -33,19 +28,18 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageMapper;
-    private AmazonS3 amazonS3;
 
-//    @Value("${cloud.aws.s3.bucket}")
+    private final AmazonS3 amazonS3;
+
+    @Value("${cloud.aws.s3.bucket}")
     String bucket;
-
     GoodsImage goodsImage = new GoodsImage();
 
     @Override
     @Transactional
     public void goodsSingleInsert(Goods goods, List<MultipartFile> images, String sellerNumber) throws IOException {
         int result = goodsMapper.goodsInsertText(goods);
-
-        int goodsNo = goodsMapper.goodsNoselect(String.valueOf(goods.getSellerNo()), goods.getGoodsName());
+        Long goodsNo = goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName());
         System.out.println(goodsNo);
         if (result > 0 && images.size() > 0) {
             goodsInsertImage(images, sellerNumber, goodsNo);
@@ -82,23 +76,17 @@ public class GoodsServiceImpl implements GoodsService {
         List<String> images = new ArrayList<>();
         String result = null;
         for (Map<String, String> imageName : imageNames) {
-            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                //캐시 사용 설정 해제
-                ImageIO.setUseCache(false);
-                //아마자 경로
+                //이미지 경로
                 String name = imageName.get("goods_image_name");
                 String imageUrl = imageName.get("goods_url") + File.separator + name;
 
                 images.add(imageUrl);
-            } catch (Exception e) {
-                System.out.println("e.getMessage() = " + e.getMessage());
-            }
 
         }
         return images;
     }
 
-    private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, int goodsNo) throws IOException {
+    private void goodsInsertImage(List<MultipartFile> images, String sellerNumber, Long goodsNo) throws IOException {
         boolean IsFirstImage = true;
         ObjectMetadata objectMetadata = new ObjectMetadata();
 
@@ -112,14 +100,14 @@ public class GoodsServiceImpl implements GoodsService {
                 //이미지 저장 폴더 이름 = 사업자 등록 번호
                 imageSaveFolder = sellerNumber.replace("-", "");
 
-                amazonS3.putObject(bucket, imageSaveFolder + File.separator, new ByteArrayInputStream(new byte[0]), new ObjectMetadata());
+//                amazonS3.putObject(bucket, imageSaveFolder + File.separator, new ByteArrayInputStream(new byte[0]), new ObjectMetadata());
 
                 objectMetadata.setContentType(image.getContentType());
                 objectMetadata.setContentLength(image.getSize());
                 objectMetadata.setHeader("filename", image.getOriginalFilename());
-                amazonS3.putObject(new PutObjectRequest(bucket + imageSaveFolder, imageDBName, image.getInputStream(), objectMetadata));
+                amazonS3.putObject(new PutObjectRequest(bucket, imageSaveFolder + File.separator + imageDBName, image.getInputStream(), objectMetadata));
 
-                imageUrl = bucket  + File.separator + imageSaveFolder;
+                imageUrl = getS3Url(imageDBName) + imageSaveFolder;
 
             }
             if (IsFirstImage) {
@@ -130,15 +118,21 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsImage.setIsMain("S");
             }
             System.out.println("goodsImage = " + goodsImage.getIsMain());
-            //파일 업로드
-            image.transferTo(new File(imageUrl, imageDBName));
+//            //로컬 파일 업로드
+//            image.transferTo(new File(imageUrl, imageDBName));
 
-            goodsImage.setGoodsNo(BigInteger.valueOf(goodsNo));
+            goodsImage.setGoodsNo(Long.valueOf(goodsNo));
             goodsImage.setGoodsUrl(imageUrl);
             goodsImage.setGoodsImageName(imageDBName);
             //상품 이미지 저장.
             imageMapper.goodsInsertImage(goodsImage);
         }
+    }
+
+    private String getS3Url(String imageDBName) {
+        String urlString = amazonS3.getUrl(bucket, imageDBName).toString();
+        int lastIndexOf = urlString.lastIndexOf("/");
+        return urlString.substring(0, lastIndexOf + 1);
     }
 
     private String imageReName(String fileName) {
