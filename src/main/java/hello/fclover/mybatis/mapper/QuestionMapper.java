@@ -27,4 +27,6 @@ public interface QuestionMapper {
     int commentDelete(int num);
 
     int commentsUpdate(Question co);
+
+    String getQvalue(String qtype);
 }

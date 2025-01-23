@@ -1,0 +1,164 @@
+.info_search-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+}
+
+.input_btn_box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.input_btn_box .form-control {
+    width: 408px;
+    height: 44px;
+    margin-right: 10px;
+}
+
+.input_btn_box .btn-primary {
+    height: 44px;
+}
+
+.form_box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.form_cont {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.date_picker_box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.period-select {
+    height: 42px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: no-repeat right 5px center;
+    background-color: white;
+    background-size: 20px;
+    padding-right: 30px;
+}
+
+.date-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-picker-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    width: 200px;
+    height: 42px;
+    background-color: white;
+}
+
+.date-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+}
+
+.calendar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.calendar-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.form_title .form_label {
+    font-weight: bold;
+    font-size: 18px;
+}
+.date_picker_box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.form_title .form_label {
+    font-weight: bold;
+}
+.period-select {
+    height: 42px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 5px center;
+    background-color: white !important;
+    background-size: 20px;
+    padding-right: 30px;
+}
+.period-select:focus {
+    outline: none;
+    border-color: #ccc;
+    box-shadow: none;
+
+}
+.date-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.date-picker-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    width: 200px;
+    height: 42px;
+}
+.date-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+}
+.calendar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.calendar-btn img {
+    width: 20px;
+    height: 20px;
+}
+

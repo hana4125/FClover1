@@ -6,12 +6,15 @@
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
+  <script src="/js/qna_reply.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
   <link rel="stylesheet" href="/css/user/noticedetail.css">
   <link rel="stylesheet" href="/css/user/qnadetail.css">
   <link rel="icon" th:href="@{/images/user/favicon.png}">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -57,7 +60,7 @@
                   <a href="/" class="sd_link">메인</a>
                 </li>
                 <li class="side_item">
-                  <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
+                  <a href="/inquiry/notice/noti_list" class="sd_link">공지사항</a></li>
                 <li class="side_item">
                   <a href="/inquiry/question" class="sd_link">문의하기</a>
                 </li>
@@ -71,7 +74,7 @@
     <div class="flex-grow-1" style="max-width: 800px; margin: 0 auto;">
       <div class="content-wrapper px-4">
         <div>
-        <span class="qna_kind" th:text="${questiondata.qtype}"></span>
+        <span class="qna_kind" th:text="${qValue}"></span>
         </div>
         <div>
         <p class="title_heading" th:text="${questiondata.qtitle}"></p>
@@ -82,28 +85,29 @@
           <span class="date" th:text="${questiondata.qcreateat}"></span>
           <hr>
         </div>
-        <div class="content-area mb-4" th:text="${questiondata.qcontent}">
-          <!--여기 사진 나오게 만들기-->
-          <button class="update_btn">수정</button>
-          <button class="delete_btn" data-toggle="modal" data-target="#myModal">삭제</button>
+        <div class="content-area mb-4">
+          <div th:text="${questiondata.qcontent}" class="mb-3"></div>
+          <div th:if="${questiondata.qfile != null}" class="mt-2">
+            <img th:src="|/upload${questiondata.qfile}|" style="width:100px;">
+<!--<img th:src="@{'/display/image?filename=' + ${questiondata.qfile}}" class="question-image">-->
+          </div>
         </div>
 
-
+      <!--QnA 댓글 -->
         <div id="comment">
           <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-          <button id="write" class="btn btn-primary float-right">답변 작성</button>
+          <button id="write" class="btn btn-primary float-right">등록</button>
           <textarea rows="3" class="form-control" id="content" maxlength="300"></textarea>
           </th:block>
           <table class="table">
-            <thead>
-            <tr>
-
-            </tr>
-            </thead>
-            <tbody></tbody>
+            <tbody>
+            </tbody>
           </table>
           <div id="message"></div>
+          <input type="hidden" name="num" th:value="${param.no}" id="board_num">
         </div>
+
+
 
       <!-- 공지사항 버튼-->
   <div class="d-flex justify-content-center mt-4">
