@@ -2,14 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <th:block th:fragment="paging(url, params)">
+
     <div class="center-block mt-5">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:if="${page <= 1}">
-                <a class="page-link gray"><</a>
+                <a class="page-link gray" style= "border-top-left-radius:50%;border-bottom-left-radius:50%"><</a>
             </li>
 
             <li class="page-item" th:if="${page > 1}">
-                <a th:href="@{|${url}?page=${page - 1}${params}|}" class="page-link"><</a>
+                <a th:href="@{|${url}?page=${page - 1}${params}|}" class="page-link" style= "border-top-left-radius:50%;border-bottom-left-radius:50%"><</a>
             </li>
 
             <li th:class="${a == page} ? 'page-item active' : 'page-item'"
@@ -21,10 +22,10 @@
             </li>
 
             <li class="page-item" th:if="${page >= maxpage}">
-                <a class="page-link gray">></a>
+                <a class="page-link gray" style= "border-top-right-radius:50%;border-bottom-right-radius:50%">></a>
             </li>
             <li class="page-item" th:if="${page < maxpage}">
-                <a th:href="@{|${url}?page=${page + 1}${params}|}" class="page-link">></a>
+                <a th:href="@{|${url}?page=${page + 1}${params}|}" class="page-link" style= "border-top-right-radius:50%;border-bottom-right-radius:50%"> ></a>
             </li>
         </ul>
     </div>

@@ -52,6 +52,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public int getSearchListCount( String search_word) {
         Map<String, Object> map = new HashMap<String, Object>();
+
             map.put("search_word",  "%"+ search_word + "%");
 
         return dao.getSearchListCount(map);
