@@ -145,7 +145,7 @@ public class MemberController {
         Member findMember = memberService.findMemberById(memberId);
         model.addAttribute("member", findMember);
 
-        return "/user/userFindIdOk";
+        return "user/userFindIdOk";
     }
 
     @GetMapping("/reset-password")
@@ -203,7 +203,7 @@ public class MemberController {
     @GetMapping("/myPage")
     public String myPageMain() {
 
-        return "/user/mypage/userMyPageMain";
+        return "user/mypage/userMyPageMain";
     }
 
     @GetMapping("/myPage/addressBook")
@@ -282,7 +282,7 @@ public class MemberController {
     @GetMapping("/myPage/info/modify")
     public String memberUpdateForm() {
 
-        return "/user/mypage/userMyPageInfoUpdateForm";
+        return "user/mypage/userMyPageInfoUpdateForm";
     }
 
     @GetMapping("/myPage/info/delete")
@@ -301,7 +301,7 @@ public class MemberController {
     @GetMapping("/myPage/profile")
     public String profile() {
 
-        return "/user/mypage/userMyPageProfile";
+        return "user/mypage/userMyPageProfile";
     }
 
     @GetMapping("/myPage/delete-profile-picture")
@@ -332,27 +332,27 @@ public class MemberController {
 
     @GetMapping("/myPage/wishlist")
     public String myPageWishlist() {
-        return "/user/mypage/userMyPageWishlist";
+        return "user/mypage/userMyPageWishlist";
     }
 
     @GetMapping("/cart")
     public String cart() {
-        return "/user/userCart";
+        return "user/userCart";
     }
 
     @GetMapping("/bestSeller")
     public String bestSeller() {
-        return "/user/userBestseller";
+        return "user/userBestseller";
     }
 
     @GetMapping("/steadySeller")
     public String steadySeller() {
-        return "/user/userSteadyseller";
+        return "user/userSteadyseller";
     }
 
     @GetMapping("/newItems")
     public String newItems() {
-        return "/user/userNewItems";
+        return "user/userNewItems";
     }
 
     @GetMapping("/sellerSignup")
@@ -403,7 +403,7 @@ public class MemberController {
         System.out.println("principal = " + principal.getName());
         System.out.println("===========>여기는 controller ===============payment = " + payment);
         model.addAttribute("list", payment);
-        return "/user/mypage/userOrderlist";
+        return "user/mypage/userOrderlist";
     }
 
 
@@ -415,7 +415,7 @@ public class MemberController {
 
         model.addAttribute("orderId", orderId);
 
-        return "user/mypage/userOrderListDetail";
+        return "user/mypage/userOrderlistDetail";
     }
 
     //포트원 결제
@@ -449,55 +449,51 @@ public class MemberController {
     }
 
 
-    @GetMapping("/goodsDetail/{no}")
-    public String goodsDetail(@PathVariable("no") Long goodsNo, Model model) {
-        // 카테고리 데이터 가져오기
-        Goods goods = goodsService.findGoodsByNo(goodsNo);
-
-        model.addAttribute("goods", goods);
-        return "/user/userGoodsDetail";
-    }
-
-    @GetMapping("/category/{no}")
-    public String categoryDetail(@PathVariable("no") int cate_no,
-                                 @ModelAttribute("member") Member member,
-                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
-                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
-                                 Model model) {
-
-        // 카테고리 데이터 가져오기
-        List<Category> categoryList = categoryService.getCategoryList();
-        model.addAttribute("categoryList", categoryList);
-        // 상품 목록 가져오기
-        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
-        model.addAttribute("goodsList", goodsList);
-
-        // 페이지네이션 정보 전달
-        int totalItems = goodsService.getTotalGoodsCount(cate_no);
-        int totalPages = (int) Math.ceil((double) totalItems / size);
-
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("sort", sort);
-        model.addAttribute("size", size);
-
-        if (member != null) {
-            Long memberNo = member.getMemberNo();
-            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
-            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
-        } else {
-            // If the user is not logged in, pass an empty list
-            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
-        }
-
-
-        return "/user/userCategory"; // 카테고리 상세 페이지
-    }
-
-    @GetMapping("/gift")
-    public String gift() {
+    @GetMapping("/GoodsDetail")
+    public String GoodsDetail() {
         System.out.println("====");
-        return "/user/gift";
+        return "user/userGoodsDetail";
     }
+
+//    @GetMapping("/category/{no}")
+//    public String categoryDetail(@PathVariable("no") int cate_no,
+//                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+//                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+//                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+//                                 Model model) {
+//
+//        // 카테고리 데이터 가져오기
+//        List<Category> categoryList = categoryService.getCategoryList();
+//        model.addAttribute("categoryList", categoryList);
+//        // 상품 목록 가져오기
+//        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
+//        model.addAttribute("goodsList", goodsList);
+//
+//        // 페이지네이션 정보 전달
+//        int totalItems = goodsService.getTotalGoodsCount(cate_no);
+//        int totalPages = (int) Math.ceil((double) totalItems / size);
+//
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", totalPages);
+//        model.addAttribute("sort", sort);
+//        model.addAttribute("size", size);
+//
+//        if (member != null) {
+//            Long memberNo = member.getMemberNo();
+//            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
+//            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
+//        } else {
+//            // If the user is not logged in, pass an empty list
+//            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
+//        }
+//
+//
+//        return "/user/userCategory"; // 카테고리 상세 페이지
+//    }
+//
+//    @GetMapping("/gift")
+//    public String gift() {
+//        System.out.println("====");
+//        return "/user/gift";
+//    }
 }
