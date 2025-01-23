@@ -3,7 +3,7 @@
 REPOSITORY=/home/ubuntu/fclover
 cd $REPOSITORY
 
-APP_NAME=FClover
+APP_NAME=java
 #JAR_NAME=$(ls $REPOSITORY/target/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_NAME=$(find $REPOSITORY/target/ -name "*.*-SNAPSHOT.jar" | sort | tail -n 1)
 JAR_PATH=$REPOSITORY/target/$JAR_NAME
@@ -24,4 +24,4 @@ echo "> Deploy - $JAR_NAME "
 #java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
 #nohup java -jar $JAR_PATH > /home/ubuntu/deploy.log 2>&1 &
 #nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
-nohup JASYPT_ENCRYPTOR_PASSWORD=fClover java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
+nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
