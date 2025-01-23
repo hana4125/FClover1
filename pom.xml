@@ -213,6 +213,13 @@
             <version>3.1.5</version>  <!-- 최신 버전으로 변경 가능 -->
         </dependency>
 
+        <!-- 상품 더미데이터 생성을 위한 라이브러리 -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -220,14 +227,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

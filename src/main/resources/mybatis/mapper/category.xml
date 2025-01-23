@@ -10,4 +10,10 @@
         SELECT cate_no, cate_name
         FROM category
     </select>
+
+    <!-- 카테고리 개수 조회 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM category
+    </select>
+
 </mapper>

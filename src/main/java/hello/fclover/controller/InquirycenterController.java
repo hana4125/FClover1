@@ -1,6 +1,4 @@
 package hello.fclover.controller;
-
-
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
 import hello.fclover.domain.PaginationResult;
@@ -15,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -42,25 +42,6 @@ public class InquirycenterController {
     }
 
     //공지사항
-    @GetMapping("/notice")
-    public String notice(
-            @RequestParam(defaultValue = "1") int page, Model m) {
-
-        int limit = 10;
-        int listcount = noticeService.getListCount();
-        List<Notice> list = noticeService.getBoardList(page, limit);
-
-        PaginationResult result = new PaginationResult(page, limit, listcount);
-        m.addAttribute("page", page);
-        m.addAttribute("maxpage", result.getMaxpage());
-        m.addAttribute("startpage", result.getStartpage());
-        m.addAttribute("endpage", result.getEndpage());
-        m.addAttribute("listcount", listcount);
-        m.addAttribute("noticelist", list);
-        m.addAttribute("limit", limit);
-        return "user/userNotice";
-    }
-
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/notice/write")
     public String noticeWrite() {
@@ -70,7 +51,7 @@ public class InquirycenterController {
     @PostMapping(value ="/notice/add")
     public String noticeAdd(Notice notice) {
         noticeService.insertNotice(notice);
-        return "redirect:/inquiry/notice";
+        return "redirect:/inquiry/notice/noti_list";
     }
 
     //공지사항 보기
@@ -97,7 +78,7 @@ public class InquirycenterController {
     @GetMapping(value = "/notice/noti_list")
     public ModelAndView noticeList(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "3") int limit,
+            @RequestParam(defaultValue = "10") int limit,
             ModelAndView mv,
             @RequestParam(defaultValue = "") String search_word)
     {
@@ -119,6 +100,7 @@ public class InquirycenterController {
         mv.addObject("noticelist",list);
         mv.addObject("search_word",search_word);
         mv.addObject("limit",limit);
+        mv.addObject("listcount",listcount);
         return mv;
     }
 
@@ -148,13 +130,19 @@ public class InquirycenterController {
     }
 
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question, @RequestParam(required = false) String qalert) {
+    public String noticeAdd(Question question, @RequestParam(required = false) String qalert) throws Exception {
         // qalert 값이 null일 경우 "n"으로 설정
         if (qalert == null || (!qalert.equalsIgnoreCase("y") && !qalert.equalsIgnoreCase("n"))) {
             question.setQalert("n");
         } else {
-
             question.setQalert(qalert.equalsIgnoreCase("y") ? "y" : "n");
+        }
+
+        MultipartFile uploadfile = question.getUploadfile();
+        if (!uploadfile.isEmpty()) {
+            String fileDBName = questionService.saveUploadFile(uploadfile, "D://temp");
+            question.setQfile(fileDBName); //바뀐 파일명으로 저장
+
         }
 
         questionService.insertQuestion(question);
@@ -169,6 +157,7 @@ public class InquirycenterController {
             String beforeURL, HttpSession session) {
 
         Question question = questionService.Detail(no);
+        String qValue = questionService.getQvalue(question.getQtype());
 
         if (question == null) {
             mv.setViewName("error/error");
@@ -177,9 +166,57 @@ public class InquirycenterController {
         }else {
             mv.setViewName("user/userQNADetail");
             mv.addObject("questiondata", question);
+            mv.addObject("qValue", qValue);
+
         }
         return mv;
     }
+
+
+
+    //문의사항 댓글
+    @PostMapping(value = "/qlist")
+    @ResponseBody
+    public Map<String, Object> CommentList(int qno, int page) {
+        List<Question> qlist = questionService.getCommentList(qno, page);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("qlist", qlist);
+
+        return map;
+    }
+
+    @PostMapping(value = "/add")
+    @ResponseBody
+    public int commentAdd(Question c) {
+        return questionService.commentsInsert(c);
+    }
+
+    @PostMapping(value = "/update")
+    @ResponseBody
+    public int commentUpdate(Question co) {
+        return questionService.commentsUpdate(co);
+    }
+
+    @PostMapping(value = "/delete")
+    @ResponseBody
+    public int commentDelete(int num) {
+        return questionService.commentDelete(num);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

@@ -1,13 +1,20 @@
 package hello.fclover.controller;
 
+import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
-import hello.fclover.dto.SearchDetailForm;
+import hello.fclover.domain.Member;
+import hello.fclover.dto.GoodsSearchParam;
+import hello.fclover.service.CategoryService;
+import hello.fclover.service.MemberService;
 import hello.fclover.service.SearchService;
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +26,18 @@ import org.springframework.web.servlet.ModelAndView;
 public class SearchController {
 
     private final SearchService searchService;
+    private final CategoryService categoryService;
+    private final MemberService memberService;
+
+    @ModelAttribute("member")
+    public Member addMemberToModel(Principal principal) {
+
+        if (principal != null) {
+            String memberId = principal.getName();
+            return memberService.findMemberById(memberId);
+        }
+        return null;
+    }
 
     // 키워드 검색 기능
     @GetMapping("/searchKeyword")
@@ -29,13 +48,15 @@ public class SearchController {
 
         ModelAndView mv = new ModelAndView();
 
-        int totalCount = searchService.countByKeyword(keyword);
-
         int offset = (page - 1) * size;
 
-        List<Goods> searchResults = searchService.searchByKeyword(keyword, sort, offset, size);
+        Map<String, Object> result = searchService.searchByKeyword(keyword, sort, offset, size);
+
+        int totalCount = (int) result.get("totalCount");
 
         int totalPages = (int) Math.ceil((double) totalCount / size);
+
+        List<Goods> searchResults = (List<Goods>) result.get("searchResults");
 
         mv.setViewName("user/userSearchResult");
         mv.addObject("searchResults", searchResults);
@@ -44,27 +65,53 @@ public class SearchController {
         mv.addObject("currentPage", page);
         mv.addObject("totalPages", totalPages);
         mv.addObject("size", size);
+        mv.addObject("totalCount", totalCount);
 
         return mv;
     }
 
 
     @GetMapping("/searchDetail")
-    public String detailSearch() {
-        return "user/userSearchDetail";
+    public ModelAndView detailSearch() {
+
+        ModelAndView mv = new ModelAndView();
+
+        List<Category> categoryList = categoryService.getCategoryList();
+
+        mv.setViewName("user/userSearchDetail");
+        mv.addObject("categoryList", categoryList);
+
+        return mv;
     }
 
     // 상세 검색 기능
-//    @GetMapping("/searchDetailResult")
-//    public ModelAndView searchDetailResult(SearchDetailForm searchDetailForm) {
-//
-//        ModelAndView mv = new ModelAndView();
-//        List<Goods> searchDetailResult = searchService.searchDetail(searchDetailForm);
-//
-//        mv.setViewName("user/userSearchResult");
-//        mv.addObject("searchDetailForm", searchDetailForm);
-//        mv.addObject("searchDetailResult", searchDetailResult);
-//
-//        return mv;
-//    }
+    @GetMapping("/searchDetailResult")
+    public ModelAndView searchDetailResult(GoodsSearchParam param,
+            @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
+        ModelAndView mv = new ModelAndView();
+
+        int offset = (page - 1) * size;
+
+        Map<String, Object> result = searchService.searchDetail(param, sort, offset, size);
+
+        List<Goods> searchResults = (List<Goods>) result.get("searchResults");
+
+        int totalCount = (int) result.get("totalCount");
+
+        int totalPages = (int) Math.ceil((double) totalCount / size);
+
+
+        mv.setViewName("user/userSearchResult");
+        mv.addObject("searchResults", searchResults);
+        mv.addObject("keyword", param.getRepKeyword());
+        mv.addObject("sort", sort);
+        mv.addObject("currentPage", page);
+        mv.addObject("totalPages", totalPages);
+        mv.addObject("size", size);
+        mv.addObject("totalCount", totalCount);
+
+        return mv;
+    }
 }
