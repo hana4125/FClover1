@@ -12,7 +12,7 @@ import java.util.List;
 public interface GoodsMapper {
     int goodsInsertText(Goods goods);
 
-    int goodsNoselect(Long sellerNo, String goodsName);
+    Long goodsNoselect(Long sellerNo, String goodsName);
   
     List<Goods> findAll(@Param("cate_no") int cateNo,
                         @Param("sort") String sort,
