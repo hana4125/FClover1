@@ -91,7 +91,7 @@
                   <a href="/" class="sd_link">메인</a>
                 </li>
                 <li class="side_item">
-                  <a href="/inquiry/notice" class="sd_link">공지사항</a></li>
+                  <a href="/inquiry/notice/noti_list" class="sd_link">공지사항</a></li>
                 <li class="side_item">
                   <a href="/inquiry/question" class="sd_link">문의하기</a>
                 </li>
@@ -111,7 +111,7 @@
         </div>
 
         <!-- search box -->
-        <form method="get" action="notice/noti_list">
+        <form method="get" action="noti_list">
           <div class="info_search-box" style="height: 100px;">
             <div class="input_btn_box">
               <input type="hidden" name="search_field" value="title">
@@ -188,7 +188,7 @@
 
           <!--pagination-->
           <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice', '')}"/>
+            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice/noti_list', |&search_word=${search_word}|)}"/>
           </div>
 
           <!--admin 글쓰기-->

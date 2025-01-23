@@ -47,15 +47,19 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
 
+
+
+
+
     //댓글 서비스
     @Override
-    public List<Question> getCommentList(int board_num, int page) {
+    public List<Question> getCommentList(int q_no, int page) {
         int startrow = 1;
         int endrow = page * 3;
 
         Map<String, Integer> map = new HashMap<String, Integer>();
-        map.put("board_num", board_num);
-        map.put("start", startrow);
+        map.put("q_no", q_no);
+        map.put("start", startrow -1);
         map.put("end", endrow);
         return dao.getCommentList(map);
     }
@@ -74,6 +78,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public int commentsUpdate(Question co) {
         return dao.commentsUpdate(co);
+    }
+
+    @Override
+    public String getQvalue(String qtype) {
+        return dao.getQvalue(qtype);
     }
 
 

@@ -6,12 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Goods {
     private Long goodsNo;              // 상품 일련번호
     private Long sellerNo;             // 판매자 번호
@@ -27,5 +34,7 @@ public class Goods {
     private LocalDateTime goodsDate;   // 상품 등록일
     private int goodsPageCount;        // 상품 페이지 수
     private String goodsBookSize;      // 상품 크기
+
+
 }
 
