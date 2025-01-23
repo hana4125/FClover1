@@ -23,5 +23,5 @@ echo "> Deploy - $JAR_NAME "
 #nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
 #java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
 #nohup java -jar $JAR_PATH > /home/ubuntu/deploy.log 2>&1 &
-nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
-
+#nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
+nohup JASYPT_ENCRYPTOR_PASSWORD=your-encryption-password java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
