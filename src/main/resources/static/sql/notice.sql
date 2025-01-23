@@ -12,7 +12,7 @@ select * from NOTICE;
 
 drop table NOTICE;
 
-TRUNCATE TABLE NOTICE;
-
 commit;
 
+ALTER TABLE NOTICE
+    ADD FULLTEXT (noti_Title);

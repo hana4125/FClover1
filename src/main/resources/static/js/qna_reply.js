@@ -51,7 +51,6 @@ $(function () {
 						$("#message").text("");
 					}
 				} else {
-					$("#message").text("등록된 댓글이 없습니다.");
 					$("#comment tbody").empty();
 					$("#comment table").hide();
 				}
