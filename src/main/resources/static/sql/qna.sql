@@ -17,6 +17,9 @@ CREATE TABLE QnA(
     PRIMARY KEY (q_no)
 );
 
+# 배포테스트중
+
+
 DROP TABLE QnA;
 
 select * from QnA;
