@@ -145,7 +145,7 @@ public class MemberController {
         Member findMember = memberService.findMemberById(memberId);
         model.addAttribute("member", findMember);
 
-        return "/user/userFindIdOk";
+        return "user/userFindIdOk";
     }
 
     @GetMapping("/reset-password")
@@ -203,7 +203,7 @@ public class MemberController {
     @GetMapping("/myPage")
     public String myPageMain() {
 
-        return "/user/mypage/userMyPageMain";
+        return "user/mypage/userMyPageMain";
     }
 
     @GetMapping("/myPage/addressBook")
@@ -282,7 +282,7 @@ public class MemberController {
     @GetMapping("/myPage/info/modify")
     public String memberUpdateForm() {
 
-        return "/user/mypage/userMyPageInfoUpdateForm";
+        return "user/mypage/userMyPageInfoUpdateForm";
     }
 
     @GetMapping("/myPage/info/delete")
@@ -301,7 +301,7 @@ public class MemberController {
     @GetMapping("/myPage/profile")
     public String profile() {
 
-        return "/user/mypage/userMyPageProfile";
+        return "user/mypage/userMyPageProfile";
     }
 
     @GetMapping("/myPage/delete-profile-picture")
@@ -332,27 +332,27 @@ public class MemberController {
 
     @GetMapping("/myPage/wishlist")
     public String myPageWishlist() {
-        return "/user/mypage/userMyPageWishlist";
+        return "user/mypage/userMyPageWishlist";
     }
 
     @GetMapping("/cart")
     public String cart() {
-        return "/user/userCart";
+        return "user/userCart";
     }
 
     @GetMapping("/bestSeller")
     public String bestSeller() {
-        return "/user/userBestseller";
+        return "user/userBestseller";
     }
 
     @GetMapping("/steadySeller")
     public String steadySeller() {
-        return "/user/userSteadyseller";
+        return "user/userSteadyseller";
     }
 
     @GetMapping("/newItems")
     public String newItems() {
-        return "/user/userNewItems";
+        return "user/userNewItems";
     }
 
     @GetMapping("/sellerSignup")
@@ -403,7 +403,7 @@ public class MemberController {
         System.out.println("principal = " + principal.getName());
         System.out.println("===========>여기는 controller ===============payment = " + payment);
         model.addAttribute("list", payment);
-        return "/user/mypage/userOrderlist";
+        return "user/mypage/userOrderlist";
     }
 
 
@@ -452,7 +452,7 @@ public class MemberController {
     @GetMapping("/GoodsDetail")
     public String GoodsDetail() {
         System.out.println("====");
-        return "/user/userGoodsDetail";
+        return "user/userGoodsDetail";
     }
 
 //    @GetMapping("/category/{no}")
