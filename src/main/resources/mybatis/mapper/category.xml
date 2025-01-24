@@ -16,4 +16,10 @@
         FROM category
         WHERE cate_no = #{cateNo}
     </select>
+
+    <!-- 카테고리 개수 조회 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM category
+    </select>
+
 </mapper>

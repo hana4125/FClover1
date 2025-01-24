@@ -92,7 +92,10 @@
                 $(".steady-items").show();
                 $(".best-items").hide();
             })
+
         })
+
+
     </script>
 </head>
 <body>
@@ -109,9 +112,9 @@
         </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-<!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
-<!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
-<!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
+            <!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
+            <!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
+            <!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
             <a href="#" class="best ps-5 pe-5">베스트</a>
             <a href="#" class="new ps-5 pe-5">신상품</a>
             <a href="#" class="ps-5 pe-5">이벤트</a>
@@ -121,675 +124,204 @@
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
     <h4 class="text-center mb-3">카테고리</h4><br>
-    <!-- 하위 카테고리 리스트 -->
-    <div class="category-list">
-        <div class="category-column" th:each="categoryGroup : ${categoryGroups}">
-            <ul class="list-unstyled">
-                <li th:each="category : ${categoryGroup}">
-                    <a th:href="@{/category/{name}(name=${category})}" th:text="${category}"></a>
-                </li>
-            </ul>
-        </div>
-    </div>
+
 </div>
 
-<div class="container w-75 d-flex">
+<div class="container d-flex justify-content-center">
     <!--시작-->
 
-    <div class="prod_detail_header">
+    <div class="prod_detail_header" style="width: 75%">
         <br>
         <br>
-<!--        <h1 style="text-align: center;">소년이 온다</h1>-->
-            <h1 style="text-align: center;"><span class="item-name" th:text="${goods.goodsName}"></span></h1>
-<!--        <span class="prod_desc" style="text-align: center;">한강 장편소설 | 2024 노벨 문학상 수상작가</span>-->
+        <div class="goodsName" th:text="${goods.goodsName}"></div>
+        <hr>
+        <div class="prod_detail_view_wrap">
 
+            <div class="prod_detail_view_area">
 
-        <div class="header_contents_inner">
+                <div class="col_prod_info thumb">
+                    <div class="prod_thumb_swiper_wrap active">
+                        <div class="swiper-container prod_thumb_list_wrap swiper-container-fade swiper-container-horizontal">
+                            <div class="leftarrow" onclick="moveLeft()"><span><img class="prod_prev"
+                                                                                   src="../../images/user/prevarrow.png"
+                                                                                   alt="prev" draggable="false"></span>
 
-
-            <div class="prod_detail_title_wrap">
-                <div class="prod_title_area">
-
-<!--                    <div class="prod_title_box auto_overflow_wrap">-->
-
-
-<!--                        <div class="auto_overflow_contents">-->
-<!--                            <h2>소년이 온다</h2>-->
-<!--                            <div class="auto_overflow_inner">-->
-
-<!--                                <h1>-->
-<!--                                    소년이 온다-->
-<!--                                    <span class="prod_title"></span>-->
-<!--                                </h1>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="auto_overflow_footer">-->
-<!--                            <button type="button" class="btn_more_detail" data-role="btn-dialog" data-target="#popAllProdTitle1"><span class="text">더보기</span><span class="ico_plus"></span></button>-->
-<!--                        </div>-->
-                    </div>
-
-
-                    <div class="prod_desc_area">
-                        <div class="prod_desc_box auto_overflow_wrap">
-
-                            <div class="auto_overflow_contents">
-                                <div class="auto_overflow_inner" style="" id="subTitleArea">
-
-<!--                                    <span class="prod_desc" style="texxt-align: center;">한강 장편소설</span>-->
-
-
-
-                                    <!--디지털 교환상품이 경우 미노출 start-->
-
-
-
-
-
-
-
-
-
-
-
-<!--                                    <span class="gap"> | </span>-->
-<!--                                    <span class="prod_desc">2024 노벨문학상 수상작가</span>-->
-
-
-
-
-                                    <!--디지털 교환상품이 경우 미노출 end-->
-                                </div>
                             </div>
+                            <div class="rightarrow" onclick="moveRight()"><span><img class="prod_next"
+                                                                                     src="../../images/user/nextarrow.png"
+                                                                                     alt="next"
+                                                                                     draggable="false"></span></div>
+                            <ul class="swiper-wrapper" id="slideList">
+                                <th:block th:each="image : ${imageList}">
+                                    <li class="prod_thumb_item swiper-slide swiper-slide-visible swiper-slide-active"
+                                        style="width: 380px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
+                                        <div class="blur_img_wrap portrait">
+                                            <!-- 이미지 리스트를 반복하여 출력 -->
+                                            <img th:src="${image}" alt="Goods Image" width="400" height="600">
+                                        </div>
+                                    </li>
+                                </th:block>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
 
-
-
-            <div class="prod_detail_view_wrap">
-
-
-                <div class="prod_detail_type_area">
-                    <div class="prod_type_list_wrap">
-                        <ul class="prod_type_list">
-
-                            <li class="prod_type_item active">
-
-
-                                <a href="https://product.kyobobook.co.kr/detail/S000000610612" class="btn_prod_type disabled">
-                                    <span class="prod_type">국내도서</span>
-                                    <span class="prod_price">13,500원</span>
-                                </a>
-
-
-                            </li>
-
-                            <li class="prod_type_item">
-
-
-                                <a href="https://product.kyobobook.co.kr/detail/S000003558277" class="btn_prod_type">
-                                    <span class="prod_type">외국도서</span>
-                                    <span class="prod_price">9,500원</span>
-                                </a>
-
-
-                            </li>
-
-                            <li class="prod_type_item">
-
-
-                                <a href="https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000003088557" class="btn_prod_type">
-                                    <span class="prod_type">eBook</span>
-                                    <span class="prod_price">10,800원</span>
-                                </a>
-
-
-                            </li>
-                        </ul>
+                <div class="col_prod_info container">
+                    <div class="writerName_box row">
+                        <div class="writer_title col-md-3">작가</div>
+                        <div class="writer col-md-9" th:text="${goods.goodsWriter}"></div>
                     </div>
-                </div>
 
-
-
-
-                <div class="prod_detail_view_area">
-
-
-                    <div class="col_prod_info">
-
-                        <div class="prod_info_wrap">
-
-
-
-
-
-
-
-
-                            <div class="prod_author_box auto_overflow_wrap">
-                                <div class="auto_overflow_contents">
-                                    <div class="auto_overflow_inner">
-                                        <div class="author">
-
-
-<!--                                            <a href="https://search.kyobobook.co.kr/search?keyword=한강&amp;chrcCode=1000646901">한강</a>-->
-                                                <a href="https://search.kyobobook.co.kr/search?keyword=한강&amp;chrcCode=1000646901" th:text="${goods.goodsWriter}"></a>
-
-
-                                            저자(글)
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="auto_overflow_footer">
-                                    <button type="button" class="btn_more_detail" data-role="btn-dialog" data-target="#popAuthorView"><span class="text">더보기</span><span class="ico_plus"></span></button>
-                                </div>
-                            </div>
-
-
-
-
-
-
-
-
-
-
-
-                            <div class="prod_info_text publish_date">
-
-<!--                                <a href="https://search.kyobobook.co.kr/search?keyword=창비&amp;pbcmCode=PB17777" class="btn_publish_link">창비</a>-->
-                                <a href="https://search.kyobobook.co.kr/search?keyword=창비&amp;pbcmCode=PB17777" class="btn_publish_link"></a>
-
-                                ·
-
-<!--                                2014년 05월 19일-->
-                                <span class="item-create-at" th:text="${goods.goodsCreateAt}"></span>
-
-
-                            </div>
-
-
-
-                            <div class="prod_best_box">
-
-
-
-
-                                <!-- 정가제Free -->
-
-
-                                <a href="https://product.kyobobook.co.kr/bestseller/online?period=002&amp;dsplDvsnCode=001&amp;dsplTrgtDvsnCode=004&amp;saleCmdtClstCode=01" class="btn_best_link">
-                                    <div class="prod_best_title"><span class="text">주간베스트</span></div>
-                                    <div class="prod_best_text">
-
-                                        국내도서 <span class="rank">1</span>위
-                                        ·
-
-                                        소설 <span class="rank">1</span>위
-
-
-                                    </div>
-                                </a>
-
-
-
-
-
-
-
-                            </div>
-
-
-
+                    <br>
+                    <div class="prod_price_box row">
+                        <div class="prod_price_title col-md-3">가격</div>
+                        <div class="prod_price col-md-9">
+                                <span class="price"><span>[[${goods.goodsPrice}]]<span
+                                        class="unit">원</span></span></span>
 
                         </div>
 
                     </div>
+                    <br>
 
-
-
-
-                    <div class="col_prod_info thumb">
-                        <div class="prod_thumb_swiper_wrap active">
-                            <div class="swiper-container prod_thumb_list_wrap swiper-container-fade swiper-container-horizontal">
-                                <ul class="swiper-wrapper">
-
-                                    <li class="prod_thumb_item swiper-slide swiper-slide-visible swiper-slide-active" style="width: 380px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
-                                        <div class="blur_img_wrap portrait">
-                                            <div class="blur_img_box">
-                                                <!-- 만약 type이 'CMB'이면 -->
-
-
-
-                                                <!-- (type이 'CMB'도 아니고 'DGV'도 아닌 경우) -->
-                                                <img data-src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg" src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg" alt="소년이 온다 대표 이미지">
-                                            </div>
-                                            <div class="portrait_img_box portrait">
-                                                <!-- 만약 type이 'CMB'이면 -->
-
-                                                <!-- type이 'DGV'이면 -->
-
-                                                <!-- type이 'CMB'도 아니고 'DGV'도 아닌 경우) -->
-                                                <img src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg" alt="소년이 온다 대표 이미지">
-                                            </div>
+                    <div class="prod_guide_wrap row">
+                        <div class="prod_guide_title col-md-3">배송안내</div>
+                        <div class="prod_guide_cont col-md-9">
+                            <div class="delivery_guide_text">
+                                            <span id="OrderDeliveryType"
+                                                  class="delivery_type">도서 포함 15,000원 이상 무료배송</span>
+                                <div class="tooltip_wrap type_sm right">
+                                    <button type="button" class="btn_tooltip" data-btn-toggle="">
+                                        <span class="ico_info"></span>
+                                        <span class="hidden">툴팁열기</span>
+                                    </button>
+                                    <div class="tooltip_inner">
+                                        <div class="tooltip_header">
+                                            <div class="tooltip_head_title">배송비 안내</div>
                                         </div>
-                                    </li>
-
-
-                                    <li class="prod_thumb_item swiper-slide swiper-slide-next" style="width: 380px; opacity: 0; transform: translate3d(-380px, 0px, 0px);">
-                                        <div class="blur_img_wrap portrait">
-                                            <div class="blur_img_box">
-                                                <!-- 만약 type이 'CMB'이면 -->
-
-
-                                                <!-- 그렇지 않고, 만약 type이 'DGV'이면 -->
-
-
-                                                <!-- 그렇지 않으면 (type이 'CMB'도 아니고 'DGV'도 아닌 경우) -->
-                                                <img data-src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg" src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg" alt="소년이 온다 부가 이미지1">
-
+                                        <div class="tooltip_contents">
+                                            <div class="tooltip_sub_title">국내도서/외국도서</div>
+                                            <div class="tooltip_desc">
+                                                도서 포함 15,000원 이상 구매 시 무료배송
+                                                <br>도서+사은품 또는 도서+사은품+교보Only(교보굿즈)
                                             </div>
-                                            <div class="portrait_img_box portrait">
-                                                <!-- 만약 type이 'CMB'이면 -->
+                                            <p class="bul_item_asterisk font_size_xxs">15,000원 미만 시 2,500원
+                                                배송비
+                                                부과</p>
 
-
-                                                <!-- 그렇지 않고, 만약 type이 'DGV'이면 -->
-
-
-                                                <!-- 그렇지 않으면 (type이 'CMB'도 아니고 'DGV'도 아닌 경우) -->
-                                                <img src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg" alt="소년이 온다 부가 이미지1">
-
+                                            <div class="tooltip_sub_title">교보Only(교보배송)</div>
+                                            <div class="tooltip_desc">
+                                                각각 구매하거나 함께 20,000원 이상 구매 시 무료배송
                                             </div>
+                                            <p class="bul_item_asterisk font_size_xxs">20,000원 미만 시 2,500원
+                                                배송비
+                                                부과</p>
+
+                                            <div class="tooltip_sub_title">해외주문 서양도서/해외주문 일본도서(교보배송)</div>
+                                            <div class="tooltip_desc">
+                                                각각 구매하거나 함께 15,000원 이상 구매 시 무료배송
+                                            </div>
+                                            <p class="bul_item_asterisk font_size_xxs">15,000원 미만 시 2,500원
+                                                배송비
+                                                부과</p>
+
+                                            <div class="tooltip_sub_title">업체배송 상품(전집, GIFT, 음반/DVD 등)</div>
+                                            <div class="tooltip_desc">
+                                                해당 상품 상세페이지 "배송비" 참고 (업체 별/판매자 별 무료배송 기준 다름)
+                                            </div>
+
+                                            <div class="tooltip_sub_title">바로드림 오늘배송</div>
+                                            <div class="tooltip_desc">
+                                                업체에서 별도 배송하여 1Box당 배송비 2,500원 부과
+                                            </div>
+                                            <p class="bul_item_asterisk font_size_xxs">1Box 기준 : 도서 10권</p>
+
+                                            <div class="tooltip_sub_title">그 외 무료배송 기준</div>
+                                            <div class="tooltip_desc">
+                                                바로드림, eBook 상품을 주문한 경우, 플래티넘/골드/실버회원 무료배송쿠폰 이용하여 주문한 경우,
+                                                무료배송 등록
+                                                상품을 주문한 경우
+                                            </div>
+
                                         </div>
-                                    </li>
-
-
-
-
-
-
-                                    <li class="prod_thumb_item swiper-slide" style="width: 380px; opacity: 0; transform: translate3d(-760px, 0px, 0px);">
-                                        <div class="size_compare_box">
-                                            <div class="size_compare_inner">
-                                                <div class="compare_def_box" style="width: 184px; height: 261px;">
-                                                    <div class="paper_name">A4</div>
-                                                    <div class="paper_desc">사이즈 비교</div>
-                                                    <div class="paper_size">210x297</div>
-                                                </div>
-                                                <div class="compare_thumb_box" style=" width: 127px; height: 184px;">
-                                                    소년이 온다 사이즈 비교
-                                                    <span class="thumb_size">145x210</span>
-                                                </div>
-                                            </div>
-                                            <span class="unit">단위 : mm</span>
-                                        </div>
-                                    </li>
-
-
-
-
-
-                                </ul>
-                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
-                            <div class="swiper_control_box">
-                                <button type="button" class="swiper-button-prev swiper-button-disabled" tabindex="0" role="button" aria-label="Previous slide" aria-disabled="true"><span class="hidden">이전</span></button>
-                                <div class="swiper-pagination swiper-pagination-fraction"><span class="swiper-pagination-current">01</span> / <span class="swiper-pagination-total">03</span></div>
-                                <button type="button" class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide" aria-disabled="false"><span class="hidden">다음</span></button>
-                            </div>
-                            <div class="swiper_control_floating_box">
-                                <button type="button" class="btn_swiper_floating prev disabled"><span class="hidden">이전</span></button>
-                                <button type="button" class="btn_swiper_floating next"><span class="hidden">다음</span></button>
-
-                                <button type="button" class="btn_img_zoom" data-role="btn-dialog" data-target="#popImgZoom"><span class="text">크게보기</span></button>
-                            </div>
-                        </div>
-
-
-
-                        <div class="btn_wrap type_static">
-                            <button type="button" class="btn_xs btn_pill btn_line_gray" style="position:relative;" data-kbbfn="preview-item" data-kbbfn-pid="S000000610612">
-                                <span class="ico_preview"></span><span class="text">미리보기</span>
-                                <div class="bubble_speech_desc type_green type_green_fade_out preview_tooltip" style="left: 50%; bottom: -45px; transform: translateX(-50%); display:none">미리 본 책 선물드림!</div>
-                            </button>
-
-                            <button data-kbbfn="preview-item" data-kbbfn-pid="E000003088557" type="button" class="btn_xs btn_pill btn_line_gray" style="position:relative;">
-                                <span class="ico_ebook_preview"></span><span class="text">eBook 미리보기</span>
-
-                            </button>
-
-                        </div>
-
-
-                    </div>
-
-
-
-
-                    <div class="col_prod_info">
-
-                        <div class="prod_price_wrap">
-                            <div class="badge_list_box">
-
-                                <span class="badge_md badge_line_primary"><span class="text">2014년 05월 19일 오늘의 선택</span></span>
-
-                                <span class="badge_md badge_line_primary"><span class="text">MD의 선택</span></span>
-
-
-
-                                <span class="badge_md badge_line_gray"><span class="text">사은품</span></span>
-                                <span class="badge_md badge_line_gray"><span class="text">이벤트</span></span>
-                                <span class="badge_md badge_line_gray"><span class="text">소득공제</span></span>
-
-
-
-                            </div>
-                            <div class="prod_price_box">
-                                <div class="prod_price">
-                                    <span class="percent">10%</span>
-                                    <span class="price">
-                    <span class="val">13,500<span class="unit">원</span></span>
-                </span>
-                                    <span class="sale_price">
-                    <s class="val">15,000<span class="unit">원</span></s>
-                </span>
+                                        <button type="button" class="btn_tooltip_close"><span
+                                                class="hidden">툴팁닫기</span>
+                                        </button>
+                                    </div>
                                 </div>
-
                             </div>
-                        </div>
 
 
-                        <div class="prod_guide_wrap">
-                            <!-- 수정 230220 정가인하상품 가격표기 -->
-                            <!-- 정가인하 -->
+                            <div class="prod_guide_row">
+                                <div class="prod_guide_cont">
+                                    <div class="delivery_guide_text"><span
+                                            class="badge_sm badge_pill badge_primary"><span
+                                            class="text">새벽배송</span></span>
 
-                            <!-- //정가인하  -->
-                            <!-- //수정 230220 정가인하상품 가격표기 -->
-
-
-
-
+                                        <span id="OrderEstimatedDate"><span><strong
+                                                class="blue">내일(1/10,금 오전 7시 전) 도착</strong></span></span>
 
 
-                            <div class="prod_guide_box">
-
-                                <div class="prod_guide_row">
-                                    <div class="prod_guide_title">적립/혜택</div>
-                                    <div class="prod_guide_cont">
-                                        <div class="point_text">
-                                            750P
-
-                                            <div class="tooltip_wrap type_info right">
-                                                <button type="button" class="btn_tooltip" data-btn-toggle="">
-                                                    <span class="ico_arw"></span>
-                                                    <span class="hidden">툴팁열기</span>
-                                                </button>
-
-                                                <div class="tooltip_inner">
-                                                    <div class="tooltip_contents">
-
-                                                        <div class="tooltip_info_list">
-
-                                                            <div class="tooltip_info_item">
-                                                                <div class="title_wrap title_size_xxs">
-                                                                    <p class="title_heading">기본적립</p>
-                                                                </div>
-                                                                <div class="info_cont">
-                                                                    <p class="bul_item_branch font_size_min">
-                                                                        <span class="cont_title">5% 적립</span>
-                                                                        <span class="cont_desc">750P</span>
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="tooltip_info_item">
-                                                                <div class="title_wrap title_size_xxs">
-                                                                    <p class="title_heading">
-                                                                        <span>추가적립</span>
-                                                                        <button type="button" class="btn_info_popup" data-role="btn-dialog" data-target="#popAccrualPointGuide">
-                                                                            <span class="ico_question"></span>
-                                                                            <span class="hidden">팝업 열기</span>
-                                                                        </button>
-                                                                    </p>
-                                                                </div>
-                                                                <div class="info_cont">
-                                                                    <ul class="bul_list">
-                                                                        <li class="bul_item_dot font_size_min">
-                                                                            <span class="cont_title">5만원 이상 구매 시 추가</span>
-                                                                            <span class="cont_desc">2,000P</span>
-                                                                        </li>
+                                        <button type="button" class="btn_info_popup" data-role="btn-dialog"
+                                                data-target="#popDeliveryInfo">
+                                            <span class="ico_question"></span>
+                                            <span class="hidden">팝업 열기</span>
+                                        </button>
 
 
-                                                                        <li class="bul_item_dot font_size_min">
-                                                                            <span class="cont_title">3만원 이상 구매 시, 등급별 2~4% 추가</span>
-                                                                            <span class="cont_desc">최대 750P</span>
-                                                                        </li>
-
-                                                                        <li class="bul_item_dot font_size_min">
-                                                                            <span class="cont_title">리뷰 작성 시, e교환권 추가</span>
-                                                                            <span class="cont_desc">최대 300원</span>
-                                                                        </li>
-
-
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="tooltip_info_item">
-                                                                <div class="title_wrap title_size_xxs">
-                                                                    <p class="title_heading">부가혜택 안내</p>
-
-                                                                    <div class="right_area"><div class="benefit_link_box">
-                                                                        <a href="#" class="btn_link" data-role="btn-dialog" data-target="#popAffiliatePoints">제휴포인트</a>
-                                                                        <a href="#" class="btn_link" data-role="btn-dialog" data-target="#popBookIncomeDeduction">도서소득공제</a>
-                                                                        <a href="https://www.kyobobook.co.kr/benefit" class="btn_link">쿠폰/혜택</a>
-                                                                    </div></div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
                                     </div>
                                 </div>
 
                             </div>
 
 
-
-
-
-
-
-
-                            <div class="prod_guide_box">
-
-                                <div class="prod_guide_row">
-                                    <div class="prod_guide_title">배송안내</div>
-                                    <div class="prod_guide_cont">
-                                        <div class="delivery_guide_text">
-                                            <span id="OrderDeliveryType" class="delivery_type">도서 포함 15,000원 이상 무료배송</span>
-                                            <div class="tooltip_wrap type_sm right">
-                                                <button type="button" class="btn_tooltip" data-btn-toggle="">
-                                                    <span class="ico_info"></span>
-                                                    <span class="hidden">툴팁열기</span>
-                                                </button>
-                                                <div class="tooltip_inner">
-                                                    <div class="tooltip_header">
-                                                        <div class="tooltip_head_title">배송비 안내</div>
-                                                    </div>
-                                                    <div class="tooltip_contents">
-                                                        <div class="tooltip_sub_title">국내도서/외국도서</div>
-                                                        <div class="tooltip_desc">
-                                                            도서 포함 15,000원 이상 구매 시 무료배송
-                                                            <br>도서+사은품 또는 도서+사은품+교보Only(교보굿즈)
-                                                        </div>
-                                                        <p class="bul_item_asterisk font_size_xxs">15,000원 미만 시 2,500원 배송비 부과</p>
-
-                                                        <div class="tooltip_sub_title">교보Only(교보배송)</div>
-                                                        <div class="tooltip_desc">
-                                                            각각 구매하거나 함께 20,000원 이상 구매 시 무료배송
-                                                        </div>
-                                                        <p class="bul_item_asterisk font_size_xxs">20,000원 미만 시 2,500원 배송비 부과</p>
-
-                                                        <div class="tooltip_sub_title">해외주문 서양도서/해외주문 일본도서(교보배송)</div>
-                                                        <div class="tooltip_desc">
-                                                            각각 구매하거나 함께 15,000원 이상 구매 시 무료배송
-                                                        </div>
-                                                        <p class="bul_item_asterisk font_size_xxs">15,000원 미만 시 2,500원 배송비 부과</p>
-
-                                                        <div class="tooltip_sub_title">업체배송 상품(전집, GIFT, 음반/DVD 등)</div>
-                                                        <div class="tooltip_desc">
-                                                            해당 상품 상세페이지 "배송비" 참고 (업체 별/판매자 별 무료배송 기준 다름)
-                                                        </div>
-
-                                                        <div class="tooltip_sub_title">바로드림 오늘배송</div>
-                                                        <div class="tooltip_desc">
-                                                            업체에서 별도 배송하여 1Box당 배송비 2,500원 부과
-                                                        </div>
-                                                        <p class="bul_item_asterisk font_size_xxs">1Box 기준 : 도서 10권</p>
-
-                                                        <div class="tooltip_sub_title">그 외 무료배송 기준</div>
-                                                        <div class="tooltip_desc">
-                                                            바로드림, eBook 상품을 주문한 경우, 플래티넘/골드/실버회원 무료배송쿠폰 이용하여 주문한 경우, 무료배송 등록 상품을 주문한 경우
-                                                        </div>
-
-                                                    </div>
-                                                    <button type="button" class="btn_tooltip_close"><span class="hidden">툴팁닫기</span></button>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="prod_guide_row">
-
-
-
-                                    <div class="prod_guide_cont">
-                                        <div class="delivery_guide_text"><span class="badge_sm badge_pill badge_primary"><span class="text">새벽배송</span></span>
-
-                                            <span id="OrderEstimatedDate"><span><strong class="blue">내일(1/10,금 오전 7시 전) 도착</strong></span></span>
-
-
-                                            <button type="button" class="btn_info_popup" data-role="btn-dialog" data-target="#popDeliveryInfo">
-                                                <span class="ico_question"></span>
-                                                <span class="hidden">팝업 열기</span>
+                            <div class="prod_guide_row">
+                                <div class="prod_guide_cont">
+                                    <div class="delivery_guide_text">
+                                        <span class="fc_gray">기본배송지 기준</span>
+                                        <div class="tooltip_wrap type_sm right">
+                                            <button type="button" class="btn_tooltip"><span
+                                                    class="ico_info"></span><span class="hidden">툴팁열기</span>
                                             </button>
-
-
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-
-
-
-
-
-                                <div class="prod_guide_row">
-                                    <div class="prod_guide_cont">
-                                        <div class="delivery_guide_text">
-                                            <span class="fc_gray">기본배송지 기준</span>
-                                            <div class="tooltip_wrap type_sm right">
-                                                <button type="button" class="btn_tooltip"><span class="ico_info"></span><span class="hidden">툴팁열기</span></button>
-                                                <div class="tooltip_inner">
-                                                    <div class="tooltip_header">
-                                                        <div class="tooltip_head_title">배송일자 기준 안내</div>
-                                                    </div>
-                                                    <div class="tooltip_contents">
-                                                        <div class="tooltip_desc">
-                                                            로그인 : 회원정보에 등록된 기본배송지<br>
-                                                            로그아웃 : '서울시 종로구 종로1' 주소 기준
-                                                        </div>
-                                                    </div>
-                                                    <button type="button" class="btn_tooltip_close"><span class="hidden">툴팁닫기</span></button>
+                                            <div class="tooltip_inner">
+                                                <div class="tooltip_header">
+                                                    <div class="tooltip_head_title">배송일자 기준 안내</div>
                                                 </div>
+                                                <div class="tooltip_contents">
+                                                    <div class="tooltip_desc">
+                                                        로그인 : 회원정보에 등록된 기본배송지<br>
+                                                        로그아웃 : '서울시 종로구 종로1' 주소 기준
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn_tooltip_close"><span
+                                                        class="hidden">툴팁닫기</span>
+                                                </button>
                                             </div>
-
                                         </div>
+
                                     </div>
                                 </div>
-
-
-
-
-
-
-
-
-
-
-
-                                <div class="prod_guide_row nonmember">
-                                    <div class="prod_guide_cont">
-                                        <div class="prod_info_text">
-                                            <a href="javascript:void(0)" id="loginButton" class="point_text btn_text_link"><span class="text">로그인</span></a> 후 <strong>정확한 배송 안내</strong>를 받아보세요!
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-
-
                             </div>
-
-
-                        </div>
-
-
-
-                        <div class="btn_wrap justify overlap">
-
-
-<!--                            <button type="button" class="btn_sm btn_line_gray" data-role="btn-dialog" data-target="#popStock"><span class="ico_locate"></span><span class="text">매장 재고·위치</span></button>-->
-                        </div>
-<!--                        <button id="basket" type="button" class="btn_lg btn_line_primary mobonCart" onclick="'KOR' == 'KOR' ? window.EigeneCartFunc() : '';"><span class="text">장바구니</span></button>-->
-<!--                        <button id="basket" type="button" class="btn_lg btn_line_primary mobonCart" onclick="'KOR' == 'KOR' ? window.EigeneCartFunc() : '';"><span class="text">바로구매</span></button>-->
-
-<!--                        <div id="prodBuyWrap" class="btn_wrap overlap single">-->
-<!--&lt;!&ndash;                            <a href="javascript:void(0)" id="direct" type="button" class="btn_lg btn_line_primary"><span class="text">장바구니</span></a>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <a href="javascript:void(0)" id="buy" type="button" class="btn_lg btn_primary"><span class="text">바로구매</span></a>&ndash;&gt;-->
-<!--                            <a href="javascript:void(0)" id="direct" type="button" class="btn_lg btn_line_primary" style="display: inline-flex; justify-content: center; align-items: center; height: 40px; padding: 0 15px; border-radius: 5px; background-color: transparent; border: 2px solid #007bff; color: #007bff; font-size: 14px;">-->
-<!--                                <span class="text" style="display: inline-block; text-align: center;">장바구니</span>-->
-<!--                            </a>-->
-<!--                            <a href="javascript:void(0)" id="buy" type="button" class="btn_lg btn_primary" style="display: inline-flex; justify-content: center; align-items: center; height: 40px; padding: 0 15px; border-radius: 5px; background-color: #007bff; border: none; color: white; font-size: 14px;">-->
-<!--                                <span class="text" style="display: inline-block; text-align: center;">바로구매</span>-->
-<!--                            </a>-->
-<!--                        </div>-->
-
-                        <br>
-                        <br>
-                        <br>
-
-
-                        <div id="prodBuyWrap" class="btn_wrap overlap single" style="display: flex; justify-content: flex-start; gap: 10px;">
-                            <button type="button" class="btn_wish size_lg mobonWish" style="padding: 0px 10px;">
-                                <span class="ico_wish"></span><span class="hidden">찜하기</span>
-                            </button>
-                            <a href="#" id="direct" type="button" class="btn_lg btn_line_primary" style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px; background-color: transparent; border: 2px solid #5055b1; color : #5055b1;font-size: 14px;">
-                                <span class="text" style="display: inline-block; text-align: center;">장바구니</span>
-                            </a>
-                            <a href="/member/memberPay" id="buy" type="button" class="btn_lg btn_primary" style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px;  border: none; color: white; font-size: 14px;">
-                                <span class="text" style="display: inline-block; text-align: center;">바로구매</span>
-                            </a>
                         </div>
                     </div>
+                    <br>
+                    <br>
+                    <br>
 
+                    <div id="prodBuyWrap" class="btn_wrap overlap single"
+                         style="display: flex; justify-content: flex-start; gap: 10px;">
+                        <button type="button" class="btn_wish size_lg mobonWish" style="padding: 0px 10px;">
+                            <span class="ico_wish"></span><span class="hidden">찜하기</span>
+                        </button>
+                        <a href="#" id="direct" type="button" class="btn_lg btn_line_primary"
+                           style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px; background-color: transparent; border: 2px solid #5055b1; color : #5055b1;font-size: 14px;">
+                            <span class="text" style="display: inline-block; text-align: center;">장바구니</span>
+                        </a>
+                        <a href="/member/memberPay" id="buy" type="button" class="btn_lg btn_primary"
+                           style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px;  border: none; color: white; font-size: 14px;">
+                            <span class="text" style="display: inline-block; text-align: center;">바로구매</span>
+                        </a>
+                    </div>
 
                 </div>
 
@@ -799,35 +331,72 @@
         </div>
 
     </div>
-    <!--끝-->
+</div>
+<!--끝-->
 <!--    상품상세-->
-<div class="tab_list_wrap">
-    <div class="sps sps_scroll_fixed tab_list_inner sps--abv sps-abv" data-height-observe="data-height-observe" data-sps-offset="1113" style="">
+<div class="container tab_list_wrap w-75">
+    <div class="sps sps_scroll_fixed tab_list_inner sps--abv sps-abv" data-height-observe="data-height-observe"
+         data-sps-offset="1113" style="">
         <div class="sps_inner">
             <ul class="tabs">
-                <li class="tab_item"><a href="#scrollSpyProdEvent" class="tab_link active"><span class="tab_text">이벤트</span></a></li>
-                <li class="tab_item"><a href="#scrollSpyProdInfo" class="tab_link"><span class="tab_text">상품정보</span></a></li>
-                <li class="tab_item"><a href="#scrollSpyProdReview" class="tab_link"><span class="tab_text">리뷰 <span class="num">(3086+)</span></span></a></li>
-
-
-                <li class="tab_item"><a href="#scrollSpyProdClaim" class="tab_link"><span class="tab_text">교환/반품/품절</span></a></li>
+                <li class="tab_item"><a href="#scrollSpyProdDetail" class="tab_link active"><span
+                        class="tab_text">작품 상세</span></a></li>
+                <li class="tab_item"><a href="#scrollSpyProdInfo" class="tab_link">
+                    <span class="tab_text">작가 상세</span></a></li>
+                <li class="tab_item"><a href="#scrollSpyProdReview" class="tab_link"><span
+                        class="tab_text">상품 기본 정보</span></a></li>
             </ul>
         </div>
-        <div class="sps_observer" style="top:0px;"></div></div>
+
+        <div class="sps_observer" style="top:0px;"></div>
+    </div>
 </div>
+<hr>
 <!--상품상세 끝-->
 <!--</div>-->
-<div class="product_detail_area detail_img" style="text-align: center;">
-    <div class="inner">
-        <img loading="lazy" src="https://contents.kyobobook.co.kr/sih/fit-in/814x0/dtl/illustrate/120/i9788936434120.jpg" alt="소년이 온다 상세 이미지" style="display: block; margin: 0 auto;">
-
+<div class="container goodsDetail w-75">
+    <div class="prodDetail-box">
+        <div class="prodDetail-header"> 작품 상세</div>
+        <div class="prodDetail-Content" th:text="${goods.goodsContent}"></div>
+        <div class="DetailLine"></div>
+    </div>
+    <div class="Line"><hr></div>
+    <div class="writerDetail-box">
+        <div class="writerDetail-header">작가 상세</div>
+        <div class="writerDetail-title">"[[${goods.goodsWriter}]]"</div>
+        <div class="writerDetail-Content" th:text="${goods.writerContent}"></div>
     </div>
 </div>
 
-<br>
-<br>
-<br>
 
+<br>
+<br>
+<br>
+<script>
+    let currentIndex = 0; // 현재 보여주는 슬라이드의 인덱스
+    const slideList = document.getElementById("slideList"); // 여기서 "slideList"라는 ID를 찾아야 함
+    const slides = document.querySelectorAll("#slideList .prod_thumb_item");
+    const slideWidth = 380; // 한 슬라이드 너비(px)
 
+    function moveLeft() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlidePosition();
+        }
+    }
+
+    function moveRight() {
+        if (currentIndex < slides.length - 1) {
+            currentIndex++;
+            updateSlidePosition();
+        }
+    }
+
+    function updateSlidePosition() {
+        const translateX = -(currentIndex * slideWidth);
+        slideList.style.transform = `translateX(${translateX}px)`;
+        slideList.style.transition = "transform 0.5s ease";
+    }
+</script>
 </body>
 </html>

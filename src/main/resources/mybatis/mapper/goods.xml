@@ -3,59 +3,85 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
+  <insert id="goodsInsertText">
+    insert into Goods
+    (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
+     goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
+    values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
+            #{goodsCount}, current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
+  </insert>
+  <select id="goodsNoselect">
+    select goods_no
+    from goods
+    where seller_no = #{sellerNo}
+      and goods_name = #{goodsName}
+  </select>
 
-    <insert id="goodsInsertText">
-            insert into Goods
-            (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
-              goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
-            values(#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter},  #{goodsCreateAt},
-                   #{goodsCount}, current_date , #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
-        </insert>
-        <select id="goodsNoselect">
-            select goods_no
-            from goods
-            where seller_no = #{sellerNo} and goods_name=#{goodsName}
-        </select>
+  <!-- 모든 카테고리에 있는 상품 조회 -->
+  <select id="findAll" resultType="hello.fclover.domain.Goods">
+    SELECT *
+    FROM goods
+    WHERE cate_no = #{cate_no}
+    ORDER BY
+    <choose>
+      <when test="'latest'.equals(sort)">goods_date DESC</when>
+      <when test="'sales'.equals(sort)">goods_count DESC</when>
+      <when test="'highPrice'.equals(sort)">goods_price DESC</when>
+      <when test="'lowPrice'.equals(sort)">goods_price ASC</when>
+      <otherwise>goods_date DESC</otherwise>
+    </choose>
+    LIMIT #{offset}, #{size}
+  </select>
 
-    <!-- 전체 상품 수 계산 -->
-    <select id="countGoods" resultType="int">
-        SELECT COUNT(*)
-        FROM goods
-        WHERE cate_no = #{cateNo}
-    </select>
+  <!-- 전체 상품 수 계산 -->
+  <select id="countGoods" resultType="int">
+    SELECT COUNT(*)
+    FROM goods
+    WHERE cate_no = #{cate_no}
+  </select>
+
 
     <select id="countBestGoods" resultType="int">
         SELECT COUNT(*)
         FROM goods
     </select>
 
-    <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
+
+  <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
+    SELECT *
+    FROM goods
+    WHERE goods_no = #{goods_no}
+  </select>
+
+ <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
         SELECT *
-        FROM goods
-        WHERE goods_no = #{goodsNo}
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        ORDER BY
+        goods_count DESC
+        LIMIT #{offset}, #{size}
     </select>
 
-    <!-- 키워드로 상품 검색 -->
-    <select id="findGoodsByKeyword" resultType="hello.fclover.domain.Goods">
+ <select id="findByRank" resultType="hello.fclover.domain.Goods">
         SELECT
-            g.GOODS_NO AS goodsNo,
-            g.SELLER_NO AS sellerNo,
-            g.CATE_NO AS cateNo,
-            g.GOODS_NAME AS goodsName,
-            g.GOODS_CONTENT AS goodsContent,
-            g.GOODS_PRICE AS goodsPrice,
-            g.GOODS_WRITER AS goodsWriter,
-            s.company_name AS companyName,
-            g.GOODS_CREATE_AT AS goodsCreateAt,
-            g.GOODS_COUNT AS goodsCount
-        FROM GOODS g
-        JOIN seller s ON g.SELLER_NO = s.seller_no
-        WHERE
-            MATCH(g.GOODS_NAME, g.GOODS_CONTENT, g.GOODS_WRITER)
-            AGAINST (#{keyword} IN BOOLEAN MODE)
-            OR
-            MATCH(s.company_name)
-            AGAINST (#{keyword} IN BOOLEAN MODE)
+            ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS row_num,
+            goods_no,
+            goods_name,
+            goods_writer
+        FROM goods
+        ORDER BY
+            goods_count DESC;
     </select>
 
     <!-- 찜 상태를 포함한 상품 조회 SQL 매핑 추가 -->
@@ -88,34 +114,164 @@
         LIMIT #{offset}, #{size}
     </select>
 
-    <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
-        SELECT
-        a.goods_no AS goodsNo,
-        a.goods_name AS goodsName,
-        a.goods_price AS goodsPrice,
-        a.goods_writer AS goodsWriter,
-        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM
-        goods a
-        LEFT OUTER JOIN (
-        SELECT *
-        FROM wish
-        WHERE member_no = #{memberNo}
-        ) b
-        ON a.goods_no = b.goods_no
-        ORDER BY
-        goods_count DESC
-        LIMIT #{offset}, #{size}
-    </select>
+  <!-- 키워드 검색 총 개수 조회-->
+  <select id="countGoodsByKeyword" resultType="int">
+    SELECT COUNT(*)
+    FROM GOODS g
+           JOIN seller s ON g.SELLER_NO = s.seller_no
+    WHERE MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
+                AGAINST(#{keyword} IN BOOLEAN MODE)
+       OR MATCH(s.company_name)
+                AGAINST(#{keyword} IN BOOLEAN MODE)
+  </select>
 
-    <select id="findByRank" resultType="hello.fclover.domain.Goods">
-        SELECT
-            ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS row_num,
-            goods_no,
-            goods_name,
-            goods_writer
-        FROM goods
-        ORDER BY
-            goods_count DESC;
-    </select>
+  <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
+  <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
+    SELECT
+    g.GOODS_NO AS goodsNo,
+    g.SELLER_NO AS sellerNo,
+    g.CATE_NO AS cateNo,
+    g.GOODS_NAME AS goodsName,
+    g.GOODS_CONTENT AS goodsContent,
+    g.GOODS_PRICE AS goodsPrice,
+    g.GOODS_WRITER AS goodsWriter,
+    s.company_name AS companyName,
+    g.GOODS_CREATE_AT AS goodsCreateAt,
+    g.GOODS_COUNT AS goodsCount
+    FROM GOODS g
+    JOIN seller s ON g.SELLER_NO = s.seller_no
+    WHERE
+    MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
+    AGAINST (#{keyword} IN BOOLEAN MODE)
+    OR
+    MATCH(s.company_name)
+    AGAINST (#{keyword} IN BOOLEAN MODE)
+
+    <!-- 정렬 조건 분기 처리 -->
+    ORDER BY
+    <choose>
+      <when test="sort == 'latest'">g.GOODS_CREATE_AT DESC</when>
+      <when test="sort == 'sales'">g.GOODS_COUNT DESC</when>
+      <when test="sort == 'highPrice'">g.GOODS_PRICE DESC</when>
+      <when test="sort == 'lowPrice'">g.GOODS_PRICE ASC</when>
+      <when test="sort == 'name'">g.GOODS_NAME ASC</when>
+    </choose>
+
+    <!-- LIMIT & OFFSET -->
+    LIMIT #{size}
+    OFFSET #{offset}
+  </select>
+
+  <!-- 상세 검색 개수 쿼리 -->
+  <select id="countGoodsByParam" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM GOODS g
+    JOIN seller s ON g.SELLER_NO = s.seller_no
+    WHERE 1 = 1
+
+    <!-- 검색 조건 분기 -->
+    <if test="name != null and name != ''">
+      AND MATCH(g.GOODS_NAME)
+      AGAINST (#{name} IN BOOLEAN MODE)
+    </if>
+    <if test="writer != null and writer != ''">
+      AND MATCH(g.GOODS_WRITER)
+      AGAINST (#{writer} IN BOOLEAN MODE)
+    </if>
+    <if test="companyName != null and companyName != ''">
+      AND MATCH(s.company_name)
+      AGAINST (#{companyName} IN BOOLEAN MODE)
+    </if>
+    <if test="cate != null and cate != 0">
+      AND g.CATE_NO = #{cate}
+    </if>
+    <if test="minPrice != null and maxPrice != null">
+      AND g.GOODS_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+    </if>
+    <if test="startDate != null and endDate != null">
+      AND g.GOODS_CREATE_AT BETWEEN #{startDate} AND #{endDate}
+    </if>
+  </select>
+
+  <!-- 상세 검색 쿼리 -->
+  <select id="findGoodsByParam" parameterType="map" resultType="hello.fclover.domain.Goods">
+    SELECT
+    g.GOODS_NO AS goodsNo,
+    g.SELLER_NO AS sellerNo,
+    g.CATE_NO AS cateNo,
+    g.GOODS_NAME AS goodsName,
+    g.GOODS_CONTENT AS goodsContent,
+    g.GOODS_PRICE AS goodsPrice,
+    g.GOODS_WRITER AS goodsWriter,
+    s.company_name AS companyName,
+    g.GOODS_CREATE_AT AS goodsCreateAt,
+    g.GOODS_COUNT AS goodsCount
+    FROM GOODS g
+    JOIN seller s ON g.SELLER_NO = s.seller_no
+    WHERE 1 = 1
+
+    <!-- 검색 조건 분기 -->
+    <if test="name != null and name != ''">
+      AND MATCH(g.GOODS_NAME)
+      AGAINST (#{name} IN BOOLEAN MODE)
+    </if>
+    <if test="writer != null and writer != ''">
+      AND MATCH(g.GOODS_WRITER)
+          AGAINST (#{writer} IN BOOLEAN MODE)
+    </if>
+    <if test="companyName != null and companyName != ''">
+      AND MATCH(s.company_name)
+      AGAINST (#{companyName} IN BOOLEAN MODE)
+    </if>
+    <if test="cate != null and cate != 0">
+      AND g.CATE_NO = #{cate}
+    </if>
+    <if test="minPrice != null and maxPrice != null">
+      AND g.GOODS_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+    </if>
+    <if test="startDate != null and endDate != null">
+      AND g.GOODS_CREATE_AT BETWEEN #{startDate} AND #{endDate}
+    </if>
+
+    <!-- 정렬 조건 분기 처리 -->
+    ORDER BY
+    <choose>
+      <when test="sort == 'latest'">g.GOODS_CREATE_AT DESC</when>
+      <when test="sort == 'sales'">g.GOODS_COUNT DESC</when>
+      <when test="sort == 'highPrice'">g.GOODS_PRICE DESC</when>
+      <when test="sort == 'lowPrice'">g.GOODS_PRICE ASC</when>
+      <when test="sort == 'name'">g.GOODS_NAME ASC</when>
+    </choose>
+
+    <!-- LIMIT & OFFSET -->
+    LIMIT #{size}
+    OFFSET #{offset}
+  </select>
+
+  <!-- DB 데이터 존재 확인 -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*)
+    FROM GOODS
+  </select>
+
+  <!-- 데이터 Batch 삽입 -->
+  <insert id="insertGoods">
+    INSERT INTO GOODS (SELLER_NO, CATE_NO, GOODS_NAME, GOODS_CONTENT, GOODS_PRICE, GOODS_WRITER, WRITER_CONTENT,
+    GOODS_CREATE_AT, GOODS_COUNT, GOODS_PAGECOUNT, GOODS_BOOKSIZE)
+    VALUES
+    <foreach collection="goods" item="g" separator=",">
+      (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
+      #{g.goodsCreateAt},#{g.goodsCount},#{g.goodsPageCount},#{g.goodsBookSize})
+    </foreach>
+  </insert>
+
+  <!-- 대량 삽입을 위한 인덱스 조작용 -->
+<!--  <update id="dropFullTextIndex">-->
+<!--    ALTER TABLE GOODS DROP INDEX ft_goods_idx;-->
+<!--  </update>-->
+
+<!--  <update id="createFullTextIndex">-->
+<!--    ALTER TABLE GOODS-->
+<!--        ADD FULLTEXT KEY ft_goods_idx (GOODS_NAME, GOODS_CONTENT, GOODS_WRITER) WITH PARSER ngram-->
+<!--  </update>-->
 </mapper>

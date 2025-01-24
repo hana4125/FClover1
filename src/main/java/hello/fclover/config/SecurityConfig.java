@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final LoginFailHandler loginFailHandler;
     private final LoginSuccessHandler loginSuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain sellerFilterChain(HttpSecurity http, SellerLoginSuccessHandler sellerLoginSuccessHandler, SellerLoginFailHandler sellerLoginFailHandler) throws Exception {
@@ -48,10 +50,35 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain adminFilterChain(HttpSecurity http, AdminLoginSuccessHandler adminLoginSuccessHandler, AdminLoginFailHandler adminLoginFailHandler) throws Exception {
 
         http
-                //.securityMatcher("/inquiry/**", "/member/**")
+                .securityMatcher("/bo/**")
+                .formLogin((formLogin) -> formLogin
+                        .loginPage("/bo/login")
+                        .loginProcessingUrl("/bo/loginProcess")
+                        .usernameParameter("memberId")
+                        .passwordParameter("password")
+                        .successHandler(adminLoginSuccessHandler)
+                        .failureHandler(adminLoginFailHandler))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/bo/login", "bo/signup", "/bo/signupProcess").permitAll()
+                        .requestMatchers("/bo/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .logout((lo) -> lo.logoutUrl("/bo/logout")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/bo/logout", "GET"))
+                        .logoutSuccessUrl("/bo/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
+        return http.build();
+    }
+
+    @Bean
+    public SecurityFilterChain memberFilterChain(HttpSecurity http) throws Exception {
+
+        http
                 .formLogin((formLogin) -> formLogin.loginPage("/member/login")
                         .loginProcessingUrl("/member/loginProcess")
                         .usernameParameter("memberId")
@@ -61,28 +88,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup", "/member/signupProcess",
                                 "/member/find-id", "/member/find-id-ok", "/member/send-code-id", "member/send-code-password",
-                                "/member/reset-password","/member/reset-password-ok", "/inquiry/**", "/member/category/**", "/member/goodsDetail/**").permitAll()
-                        .requestMatchers("/", "/member/main", "/member/login", "/member/signup",
-                                "/member/signupProcess", "/member/find-id", "/member/find-id-ok",
-                                "/member/reset-password", "/inquiry/**", "/member/category/**").permitAll()
+                                "/member/reset-password","/member/reset-password-ok", "/inquiry/**", "/member/category/**","/member/goodsDetail/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
-                        .requestMatchers( "/","/member/main", "/member/login", "/member/signup", "/member/signupProcess",
-                               "/inquiry/**").permitAll()
                         .requestMatchers("/member/**").hasRole("MEMBER")
                         .anyRequest().authenticated()
-
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/member/main", true)
                 )
                 .logout((lo) -> lo.logoutUrl("/member/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/member/main")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
+
         return http.build();
     }
 

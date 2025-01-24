@@ -1,7 +1,7 @@
 package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Goods;
-import hello.fclover.dto.SearchDetailForm;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public interface GoodsMapper {
     int goodsInsertText(Goods goods);
 
-    int goodsNoselect(String sellerNo, String goodsName);
+    Long goodsNoselect(Long sellerNo, String goodsName);
   
 //    List<Goods> findAll(@Param("memberNo") Long memberNo,
 //                        @Param("cate_no") int cateNo,
@@ -25,7 +25,7 @@ public interface GoodsMapper {
 
     Goods findGoodsById(long goodsNo);
 
-    List<Goods> findGoodsByKeyword(@Param("keyword") String keyword);
+    int countGoodsByKeyword(String keyword);
 
     List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
 
@@ -45,4 +45,18 @@ public interface GoodsMapper {
     );
 
     List<Goods> findByRank();
+  
+    List<Goods> findGoodsByKeyword(Map<String, Object> params);
+
+    int countGoodsByParam(Map<String, Object> params);
+
+    List<Goods> findGoodsByParam(Map<String, Object> params);
+
+    long countAll();
+
+    void insertGoods(@Param("goods") List<Goods> goods);
+
+    // 인덱스 활성화, 비활성화용
+    // void dropFullTextIndex();
+    // void createFullTextIndex();
 }

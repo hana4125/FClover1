@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>검색결과</title>
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
   <link href="/css/user/home.css" rel="stylesheet">
   <link href="/css/user/searchBox.css" rel="stylesheet">
   <link href="/css/user/searchResult.css" rel="stylesheet">
+
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -40,10 +43,10 @@
               <span class="search_value" th:text="${keyword}"></span>
               '
             </span>
-            <th:block th:if="${searchResults.size() > 0}">
-            <span th:text="'에 대한 ' + ${searchResults.size()} + '개의 검색 결과'"></span>
+            <th:block th:if="${totalCount > 0 }">
+            <span th:text="'에 대한 ' + ${totalCount} + '개의 검색 결과'"></span>
             </th:block>
-            <th:block th:if="${searchResults.size() == 0}">
+            <th:block th:if="${totalCount == 0 || totalCount == null}">
               <span th:text="'상품 검색 결과가 없습니다.'"></span>
             </th:block>
           </h1>
@@ -52,6 +55,11 @@
           <p>검색 결과가 없습니다.</p>
         </div>
         <div th:if="${!#lists.isEmpty(searchResults)}">
+          <!-- 필터 영역 -->
+          <div class="filter_area">
+
+          </div>
+          <!-- 결과 영역 -->
           <div class="container w-75 mt-5">
             <div class="d-flex justify-content-end align-items-center mb-3">
               <!-- 장바구니, 찜 버튼 -->
@@ -66,10 +74,11 @@
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                  <li><a class="dropdown-item" href="#" data-sort="latest">최신순</a></li>
                   <li><a class="dropdown-item" href="#" data-sort="sales">판매량순</a></li>
-                  <li><a class="dropdown-item" href="#" data-sort="highPrice">높은가격순</a></li>
+                  <li><a class="dropdown-item" href="#" data-sort="latest">최신순</a></li>
+                  <li><a class="dropdown-item" href="#" data-sort="name">상품명순</a></li>
                   <li><a class="dropdown-item" href="#" data-sort="lowPrice">낮은가격순</a></li>
+                  <li><a class="dropdown-item" href="#" data-sort="highPrice">높은가격순</a></li>
                 </ul>
                 <!-- 페이지당 보기 -->
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,6 +86,7 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownView">
                   <li><a class="dropdown-view" href="#" data-size="20">20개씩 보기</a></li>
                   <li><a class="dropdown-view" href="#" data-size="50">50개씩 보기</a></li>
+                  <li><a class="dropdown-view" href="#" data-size="100">100개씩 보기</a></li>
                 </ul>
               </div>
             </div>

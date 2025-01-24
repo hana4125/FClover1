@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.HttpURLConnection;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -144,7 +145,7 @@ public class MemberController {
         Member findMember = memberService.findMemberById(memberId);
         model.addAttribute("member", findMember);
 
-        return "/user/userFindIdOk";
+        return "user/userFindIdOk";
     }
 
     @GetMapping("/reset-password")
@@ -202,7 +203,7 @@ public class MemberController {
     @GetMapping("/myPage")
     public String myPageMain() {
 
-        return "/user/mypage/userMyPageMain";
+        return "user/mypage/userMyPageMain";
     }
 
     @GetMapping("/myPage/addressBook")
@@ -281,7 +282,7 @@ public class MemberController {
     @GetMapping("/myPage/info/modify")
     public String memberUpdateForm() {
 
-        return "/user/mypage/userMyPageInfoUpdateForm";
+        return "user/mypage/userMyPageInfoUpdateForm";
     }
 
     @GetMapping("/myPage/info/delete")
@@ -300,7 +301,7 @@ public class MemberController {
     @GetMapping("/myPage/profile")
     public String profile() {
 
-        return "/user/mypage/userMyPageProfile";
+        return "user/mypage/userMyPageProfile";
     }
 
     @GetMapping("/myPage/delete-profile-picture")
@@ -331,27 +332,22 @@ public class MemberController {
 
     @GetMapping("/myPage/wishlist")
     public String myPageWishlist() {
-        return "/user/mypage/userMyPageWishlist";
+        return "user/mypage/userMyPageWishlist";
     }
 
     @GetMapping("/cart")
     public String cart() {
-        return "/user/userCart";
+        return "user/userCart";
     }
-
-//    @GetMapping("/bestSeller")
-//    public String bestSeller() {
-//        return "/user/userBestseller";
-//    }
 
     @GetMapping("/steadySeller")
     public String steadySeller() {
-        return "/user/userSteadyseller";
+        return "user/userSteadyseller";
     }
 
     @GetMapping("/newItems")
     public String newItems() {
-        return "/user/userNewItems";
+        return "user/userNewItems";
     }
 
     @GetMapping("/sellerSignup")
@@ -402,7 +398,7 @@ public class MemberController {
         System.out.println("principal = " + principal.getName());
         System.out.println("===========>여기는 controller ===============payment = " + payment);
         model.addAttribute("list", payment);
-        return "/user/mypage/userOrderlist";
+        return "user/mypage/userOrderlist";
     }
 
 
@@ -414,7 +410,7 @@ public class MemberController {
 
         model.addAttribute("orderId", orderId);
 
-        return "user/mypage/userOrderListDetail";
+        return "user/mypage/userOrderlistDetail";
     }
 
     //포트원 결제
@@ -424,15 +420,19 @@ public class MemberController {
         System.out.println("========>controller의 paymentRequest : " + paymentRequest);
 
         try {
-            System.out.println("========>controller의 try문 안의 paymentRequest : " + paymentRequest);
-//            System.out.println("========>controller의 try문 안의 paymentService.savePayment(Payment.save(paymentRequest)) : " + paymentService.savePayment(Payment.save(paymentRequest)));
+            HttpURLConnection connection =paymentService.createConnection("https://service.iamport.kr/payments/ready/imp03578475/nice/iamport00m?sandbox=true&store_id=store-a0b049dc-4590-4213-b1f5-d861a3ccae51&channelKey=channel-key-68c69d42-0462-4eb9-af59-5b26cb4100de");
 
-            paymentService.savePayment(Payment.save(paymentRequest));
+            if (paymentService.isConnectionSuccessful(connection)) {
+                // 결제 처리
+                paymentService.savePayment(Payment.save(paymentRequest));
 
-//            System.out.println("========Controller====>Payment.save(paymentRequest)" + Payment.save(paymentRequest));
-            response.put("message", "Payment processed successfully.");
+                response.put("message", "Payment processed successfully.");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("message", "Failed to connect to payment service.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
 
-            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("message", "Failed to process payment.");
@@ -446,8 +446,7 @@ public class MemberController {
 
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
-
-
+  
     @GetMapping("/goodsDetail/{no}")
     public String goodsDetail(@PathVariable("no") Long goodsNo, @ModelAttribute("member") Member member, Model model) {
         // 카테고리 데이터 가져오기
@@ -527,6 +526,6 @@ public class MemberController {
     @GetMapping("/gift")
     public String gift() {
         System.out.println("====");
-        return "/user/gift";
+        return "user/userGoodsDetail";
     }
 }

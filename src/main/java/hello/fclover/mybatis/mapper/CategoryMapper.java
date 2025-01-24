@@ -11,5 +11,8 @@ public interface CategoryMapper {
     List<Category> findAll();
 
     Category findTitle(int cateNo);
+  
+    // 카테고리 개수 조회
+    int countAll();
 }
 

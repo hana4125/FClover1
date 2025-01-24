@@ -1,6 +1,8 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.Goods;
+import hello.fclover.domain.GoodsImage;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,5 +23,7 @@ public interface GoodsService {
     List<Goods> getGoodsList();
 
     List<Goods> getGoodsWishStatus(Long memberNo, int page, int size);
+  
+    void getGoodsDetail(Long goodsNo, Model model);
 }
 

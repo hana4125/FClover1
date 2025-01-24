@@ -135,15 +135,6 @@ function goDetailSearchResult() {
             + '" name="rlseEnd">'));  // uncomma함수가 콤마 외에도 특수문자 모두 제거
   }
 
-  //카테고리 필터 세팅
-  if (typeof cateVal == "undefined" || cateVal == "") {
-    $("#detailSearchForm").append(
-        $('<input type="hidden" value="전체@ALL" name="cat">'));
-  } else {
-    $("#detailSearchForm").append(
-        $('<input type="hidden" value="' + cateVal + '" name="cat">'));
-  }
-
   $("#detailSearchForm").submit();
 
 }
