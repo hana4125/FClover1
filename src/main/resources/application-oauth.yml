@@ -36,6 +36,8 @@ spring:
             user-name-attribute: response
 
 
+
 aws:
   paramstore:
     name: JASYPT_ENCRYPTOR_PASSWORD
+
