@@ -46,9 +46,9 @@ aws:
     profile-separator: _
     name: fclover
 
-cloud:
-  aws:
-    credentials:
-      access-key:
-      instance-profile: true
-      secret-key:
+#cloud:
+#  aws:
+#    credentials:
+#      access-key:
+#      instance-profile: true
+#      secret-key:
