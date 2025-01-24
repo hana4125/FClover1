@@ -9,6 +9,7 @@ import hello.fclover.mybatis.mapper.GoodsImageMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -46,12 +47,6 @@ public class GoodsServiceImpl implements GoodsService {
             goodsInsertImage(images, sellerNumber, goodsNo);
         }
     }
-  
-//    @Override
-//    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
-//        int offset = (page - 1) * size;
-//        return goodsMapper.findAll(cate_no, sort, offset, size);
-//    }
 
     @Override
     public int getTotalGoodsCount(int cateNo) {
@@ -59,7 +54,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public int getTotalBestGoodsCount() {
+    public int getTotalBestGoodsCount(Long memberNo) {
         return goodsMapper.countBestGoods();
     }
 
@@ -75,11 +70,12 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getGoodsList() {
-        return goodsMapper.findByRank();
+    public List<Goods> getGoodsList(int limit) {
+        return goodsMapper.findByRank(limit);
     }
 
     @Override
+    @Cacheable(value = "GoodsMapper.findGoodsWishStatus")
     public List<Goods> getGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findGoodsWishStatus(memberNo, offset, size);

@@ -486,8 +486,30 @@ public class MemberController {
         int totalItems = goodsService.getTotalGoodsCount(cateNo);
         int totalPages = (int) Math.ceil((double) totalItems / size);
 
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
+
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
         return "/user/userCategory"; // 카테고리 상세 페이지
@@ -515,7 +537,8 @@ public class MemberController {
 
 
         // 페이지네이션 정보 전달
-        int totalItems = goodsService.getTotalBestGoodsCount();
+//        int totalItems = goodsService.getTotalBestGoodsCount();
+        int totalItems = Math.min(goodsService.getTotalBestGoodsCount(memberNo), 100);
         int totalPages = (int) Math.ceil((double) totalItems / size);
 
         model.addAttribute("currentPage", page);

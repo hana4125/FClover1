@@ -59,7 +59,7 @@ public class HomeController {
         model.addAttribute("categoryList", categoryList);
 
         // 상품 목록 가져오기
-        List<Goods> goodsList = goodsService.getGoodsList();
+        List<Goods> goodsList = goodsService.getGoodsList(10);
         model.addAttribute("goodsList", goodsList);
         return "user/userHome";
     }
