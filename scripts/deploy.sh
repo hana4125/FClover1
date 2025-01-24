@@ -10,7 +10,7 @@ JAR_PATH=$REPOSITORY/target/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
-if [ -z $CURRENT_PID ];
+if [ -z "$CURRENT_PID" ];
 then
   echo "> 종료할 애플리케이션이 없습니다."
 else
