@@ -1,7 +1,6 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.Goods;
-import hello.fclover.domain.GoodsImage;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
