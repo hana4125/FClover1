@@ -41,4 +41,4 @@ aws:
   paramstore:
     enabled: true
     prefix: /config
-    name: JASYPT_ENCRYPTOR_PASSWORD
+    name: flover
