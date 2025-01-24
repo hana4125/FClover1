@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.HttpURLConnection;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -425,15 +426,19 @@ public class MemberController {
         System.out.println("========>controller의 paymentRequest : " + paymentRequest);
 
         try {
-            System.out.println("========>controller의 try문 안의 paymentRequest : " + paymentRequest);
-//            System.out.println("========>controller의 try문 안의 paymentService.savePayment(Payment.save(paymentRequest)) : " + paymentService.savePayment(Payment.save(paymentRequest)));
+            HttpURLConnection connection =paymentService.createConnection("https://service.iamport.kr/payments/ready/imp03578475/nice/iamport00m?sandbox=true&store_id=store-a0b049dc-4590-4213-b1f5-d861a3ccae51&channelKey=channel-key-68c69d42-0462-4eb9-af59-5b26cb4100de");
 
-            paymentService.savePayment(Payment.save(paymentRequest));
+            if (paymentService.isConnectionSuccessful(connection)) {
+                // 결제 처리
+                paymentService.savePayment(Payment.save(paymentRequest));
 
-//            System.out.println("========Controller====>Payment.save(paymentRequest)" + Payment.save(paymentRequest));
-            response.put("message", "Payment processed successfully.");
+                response.put("message", "Payment processed successfully.");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("message", "Failed to connect to payment service.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
 
-            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("message", "Failed to process payment.");
