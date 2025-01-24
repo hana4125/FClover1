@@ -1,12 +1,23 @@
-jasypt:
-  encryptor:
-    bean: jasyptEncryptorAES
-    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+#jasypt:
+#  encryptor:
+#    bean: jasyptEncryptorAES
+#    password: ${JASYPT_ENCRYPTOR_PASSWORD}
 
 #test
 spring:
-  config:
-    import: 'aws-parameterstore:/config/fclover/'
+#  config:
+#    import: 'aws-parameterstore:/config/fclover/'
+  application:
+    name: fclover-app
+    cloud:
+      aws:
+        region:
+          static: ap-northeast-2 # AWS 리전 설정
+        stack:
+          auto: false
+    config:
+      import: optional:aws-parameterstore:/ # AWS Parameter Store 사용 설정
+
   security:
     oauth2:
       client:
@@ -36,12 +47,18 @@ spring:
             user-info-authentication-method: header
             user-name-attribute: response
 
+jasypt:
+  encryptor:
+    password: "${/config/fclover/JASYPT_ENCRYPTOR_PASSWORD}" # AWS Parameter Store에서 가져오는 값
+    algorithm: PBEWithHMACSHA512AndAES_256
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 
-aws:
-  paramstore:
-    enabled: true
-    prefix: /config
-    name: fclover
+
+#aws:
+#  paramstore:
+#    enabled: true
+#    prefix: /config
+#    name: fclover
 
 #cloud:
 #  aws:
