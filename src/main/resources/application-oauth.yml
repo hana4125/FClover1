@@ -1,10 +1,3 @@
-aws:
-  paramstore:
-    enabled: true
-    prefix: /config
-    profile-separator: _
-    name: fclover
-
 jasypt:
   encryptor:
     bean: jasyptEncryptorAES
@@ -45,6 +38,13 @@ spring:
             user-info-authentication-method: header
             user-name-attribute: response
 
+
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    profile-separator: _
+    name: fclover
 
 cloud:
   aws:
