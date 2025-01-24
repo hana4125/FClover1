@@ -7,7 +7,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: 'optional:aws-parameterstore:/config/fclover'
+    import: 'optional:aws-parameterstore:/config/fclover_prod/'
   security:
     oauth2:
       client:
