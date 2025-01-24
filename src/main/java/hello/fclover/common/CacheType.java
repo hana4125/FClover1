@@ -11,3 +11,4 @@ public enum CacheType {
     private final int expiredAfterWrite;
     private final int maximumSize;
 }
+
