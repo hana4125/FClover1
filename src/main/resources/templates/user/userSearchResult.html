@@ -43,10 +43,10 @@
               <span class="search_value" th:text="${keyword}"></span>
               '
             </span>
-            <th:block th:if="${searchResults.size() > 0}">
-            <span th:text="'에 대한 ' + ${searchResults.size()} + '개의 검색 결과'"></span>
+            <th:block th:if="${totalCount > 0 }">
+            <span th:text="'에 대한 ' + ${totalCount} + '개의 검색 결과'"></span>
             </th:block>
-            <th:block th:if="${searchResults.size() == 0}">
+            <th:block th:if="${totalCount == 0 || totalCount == null}">
               <span th:text="'상품 검색 결과가 없습니다.'"></span>
             </th:block>
           </h1>
@@ -55,6 +55,11 @@
           <p>검색 결과가 없습니다.</p>
         </div>
         <div th:if="${!#lists.isEmpty(searchResults)}">
+          <!-- 필터 영역 -->
+          <div class="filter_area">
+
+          </div>
+          <!-- 결과 영역 -->
           <div class="container w-75 mt-5">
             <div class="d-flex justify-content-end align-items-center mb-3">
               <!-- 장바구니, 찜 버튼 -->

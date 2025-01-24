@@ -145,6 +145,7 @@
                             <div class="leftarrow" onclick="moveLeft()"><span><img class="prod_prev"
                                                                                    src="../../images/user/prevarrow.png"
                                                                                    alt="prev" draggable="false"></span>
+
                             </div>
                             <div class="rightarrow" onclick="moveRight()"><span><img class="prod_next"
                                                                                      src="../../images/user/nextarrow.png"
@@ -170,12 +171,14 @@
                         <div class="writer_title col-md-3">작가</div>
                         <div class="writer col-md-9" th:text="${goods.goodsWriter}"></div>
                     </div>
+
                     <br>
                     <div class="prod_price_box row">
                         <div class="prod_price_title col-md-3">가격</div>
                         <div class="prod_price col-md-9">
                                 <span class="price"><span>[[${goods.goodsPrice}]]<span
                                         class="unit">원</span></span></span>
+
                         </div>
 
                     </div>

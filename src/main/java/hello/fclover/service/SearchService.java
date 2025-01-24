@@ -1,14 +1,13 @@
 package hello.fclover.service;
 
-import hello.fclover.domain.Goods;
-import hello.fclover.dto.SearchDetailForm;
-import java.util.List;
+import hello.fclover.dto.GoodsSearchParam;
+import java.util.Map;
 
 public interface SearchService {
 
     int countByKeyword(String keyword);
 
-    List<Goods> searchByKeyword(String keyword, String sort, int offset, int size);
+    Map<String, Object> searchByKeyword(String keyword, String sort, int offset, int size);
 
-    List<Goods> searchDetail(SearchDetailForm searchDetailForm);
+    Map<String, Object> searchDetail(GoodsSearchParam goodsSearchParam, String sort, int offset, int size);
 }
