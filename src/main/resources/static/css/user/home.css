@@ -83,12 +83,21 @@
     color: #007bff;
 }
 
+.best-list,
+.steady-list {
+    display: flex;          /* Flexbox 레이아웃 사용 */
+    flex-wrap: wrap;        /* 아이템이 넘칠 경우 다음 줄로 넘김 */
+    justify-content: space-between; /* 아이템 간 간격 조정 */
+    padding: 0;             /* 기본 패딩 제거 */
+    margin: 0;              /* 기본 마진 제거 */
+}
 
 .best-list li,
 .steady-list li {
-    display: inline-block;
-    margin: 2%;
-    text-align: center;
+    flex: 0 0 19%;          /* 각 아이템의 너비를 19%로 설정 (5개 배치를 위해) */
+    max-width: 19%;         /* 최대 너비를 19%로 설정 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 너비 계산 */
+    margin-bottom: 20px;    /* 아래쪽 간격 추가 */
 }
 
 .show-plus {
@@ -197,6 +206,27 @@
     margin-right: 10px;
     top: 10px;
 }
+
+/* 사이드바 */
+.title_heading {
+    font-size: 30px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+}
+
+/* category-item 스타일 수정 */
+.category-item {
+    font-size: 14px; /* 원하는 글자 크기로 조정 (예: 14px) */
+    text-decoration: none; /* 밑줄 제거 */
+    color: #A9A9A9;
+    transition: color 0.3s ease;
+}
+
+.category-item:hover {
+    color: #696969;
+}
+
+
 
 
 

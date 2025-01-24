@@ -3,7 +3,6 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
-
   <insert id="goodsInsertText">
     insert into Goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
@@ -41,11 +40,79 @@
     WHERE cate_no = #{cate_no}
   </select>
 
+
+    <select id="countBestGoods" resultType="int">
+        SELECT COUNT(*)
+        FROM goods
+    </select>
+
+
   <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
     SELECT *
     FROM goods
     WHERE goods_no = #{goods_no}
   </select>
+
+ <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        ORDER BY
+        goods_count DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+ <select id="findByRank" resultType="hello.fclover.domain.Goods">
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS row_num,
+            goods_no,
+            goods_name,
+            goods_writer
+        FROM goods
+        ORDER BY
+            goods_count DESC;
+    </select>
+
+    <!-- 찜 상태를 포함한 상품 조회 SQL 매핑 추가 -->
+    <select id="findGoodsWithWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.cate_no AS cateNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        WHERE
+        a.cate_no = #{cateNo}
+        ORDER BY
+        <choose>
+            <when test="'latest' == sort">a.goods_date DESC</when>
+            <when test="'sales' == sort">a.goods_count DESC</when>
+            <when test="'highPrice' == sort">a.goods_price DESC</when>
+            <when test="'lowPrice' == sort">a.goods_price ASC</when>
+            <otherwise>a.goods_date DESC</otherwise>
+        </choose>
+        LIMIT #{offset}, #{size}
+    </select>
 
   <!-- 키워드 검색 총 개수 조회-->
   <select id="countGoodsByKeyword" resultType="int">

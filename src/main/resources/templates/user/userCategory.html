@@ -1,340 +1,379 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>home</title>
-  <meta name="_csrf" th:content="${_csrf.token}">
-  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta charset="UTF-8">
+    <title>home</title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
-  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
-  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/jquery-3.7.1.js"></script>
-  <link rel="stylesheet" href="/css/user/home.css">
-  <link rel="stylesheet" href="/css/user/searchBox.css">
-  <script th:inline="javascript">
-    $(function () {
-      $("#logo").click(function () {
-        location.href = "/";
-      })
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="/css/user/home.css">
+    <link rel="stylesheet" href="/css/user/searchBox.css">
+    <script th:inline="javascript">
+        $(function () {
+            $("#logo").click(function () {
+                location.href = "/";
+            })
 
-      $("#cart").click(function () {
-        location.href = "/member/cart";
-      })
-
-      $("#myPage").click(function () {
-        location.href = "/myPage";
-      })
-
-      $(".category-item").click(function () {
-        location.href = "/member/category/{no}";
-      })
-
-      $(".best").click(function () {
-        location.href = "/member/bestSeller";
-      })
-
-      $(".new").click(function () {
-        location.href = "/member/newItems";
-      })
-
-      $(".show-detail").click(function () {
-        location.href = "/goodsDetail";
-      })
-    })
-
-    $(document).ready(function () {
-      // URL에서 쿼리 파라미터 읽기
-      const urlParams = new URLSearchParams(window.location.search);
-      const currentSort = urlParams.get("sort") || "latest"; // 기본값: 최신순
-      const currentSize = urlParams.get("size") || "20"; // 기본값: 20개씩 보기
-
-      // 드롭다운 버튼 텍스트 설정
-      const sortTextMap = {
-        latest: "최신순",
-        sales: "판매량순",
-        highPrice: "높은가격순",
-        lowPrice: "낮은가격순",
-      };
-      const sizeTextMap = {
-        "20": "20개씩 보기",
-        "50": "50개씩 보기",
-      };
-
-      $("#dropdownMenu").text(sortTextMap[currentSort] || "최신순");
-      $("#dropdownView").text(sizeTextMap[currentSize] || "20개씩 보기");
-
-      // 드롭다운 아이템 클릭 이벤트
-      $(".dropdown-item").click(function () {
-        const selectedSort = $(this).attr("data-sort") || "latest";
-        const selectedText = $(this).text();
-        $("#dropdownMenu").text(selectedText);
-
-        urlParams.set("sort", selectedSort);
-        urlParams.set("page", "1"); // 페이지를 1로 초기화
-        window.location.search = urlParams.toString(); // 페이지 새로고침
-      });
-
-      $(".dropdown-view").click(function () {
-        const selectedSize = $(this).attr("data-size") || "20";
-        const selectedText = $(this).text();
-        $("#dropdownView").text(selectedText);
-
-        urlParams.set("size", selectedSize);
-        urlParams.set("page", "1"); // 페이지를 1로 초기화
-        window.location.search = urlParams.toString(); // 페이지 새로고침
-      });
-
-      // 전체 선택 체크박스 제어
-      $("#selectAll").change(function () {
-        const isChecked = $(this).is(":checked"); // 전체 선택 체크박스의 상태
-        $(".item-checkbox").prop("checked", isChecked); // 모든 개별 체크박스의 상태를 변경
-      });
-
-      // 개별 체크박스 변경 시 전체 선택 체크박스 상태 업데이트
-      $(".item-checkbox").change(function () {
-        const totalCheckboxes = $(".item-checkbox").length; // 전체 체크박스 개수
-        const checkedCheckboxes = $(".item-checkbox:checked").length; // 체크된 체크박스 개수
-
-        // 모든 항목이 체크되었는지 확인
-        $("#selectAll").prop("checked", totalCheckboxes === checkedCheckboxes);
-      });
-
-      // 페이지 네이션 액션
-      $(".pagination .page-link").click(function (event) {
-        event.preventDefault(); // 기본 동작 방지
-
-        const selectedPage = $(this).attr("data-page") || "1"; // 기본값 설정
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set("page", selectedPage);
-
-        window.location.search = urlParams.toString(); // 페이지 새로고침
-      });
-    })
-
-    // 카테고리 버튼 동작
-    $(function () {
-      $("#category").click(function () {
-        const category = $(this).find(".category");
-        const closeIcon = $(this).find(".close-icon");
-        if (category.hasClass("open")) {
-          // 햄버거 버튼으로 복귀
-          category.removeClass("open");
-          closeIcon.addClass("d-none");
-          category.removeClass("d-none");
-          $(this).css("background-color", "white");
-          $("#categoryView").hide(); // 카테고리 전체보기 숨기기
-        } else {
-          // X 버튼으로 전환
-          category.addClass("open");
-          closeIcon.removeClass("d-none");
-          category.addClass("d-none");
-          $(this).css("background-color", "black");
-          $("#categoryView").show(); // 카테고리 전체보기 보이기
-        }
-      })
-    })
-
-    $(function () {
-      // 찜 버튼 클릭 시
-      $(".heart").click(function () {
-        // CSRF 토큰
-        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        const goodsNo = $(this).data("id");
-        const heartIcon = $(this);
-
-        $.ajax({
-          url: "/wish/wishlist",
-          type: "POST",
-          headers: { [csrfHeader]: csrfToken}, // CSRF 사용시 헤더에 추가
-          data: { goodsNo: goodsNo },
-          dataType: "json",
-          success: function (response) {
-            if (response.status === "added") {
-              alert("찜 설정 되었습니다.");
-              heartIcon.attr("src", "/images/user/redHeart.png");
-            } else if (response.status === "removed") {
-              alert("찜 해제 되었습니다.");
-              heartIcon.attr("src", "/images/user/heart.png");
-            }
-          },
-          error: function (xhr, status, error) {
-            if (status === "parsererror") {
-              location.href = '/member/login'
-            }
-          }
-        });
-      });
-
-      // 장바구니 버튼 클릭 시
-      $(".cart").click(function () {
-        // CSRF 토큰
-        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        const goodsNo = $(this).data("id");
-
-        $.ajax({
-          url: "/cart/cartList",
-          type: "POST",
-          // CSRF 토큰 헤더 설정
-          headers: { [csrfHeader]: csrfToken },
-          data: { goodsNo: goodsNo },
-          dataType: "json",
-          success: function (response) {
-            // response.status 가 "added" 또는 "updated"
-            if (response.status === "added") {
-              const moveConfirm = confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
-              if (moveConfirm) {
+            $("#cart").click(function () {
                 location.href = "/member/cart";
-              }
-            } else if (response.status === "updated") {
-              const moveConfirm = confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?");
-              if (moveConfirm) {
-                location.href = "/member/cart";
-              }
-            }
-          },
-          error: function (xhr, status, error) {
-            if (status === "parsererror") {
-              location.href = '/member/login'
-            }
-          }
+            })
+
+            $("#myPage").click(function () {
+                location.href = "/myPage";
+            })
+
+            $(".category-item").click(function () {
+                location.href = "/member/category/{no}";
+            })
+
+            $(".best").click(function () {
+                location.href = "/member/bestSeller";
+            })
+
+            $(".new").click(function () {
+                location.href = "/member/newItems";
+            })
+
+            $(".show-detail").click(function () {
+                location.href = "/member/GoodsDetail{no}";
+            })
+        })
+
+        $(document).ready(function () {
+            // URL에서 쿼리 파라미터 읽기
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentSort = urlParams.get("sort") || "latest"; // 기본값: 최신순
+            const currentSize = urlParams.get("size") || "20"; // 기본값: 20개씩 보기
+
+            // 드롭다운 버튼 텍스트 설정
+            const sortTextMap = {
+                latest: "최신순",
+                sales: "판매량순",
+                highPrice: "높은가격순",
+                lowPrice: "낮은가격순",
+            };
+            const sizeTextMap = {
+                "20": "20개씩 보기",
+                "50": "50개씩 보기",
+            };
+
+            $("#dropdownMenu").text(sortTextMap[currentSort] || "최신순");
+            $("#dropdownView").text(sizeTextMap[currentSize] || "20개씩 보기");
+
+            // 드롭다운 아이템 클릭 이벤트
+            $(".dropdown-item").click(function () {
+                const selectedSort = $(this).attr("data-sort") || "latest";
+                const selectedText = $(this).text();
+                $("#dropdownMenu").text(selectedText);
+
+                urlParams.set("sort", selectedSort);
+                urlParams.set("page", "1"); // 페이지를 1로 초기화
+                window.location.search = urlParams.toString(); // 페이지 새로고침
+            });
+
+            $(".dropdown-view").click(function () {
+                const selectedSize = $(this).attr("data-size") || "20";
+                const selectedText = $(this).text();
+                $("#dropdownView").text(selectedText);
+
+                urlParams.set("size", selectedSize);
+                urlParams.set("page", "1"); // 페이지를 1로 초기화
+                window.location.search = urlParams.toString(); // 페이지 새로고침
+            });
+
+            // 전체 선택 체크박스 제어
+            $("#selectAll").change(function () {
+                const isChecked = $(this).is(":checked"); // 전체 선택 체크박스의 상태
+                $(".item-checkbox").prop("checked", isChecked); // 모든 개별 체크박스의 상태를 변경
+            });
+
+            // 개별 체크박스 변경 시 전체 선택 체크박스 상태 업데이트
+            $(".item-checkbox").change(function () {
+                const totalCheckboxes = $(".item-checkbox").length; // 전체 체크박스 개수
+                const checkedCheckboxes = $(".item-checkbox:checked").length; // 체크된 체크박스 개수
+
+                // 모든 항목이 체크되었는지 확인
+                $("#selectAll").prop("checked", totalCheckboxes === checkedCheckboxes);
+            });
+
+            // 페이지 네이션 액션
+            $(".pagination .page-link").click(function (event) {
+                event.preventDefault(); // 기본 동작 방지
+
+                const selectedPage = $(this).attr("data-page") || "1"; // 기본값 설정
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set("page", selectedPage);
+
+                window.location.search = urlParams.toString(); // 페이지 새로고침
+            });
+        })
+
+        // 카테고리 버튼 동작
+        $(function () {
+            $("#category").click(function () {
+                const category = $(this).find(".category");
+                const closeIcon = $(this).find(".close-icon");
+                if (category.hasClass("open")) {
+                    // 햄버거 버튼으로 복귀
+                    category.removeClass("open");
+                    closeIcon.addClass("d-none");
+                    category.removeClass("d-none");
+                    $(this).css("background-color", "white");
+                    $("#categoryView").hide(); // 카테고리 전체보기 숨기기
+                } else {
+                    // X 버튼으로 전환
+                    category.addClass("open");
+                    closeIcon.removeClass("d-none");
+                    category.addClass("d-none");
+                    $(this).css("background-color", "black");
+                    $("#categoryView").show(); // 카테고리 전체보기 보이기
+                }
+            })
+        })
+
+        $(function () {
+            // 찜 버튼 클릭 시
+            $(".heart").click(function () {
+                // CSRF 토큰
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                const goodsNo = $(this).data("id");
+                const heartIcon = $(this);
+
+                $.ajax({
+                    url: "/wish/wishlist",
+                    type: "POST",
+                    headers: {[csrfHeader]: csrfToken}, // CSRF 사용시 헤더에 추가
+                    data: {goodsNo: goodsNo},
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.status === "added") {
+                            alert("찜 설정 되었습니다.");
+                            heartIcon.attr("src", "/images/user/redHeart.png");
+                        } else if (response.status === "removed") {
+                            alert("찜 해제 되었습니다.");
+                            heartIcon.attr("src", "/images/user/heart.png");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        if (status === "parsererror") {
+                            location.href = '/member/login'
+                        }
+                    }
+                });
+            });
+
+            // 장바구니 버튼 클릭 시
+            $(".cart").click(function () {
+                // CSRF 토큰
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                const goodsNo = $(this).data("id");
+
+                $.ajax({
+                    url: "/cart/cartList",
+                    type: "POST",
+                    // CSRF 토큰 헤더 설정
+                    headers: {[csrfHeader]: csrfToken},
+                    data: {goodsNo: goodsNo},
+                    dataType: "json",
+                    success: function (response) {
+                        // response.status 가 "added" 또는 "updated"
+                        if (response.status === "added") {
+                            const moveConfirm = confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
+                            if (moveConfirm) {
+                                location.href = "/member/cart";
+                            }
+                        } else if (response.status === "updated") {
+                            const moveConfirm = confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?");
+                            if (moveConfirm) {
+                                location.href = "/member/cart";
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        if (status === "parsererror") {
+                            location.href = '/member/login'
+                        }
+                    }
+                });
+            });
         });
-      });
-    });
 
-    $(function () {
-      $(".buy-now-btn").click(function () {
-        const goodsNo = $(this).data("id");
+        $(function () {
+            $(".buy-now-btn").click(function () {
+                const goodsNo = $(this).data("id");
 
-        // 바로구매 페이지로 이동
-        location.href = `/payments?goodsNo=${goodsNo}`;
-      })
-    })
-  </script>
+                // 바로구매 페이지로 이동
+                location.href = `/payments?goodsNo=${goodsNo}`;
+            })
+        })
+    </script>
 </head>
 <body>
-<div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success">
-  <div class="container w-75">
-    <div class="header-menu mt-4 d-flex align-items-center">
-      <button class="btn btn-light me-3" id="category">
+    <div class="container w-75">
+        <div class="header-menu mt-4 d-flex align-items-center">
+            <button class="btn btn-light me-3" id="category">
         <span class="category d-flex flex-column justify-content-center align-items-center">
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
         </span>
-        <span class="close-icon d-none">&times;</span>
-      </button>
-      <a href="#" class="best ps-5 pe-5">베스트</a>
-      <a href="#" class="new ps-5 pe-5">신상품</a>
+                <span class="close-icon d-none">&times;</span>
+            </button>
+            <a href="#" class="best ps-5 pe-5">베스트</a>
+            <a href="#" class="new ps-5 pe-5">신상품</a>
+        </div>
     </div>
-  </div>
 </div>
-<!-- 카테고리 전체보기 -->
 <div id="categoryView">
-  <h4 class="text-center mb-3">카테고리</h4><br>
-  <div class="category-list">
-    <ul class="list-unstyled">
-      <!-- categoryList의 각 요소를 반복하여 출력 -->
-      <li th:each="category : ${categoryList}">
-        <!-- 카테고리 이름 출력 -->
-        <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
-           th:text="${category.cateName}"
-           class="category-item"></a>
-      </li>
-    </ul>
-  </div>
+    <h4 class="text-center">카테고리</h4><br>
+    <div class="category-list">
+        <ul class="list-unstyled">
+            <!-- categoryList의 각 요소를 반복하여 출력 -->
+            <li th:each="category : ${categoryList}">
+                <!-- 카테고리 이름 출력 -->
+                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
+                   th:text="${category.cateName}"
+                   class="category-item"></a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div class="container w-75 mt-5">
-  <div class="d-flex justify-content-end align-items-center mb-3">
-    <!-- 장바구니, 찜 버튼 -->
+    <div class="row">
+        <!-- 사이드바 -->
+        <aside class="col-md-3 aside_wrap sub_category">
+            <h4 class="title_heading mb-3" th:text="${category?.cateName}"></h4>
+                <div class="category-list">
+                    <ul class="list-unstyled">
+                        <!-- categoryList의 각 요소를 반복하여 출력 -->
+                        <li th:each="category : ${categoryList}">
+                            <!-- 카테고리 이름 출력 -->
+                            <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
+                               th:text="${category.cateName}"
+                               class="category-item"></a>
+                        </li>
+                    </ul>
+                </div>
+        </aside>
+        <div class="col-md-9">
+            <div class="d-flex justify-content-end align-items-center mb-3">
+                <!-- 장바구니, 찜 버튼 -->
+                <!--            <div class="icon ms-auto mb-4">-->
+                <!--              <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
+                <!--              <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
+                <!--            </div>-->
 
-<!--    <div class="icon ms-auto mb-4">-->
-<!--      <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
-<!--      <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
-<!--    </div>-->
-
-    <!-- 드롭다운 -->
-    <div class="dropdown me-2">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-      <li><a class="dropdown-item" href="#" data-sort="latest">최신순</a></li>
-      <li><a class="dropdown-item" href="#" data-sort="sales">판매량순</a></li>
-      <li><a class="dropdown-item" href="#" data-sort="highPrice">높은가격순</a></li>
-      <li><a class="dropdown-item" href="#" data-sort="lowPrice">낮은가격순</a></li>
-    </ul>
-    <!-- 페이지당 보기 -->
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView" data-bs-toggle="dropdown" aria-expanded="false">
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownView">
-      <li><a class="dropdown-view" href="#" data-size="20">20개씩 보기</a></li>
-      <li><a class="dropdown-view" href="#" data-size="50">50개씩 보기</a></li>
-    </ul>
-    </div>
-  </div>
-
-  <!-- 전체 선택 체크박스 -->
-  <input type="checkbox" id="selectAll" class="all-checkbox me-1" style="width: 20px; height: 20px; vertical-align: middle;">
-  <label for="selectAll" style="vertical-align: middle;">전체 선택</label>
-  <div class="book-items mt-4">
-    <ul class="list-unstyled">
-      <!-- bestBooks 리스트를 반복하여 출력 -->
-      <li th:each="goods : ${goodsList}">
-        <div class="category-list d-flex align-items-start mb-5">
-          <input type="checkbox" class="item-checkbox mt-1 ms-1" style="width: 18px; height: 18px;">
-          <div class="book-item mt-1">
-            <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
-            <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
-              <div class="img-box">
-<!--                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">-->
-              </div>
-            </a>
-            <div class="item-info">
-              <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
-              <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
-                <span class="item-name" th:text="${goods.goodsName}"></span>
-              </a>
-              <br>
-              <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                <!-- 드롭다운 -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                        <li><a class="dropdown-item" href="#" data-sort="latest">최신순</a></li>
+                        <li><a class="dropdown-item" href="#" data-sort="sales">판매량순</a></li>
+                        <li><a class="dropdown-item" href="#" data-sort="highPrice">높은가격순</a></li>
+                        <li><a class="dropdown-item" href="#" data-sort="lowPrice">낮은가격순</a></li>
+                    </ul>
+                    <!-- 페이지당 보기 -->
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownView">
+                        <li><a class="dropdown-view" href="#" data-size="20">20개씩 보기</a></li>
+                        <li><a class="dropdown-view" href="#" data-size="50">50개씩 보기</a></li>
+                    </ul>
+                </div>
             </div>
-          </div>
-          <div class="icon ms-auto mb-4">
-              <img src="/images/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">
-              <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="장바구니">
-          </div>
-          <!-- 바로구매 버튼 -->
-          <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매</button>
+            <!-- 전체 선택 체크박스 -->
+            <input type="checkbox" id="selectAll" class="all-checkbox me-1"
+                   style="width: 20px; height: 20px; vertical-align: middle;">
+            <label for="selectAll" style="vertical-align: middle;">전체 선택</label>
+            <div class="book-items mt-4">
+                <ul class="list-unstyled">
+                    <li th:each="goods : ${goodsList}">
+                        <div class="category-list d-flex align-items-start mb-5">
+                            <input type="checkbox" class="item-checkbox mt-1 ms-1"
+                                   style="width: 18px; height: 18px;">
+                            <div class="book-item mt-1">
+                                <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
+                                <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}"
+                                   class="show-detail">
+                                    <div class="img-box">
+                                        <!--                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">-->
+                                    </div>
+                                </a>
+                                <div class="item-info">
+                                    <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+                                    <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}"
+                                       class="show-detail">
+                                        <span class="item-name" th:text="${goods.goodsName}"></span>
+                                    </a>
+                                    <br>
+                                    <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                                </div>
+                            </div>
+                            <div class="icon ms-auto mb-4">
+                                <!-- 찜 상태에 따른 하트 아이콘 -->
+                                <img th:if="${goods.wishStatus == 'Y'}"
+                                     src="/images/user/redHeart.png"
+                                     class="heart me-2"
+                                     th:data-id="${goods.goodsNo}"
+                                     width="36"
+                                     height="36"
+                                     alt="찜">
+                                <img th:if="${goods.wishStatus == 'N'}"
+                                     src="/images/user/heart.png"
+                                     class="heart me-2"
+                                     th:data-id="${goods.goodsNo}"
+                                     width="36"
+                                     height="36"
+                                     alt="찜">
+                                <!--              <img src="/images/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">-->
+                                <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
+                                     width="36" height="36" alt="장바구니">
+                            </div>
+                            <!-- 바로구매 버튼 -->
+                            <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <hr>
+                <!-- 페이지네이션 -->
+                <nav th:if="${totalPages > 0}" aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <!-- 이전 페이지 버튼 -->
+                        <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                            <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}"
+                               th:if="${currentPage > 1}">&lt;</a>
+                        </li>
+
+                        <!-- 페이지 번호 -->
+                        <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                            th:classappend="${currentPage == i} ? 'active' : ''">
+                            <a class="page-link" href="#" th:attr="data-page=${i}" th:text="${i}"></a>
+                        </li>
+
+                        <!-- 다음 페이지 버튼 -->
+                        <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                            <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}"
+                               th:if="${currentPage < totalPages}">&gt;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-      </li>
-    </ul>
-  <hr>
-  <!-- 페이지네이션 -->
-    <nav th:if="${totalPages > 0}" aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <!-- 이전 페이지 버튼 -->
-        <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-          <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}" th:if="${currentPage > 1}">&lt;</a>
-        </li>
-
-        <!-- 페이지 번호 -->
-        <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-            th:classappend="${currentPage == i} ? 'active' : ''">
-          <a class="page-link" href="#" th:attr="data-page=${i}" th:text="${i}"></a>
-        </li>
-
-        <!-- 다음 페이지 버튼 -->
-        <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-          <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}" th:if="${currentPage < totalPages}">&gt;</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+    </div>
 </div>
 </body>
 </html>

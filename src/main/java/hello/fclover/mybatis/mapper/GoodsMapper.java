@@ -13,17 +13,39 @@ public interface GoodsMapper {
 
     Long goodsNoselect(Long sellerNo, String goodsName);
   
-    List<Goods> findAll(@Param("cate_no") int cateNo,
-                        @Param("sort") String sort,
-                        @Param("offset") int offset,
-                        @Param("size") int size);
+//    List<Goods> findAll(@Param("memberNo") Long memberNo,
+//                        @Param("cate_no") int cateNo,
+//                        @Param("sort") String sort,
+//                        @Param("offset") int offset,
+//                        @Param("size") int size);
 
     int countGoods(int cate_no);
+
+    int countBestGoods();
 
     Goods findGoodsById(long goodsNo);
 
     int countGoodsByKeyword(String keyword);
 
+    List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
+
+    // 찜 상태를 포함한 상품 조회 메서드 추가
+    List<Goods> findGoodsWithWishStatus(
+            @Param("memberNo") Long memberNo,
+            @Param("cateNo") Integer cateNo,
+            @Param("sort") String sort,
+            @Param("offset") Integer offset,
+            @Param("size") Integer size
+    );
+
+    List<Goods> findGoodsWishStatus(
+            @Param("memberNo") Long memberNo,
+            @Param("offset") Integer offset,
+            @Param("size") Integer size
+    );
+
+    List<Goods> findByRank();
+  
     List<Goods> findGoodsByKeyword(Map<String, Object> params);
 
     int countGoodsByParam(Map<String, Object> params);
