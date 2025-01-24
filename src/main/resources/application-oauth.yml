@@ -5,7 +5,7 @@ jasypt:
 #test
 spring:
   config:
-    import: 'aws-parameterstore:/config/fclover'
+    import: 'optional:aws-parameterstore:/config/fclover'
   security:
     oauth2:
       client:
