@@ -27,7 +27,7 @@ public interface GoodsMapper {
 
     int countGoodsByKeyword(String keyword);
 
-    List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
+//    List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
 
     // 찜 상태를 포함한 상품 조회 메서드 추가
     List<Goods> findGoodsWithWishStatus(

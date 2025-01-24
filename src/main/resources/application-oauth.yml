@@ -2,7 +2,7 @@ jasypt:
   encryptor:
     bean: jasyptEncryptorAES
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
-
+#test
 spring:
   config:
     import: 'aws-parameterstore:/config/fclover'
@@ -41,4 +41,4 @@ aws:
   paramstore:
     enabled: true
     prefix: /config
-    name: JASYPT_ENCRYPTOR_PASSWORD
+    name: flover
