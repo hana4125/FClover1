@@ -14,13 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,16 +46,21 @@ public class GoodsServiceImpl implements GoodsService {
             goodsInsertImage(images, sellerNumber, goodsNo);
         }
     }
+  
+//    @Override
+//    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
+//        int offset = (page - 1) * size;
+//        return goodsMapper.findAll(cate_no, sort, offset, size);
+//    }
 
     @Override
-    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
-        int offset = (page - 1) * size;
-        return goodsMapper.findAll(cate_no, sort, offset, size);
+    public int getTotalGoodsCount(int cateNo) {
+        return goodsMapper.countGoods(cateNo);
     }
 
     @Override
-    public int getTotalGoodsCount(int cate_no) {
-        return goodsMapper.countGoods(cate_no);
+    public int getTotalBestGoodsCount() {
+        return goodsMapper.countBestGoods();
     }
 
     @Override
@@ -63,6 +69,22 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
+        int offset = (page - 1) * size;
+        return goodsMapper.findGoodsWithWishStatus(memberNo, cateNo, sort, offset, size);
+    }
+
+    @Override
+    public List<Goods> getGoodsList() {
+        return goodsMapper.findByRank();
+    }
+
+    @Override
+    public List<Goods> getGoodsWishStatus(Long memberNo, int page, int size) {
+        int offset = (page - 1) * size;
+        return goodsMapper.findGoodsWishStatus(memberNo, offset, size);
+    }
+
     public void getGoodsDetail(Long goodsNo, Model model) {
         model.addAttribute("goods", goodsMapper.findGoodsById(goodsNo));
         List<String> imageList = getGoodsImages(goodsNo, goodsImage);

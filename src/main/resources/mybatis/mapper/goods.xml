@@ -3,9 +3,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
-
   <insert id="goodsInsertText">
-    insert into Goods
+    insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
      goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
     values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
@@ -41,16 +40,84 @@
     WHERE cate_no = #{cate_no}
   </select>
 
+
+    <select id="countBestGoods" resultType="int">
+        SELECT COUNT(*)
+        FROM goods
+    </select>
+
+
   <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
     SELECT *
     FROM goods
     WHERE goods_no = #{goods_no}
   </select>
 
+ <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        ORDER BY
+        goods_count DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+ <select id="findByRank" resultType="hello.fclover.domain.Goods">
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS row_num,
+            goods_no,
+            goods_name,
+            goods_writer
+        FROM goods
+        ORDER BY
+            goods_count DESC;
+    </select>
+
+    <!-- 찜 상태를 포함한 상품 조회 SQL 매핑 추가 -->
+    <select id="findGoodsWithWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no AS goodsNo,
+        a.cate_no AS cateNo,
+        a.goods_name AS goodsName,
+        a.goods_price AS goodsPrice,
+        a.goods_writer AS goodsWriter,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+        goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b
+        ON a.goods_no = b.goods_no
+        WHERE
+        a.cate_no = #{cateNo}
+        ORDER BY
+        <choose>
+            <when test="'latest' == sort">a.goods_date DESC</when>
+            <when test="'sales' == sort">a.goods_count DESC</when>
+            <when test="'highPrice' == sort">a.goods_price DESC</when>
+            <when test="'lowPrice' == sort">a.goods_price ASC</when>
+            <otherwise>a.goods_date DESC</otherwise>
+        </choose>
+        LIMIT #{offset}, #{size}
+    </select>
+
   <!-- 키워드 검색 총 개수 조회-->
   <select id="countGoodsByKeyword" resultType="int">
     SELECT COUNT(*)
-    FROM GOODS g
+    FROM goods g
            JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
                 AGAINST(#{keyword} IN BOOLEAN MODE)
@@ -71,7 +138,7 @@
     s.company_name AS companyName,
     g.GOODS_CREATE_AT AS goodsCreateAt,
     g.GOODS_COUNT AS goodsCount
-    FROM GOODS g
+    FROM goods g
     JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE
     MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
@@ -98,7 +165,7 @@
   <!-- 상세 검색 개수 쿼리 -->
   <select id="countGoodsByParam" parameterType="map" resultType="int">
     SELECT COUNT(*)
-    FROM GOODS g
+    FROM goods g
     JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE 1 = 1
 
@@ -139,7 +206,7 @@
     s.company_name AS companyName,
     g.GOODS_CREATE_AT AS goodsCreateAt,
     g.GOODS_COUNT AS goodsCount
-    FROM GOODS g
+    FROM goods g
     JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE 1 = 1
 
@@ -184,12 +251,12 @@
   <!-- DB 데이터 존재 확인 -->
   <select id="countAll" resultType="long">
     SELECT COUNT(*)
-    FROM GOODS
+    FROM goods
   </select>
 
   <!-- 데이터 Batch 삽입 -->
   <insert id="insertGoods">
-    INSERT INTO GOODS (SELLER_NO, CATE_NO, GOODS_NAME, GOODS_CONTENT, GOODS_PRICE, GOODS_WRITER, WRITER_CONTENT,
+    INSERT INTO goods (SELLER_NO, CATE_NO, GOODS_NAME, GOODS_CONTENT, GOODS_PRICE, GOODS_WRITER, WRITER_CONTENT,
     GOODS_CREATE_AT, GOODS_COUNT, GOODS_PAGECOUNT, GOODS_BOOKSIZE)
     VALUES
     <foreach collection="goods" item="g" separator=",">
