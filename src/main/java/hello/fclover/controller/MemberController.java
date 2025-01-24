@@ -454,12 +454,6 @@ public class MemberController {
     }
 
 
-    @GetMapping("/GoodsDetail")
-    public String GoodsDetail() {
-        System.out.println("====");
-        return "user/userGoodsDetail";
-    }
-
 //    @GetMapping("/category/{no}")
 //    public String categoryDetail(@PathVariable("no") int cate_no,
 //                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
