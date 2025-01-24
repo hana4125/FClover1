@@ -7,7 +7,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: 'aws-parameterstore:'
+    import: 'optional:aws-parameterstore:/config/fclover'
   security:
     oauth2:
       client:
@@ -40,4 +40,5 @@ aws:
   paramstore:
     enabled: true
     prefix: /config
+    profile-separator: _
     name: fclover
