@@ -1,18 +1,23 @@
 
-CREATE TABLE NOTICE (
-noti_No INT,
-noti_Title VARCHAR(300),
+CREATE TABLE notice (
+noti_no INT,
+noti_title VARCHAR(300),
 noti_Name VARCHAR(30),
-noti_Content VARCHAR(4000),
+noti_content VARCHAR(4000),
 noti_Date DATETIME,
-PRIMARY KEY (noti_No)
+PRIMARY KEY (noti_no)
 );
 
-select * from NOTICE;
+select * from notice;
 
-drop table NOTICE;
+drop table notice;
 
 commit;
 
-ALTER TABLE NOTICE
-    ADD FULLTEXT (noti_Title);
+ALTER TABLE notice
+    ADD FULLTEXT (noti_title);
+
+ALTER TABLE notice RENAME COLUMN noti_Date TO noti_date;
+
+
+

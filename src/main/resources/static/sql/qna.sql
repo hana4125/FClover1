@@ -1,4 +1,4 @@
-CREATE TABLE QnA(
+CREATE TABLE qna(
     q_no bigint,
     q_create_at date,
     member_id varchar(20),
@@ -19,11 +19,11 @@ CREATE TABLE QnA(
 # 배포테스트중
 
 
-DROP TABLE QnA;
+DROP TABLE qna;
 
-select * from QnA;
+select * from qna;
 
-ALTER TABLE QnA MODIFY COLUMN q_alert ENUM('y', 'n');
+ALTER TABLE qna MODIFY COLUMN q_alert ENUM('y', 'n');
 
 
 
