@@ -1,7 +1,15 @@
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    profile-separator: _
+    name: fclover
+
 jasypt:
   encryptor:
     bean: jasyptEncryptorAES
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
+
 #test
 spring:
   config:
@@ -38,9 +46,9 @@ spring:
             user-name-attribute: response
 
 
-aws:
-  paramstore:
-    enabled: true
-    prefix: /config
-    profile-separator: _
-    name: fclover
+cloud:
+  aws:
+    credentials:
+      access-key:
+      instance-profile: true
+      secret-key:
