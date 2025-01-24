@@ -10,7 +10,7 @@ JAR_PATH=$REPOSITORY/target/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
-if [ -z $CURRENT_PID ];
+if [ -z "$CURRENT_PID" ];
 then
   echo "> 종료할 애플리케이션이 없습니다."
 else
@@ -20,6 +20,9 @@ else
 fi
 
 echo "> Deploy - $JAR_NAME "
+
+source ~/.bashrc
+
 #nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
 #java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
 #nohup java -jar $JAR_PATH > /home/ubuntu/deploy.log 2>&1 &
