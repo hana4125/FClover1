@@ -447,14 +447,14 @@ public class MemberController {
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
   
-    @GetMapping("/goodsDetail/{no}")
-    public String goodsDetail(@PathVariable("no") Long goodsNo, @ModelAttribute("member") Member member, Model model) {
-        // 카테고리 데이터 가져오기
-        Goods goods = goodsService.findGoodsByNo(goodsNo);
-
-        model.addAttribute("goods", goods);
-        return "/user/userGoodsDetail";
-    }
+//    @GetMapping("/goodsDetail/{no}")
+//    public String goodsDetail(@PathVariable("no") Long goodsNo, @ModelAttribute("member") Member member, Model model) {
+//        // 카테고리 데이터 가져오기
+//        Goods goods = goodsService.findGoodsByNo(goodsNo);
+//
+//        model.addAttribute("goods", goods);
+//        return "/user/userGoodsDetail";
+//    }
 
     @GetMapping("/category/{no}")
     public String categoryDetail(@PathVariable("no") int cateNo,

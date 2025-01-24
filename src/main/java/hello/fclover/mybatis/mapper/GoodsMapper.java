@@ -1,11 +1,11 @@
 package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Goods;
-import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface GoodsMapper {
