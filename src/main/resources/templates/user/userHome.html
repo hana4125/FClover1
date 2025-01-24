@@ -124,7 +124,19 @@
 </div>
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
-    <div th:replace="~{fragment/category :: category}"></div>
+  <div th:replace="~{fragment/category :: category}"></div>
+    <h4 class="text-center">카테고리</h4><br>
+    <div class="category-list">
+        <ul class="list-unstyled">
+            <!-- categoryList의 각 요소를 반복하여 출력 -->
+            <li th:each="category : ${categoryList}">
+                <!-- 카테고리 이름 출력 -->
+                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
+                   th:text="${category.cateName}"
+                   class="category-item"></a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <br>
@@ -191,9 +203,6 @@
 
 <!-- 베스트 스테디 샐러 -->
 <div class="container w-75 mt-5">
-
-
-
     <div class="d-flex align-items-center justify-content-start">
         <h3 class="mb-4 me-3 best-title active" id="best">베스트</h3>
         <h3 class="mb-4 mx-3" style="color: gray; font-size:15px">|</h3>
@@ -201,127 +210,52 @@
         <a href="#" class="show-plus">더보기 +</a>
     </div>
 
-
-
-
-
-<!--    <div class="best-items">-->
-<!--        <ul class="list-unstyled">-->
-<!--            <li th:each="book : ${bestBooks}">-->
-<!--                <span class="item-lank" style="font-size : 18px;" th:text="${book.rank}"></span>-->
-<!--                <div class="item-image">-->
-<!--                    <a href="#" class="show-detail">-->
-<!--                        <div class="img-box">-->
-<!--                            <img th:src="@{/img/user/book/{image}(image=${book.image})}" style="width:200px; height:280px;" th:alt="${book.alt}">-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <br>-->
-<!--                <div class="item-info">-->
-<!--                    <a href="#" class="show-detail">-->
-<!--                        <span class="item_name" th:text="${book.name}"></span>-->
-<!--                    </a><br>-->
-<!--                    <span class="item_author" th:text="${book.author}"></span>-->
-<!--                </div>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--    <div class="steady-items" style="display: none">-->
-<!--        <ul class="list-unstyled">-->
-<!--            <li th:each="book : ${steadyBooks}">-->
-<!--                <span class="item-lank" style="font-size : 18px;" th:text="${book.rank}"></span>-->
-<!--                <div class="item-image">-->
-<!--                    <a href="#" class="show-detail">-->
-<!--                        <div class="img-box">-->
-<!--                            <img th:src="@{/img/user/book/{image}(image=${book.image})}" style="width:200px; height:280px;" th:alt="${book.alt}">-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <br>-->
-<!--                <div class="item-info">-->
-<!--                    <a href="#" class="show-detail">-->
-<!--                        <span class="item_name" th:text="${book.name}"></span>-->
-<!--                    </a><br>-->
-<!--                    <span class="item_author" th:text="${book.author}"></span>-->
-<!--                </div>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-    <div class="best-items">
+    <div class="best-items mt-4">
         <ul class="best-list list-unstyled">
-            <li>
-                <span class="item-lank" style="font-size : 18px;">1</span>
-                <div class="item-image">
-                    <a href="/member/GoodsDetail" class="show-detail">
-                        <div class="img-box">
-                            <img src="/images/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
+<!--            <li th:each="goods : ${goodsList}">-->
+            <li th:each="goods, iterStat : ${goodsList}" th:if="${iterStat.index < 10}">
+                <span class="item-lank" style="font-size : 18px;" th:text="${goods.rowNum}"></span>
+                    <div class="book-item mt-1">
+                        <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
+                        <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}"
+                           class="show-detail">
+                            <div class="img-box">
+                                <!--                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">-->
+                            </div>
+                        </a>
+                        <div class="item-info">
+                            <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+                            <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}"
+                               class="show-detail">
+                                <span class="item-name" th:text="${goods.goodsName}"></span>
+                            </a>
+                            <br>
+                            <span class="item-author" th:text="${goods.goodsWriter}"></span>
                         </div>
-                    </a>
-                </div>
-                <br>
-                <div class="item-info">
-                    <a href="/member/GoodsDetail" class="show-detail">
-                        <span class="item_name">소년이 온다</span>
-                    </a><br>
-                    <a href="/member/GoodsDetail" class="show-detail">
-                    <span class="item_author">한강 · 창비</span>
-                    </a><br>
-                </div>
-            </li>
-            <li>
-                <span class="item-lank" style="font-size : 18px;">2</span>
-                <div class="item-image">
-                    <a href="#" class="show-detail">
-                        <div class="img-box">
-                            <img src="/images/user/book/bestItem2.png" style="width:200px; height:280px;" alt="bestItem2">
-                        </div>
-                    </a>
-                </div>
-                <br>
-                <div class="item-info">
-                    <a href="#" class="show-detail">
-                        <span class="item_name">채식주의자</span>
-                    </a><br>
-                    <span class="item_author">한강 · 문학동네</span>
-                </div>
             </li>
         </ul>
     </div>
-    <div class="steady-items" style="display: none">
+    <div class="steady-items mt-4" style="display: none">
         <ul class="steady-list list-unstyled">
-            <li>
-                <span class="item-lank" style="font-size : 18px;">1</span>
-                <div class="item-image">
-                    <a href="#" class="show-detail">
+            <li th:each="goods, iterStat : ${goodsList}" th:if="${iterStat.index < 10}">
+                <span class="item-lank" style="font-size : 18px;" th:text="${goods.rowNum}"></span>
+                <div class="book-item mt-1">
+                    <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
+                    <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}"
+                       class="show-detail">
                         <div class="img-box">
-                            <img src="/images/user/book/item1.png" style="width:200px; height:280px;" alt="item1">
+                            <!--                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">-->
                         </div>
                     </a>
-                </div>
-                <br>
-                <div class="item-info">
-                    <a href="#" class="show-detail">
-                        <span class="item_name">소년이 온다</span>
-                    </a><br>
-                    <span class="item_author">한강 · 창비</span>
-                </div>
-            </li>
-            <li>
-                <span class="item-lank" style="font-size : 18px;">2</span>
-                <div class="item-image">
-                    <a href="#" class="show-detail">
-                        <div class="img-box">
-                            <img src="/images/user/book/steadyItem2.png" style="width:200px; height:280px;"
-                                 alt="steadyItem2">
-                        </div>
-                    </a>
-                </div>
-                <br>
-                <div class="item-info">
-                    <a href="#" class="show-detail">
-                        <span class="item_name">작별하지 않는다</span>
-                    </a><br>
-                    <span class="item_author">한강 · 문학동네</span>
+                    <div class="item-info">
+                        <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+                        <a th:href="@{/member/goodsDetail/{no}(no=${goods.goodsNo})}"
+                           class="show-detail">
+                            <span class="item-name" th:text="${goods.goodsName}"></span>
+                        </a>
+                        <br>
+                        <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                    </div>
                 </div>
             </li>
         </ul>

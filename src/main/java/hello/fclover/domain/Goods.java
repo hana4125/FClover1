@@ -1,11 +1,9 @@
 package hello.fclover.domain;
 
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Goods {
     private Long goodsNo;              // 상품 일련번호
     private Long sellerNo;             // 판매자 번호
-    private Integer cateNo;            // 카테고리 번호
+    private int cateNo;                // 카테고리 번호
     private String goodsName;          // 상품 명
     private String goodsContent;       // 상품 설명
     private int goodsPrice;            // 상품 가격
@@ -34,7 +32,7 @@ public class Goods {
     private LocalDateTime goodsDate;   // 상품 등록일
     private int goodsPageCount;        // 상품 페이지 수
     private String goodsBookSize;      // 상품 크기
-
-
+    private String wishStatus; // 'Y' 또는 'N'
+    private int rowNum; // 상품 순위
 }
 

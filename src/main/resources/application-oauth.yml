@@ -36,6 +36,7 @@ spring:
             user-name-attribute: response
 
 
+
 aws:
   paramstore:
     enabled: true

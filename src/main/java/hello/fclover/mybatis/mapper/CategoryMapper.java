@@ -10,6 +10,8 @@ public interface CategoryMapper {
     // 모든 카테고리 조회
     List<Category> findAll();
 
+    Category findTitle(int cateNo);
+  
     // 카테고리 개수 조회
     int countAll();
 }
