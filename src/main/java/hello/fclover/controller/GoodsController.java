@@ -14,4 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class GoodsController {
     private final GoodsService goodsService;
 
+    @GetMapping("/GoodsDetail/{no}")
+    public String goodsDetail(Model model, @PathVariable("no") Long goodsNo) {
+        goodsService.getGoodsDetail(goodsNo, model);
+        System.out.println("============================================");
+        System.out.println("model = " + model.getAttribute("imageList"));
+        return "user/userGoodsDetail";
+    }
 }
