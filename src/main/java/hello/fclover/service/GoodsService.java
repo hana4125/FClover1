@@ -12,17 +12,17 @@ public interface GoodsService {
 
     int getTotalGoodsCount(int cateNo);
 
-    int getTotalBestGoodsCount();
+    int getTotalBestGoodsCount(Long memberNo);
 
     Goods findGoodsByNo(Long goodsNo);
 
     // 찜 상태를 포함한 상품 목록 조회 메서드 추가
     List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size);
 
-    List<Goods> getGoodsList();
+    List<Goods> getGoodsList(int limit);
 
     List<Goods> getGoodsWishStatus(Long memberNo, int page, int size);
-  
+
     void getGoodsDetail(Long goodsNo, Model model);
 }
 
