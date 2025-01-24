@@ -1,11 +1,11 @@
 package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Goods;
-import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface GoodsMapper {
@@ -27,7 +27,7 @@ public interface GoodsMapper {
 
     int countGoodsByKeyword(String keyword);
 
-    List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
+//    List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
 
     // 찜 상태를 포함한 상품 조회 메서드 추가
     List<Goods> findGoodsWithWishStatus(
