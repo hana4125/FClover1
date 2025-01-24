@@ -14,4 +14,10 @@
             from goods_image
             where goods_no=#{goodsNo}
         </select>
+
+        <select id="findMainImageByGoodsNo">
+            select goods_image_name, goods_url
+            from goods_image
+            where goods_no=#{goodsNo} and isMain= 'M'
+        </select>
 </mapper>

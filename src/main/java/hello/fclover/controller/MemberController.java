@@ -513,6 +513,7 @@ public class MemberController {
         List<Goods> goodsList = goodsService.getGoodsWishStatus(memberNo, page, size);
         model.addAttribute("goodsList", goodsList);
 
+
         // 페이지네이션 정보 전달
         int totalItems = goodsService.getTotalBestGoodsCount();
         int totalPages = (int) Math.ceil((double) totalItems / size);
@@ -528,4 +529,5 @@ public class MemberController {
         System.out.println("====");
         return "user/userGoodsDetail";
     }
+
 }
