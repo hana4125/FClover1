@@ -31,6 +31,10 @@ public class NoticeServiceImpl implements NoticeService {
         map.put("start", startrow);
         map.put("limit", limit);
 
+        log.info("getBoardList - start: {}, limit: {}", map.get("start"), map.get("limit"));
+        List<Notice> resultList = dao.getBoardList(map);
+        log.info("Result from dao.getBoardList: {}", resultList);
+
         return dao.getBoardList(map);
     }
 
