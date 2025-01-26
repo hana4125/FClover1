@@ -29,3 +29,4 @@ insert into qna_typelist values ('948','동영상문의');
 commit;
 
 
+select * from qna_typelist;

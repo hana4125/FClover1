@@ -28,5 +28,4 @@ public class Question {
     private int cno;
     private String ccontent;
     private String cresponseat;
-
 }

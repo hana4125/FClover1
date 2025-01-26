@@ -103,4 +103,5 @@ public interface QuestionService {
     public int commentsUpdate(Question co);
 
     String getQvalue(String qtype);
+
 }

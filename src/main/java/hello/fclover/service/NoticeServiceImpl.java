@@ -40,6 +40,10 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public void insertNotice(Notice notice) {
+        log.info("Insert Notice: {}", notice);
+        if (notice.getNotititle() == null || notice.getNotiname() == null) {
+            throw new IllegalArgumentException("필수 필드 누락");
+        }
         dao.insertNotice(notice);
     }
 
