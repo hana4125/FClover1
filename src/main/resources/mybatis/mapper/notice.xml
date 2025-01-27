@@ -66,4 +66,11 @@
         </where>
     </select>
 
+    <delete id="deleteNotice" parameterType="int">
+        <if test="_parameter != null">
+            DELETE FROM notice WHERE noti_no = #{notino}
+        </if>
+    </delete>
+
+
 </mapper>

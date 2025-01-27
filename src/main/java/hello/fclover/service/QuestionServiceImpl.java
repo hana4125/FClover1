@@ -3,6 +3,7 @@ package hello.fclover.service;
 
 
 import hello.fclover.domain.Question;
+import hello.fclover.mybatis.mapper.NoticeMapper;
 import hello.fclover.mybatis.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionMapper dao;
+    private final NoticeMapper noticeMapper;
 
 
     @Override

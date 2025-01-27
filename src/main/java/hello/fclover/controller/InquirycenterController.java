@@ -10,11 +10,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -41,13 +46,14 @@ public class InquirycenterController {
         return null;
     }
 
-    //공지사항
+    //공지사항 작성(관리자만)
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/notice/write")
     public String noticeWrite() {
         return "user/userNoticeWrite";
     }
 
+    //공지사항 등록
     @PostMapping(value ="/notice/add")
     public String noticeAdd(Notice notice, Principal principal) {
         notice.setNotiname(principal.getName());
@@ -103,6 +109,35 @@ public class InquirycenterController {
         mv.addObject("limit",limit);
         mv.addObject("listcount",listcount);
         return mv;
+    }
+
+    //공지사항 삭제
+    @PostMapping(value = "/notice/delete")
+    public String deleteNotice(@RequestBody Map<String, Integer> body,
+                               RedirectAttributes rattr,
+                               Principal principal) {
+        int notino = body.get("num");
+
+        // 관리자 권한 체크
+        if (!principal.getName().equals("admin")) {
+            rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
+            return "redirect:/inquiry/notice/detail?num=" + notino;
+        }
+
+        System.out.println("Delete Request - notino: " + notino);
+        System.out.println("Current User: " + principal.getName());
+
+        int result = noticeService.deleteNotice(notino);
+
+        System.out.println("Delete Result: " + result);
+
+        if (result > 0) {
+            rattr.addFlashAttribute("successMessage", "공지사항이 삭제되었습니다.");
+            return "redirect:/inquiry/notice/noti_list";
+        } else {
+            rattr.addFlashAttribute("errorMessage", "삭제 실패");
+            return "redirect:/inquiry/notice/detail?num=" + notino;
+        }
     }
 
     //문의사항
@@ -199,7 +234,7 @@ public class InquirycenterController {
         return questionService.commentsUpdate(co);
     }
 
-    @PostMapping(value = "/delete")
+    @PostMapping(value = "/inquiry/comment/delete")
     @ResponseBody
     public int commentDelete(int num) {
         return questionService.commentDelete(num);

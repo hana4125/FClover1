@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
+  <script src="/js/noti_btn.js"></script>
+  <link rel="icon" th:href="@{/images/user/favicon.png}">
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
   <link rel="stylesheet" href="/css/user/noticedetail.css">
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -70,13 +76,14 @@
         <div class="content-wrapper px-4">
           <div class="title-row">
             <p class="title_heading" th:text="${notidata.notititle}"></p>
+
             <th:block sec:authorize-expr="isAuthenticated()">
               <th:block th:with="pinfo=${#authentication.principal}">
                 <th:block th:if="${notidata.notiname == pinfo.username || pinfo.username=='admin'}">
                   <div class="button-group">
                     <a th:href="@{'modifyView?num=' + ${notidata.notino}}" class="text-button">수정</a>
                     <span class="separator">|</span>
-                    <a href="#" class="text-button" data-toggle="modal" data-target="#myModal">삭제</a>
+                    <a href="#" th:onclick="'deleteNotice(' + ${notidata.notino} + ')'" class="text-button">삭제</a>
                   </div>
                 </th:block>
               </th:block>

@@ -76,4 +76,16 @@ public class NoticeServiceImpl implements NoticeService {
 
         return dao.getSearchList(map);
     }
+
+    @Override
+    public int deleteNotice(int notino) {
+        try {
+            int result = dao.deleteNotice(notino);
+            log.error("Delete attempt - notino: {}, rows affected: {}", notino, result);
+            return result;
+        } catch (Exception e) {
+            log.error("Delete failed - notino: {}, error: {}", notino, e.getMessage());
+            return 0;
+        }
+    }
 }
