@@ -43,7 +43,11 @@
       }
   </style>
   <script th:inline="javascript">
-
+    $("#deleteWishBtn").click(function() {
+       $.ajax({
+           url: ''
+       })
+    });
   </script>
 </head>
 <body>
@@ -77,6 +81,7 @@
                   <div class="d-flex">
                     <div class="imageBox ms-4 mt-4">이미지</div>
                     <div class="textBox d-flex flex-column ms-4 mt-4">
+                      <div></div>
                       <div><span th:text="${wish.goodsName}"></span></div>
                       <div><span th:text="${wish.goodsWriter}"></span></div>
                     </div>
