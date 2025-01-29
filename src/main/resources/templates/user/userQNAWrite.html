@@ -232,7 +232,7 @@
                   <td>
                     <div class="form_cont">
                       <div class="vaild_check">
-                        <input id="InqPhoneNumber" name="responsephone" maxlength="20" placeholder="휴대폰 번호를 입력해 주세요.">
+                        <input id="InqPhoneNumber" name="phone" maxlength="20" placeholder="휴대폰 번호를 입력해 주세요.">
                       </div>
                     </div>
                   </td>
@@ -243,10 +243,11 @@
                   </th>
                   <td>
                     <div class="valid_check">
-                      <input id="InqEmail" name="responseemail" maxlength="100" placeholder="이메일을 입력해 주세요.">
+                      <input id="InqEmail" name="email" maxlength="100" placeholder="이메일을 입력해 주세요.">
                     </div>
                     <span class="form_chk">
-                      <input type="checkbox" id="alert" name="qalert" value="y">
+                      <input type="checkbox" id="alert" name="alert" value="true">
+                      <input type="hidden" name="alert" value="false">
                       <label for="alert"><span>답변알림 요청</span></label>
                     </span>
                   </td>

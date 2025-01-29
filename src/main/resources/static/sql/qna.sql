@@ -1,11 +1,11 @@
-CREATE TABLE QnA(
+CREATE TABLE qna(
     q_no bigint,
     q_create_at date,
     member_id varchar(20),
     q_name varchar(30),
     q_type varchar(20),
     q_file varchar(255),
-    q_title varchar(20),
+    q_title varchar(30),
     q_content varchar(500),
     response_phone varchar(20),
     response_email varchar(100),
@@ -16,14 +16,17 @@ CREATE TABLE QnA(
     PRIMARY KEY (q_no)
 );
 
-# 배포테스트중
+commit;
 
 
-DROP TABLE QnA;
+DROP TABLE qna;
 
-select * from QnA;
+select * from qna;
 
-ALTER TABLE QnA MODIFY COLUMN q_alert ENUM('y', 'n');
+ALTER TABLE qna MODIFY COLUMN q_alert ENUM('y', 'n');
+
+
+
 
 
 
