@@ -331,7 +331,11 @@ public class MemberController {
 //    }
 
     @GetMapping("/myPage/wishlist")
-    public String myPageWishlist() {
+    public String myPageWishlist(Principal principal, Model model) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+        List<Wish> wishlist = wishService.getWishList(memberNo);
+        model.addAttribute("wishlist", wishlist);
         return "user/mypage/userMyPageWishlist";
     }
 

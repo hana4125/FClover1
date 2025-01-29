@@ -11,7 +11,7 @@ public interface MemberService {
 
     int signup(Member member);
 
-    long getmemberNo(String memberId);
+    Long getmemberNo(String memberId);
 
     Member findMemberById(String memberId);
 

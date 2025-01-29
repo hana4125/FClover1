@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public long getmemberNo(String memberId) {
+    public Long getmemberNo(String memberId) {
         return dao.selectMemberNo(memberId);
     }
 

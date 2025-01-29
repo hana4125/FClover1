@@ -119,8 +119,8 @@
   <select id="countGoodsByKeyword" resultType="int">
     SELECT COUNT(*)
     FROM goods g
-           JOIN seller s ON g.SELLER_NO = s.seller_no
-    WHERE MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
+           JOIN seller s ON g.seller_no = s.seller_no
+    WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
                 AGAINST(#{keyword} IN BOOLEAN MODE)
        OR MATCH(s.company_name)
                 AGAINST(#{keyword} IN BOOLEAN MODE)
