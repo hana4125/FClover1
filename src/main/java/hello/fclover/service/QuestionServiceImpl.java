@@ -3,6 +3,8 @@ package hello.fclover.service;
 
 
 import hello.fclover.domain.Question;
+import hello.fclover.mail.EmailMessage;
+import hello.fclover.mail.EmailService;
 import hello.fclover.mybatis.mapper.NoticeMapper;
 import hello.fclover.mybatis.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,9 @@ import java.util.Map;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionMapper dao;
+    private final EmailService emailService;
     private final NoticeMapper noticeMapper;
+    private final QuestionMapper questionMapper;
 
 
     @Override
@@ -47,11 +51,6 @@ public class QuestionServiceImpl implements QuestionService {
     public Question Detail(int no) {
         return dao.Detail(no);
     }
-
-
-
-
-
 
     //댓글 서비스
     @Override
@@ -86,6 +85,31 @@ public class QuestionServiceImpl implements QuestionService {
     public String getQvalue(String qtype) {
         return dao.getQvalue(qtype);
     }
+
+    @Override
+    public void saveInquiry(String phone, String email, String message, boolean alert) {
+        // 문의 정보 저장
+        Question qs = new Question();
+        qs.setResponsephone(phone);
+        qs.setResponseemail(email);
+        qs.setQalert(alert);
+
+        // 문의 저장
+        dao.insertQuestionSave(qs);
+
+        // 알림 요청이 있을 경우 이메일 발송
+        if (alert) {
+            EmailMessage emailMessage = EmailMessage.builder()
+                    .to(email)
+                    .subject("답변 알림")
+                    .message("귀하의 문의에 대한 답변이 등록되었습니다.")
+                    .build();
+
+            // 이메일 비동기 발송
+            emailService.asyncSendMail(emailMessage);  // 비동기 이메일 발송
+        }
+    }
+
 
 
 }

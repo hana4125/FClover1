@@ -104,5 +104,5 @@ public interface QuestionService {
 
     String getQvalue(String qtype);
 
-
+    void saveInquiry(String phone, String email, String message, boolean alert);
 }

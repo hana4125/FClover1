@@ -18,14 +18,26 @@ public class Question {
     private String qcontent;
     private String responsephone;
     private String responseemail;
-    private String qalert;
+    private boolean qalert;
     private int qreref;
     private int qrelev;
     private int qreseq;
     private MultipartFile uploadfile;
 
-
     private int cno;
     private String ccontent;
     private String cresponseat;
+
+
+    public String getEmail() {
+        return this.responseemail;
+    }
+
+    public String getPhone() {
+        return this.responsephone;
+    }
+
+    public Object getQalert() {
+        return this.qalert;
+    }
 }
