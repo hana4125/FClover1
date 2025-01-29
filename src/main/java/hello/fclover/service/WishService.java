@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 
 import hello.fclover.domain.Wish;
+import hello.fclover.dto.WishDTO;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface WishService {
     List<Long> getWishlistGoodsNos(Long memberNo);
 
     List<Wish> getWishList(Long memberNo);
+
+    List<WishDTO> getWishDTOList(Long memberNo);
 }
 

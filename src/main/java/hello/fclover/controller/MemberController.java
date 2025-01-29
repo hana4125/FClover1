@@ -1,6 +1,7 @@
 package hello.fclover.controller;
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.*;
@@ -334,7 +335,7 @@ public class MemberController {
     public String myPageWishlist(Principal principal, Model model) {
         String memberId = principal.getName();
         Long memberNo = memberService.getmemberNo(memberId);
-        List<Wish> wishlist = wishService.getWishList(memberNo);
+        List<WishDTO> wishlist = wishService.getWishDTOList(memberNo);
         model.addAttribute("wishlist", wishlist);
         return "user/mypage/userMyPageWishlist";
     }

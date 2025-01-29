@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.Wish;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mybatis.mapper.WishMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,10 @@ public class WishServiceImpl implements WishService {
     @Override
     public List<Wish> getWishList(Long memberNo) {
         return wishMapper.selectWishList(memberNo);
+    }
+
+    @Override
+    public List<WishDTO> getWishDTOList(Long memberNo) {
+        return wishMapper.selectWishDTOList(memberNo);
     }
 }
