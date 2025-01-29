@@ -25,7 +25,3 @@ update member
 set auth = 'ROLE_ADMIN'
 where member_id = 'admin';
 
-UPDATE member
-SET password = '1111'
-WHERE name = 'admin';
-
