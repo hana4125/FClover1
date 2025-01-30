@@ -8,7 +8,7 @@
         select count(*) from NOTICE
     </select>
 
-    <select id="getBoardList" parameterType="map" resultType="Notice">
+    <select id="getBoardList" parameterType="map" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
                noti_Title as notiTitle,
                noti_Name as notiName,
@@ -33,7 +33,7 @@
         #{notiContent}, now())
     </insert>
 
-    <select id="getDetail" parameterType="int" resultType="Notice">
+    <select id="getDetail" parameterType="int" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
                noti_Title as notiTitle,
                noti_Name as notiName,
@@ -43,7 +43,7 @@
         WHERE noti_No = #{num}
     </select>
 
-    <select id="getSearchList" parameterType="map" resultType="Notice">
+    <select id="getSearchList" parameterType="map" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
                noti_Title as notiTitle,
                noti_Name as notiName,

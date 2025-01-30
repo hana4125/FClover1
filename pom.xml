@@ -456,6 +456,18 @@
             <artifactId>spring-aspects</artifactId>
         </dependency>
 
+        <!-- DB 이중화 라이브러리 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.19</version>
+        </dependency>
+
         <!-- JSON 라이브러리 -->
         <dependency>
             <groupId>org.json</groupId>
@@ -478,9 +490,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-
-
-
     </dependencies>
 
     <build>

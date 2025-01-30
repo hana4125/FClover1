@@ -8,7 +8,7 @@
         select count(*) from QnA
     </select>
 
-    <select id="BoardList" parameterType="map" resultType="Question">
+    <select id="BoardList" parameterType="map" resultType="hello.fclover.domain.Question">
         SELECT q_no as qno,
                q_name as qname,
                q_create_at as qcreateat,
@@ -37,7 +37,7 @@
         #{qalert},#{qreref},#{qrelev},#{qreseq})
     </insert>
 
-    <select id="Detail" parameterType="int" resultType="Question">
+    <select id="Detail" parameterType="int" resultType="hello.fclover.domain.Question">
         SELECT q_no,
                q_create_at,
                member_id,
@@ -63,7 +63,7 @@
     </select>
 
 <!-- 댓글 기능   -->
-    <select id="getCommentList" resultType="Question">
+    <select id="getCommentList" resultType="hello.fclover.domain.Question">
         SELECT *
         FROM (
                  SELECT c_no as cno,
