@@ -58,14 +58,38 @@ public class SearchController {
 
         List<Goods> searchResults = (List<Goods>) result.get("searchResults");
 
+        // TODO : 중복되는 코드 메소드화 하거나 유틸 클래스로 빼기
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
+
         mv.setViewName("user/userSearchResult");
         mv.addObject("searchResults", searchResults);
         mv.addObject("keyword", keyword);
+        mv.addObject("totalCount", totalCount);
+
         mv.addObject("sort", sort);
         mv.addObject("currentPage", page);
         mv.addObject("totalPages", totalPages);
+        mv.addObject("startPage", startPage);
+        mv.addObject("endPage", endPage);
         mv.addObject("size", size);
-        mv.addObject("totalCount", totalCount);
 
         return mv;
     }
@@ -102,6 +126,25 @@ public class SearchController {
 
         int totalPages = (int) Math.ceil((double) totalCount / size);
 
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
 
         mv.setViewName("user/userSearchResult");
         mv.addObject("searchResults", searchResults);
@@ -110,6 +153,8 @@ public class SearchController {
         mv.addObject("currentPage", page);
         mv.addObject("totalPages", totalPages);
         mv.addObject("size", size);
+        mv.addObject("startPage", startPage);
+        mv.addObject("endPage", endPage);
         mv.addObject("totalCount", totalCount);
 
         return mv;
