@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>home</title>
@@ -87,17 +87,17 @@
         <form th:action="@{/inquiry/notice/add}" method="post" name="boardform">
 
           <div class="form-group">
-            <input name="notiName" id="noti_Name" readOnly
+            <input name="notiname" id="noti_name" readOnly
                    type="text" class="form-control"
                    placeholder="notice_writer"  th:value="${#authentication.name}" />
           </div>
 
           <div class="form-group mt-2">
-            <input name="notiTitle" id="noti_Title" type="text" maxlength="300"
+            <input name="notititle" id="noti_title" type="text" maxlength="300"
                    class="form-control" placeholder="notice_title">
           </div>
           <div class="form-group mt-3">
-            <textarea name="notiContent" id="noti_Content"
+            <textarea name="noticontent" id="noti_content"
                       rows="10" class="form-control"></textarea>
           </div>
 

@@ -29,4 +29,6 @@ public interface QuestionMapper {
     int commentsUpdate(Question co);
 
     String getQvalue(String qtype);
+
+    void insertQuestionSave(Question qs);
 }

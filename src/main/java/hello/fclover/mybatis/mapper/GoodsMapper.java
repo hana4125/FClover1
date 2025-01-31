@@ -44,7 +44,9 @@ public interface GoodsMapper {
             @Param("size") Integer size
     );
 
-    List<Goods> findByRank();
+    List<Goods> findByRank(
+            @Param("limit") int limit
+    );
   
     List<Goods> findGoodsByKeyword(Map<String, Object> params);
 
