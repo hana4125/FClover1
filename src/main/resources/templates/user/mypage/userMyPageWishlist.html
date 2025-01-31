@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/myPage.css">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <style>
       /* 컨테이너 스타일 수정 */
       .wishlist-container {
@@ -43,11 +45,34 @@
       }
   </style>
   <script th:inline="javascript">
-    $("#deleteWishBtn").click(function() {
-       $.ajax({
-           url: ''
-       })
-    });
+    $(function() {
+        $("#removeWishBtn").click(function() {
+
+        });
+
+        $("#removeAllWishListBtn").click(function() {
+
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+            let memberNo = $("#memberNo").val();
+            console.log("memberNo = " + memberNo);
+            let result = confirm("정말 전체 리스트를 삭제하시겠습니까?");
+            if (result === true) {
+                $.ajax({
+                    url: '/member/myPage/wishlist/deleteAll?memberNo=' + memberNo,
+                    type: 'GET',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function() {
+                        alert("삭제되었습니다.");
+                    }
+                })
+            } else {
+
+            }
+        });
+    })
   </script>
 </head>
 <body>
@@ -63,7 +88,7 @@
         </div>
         <div class="mt-5 ms-5 d-flex">
           <div>찜한 상품</div>
-          <div class="ms-auto"><button class="btn btn-sm btn-outline-secondary me-2">전체 삭제</button></div>
+          <div class="ms-auto"><button type="button" class="btn btn-sm btn-outline-secondary me-2" id="removeAllWishListBtn">전체 삭제</button></div>
         </div>
         <hr class="ms-5 mb-5">
         <div class="ms-5 text-center">
@@ -76,12 +101,13 @@
               <div th:each="wish : ${wishlist}">
                 <div class="wishBox bg-light">
                   <div class="d-flex justify-content-end align-items-start">
-                  <button class="btn-close ms-auto m-3" id="deleteWishBtn"></button> <!-- 삭제버튼 -->
+                  <button class="btn-close ms-auto m-3" id="removeWishBtn"></button> <!-- 삭제버튼 -->
                   </div>
                   <div class="d-flex">
                     <div class="imageBox ms-4 mt-4">이미지</div>
                     <div class="textBox d-flex flex-column ms-4 mt-4">
-                      <div></div>
+                      <div><input type="hidden" id="wishNo" th:value="${wish.wishNo}"></div>
+                      <div><input type="hidden" id="memberNo" th:value="${wish.memberNo}"></div>
                       <div><span th:text="${wish.goodsName}"></span></div>
                       <div><span th:text="${wish.goodsWriter}"></span></div>
                     </div>

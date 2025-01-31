@@ -81,10 +81,16 @@
     </select>
 
     <delete id="deleteAddressBook">
-        DELETE FROM address_book WHERE address_no = #{addressNo}
+        DELETE
+        FROM address_book
+        WHERE address_no = #{addressNo}
     </delete>
 
     <select id="selectWishList">
         SELECT goods_name, goods_writer FROM wish w INNER JOIN goods g ON w.goods_no = g.goods_no WHERE member_no = #{memberNo};
     </select>
+
+    <delete id="deleteAllWishList">
+        DELETE FROM wish WHERE member_no = #{memberNo}
+    </delete>
 </mapper>

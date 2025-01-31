@@ -155,4 +155,9 @@ public class MemberServiceImpl implements MemberService {
 
         return member.getProfilePicture();
     }
+
+    @Override
+    public void removeAllWishList(Long memberNo) {
+        dao.deleteAllWishList(memberNo);
+    }
 }

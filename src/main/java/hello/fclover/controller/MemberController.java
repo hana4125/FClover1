@@ -340,6 +340,12 @@ public class MemberController {
         return "user/mypage/userMyPageWishlist";
     }
 
+    @ResponseBody
+    @GetMapping("/myPage/wishlist/deleteAll")
+    public void deleteAllWishList(@RequestParam String memberNo) {
+
+    }
+
     @GetMapping("/cart")
     public String cart() {
         return "user/userCart";

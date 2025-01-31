@@ -51,4 +51,6 @@ public interface MemberMapper {
     int deleteAddressBook(int addressNo);
 
     List<WishDTO> selectWishList(Long memberNo);
+
+    void deleteAllWishList(Long memberNo);
 }

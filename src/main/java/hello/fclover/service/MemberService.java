@@ -48,4 +48,6 @@ public interface MemberService {
     int removeAddressBook(int addressNo);
 
     String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
+
+    void removeAllWishList(Long memberNo);
 }
