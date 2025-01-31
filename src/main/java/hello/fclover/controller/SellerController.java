@@ -77,7 +77,10 @@ public class SellerController {
     }
 
     @GetMapping("/productDetail")
-    public String productDetail(Model model) {
+    public String productDetail(Model model, Principal principal) {
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
         return "seller/sellerProductDetail";
     }
 
