@@ -38,6 +38,10 @@
       $(".singleProduct").click(function(){
         location.href = "addSingleProduct"
       })
+      $(".productList").click(function(){
+        location.href="productDetail"
+      })
+
     })
   </script>
 </head>
@@ -108,7 +112,8 @@
           <div class="mb-4">
             <h5 class="fw-bold">상품등록</h5>
             <ul class="list-unstyled">
-              <li><a href="#">자동등록</a></li>
+              <li><a href="#" class="productList">상품 리스트</a></li>
+              <li><a href="#" class="autoProduct">자동등록</a></li>
               <li><a href="#" class="singleProduct">수동등록</a></li>
             </ul>
           </div>
