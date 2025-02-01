@@ -1,9 +1,6 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.Category;
-import hello.fclover.domain.Goods;
-import hello.fclover.domain.Member;
-import hello.fclover.domain.Seller;
+import hello.fclover.domain.*;
 import hello.fclover.service.CategoryService;
 import hello.fclover.service.GoodsService;
 import hello.fclover.service.MemberService;
@@ -61,6 +58,13 @@ public class HomeController {
         // 상품 목록 가져오기
         List<Goods> goodsList = goodsService.getGoodsList(10);
         model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
         return "user/userHome";
     }
 

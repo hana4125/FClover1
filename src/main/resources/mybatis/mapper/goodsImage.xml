@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsImageMapper">
-        <insert id="goodsInsertImage">
-            insert into goods_image
+    <insert id="goodsInsertImage">
+        insert into goods_image
             (goods_no, goods_image_name, goods_url, is_main)
-            values(#{goodsNo}, #{goodsImageName}, #{goodsUrl}, #{isMain})
-        </insert>
+        values (#{goodsNo}, #{goodsImageName}, #{goodsUrl}, #{isMain})
+    </insert>
 
-        <select id="findAllGoodsImage" resultType="map">
-            select goods_image_name, goods_url
-            from goods_image
-            where goods_no=#{goodsNo}
-        </select>
+    <select id="findAllGoodsImage" resultType="map">
+        select goods_image_name, goods_url
+        from goods_image
+        where goods_no = #{goodsNo}
+    </select>
 
-        <select id="findMainImageByGoodsNo">
-            select goods_image_name, goods_url
-            from goods_image
-            where goods_no=#{goodsNo} and isMain= 'M'
-        </select>
+    <!-- GoodsImageMapper.xml -->
+    <select id="findMainImageByGoodsNo" resultType="hello.fclover.domain.GoodsImage">
+        SELECT
+            image_no          AS imageNo,
+            goods_no          AS goodsNo,
+            goods_image_name  AS goodsImageName,
+            goods_url         AS goodsUrl,
+            is_main           AS isMain
+        FROM goods_image
+        WHERE goods_no = #{goodsNo}
+          AND is_main = 'M'
+    </select>
 </mapper>

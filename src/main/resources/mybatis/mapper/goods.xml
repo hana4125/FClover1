@@ -53,26 +53,6 @@
     WHERE goods_no = #{goods_no}
   </select>
 
- <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
-        SELECT
-        a.goods_no AS goodsNo,
-        a.goods_name AS goodsName,
-        a.goods_price AS goodsPrice,
-        a.goods_writer AS goodsWriter,
-        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM
-        goods a
-        LEFT OUTER JOIN (
-        SELECT *
-        FROM wish
-        WHERE member_no = #{memberNo}
-        ) b
-        ON a.goods_no = b.goods_no
-        ORDER BY
-        goods_count DESC
-        LIMIT #{offset}, #{size}
-    </select>
-
  <select id="findByRank" resultType="hello.fclover.domain.Goods">
         SELECT
             ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS rowNum,
@@ -113,6 +93,26 @@
             <otherwise>a.goods_date DESC</otherwise>
         </choose>
         LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+            a.goods_no AS goodsNo,
+            a.goods_name AS goodsName,
+            a.goods_price AS goodsPrice,
+            a.goods_writer AS goodsWriter,
+            CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM
+            goods a
+                LEFT OUTER JOIN (
+                SELECT *
+                FROM wish
+                WHERE member_no = #{memberNo}
+            ) b
+                                ON a.goods_no = b.goods_no
+        ORDER BY
+            goods_count DESC
+            LIMIT #{offset}, #{size}
     </select>
 
   <!-- 키워드 검색 총 개수 조회-->
@@ -276,4 +276,50 @@
 <!--    ALTER TABLE GOODS-->
 <!--        ADD FULLTEXT KEY ft_goods_idx (GOODS_NAME, GOODS_CONTENT, GOODS_WRITER) WITH PARSER ngram-->
 <!--  </update>-->
+
+    <!-- 신상품 목록 조회 -->
+    <select id="selectNewItems" resultType="hello.fclover.domain.Goods">
+        SELECT
+        a.goods_no        AS goodsNo,
+        a.goods_name      AS goodsName,
+        a.goods_price     AS goodsPrice,
+        a.goods_writer    AS goodsWriter,
+        a.goods_create_at AS goodsCreateAt,
+        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM goods a
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM wish
+        WHERE member_no = #{memberNo}
+        ) b ON a.goods_no = b.goods_no
+        WHERE 1=1
+        <!-- 일자별 필터 -->
+        <if test="year != null and year != ''">
+            AND YEAR(goods_create_at) = #{year}
+        </if>
+        <if test="month != null and month != ''">
+            AND MONTH(goods_create_at) = #{month}
+        </if>
+        <if test="week != null and week != ''">
+            AND WEEK(goods_create_at) = #{week}
+        </if>
+        ORDER BY goods_create_at DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 신상품 총 개수 조회 -->
+    <select id="countNewItems" resultType="int">
+        SELECT COUNT(*) FROM goods
+        WHERE 1=1
+        <!-- 일자별 필터 -->
+        <if test="year != null and year != ''">
+            AND YEAR(goods_create_at) = #{year}
+        </if>
+        <if test="month != null and month != ''">
+            AND MONTH(goods_create_at) = #{month}
+        </if>
+        <if test="week != null and week != ''">
+            AND WEEK(goods_create_at) = #{week}
+        </if>
+    </select>
 </mapper>
