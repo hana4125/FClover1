@@ -6,6 +6,7 @@ import hello.fclover.domain.Notice;
 import hello.fclover.domain.Wish;
 import hello.fclover.dto.WishDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +55,8 @@ public interface MemberMapper {
     List<Wish> selectWishList(Long memberNo);
 
     List<WishDTO> selectWishDTOList(Long memberNo);
+
+    void deleteWishList(@Param("wishNo") Long wishNo, @Param("memberNo") Long memberNo);
 
     void deleteAllWishList(Long memberNo);
 }

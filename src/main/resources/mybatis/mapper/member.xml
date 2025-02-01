@@ -97,6 +97,10 @@
         WHERE member_no = #{memberNo}
     </select>
 
+    <delete id="deleteWishList">
+        DELETE FROM wish WHERE wish_no = #{wishNo} AND member_no = #{memberNo}
+    </delete>
+
     <delete id="deleteAllWishList">
         DELETE FROM wish WHERE member_no = #{memberNo}
     </delete>

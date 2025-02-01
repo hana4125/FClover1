@@ -163,6 +163,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void removeWishList(Long wishNo, Long memberNo) {
+        dao.deleteWishList(wishNo, memberNo);
+    }
+
+    @Override
     public void removeAllWishList(Long memberNo) {
         dao.deleteAllWishList(memberNo);
     }

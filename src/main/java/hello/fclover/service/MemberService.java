@@ -52,5 +52,7 @@ public interface MemberService {
 
     List<WishDTO> getWishDTOList(Long memberNo);
 
+    void removeWishList(Long wishNo, Long memberNo);
+
     void removeAllWishList(Long memberNo);
 }

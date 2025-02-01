@@ -340,14 +340,33 @@ public class MemberController {
         return "user/mypage/userMyPageWishlist";
     }
 
-    @ResponseBody
-    @GetMapping("/myPage/wishlist/deleteAll")
-    public void deleteAllWishList(@RequestParam String memberNo) {
+    @PostMapping("/myPage/wishlist/delete")
+    public ResponseEntity<String> deleteWishList(Principal principal, @RequestBody Map<String, String> data) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+        String wishNo = data.get("wishNo");
+
+        try {
+            memberService.removeWishList(Long.parseLong(wishNo), memberNo);
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+
+        return ResponseEntity.ok(data + " 삭제 완료");
+    }
+
+    @PostMapping("/myPage/wishlist/deleteAll")
+    public ResponseEntity<String> deleteAllWishList(@RequestBody Map<String, String> data) {
+
+        String memberNo = data.get("memberNo");
+
         try {
             memberService.removeAllWishList(Long.parseLong(memberNo));
         } catch (NumberFormatException e) {
             log.info("숫자로 변환할 수 없습니다.");
         }
+
+        return ResponseEntity.ok("전체 삭제 완료");
     }
 
     @GetMapping("/cart")

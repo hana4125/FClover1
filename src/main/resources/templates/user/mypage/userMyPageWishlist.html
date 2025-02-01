@@ -45,34 +45,57 @@
       }
   </style>
   <script th:inline="javascript">
-    $(function() {
-        $("#removeWishBtn").click(function() {
+      $(function () {
 
-        });
+          let token = $("meta[name='_csrf']").attr("content");
+          let header = $("meta[name='_csrf_header']").attr("content");
 
-        $("#removeAllWishListBtn").click(function() {
+          $(".removeWishBtn").click(function () {
+              let data = $(this).data("no");
+              $(this).closest('.wishList').remove();
 
-            let token = $("meta[name='_csrf']").attr("content");
-            let header = $("meta[name='_csrf_header']").attr("content");
-            let memberNo = $("#memberNo").val();
-            console.log("memberNo = " + memberNo);
-            let result = confirm("정말 전체 리스트를 삭제하시겠습니까?");
-            if (result === true) {
-                $.ajax({
-                    url: '/member/myPage/wishlist/deleteAll?memberNo=' + memberNo,
-                    type: 'GET',
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    success: function() {
-                        alert("삭제되었습니다.");
-                    }
-                })
-            } else {
+              $.ajax({
+                  url: '/member/myPage/wishlist/delete',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({"wishNo": data}),
+                  beforeSend: function (xhr) {
+                      xhr.setRequestHeader(header, token);
+                  },
+                  success: function (result) {
+                      console.log(result);
+                  },
+                  error: function (xhr, status, error) {
+                      alert("삭제 실패 : " + error);
+                  }
+              })
+          });
 
-            }
-        });
-    })
+          $("#removeAllWishListBtn").click(function () {
+
+              let memberNo = $("#memberNo").val();
+              let result = confirm("정말 전체 리스트를 삭제하시겠습니까?");
+              if (result === true) {
+                  $.ajax({
+                      url: '/member/myPage/wishlist/deleteAll',
+                      type: 'POST',
+                      contentType: 'application/json',
+                      data: JSON.stringify({"memberNo": memberNo}),
+                      beforeSend: function (xhr) {
+                          xhr.setRequestHeader(header, token);
+                      },
+                      success: function (result) {
+                          console.log(result);
+                          $(".wishList").remove();
+                          alert("삭제되었습니다.");
+                      },
+                      error: function (xhr, status, error) {
+                          console.error("전체 삭제 실패:", error);
+                      }
+                  })
+              }
+          });
+      })
   </script>
 </head>
 <body>
@@ -88,7 +111,9 @@
         </div>
         <div class="mt-5 ms-5 d-flex">
           <div>찜한 상품</div>
-          <div class="ms-auto"><button type="button" class="btn btn-sm btn-outline-secondary me-2" id="removeAllWishListBtn">전체 삭제</button></div>
+          <div class="ms-auto">
+            <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="removeAllWishListBtn">전체 삭제</button>
+          </div>
         </div>
         <hr class="ms-5 mb-5">
         <div class="ms-5 text-center">
@@ -98,10 +123,11 @@
           </th:block>
           <th:block th:unless="${wishlist == null}">
             <div class="wishlist-container">
-              <div th:each="wish : ${wishlist}">
+              <div th:each="wish : ${wishlist}" class="wishList">
                 <div class="wishBox bg-light">
                   <div class="d-flex justify-content-end align-items-start">
-                  <button class="btn-close ms-auto m-3" id="removeWishBtn"></button> <!-- 삭제버튼 -->
+                    <button class="btn-close ms-auto m-3 removeWishBtn" th:data-no="${wish.wishNo}"></button>
+                    <!-- 삭제버튼 -->
                   </div>
                   <div class="d-flex">
                     <div class="imageBox ms-4 mt-4">이미지</div>
@@ -117,7 +143,6 @@
             </div>
           </th:block>
         </div>
-        <hr>
         <div style="height: 100px">
         </div>
       </div>
