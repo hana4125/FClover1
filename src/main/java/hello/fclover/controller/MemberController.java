@@ -607,5 +607,10 @@ public class MemberController {
         System.out.println("====");
         return "user/userGoodsDetail";
     }
+    @GetMapping("/myPage/coupon")
+    public String coupon() {
+        System.out.println("====");
+        return "user/mypage/userMypageCoupon";
+    }
 
 }

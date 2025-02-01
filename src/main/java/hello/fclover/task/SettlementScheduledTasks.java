@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,13 +40,15 @@ public class SettlementScheduledTasks {
         this.settlementMapper = settlementMapper;
     }
 
-//    @Scheduled(cron = "0 * * * * ?")
+    @Transactional
+    @Scheduled(cron = "0 0 * * * ?")
     @SchedulerLock(name = "ScheduledTask_run")
     public void dailySettlement(){
         LocalDate yesterday = LocalDate.now().minusDays(1);
         LocalDateTime startDate = yesterday.atStartOfDay();
         LocalDateTime endDate = yesterday.atTime(LocalTime.of(23,59,59));
 
+        System.out.println("======>정산 스케쥴링 실행 ");
         //기간에 해당하는 결제내역 조회 및 집계
         Map<Long, BigDecimal> settlementMap = getSettlementMap(startDate, endDate);
 

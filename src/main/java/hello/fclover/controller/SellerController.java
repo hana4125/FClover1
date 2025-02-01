@@ -135,4 +135,16 @@ public class SellerController {
 
         return "seller/sellerLogin";
     }
+
+    //판매자 일정산 페이지
+    @GetMapping("/sellerDaySettlement")
+    public String sellerDaySettlement() {
+        return "seller/sellerDaySettlement";
+    }
+
+    //판매자 월정산 페이지
+    @GetMapping("/sellerMonthSettlement")
+    public String sellerMonthSettlement() {
+        return "seller/sellerMonthSettlement";
+    }
 }
