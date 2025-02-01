@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.WishDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -48,6 +49,8 @@ public interface MemberService {
     int removeAddressBook(int addressNo);
 
     String uploadProfilePicture(MultipartFile file, String memberId) throws IOException;
+
+    List<WishDTO> getWishDTOList(Long memberNo);
 
     void removeAllWishList(Long memberNo);
 }

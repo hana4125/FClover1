@@ -27,17 +27,4 @@
         FROM wish
         WHERE member_no = #{memberNo}
     </select>
-
-    <select id="selectWishList">
-        SELECT *
-        FROM wish
-        WHERE member_no = #{memberNo}
-    </select>
-
-    <select id="selectWishDTOList">
-        SELECT w.wish_no, w.member_no, g.goods_name, g.goods_writer
-        FROM goods g
-                 JOIN wish w ON g.goods_no = w.goods_no
-        WHERE member_no = #{memberNo}
-    </select>
 </mapper>

@@ -14,9 +14,5 @@ public interface WishService {
     void removeWishlist(Long goodsNo, Long memberNo);
 
     List<Long> getWishlistGoodsNos(Long memberNo);
-
-    List<Wish> getWishList(Long memberNo);
-
-    List<WishDTO> getWishDTOList(Long memberNo);
 }
 

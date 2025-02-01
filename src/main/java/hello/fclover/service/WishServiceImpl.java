@@ -33,14 +33,4 @@ public class WishServiceImpl implements WishService {
     public List<Long> getWishlistGoodsNos(Long memberNo) {
         return wishMapper.findWishlistGoodsNosByMemberNo(memberNo);
     }
-
-    @Override
-    public List<Wish> getWishList(Long memberNo) {
-        return wishMapper.selectWishList(memberNo);
-    }
-
-    @Override
-    public List<WishDTO> getWishDTOList(Long memberNo) {
-        return wishMapper.selectWishDTOList(memberNo);
-    }
 }

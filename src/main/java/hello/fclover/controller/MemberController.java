@@ -335,7 +335,7 @@ public class MemberController {
     public String myPageWishlist(Principal principal, Model model) {
         String memberId = principal.getName();
         Long memberNo = memberService.getmemberNo(memberId);
-        List<WishDTO> wishlist = wishService.getWishDTOList(memberNo);
+        List<WishDTO> wishlist = memberService.getWishDTOList(memberNo);
         model.addAttribute("wishlist", wishlist);
         return "user/mypage/userMyPageWishlist";
     }
@@ -343,7 +343,11 @@ public class MemberController {
     @ResponseBody
     @GetMapping("/myPage/wishlist/deleteAll")
     public void deleteAllWishList(@RequestParam String memberNo) {
-
+        try {
+            memberService.removeAllWishList(Long.parseLong(memberNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
     }
 
     @GetMapping("/cart")

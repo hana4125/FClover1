@@ -20,10 +20,6 @@ public interface WishMapper {
 
     // 특정 회원의 찜 목록에 있는 goodsNo 목록 가져오기
     List<Long> findWishlistGoodsNosByMemberNo(@Param("memberNo") Long memberNo);
-
-    List<Wish> selectWishList(Long memberNo);
-
-    List<WishDTO> selectWishDTOList(Long memberNo);
 }
 
 

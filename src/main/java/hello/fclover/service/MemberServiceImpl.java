@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -154,6 +155,11 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return member.getProfilePicture();
+    }
+
+    @Override
+    public List<WishDTO> getWishDTOList(Long memberNo) {
+        return dao.selectWishDTOList(memberNo);
     }
 
     @Override
