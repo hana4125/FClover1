@@ -30,7 +30,7 @@
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
-<script th:src="@{/js/search_filter.js}"></script>
+<script th:src="@{/js/search/search_filter.js}"></script>
 <main class="container_wrapper">
   <input type="hidden" id="keywordHidden" th:value="${keyword}">
   <section id="contents" class="contents_wrap">
@@ -132,7 +132,7 @@
                   </li>
 
                   <!-- 페이지 번호 -->
-                  <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                  <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
                       th:classappend="${currentPage == i} ? 'active' : ''">
                     <a class="page-link" href="#" th:attr="data-page=${i}" th:text="${i}"></a>
                   </li>
