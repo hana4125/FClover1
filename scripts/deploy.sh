@@ -4,11 +4,11 @@ REPOSITORY=/home/ubuntu/fclover
 cd $REPOSITORY
 
 # 배포 후 MY_ENV_VAR 환경변수를 /etc/environment에 추가
-echo "MY_ENV_VAR=${MY_ENV_VAR}" >> /etc/environment
+echo "JASYPT_ENCRYPTOR_PASSWORD=${JASYPT_ENCRYPTOR_PASSWORD}" >> /etc/environment
 source /etc/environment
 
 # 이제 EC2에서 MY_ENV_VAR 환경변수를 사용할 수 있다.
-echo "The value of MY_ENV_VAR is $MY_ENV_VAR"
+echo "The value of JASYPT_ENCRYPTOR_PASSWORD is $JASYPT_ENCRYPTOR_PASSWORD"
 
 APP_NAME=java
 #JAR_NAME=$(ls $REPOSITORY/target/ | grep 'SNAPSHOT.jar' | tail -n 1)
