@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,4 +56,8 @@ public interface MemberService {
     void removeWishList(Long wishNo, Long memberNo);
 
     void removeAllWishList(Long memberNo);
+
+    List<CartDTO> getCartItems(Long memberNo);
+
+    void removeCartItems(Long cartNo);
 }

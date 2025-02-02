@@ -4,6 +4,7 @@ import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
 import hello.fclover.domain.Wish;
+import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -59,4 +60,8 @@ public interface MemberMapper {
     void deleteWishList(@Param("wishNo") Long wishNo, @Param("memberNo") Long memberNo);
 
     void deleteAllWishList(Long memberNo);
+
+    List<CartDTO> selectCartItems(Long memberNo);
+
+    void deleteCartItems(Long cartNo);
 }

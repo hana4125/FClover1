@@ -104,4 +104,15 @@
     <delete id="deleteAllWishList">
         DELETE FROM wish WHERE member_no = #{memberNo}
     </delete>
+
+    <select id="selectCartItems">
+        SELECT c.cart_no, c.member_no, c.goods_no, c.cart_quantity, c.created_at, g.goods_name, g.goods_price
+        FROM cart c
+                 JOIN goods g ON c.goods_no = g.goods_no
+        WHERE c.member_no = #{memberNo};
+    </select>
+
+    <delete id="deleteCartItems">
+        DELETE FROM cart WHERE cart_no = #{cartNo}
+    </delete>
 </mapper>

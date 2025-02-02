@@ -1,6 +1,7 @@
 package hello.fclover.controller;
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.HttpURLConnection;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -349,7 +351,7 @@ public class MemberController {
         try {
             memberService.removeWishList(Long.parseLong(wishNo), memberNo);
         } catch (NumberFormatException e) {
-            log.info("숫자로 변환할 수 없습니다.");
+            log.info(e.getMessage());
         }
 
         return ResponseEntity.ok(data + " 삭제 완료");
@@ -370,8 +372,34 @@ public class MemberController {
     }
 
     @GetMapping("/cart")
-    public String cart() {
+    public String cart(Principal principal, Model model) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+
+        List<CartDTO> cartItems = memberService.getCartItems(memberNo);
+
+        for (CartDTO cartItem : cartItems) {
+            if (cartItem.getDeliveryDate() == null && cartItem.getCreatedAt() != null) {
+                LocalDateTime deliveryDate = cartItem.getCreatedAt().plusDays(3);
+                cartItem.setDeliveryDate(deliveryDate);
+            }
+        }
+
+        model.addAttribute("cartItems", cartItems);
+
         return "user/userCart";
+    }
+
+    @PostMapping("/cart/delete")
+    public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
+        log.info("값이 넘어오나요?");
+        String cartNo = data.get("cartNo");
+        try {
+            memberService.removeCartItems(Long.parseLong(cartNo));
+        } catch (NumberFormatException e) {
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok("삭제된 상품 cartNo : " + cartNo);
     }
 
     @GetMapping("/steadySeller")

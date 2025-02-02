@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -170,5 +171,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void removeAllWishList(Long memberNo) {
         dao.deleteAllWishList(memberNo);
+    }
+
+    @Override
+    public List<CartDTO> getCartItems(Long memberNo) {
+        return dao.selectCartItems(memberNo);
+    }
+
+    @Override
+    public void removeCartItems(Long cartNo) {
+        dao.deleteCartItems(cartNo);
     }
 }
