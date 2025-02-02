@@ -29,9 +29,9 @@ public class GoodsController {
         System.out.println("model = " + model.getAttribute("imageList"));
         return "user/userGoodsDetail";
     }
-    @PostMapping("/SearchGoodsProcess")
+   /* @PostMapping("/SearchGoodsProcess")
     public List<Goods> searchGoodsProcess(@ModelAttribute Goods goods) {
         List<Goods> list = new ArrayList<>();
         return list;
-    }
+    }*/
 }
