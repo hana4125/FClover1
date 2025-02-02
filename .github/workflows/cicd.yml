@@ -34,7 +34,7 @@ jobs:
         run: |
             echo "AWS_ACCESS_KEY_ID=${{ env.aws-access-key-id }}" >> .env
             echo "JASYPT_ENCRYPTOR_PASSWORD=${{ env.JASYPT_ENCRYPTOR_PASSWORD }}" >> .env
-            echo "AWS_PRIVATE_ACCESS_KEY=$aws-secret-access-key" >> .env
+            echo "AWS_PRIVATE_ACCESS_KEY=${{ env.aws-secret-access-key }}" >> .env
             echo "AWS_REGION=ap-northeast-2" >> .env
         
 
