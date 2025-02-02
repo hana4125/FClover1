@@ -44,20 +44,20 @@
               '
             </span>
             <th:block th:if="${totalCount > 0 }">
-            <span th:text="'에 대한 ' + ${totalCount} + '개의 검색 결과'"></span>
+              <span th:text="'에 대한 ' + ${totalCount} + '개의 검색 결과'"></span>
             </th:block>
             <th:block th:if="${totalCount == 0 || totalCount == null}">
               <span th:text="'상품 검색 결과가 없습니다.'"></span>
             </th:block>
           </h1>
         </div>
-        <div th:if="${#lists.isEmpty(searchResults)}">
+        <div class="search_result_wrap" th:if="${#lists.isEmpty(searchResults)}">
           <p>검색 결과가 없습니다.</p>
         </div>
-        <div th:if="${!#lists.isEmpty(searchResults)}">
+        <div class="search_result_wrap" th:if="${!#lists.isEmpty(searchResults)}">
           <!-- 필터 영역 -->
           <div class="filter_area">
-
+            <p> 필터 추가 예정 </p>
           </div>
           <!-- 결과 영역 -->
           <div class="container w-75 mt-5">
@@ -71,7 +71,8 @@
 
               <!-- 드롭다운 -->
               <div class="dropdown me-2">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                   <li><a class="dropdown-item" href="#" data-sort="sales">판매량순</a></li>
@@ -81,7 +82,8 @@
                   <li><a class="dropdown-item" href="#" data-sort="highPrice">높은가격순</a></li>
                 </ul>
                 <!-- 페이지당 보기 -->
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownView">
                   <li><a class="dropdown-view" href="#" data-size="20">20개씩 보기</a></li>
@@ -92,33 +94,82 @@
             </div>
 
             <div class="book-items mt-4">
-              <ul class="list-unstyled">
-                <!-- bestBooks 리스트를 반복하여 출력 -->
-                <li th:each="goods : ${searchResults}">
-                  <div class="category-list d-flex align-items-start mb-5">
-                    <input type="checkbox" class="item-checkbox mt-1 ms-1" style="width: 18px; height: 18px;">
-                    <div class="book-item mt-1">
+              <ul class="prod_list" th:each="goods : ${searchResults}">
+                <!-- goods 리스트를 반복하여 출력 -->
+                <li class="prod_item d-flex justify-content-between align-items-start">
+                  <div class="prod_area d-flex align-items-start mb-5">
+                    <input type="checkbox" class="item-checkbox mt-1 ms-1"
+                           style="width: 18px; height: 18px;">
+                    <div class="book-item d-flex mt-1 ms-3">
                       <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
-                      <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
+                      <div>
+
+                      <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
+                         class="show-detail">
                         <div class="img-box">
-                          <!--                <img th:src="@{/goods{image}(image=${goods.goodsImage})}" style="width:200px; height:280px;">-->
+                          <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
+                                        : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
                         </div>
                       </a>
-                      <div class="item-info">
-                        <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
-                        <a th:href="@{/goods/{no}(no=${goods.goodsNo})}" class="show-detail">
-                          <span class="item-name" th:text="${goods.goodsName}"></span>
-                        </a>
-                        <br>
-                        <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                      </div>
+                      <div class="item-info ms-3">
+
+                        <div class="prod_name_group">
+                          <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+                          <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
+                             class="show-detail">
+                            <!-- TODO : 이름 옆에 카테고리 이름 추가하기 -->
+                            <span class="item-name" th:text="${goods.goodsName}"></span>
+                          </a>
+                          <br>
+                        </div>
+
+                        <div class="prod_desc_info">
+                          <span th:text="${goods.goodsContent}"></span>
+                        </div>
+
+                        <!-- TODO : 저자와 출판사 클릭시 해당 검색어로 검색하는 기능 추가하기 -->
+                        <div class="prod_author_info">
+                          <div class="prod_author_group">
+                            <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                            <span class="type">저자(글)</span>
+                          </div>
+
+                          <div class="prod_publish">
+                            <th:block th:if="${goods.companyName != null}">
+                              <span class="prod_publish" th:text="${goods.companyName}"></span>
+                            </th:block>
+                            <th:block th:if="${goods.companyName == null}">
+                              <span class="prod_publish">출판사 없음</span>
+                            </th:block>
+                            <span class="gap"> · </span>
+                            <span class="date" th:text="${#temporals.format(goods.goodsCreateAt, 'yyyy년 MM월 dd일')}"></span>
+                          </div>
+
+                          <!-- TODO : 할인 기능 추가할 시 변경 필요 -->
+                          <div class="prod_price">
+                            <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
+                            <span class="unit">원&nbsp;</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="prod_btn_wrap d-flex flex-column align-items-end" style="flex-shrink: 0;">
                     <div class="icon ms-auto mb-4">
-                      <img src="/images/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">
-                      <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="장바구니">
+                      <!-- 찜 상태에 따른 하트 아이콘 -->
+                      <img th:src="${goods.wishStatus == 'Y'} ? '/images/user/redHeart.png' : '/images/user/heart.png'"
+                           class="heart me-2"
+                           th:data-id="${goods.goodsNo}"
+                           width="36"
+                           height="36"
+                           alt="찜">
+                      <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
+                           width="36" height="36" alt="장바구니">
                     </div>
                     <!-- 바로구매 버튼 -->
-                    <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매</button>
+                    <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
+                    </button>
                   </div>
                 </li>
               </ul>
@@ -128,7 +179,8 @@
                 <ul class="pagination justify-content-center">
                   <!-- 이전 페이지 버튼 -->
                   <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                    <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}" th:if="${currentPage > 1}">&lt;</a>
+                    <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}"
+                       th:if="${currentPage > 1}">&lt;</a>
                   </li>
 
                   <!-- 페이지 번호 -->
@@ -139,7 +191,8 @@
 
                   <!-- 다음 페이지 버튼 -->
                   <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-                    <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}" th:if="${currentPage < totalPages}">&gt;</a>
+                    <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}"
+                       th:if="${currentPage < totalPages}">&gt;</a>
                   </li>
                 </ul>
               </nav>
