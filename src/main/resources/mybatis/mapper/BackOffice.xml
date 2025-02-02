@@ -40,4 +40,7 @@
         update delivery set deli_status=#{deliStatus}
         where deli_no = #{deliNo}
     </update>
+    <select id="sellerSettlementSearch">
+        select * from settlements
+    </select>
 </mapper>
