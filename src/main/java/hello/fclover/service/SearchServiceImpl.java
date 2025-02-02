@@ -34,6 +34,7 @@ public class SearchServiceImpl implements SearchService {
 
         long countStartTime = System.currentTimeMillis();
 
+        // TODO : 페이지네이션 할 때는 DB 조회 안하도록 수정하기 -> 캐시처리?
         int totalCount = countByKeyword(keyword);
 
         long countEndTime = System.currentTimeMillis();
