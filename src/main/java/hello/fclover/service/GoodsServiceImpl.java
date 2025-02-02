@@ -46,12 +46,6 @@ public class GoodsServiceImpl implements GoodsService {
             goodsInsertImage(images, sellerNumber, goodsNo);
         }
     }
-  
-//    @Override
-//    public List<Goods> getGoodsList(int cate_no, String sort, int page, int size) {
-//        int offset = (page - 1) * size;
-//        return goodsMapper.findAll(cate_no, sort, offset, size);
-//    }
 
     @Override
     public int getTotalGoodsCount(int cateNo) {
@@ -59,7 +53,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public int getTotalBestGoodsCount() {
+    public int getTotalBestGoodsCount(Long memberNo) {
         return goodsMapper.countBestGoods();
     }
 
@@ -75,11 +69,12 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getGoodsList() {
-        return goodsMapper.findByRank();
+    public List<Goods> getGoodsList(int limit) {
+        return goodsMapper.findByRank(limit);
     }
 
     @Override
+//    @Cacheable(value = "GoodsMapper.findGoodsWishStatus")
     public List<Goods> getGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findGoodsWishStatus(memberNo, offset, size);
@@ -89,6 +84,30 @@ public class GoodsServiceImpl implements GoodsService {
         model.addAttribute("goods", goodsMapper.findGoodsById(goodsNo));
         List<String> imageList = getGoodsImages(goodsNo, goodsImage);
         model.addAttribute("imageList", imageList);
+    }
+
+    @Override
+    public GoodsImage getMainImageByGoodsNo(Long goodsNo) {
+        return imageMapper.findMainImageByGoodsNo(goodsNo);
+    }
+
+    @Override
+    public List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size) {
+        int offset = (page - 1) * size;
+        // 최대 100개까지만 조회되도록 offset과 size를 조정
+        if (offset >= 100) {
+            return List.of(); // 빈 리스트 반환
+        }
+        if (offset + size > 100) {
+            size = 100 - offset;
+        }
+        return goodsMapper.selectNewItems(memberNo, year, month, week, offset, size);
+    }
+
+    @Override
+    public int getTotalNewItemsCount(Long memberNo, String year, String month, String week) {
+        int count = goodsMapper.countNewItems(memberNo, year, month, week);
+        return Math.min(count, 100); // 최대 100개로 제한
     }
 
     private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {

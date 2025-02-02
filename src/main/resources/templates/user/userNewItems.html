@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>home</title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
     <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
-    <link rel="stylesheet" href="/css/user/newItem.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -44,27 +46,58 @@
             // URL에서 쿼리 파라미터 읽기
             const urlParams = new URLSearchParams(window.location.search);
             const currentSize = urlParams.get("size") || "20"; // 기본값: 20개씩 보기
+            const currentYear = urlParams.get("year");
+            const currentMonth = urlParams.get("month");
+            const currentWeek = urlParams.get("week");
 
             const sizeTextMap = {
                 "20": "20개씩 보기",
                 "50": "50개씩 보기",
             };
 
-            // 드롭다운 메뉴 클릭 이벤트
-            $(".dropdown-year").click(function () {
-                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
-                $("#dropdownYear").text(selectedText); // 드롭다운 버튼 텍스트 변경
-            })
+            // 초기 필터 버튼 제목 설정
+            if (currentYear) {
+                $("#dropdownYear").text(currentYear + "년");
+            }
+            if (currentMonth) {
+                $("#dropdownMonth").text(currentMonth + "월");
+            }
+            if (currentWeek) {
+                $("#dropdownWeek").text(currentWeek + "주");
+            }
 
-            $(".dropdown-month").click(function () {
-                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
-                $("#dropdownMonth").text(selectedText); // 드롭다운 버튼 텍스트 변경
-            })
+            // 연도 선택 시
+            $(".dropdown-year").click(function (event) {
+                event.preventDefault();
+                const selectedYear = $(this).attr("data-year");
+                $("#dropdownYear").text($(this).text());
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set("year", selectedYear);
+                urlParams.set("page", "1"); // 페이지 초기화
+                window.location.search = urlParams.toString();
+            });
 
-            $(".dropdown-week").click(function () {
-                const selectedText = $(this).text(); // 클릭한 메뉴의 텍스트 가져오기
-                $("#dropdownWeek").text(selectedText); // 드롭다운 버튼 텍스트 변경
-            })
+            // 월 선택 시
+            $(".dropdown-month").click(function (event) {
+                event.preventDefault();
+                const selectedMonth = $(this).attr("data-month");
+                $("#dropdownMonth").text($(this).text());
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set("month", selectedMonth);
+                urlParams.set("page", "1"); // 페이지 초기화
+                window.location.search = urlParams.toString();
+            });
+
+            // 주 선택 시
+            $(".dropdown-week").click(function (event) {
+                event.preventDefault();
+                const selectedWeek = $(this).attr("data-week");
+                $("#dropdownWeek").text($(this).text());
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set("week", selectedWeek);
+                urlParams.set("page", "1"); // 페이지 초기화
+                window.location.search = urlParams.toString();
+            });
 
             $("#dropdownView").text(sizeTextMap[currentSize] || "20개씩 보기");
 
@@ -222,12 +255,8 @@
         </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-            <!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
-            <!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
-            <!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
             <a href="#" class="best ps-5 pe-5">베스트</a>
             <a href="#" class="new ps-5 pe-5">신상품</a>
-            <a href="#" class="ps-5 pe-5">이벤트</a>
         </div>
     </div>
 </div>
@@ -249,21 +278,6 @@
 
 <div class="container w-75 mt-5">
     <div class="row">
-        <!-- 사이드바 -->
-        <!--        <aside class="col-md-3 aside_wrap sub_category">-->
-        <!--            <h4 class="title_heading mb-3" th:text="${category?.cateName}"></h4>-->
-        <!--            <div class="category-list">-->
-        <!--                <ul class="list-unstyled">-->
-        <!--                    &lt;!&ndash; categoryList의 각 요소를 반복하여 출력 &ndash;&gt;-->
-        <!--                    <li th:each="category : ${categoryList}">-->
-        <!--                        &lt;!&ndash; 카테고리 이름 출력 &ndash;&gt;-->
-        <!--                        <a th:href="@{/member/category/{no}(no=${category.cateNo})}"-->
-        <!--                           th:text="${category.cateName}"-->
-        <!--                           class="category-item"></a>-->
-        <!--                    </li>-->
-        <!--                </ul>-->
-        <!--            </div>-->
-        <!--        </aside>-->
         <div class="col-md-9">
             <div class="d-flex justify-content-end align-items-center mb-3">
                 <!-- 장바구니, 찜 버튼 -->
@@ -273,55 +287,48 @@
                 <!--            </div>-->
 
                 <!-- 드롭다운 -->
-                <div class="dropdown me-2">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    2025년
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownYear">
-                    <li><a class="dropdown-year" href="#">2025년</a></li>
-                    <li><a class="dropdown-year" href="#">2024년</a></li>
-                    <li><a class="dropdown-year" href="#">2023년</a></li>
-                    <li><a class="dropdown-year" href="#">2022년</a></li>
-                    <li><a class="dropdown-year" href="#">2021년</a></li>
-                    <li><a class="dropdown-year" href="#">2020년</a></li>
-                    <li><a class="dropdown-year" href="#">2019년</a></li>
-                    <li><a class="dropdown-year" href="#">2018년</a></li>
-                    <li><a class="dropdown-year" href="#">2017년</a></li>
-                </ul>
+                <!-- 기간별보기 드롭다운 그룹 -->
+                <div class="d-flex">
+                    <!-- 일자별 보기 드롭다운 -->
+                    <div class="dropdown me-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            연도 선택
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownYear">
+                            <li><a class="dropdown-year" href="#" data-year="2025">2025년</a></li>
+                            <li><a class="dropdown-year" href="#" data-year="2024">2024년</a></li>
+                        </ul>
+                    </div>
 
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    1월
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMonth">
-                    <li><a class="dropdown-month" href="#">1월</a></li>
-                    <li><a class="dropdown-month" href="#">2월</a></li>
-                    <li><a class="dropdown-month" href="#">3월</a></li>
-                    <li><a class="dropdown-month" href="#">4월</a></li>
-                    <li><a class="dropdown-month" href="#">5월</a></li>
-                    <li><a class="dropdown-month" href="#">6월</a></li>
-                    <li><a class="dropdown-month" href="#">7월</a></li>
-                    <li><a class="dropdown-month" href="#">8월</a></li>
-                    <li><a class="dropdown-month" href="#">9월</a></li>
-                    <li><a class="dropdown-month" href="#">10월</a></li>
-                    <li><a class="dropdown-month" href="#">11월</a></li>
-                    <li><a class="dropdown-month" href="#">12월</a></li>
-                </ul>
+                    <div class="dropdown me-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            월 선택
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMonth">
+                            <li><a class="dropdown-month" href="#" data-month="1">1월</a></li>
+                            <li><a class="dropdown-month" href="#" data-month="2">2월</a></li>
+                        </ul>
+                    </div>
 
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownWeek" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    1주
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownWeek">
-                    <li><a class="dropdown-week" href="#">1주</a></li>
-                    <li><a class="dropdown-week" href="#">2주</a></li>
-                    <li><a class="dropdown-week" href="#">3주</a></li>
-                    <li><a class="dropdown-week" href="#">4주</a></li>
-                    <li><a class="dropdown-week" href="#">5주</a></li>
-                    <li><a class="dropdown-week" href="#">6주</a></li>
-                </ul>
+                    <div class="dropdown me-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownWeek"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            주 선택
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownWeek">
+                            <li><a class="dropdown-week" href="#" data-week="1">1주</a></li>
+                            <li><a class="dropdown-week" href="#" data-week="2">2주</a></li>
+                            <li><a class="dropdown-week" href="#" data-week="3">3주</a></li>
+                            <li><a class="dropdown-week" href="#" data-week="4">4주</a></li>
+                            <li><a class="dropdown-week" href="#" data-week="5">5주</a></li>
+                            <li><a class="dropdown-week" href="#" data-week="6">6주</a></li>
+                        </ul>
+                    </div>
+                </div>
 
+                <div class="dropdown">
                     <!-- 페이지당 보기 -->
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -333,9 +340,9 @@
                 </div>
             </div>
             <!-- 전체 선택 체크박스 -->
-            <!--            <input type="checkbox" id="selectAll" class="all-checkbox me-1"-->
-            <!--                   style="width: 20px; height: 20px; vertical-align: middle;">-->
-            <!--            <label for="selectAll" style="vertical-align: middle;">전체 선택</label>-->
+                        <input type="checkbox" id="selectAll" class="all-checkbox me-1"
+                               style="width: 20px; height: 20px; vertical-align: middle;">
+                        <label for="selectAll" style="vertical-align: middle;">전체 선택</label>
             <div class="book-items mt-4">
                 <ul class="list-unstyled">
                     <li th:each="goods : ${goodsList}">
@@ -347,7 +354,8 @@
                                 <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                    class="show-detail">
                                     <div class="img-box">
-                                        <!--                <img th:src="@{/goodsImage{image}(image=${goodsImage.goodsUrl})}" style="width:200px; height:280px;">-->
+                                        <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
+                                        : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
                                     </div>
                                 </a>
                                 <div class="item-info">
@@ -362,21 +370,12 @@
                             </div>
                             <div class="icon ms-auto mb-4">
                                 <!-- 찜 상태에 따른 하트 아이콘 -->
-                                <img th:if="${goods.wishStatus == 'Y'}"
-                                     src="/images/user/redHeart.png"
+                                <img th:src="${goods.wishStatus == 'Y'} ? '/images/user/redHeart.png' : '/images/user/heart.png'"
                                      class="heart me-2"
                                      th:data-id="${goods.goodsNo}"
                                      width="36"
                                      height="36"
                                      alt="찜">
-                                <img th:if="${goods.wishStatus == 'N'}"
-                                     src="/images/user/heart.png"
-                                     class="heart me-2"
-                                     th:data-id="${goods.goodsNo}"
-                                     width="36"
-                                     height="36"
-                                     alt="찜">
-                                <!--              <img src="/images/user/heart.png" class="heart me-2" th:data-id="${goods.goodsNo}" width="36" height="36" alt="찜">-->
                                 <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
                                      width="36" height="36" alt="장바구니">
                             </div>

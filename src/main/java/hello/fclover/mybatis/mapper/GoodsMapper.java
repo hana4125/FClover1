@@ -44,7 +44,9 @@ public interface GoodsMapper {
             @Param("size") Integer size
     );
 
-    List<Goods> findByRank();
+    List<Goods> findByRank(
+            @Param("limit") int limit
+    );
   
     List<Goods> findGoodsByKeyword(Map<String, Object> params);
 
@@ -59,4 +61,22 @@ public interface GoodsMapper {
     // 인덱스 활성화, 비활성화용
     // void dropFullTextIndex();
     // void createFullTextIndex();
+
+    /**
+     * 신상품 목록 조회
+     */
+    List<Goods> selectNewItems(@Param("memberNo") Long memberNo,
+                               @Param("year") String year,
+                               @Param("month") String month,
+                               @Param("week") String week,
+                               @Param("offset") int offset,
+                               @Param("size") int size);
+
+    /**
+     * 신상품 총 개수 조회
+     */
+    int countNewItems(@Param("memberNo") Long memberNo,
+                      @Param("year") String year,
+                      @Param("month") String month,
+                      @Param("week") String week);
 }

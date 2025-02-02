@@ -6,7 +6,17 @@ import hello.fclover.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @Controller
 @RequestMapping("/goods")
@@ -20,5 +30,10 @@ public class GoodsController {
         System.out.println("============================================");
         System.out.println("model = " + model.getAttribute("imageList"));
         return "user/userGoodsDetail";
+    }
+    @PostMapping("/SearchGoodsProcess")
+    public List<Goods> searchGoodsProcess(@ModelAttribute Goods goods) {
+        List<Goods> list = new ArrayList<>();
+        return list;
     }
 }

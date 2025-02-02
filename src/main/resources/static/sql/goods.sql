@@ -89,4 +89,15 @@ select * from goods;
 
 delete from goods;
 
+SELECT
+    goods_no,
+    goods_name,
+    goods_writer,
+    goods_date
+FROM goods
+ORDER BY
+    goods_date DESC
+LIMIT 100;
+
+
 
