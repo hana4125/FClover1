@@ -338,6 +338,12 @@ public class MemberController {
         String memberId = principal.getName();
         Long memberNo = memberService.getmemberNo(memberId);
         List<WishDTO> wishlist = memberService.getWishDTOList(memberNo);
+
+        for (WishDTO wishDTO : wishlist) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(wishDTO.getGoodsNo());
+            wishDTO.setMainImage(mainImage);
+        }
+
         model.addAttribute("wishlist", wishlist);
         return "user/mypage/userMyPageWishlist";
     }
@@ -379,6 +385,8 @@ public class MemberController {
         List<CartDTO> cartItems = memberService.getCartItems(memberNo);
 
         for (CartDTO cartItem : cartItems) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(cartItem.getGoodsNo());
+            cartItem.setMainImage(mainImage); // 이미지 불러오기
             if (cartItem.getDeliveryDate() == null && cartItem.getCreatedAt() != null) {
                 LocalDateTime deliveryDate = cartItem.getCreatedAt().plusDays(3);
                 cartItem.setDeliveryDate(deliveryDate);
@@ -392,7 +400,7 @@ public class MemberController {
 
     @PostMapping("/cart/delete")
     public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
-       
+
         String cartNo = data.get("cartNo");
         try {
             memberService.removeCartItems(Long.parseLong(cartNo));
@@ -402,15 +410,15 @@ public class MemberController {
         return ResponseEntity.ok("삭제된 상품 cartNo : " + cartNo);
     }
 
-    @GetMapping("/steadySeller")
+/*    @GetMapping("/steadySeller")
     public String steadySeller() {
         return "user/userSteadyseller";
-    }
+    }*/
 
-    @GetMapping("/newItems")
+/*    @GetMapping("/newItems")
     public String newItems() {
         return "user/userNewItems";
-    }
+    }*/
 
     @GetMapping("/sellerSignup")
     public String sellerSignup() {

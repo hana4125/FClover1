@@ -5,7 +5,7 @@
 <mapper namespace="hello.fclover.mybatis.mapper.QuestionMapper">
 
     <select id="TotalCount" resultType="int">
-        select count(*) from QnA
+        select count(*) from qna
     </select>
 
     <select id="BoardList" parameterType="map" resultType="hello.fclover.domain.Question">
@@ -14,16 +14,16 @@
                q_create_at as qcreateat,
                q_content as qcontent,
                q_title as qtitle
-        FROM QnA
+        FROM qna
         ORDER BY q_no DESC
             LIMIT #{start}, #{limit}
     </select>
 
     <insert id="insertQuestion">
         <selectKey resultType="int" order="BEFORE" keyProperty="qno" keyColumn="q_no">
-            select IFNULL(max(q_no), 0) + 1 from QnA
+            select IFNULL(max(q_no), 0) + 1 from qna
         </selectKey>
-        insert into QnA
+        insert into qna
         (q_no,q_create_at,
         member_id,q_name,
         q_type, q_file, q_title,
@@ -52,13 +52,13 @@
                q_re_ref,
                q_re_lev,
                q_re_seq
-        FROM QnA
+        FROM qna
         WHERE q_no = #{num}
     </select>
 
     <select id="getQvalue" resultType="String">
         select q_value
-        from QnA_typelist
+        from qna_typelist
         where q_type = #{qtype}
     </select>
 
@@ -83,21 +83,23 @@
     </select>
 
 <!-- 기간 조회 -->
+
     <!-- 기간 조회를 위한 쿼리 -->
-    <select id="getFilteredQuestions" resultType="Question">
+    <select id="findByDateBetween" resultType="hello.fclover.domain.Question">
         SELECT *
-        FROM question
-        WHERE qcreateat BETWEEN #{startDate} AND #{endDate}
-        ORDER BY qno DESC
-            LIMIT #{start}, #{limit}
+        FROM qna
+        WHERE q_create_at BETWEEN #{startDate} AND #{endDate}
+        ORDER BY q_no DESC
+            LIMIT #{offset}, #{limit}
     </select>
 
     <!-- 기간 조회된 총 개수를 반환하는 쿼리 -->
-    <select id="getFilteredCount" resultType="int">
+    <select id="countByDateBetween" resultType="int">
         SELECT COUNT(*)
-        FROM question
-        WHERE qcreateat BETWEEN #{startDate} AND #{endDate}
+        FROM qna
+        WHERE q_create_at BETWEEN #{startDate} AND #{endDate}
     </select>
+
 
 <!-- 댓글 기능   -->
     <select id="getCommentList" resultType="hello.fclover.domain.Question">

@@ -5,7 +5,7 @@ CREATE TABLE qna(
     q_name varchar(30),
     q_type varchar(20),
     q_file varchar(255),
-    q_title varchar(20),
+    q_title varchar(30),
     q_content varchar(500),
     response_phone varchar(20),
     response_email varchar(100),
@@ -15,11 +15,6 @@ CREATE TABLE qna(
     q_re_seq int,
     PRIMARY KEY (q_no)
 );
-
-# 배포테스트중
-
-
-DROP TABLE qna;
 
 select * from qna;
 
