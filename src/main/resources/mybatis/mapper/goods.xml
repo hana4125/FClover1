@@ -167,50 +167,47 @@
   </select>
 
   <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
-  <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
-    SELECT
-    g.goods_no AS goodsNo,
-    g.seller_no AS sellerNo,
-    g.cate_no AS cateNo,
-    g.goods_name AS goodsName,
-    g.goods_content AS goodsContent,
-    g.goods_price AS goodsPrice,
-    g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
-    g.goods_create_at AS goodsCreateAt,
-    (st.initial_stock - st.product_stock) AS goodsCount
-    FROM (
-    SELECT *
-    FROM (
-    SELECT g.*
-    FROM goods g
-    JOIN stock st ON a.goods_no = st.goods_no
-    WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-    OR
-    MATCH(s.company_name)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
+    <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
+        SELECT
+        g.goods_no AS goodsNo,
+        g.seller_no AS sellerNo,
+        g.cate_no AS cateNo,
+        g.goods_name AS goodsName,
+        g.goods_content AS goodsContent,
+        g.goods_price AS goodsPrice,
+        g.goods_writer AS goodsWriter,
+        s.company_name AS companyName,
+        g.goods_create_at AS goodsCreateAt,
+        (st.initial_stock - st.product_stock) AS goodsCount
+        FROM (
+        SELECT *
+        FROM (
+        SELECT g.*
+        FROM goods g
+        WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
+        AGAINST (#{keyword} IN BOOLEAN MODE)
 
-    UNION ALL
+        UNION ALL
 
-    SELECT g.*
-    FROM goods g
-    JOIN seller s ON g.seller_no = s.seller_no
-    WHERE MATCH(s.company_name)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-    ) AS union_result
-    ORDER BY
-    <choose>
-      <when test="sort == 'latest'">goods_create_at DESC</when>
-      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
-      <when test="sort == 'highPrice'">goods_price DESC</when>
-      <when test="sort == 'lowPrice'">goods_price ASC</when>
-      <when test="sort == 'name'">goods_name ASC</when>
-    </choose>
-    LIMIT #{size} OFFSET #{offset}
-    ) g
-    LEFT JOIN seller s ON g.seller_no = s.seller_no;
-  </select>
+        SELECT g.*
+        FROM goods g
+        JOIN seller s ON g.seller_no = s.seller_no
+        WHERE MATCH(s.company_name)
+        AGAINST (#{keyword} IN BOOLEAN MODE)
+        ) AS union_result
+        ORDER BY
+        <choose>
+            <when test="sort == 'latest'">goods_create_at DESC</when>
+            <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
+            <when test="sort == 'highPrice'">goods_price DESC</when>
+            <when test="sort == 'lowPrice'">goods_price ASC</when>
+            <when test="sort == 'name'">goods_name ASC</when>
+        </choose>
+        LIMIT #{size} OFFSET #{offset}
+        ) g
+        JOIN stock st ON a.goods_no = st.goods_no
+        LEFT JOIN seller s ON g.seller_no = s.seller_no;
+    </select>
 
   <!-- 상세 검색 개수 쿼리 -->
   <select id="countGoodsByParam" parameterType="map" resultType="int">
