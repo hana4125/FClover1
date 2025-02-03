@@ -8,14 +8,14 @@
         select count(*) from notice
     </select>
 
-    <select id="getBoardList" parameterType="map" resultType="notice">
-        SELECT noti_no as notiNo,
-               noti_title as notiTitle,
-               noti_name as notiName,
-               noti_content as notiContent,
-               noti_date as notiDate
-        FROM notice
-        ORDER BY noti_date DESC
+    <select id="getBoardList" parameterType="map" resultType="hello.fclover.domain.Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        ORDER BY noti_Date DESC
             LIMIT #{start}, #{limit}
     </select>
 
@@ -33,25 +33,25 @@
         #{noticontent}, now())
     </insert>
 
-    <select id="getDetail" parameterType="int" resultType="notice">
-        SELECT noti_no as notiNo,
-               noti_title as notiTitle,
-               noti_name as notiName,
-               noti_content as notiContent,
-               noti_date as notiDate
-        FROM notice
-        WHERE noti_no = #{num}
+    <select id="getDetail" parameterType="int" resultType="hello.fclover.domain.Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        WHERE noti_No = #{num}
     </select>
 
-    <select id="getSearchList" parameterType="map" resultType="notice">
-        SELECT noti_no as notiNo,
-               noti_title as notiTitle,
-               noti_name as notiName,
-               noti_content as notiContent,
-               noti_date as notiDate
-        FROM notice
-        WHERE noti_title LIKE  #{search_word}
-        ORDER BY noti_date DESC
+    <select id="getSearchList" parameterType="map" resultType="hello.fclover.domain.Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        WHERE noti_Title LIKE  #{search_word}
+        ORDER BY noti_Date DESC
             LIMIT #{start}, #{size}
     </select>
 

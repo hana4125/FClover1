@@ -26,6 +26,20 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      - name: Generate Environment Variables File for Production
+        env:
+          JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+        run: |
+            echo "AWS_ACCESS_KEY_ID=${{ env.aws-access-key-id }}" >> .env
+            echo "JASYPT_ENCRYPTOR_PASSWORD=${{ env.JASYPT_ENCRYPTOR_PASSWORD }}" >> .env
+            echo "AWS_PRIVATE_ACCESS_KEY=${{ env.aws-secret-access-key }}" >> .env
+            echo "AWS_REGION=ap-northeast-2" >> .env
+        
+
+
+
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
 
@@ -48,11 +62,14 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
 
       - name: Code Deploy To EC2 instance
+#        env:
+#          MY_ENV_VAR: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
         run: aws deploy create-deployment
                 --application-name $CODE_DEPLOY_APP_NAME
                 --deployment-config-name CodeDeployDefault.AllAtOnce
                 --deployment-group-name $DEPLOYMENT_GROUP_NAME
                 --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+
 
 
 

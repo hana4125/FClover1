@@ -132,6 +132,7 @@
            WHERE MATCH(s.company_name)
              AGAINST (#{keyword} IN BOOLEAN MODE)
          ) result
+
   </select>
 
   <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
