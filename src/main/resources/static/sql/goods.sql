@@ -24,6 +24,9 @@ CREATE TABLE GOODS
     FULLTEXT INDEX ft_goods_writer_idx (GOODS_WRITER) WITH PARSER ngram
 ) ENGINE=InnoDB;
 
+
+drop table GOODS;
+
 insert into GOODS values(1,1, 1,'GoodsName1','GoodsContent1',
                          20000,'writer1', 'writerContent1',sysdate(),
                          1000, CURRENT_TIMESTAMP(), 300, 1,

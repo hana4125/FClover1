@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <link rel="stylesheet" href="/css/user/myPage.css">
+  <link rel="stylesheet" href="/css/user/myPageCoupon.css">
+  <script th:inline="javascript">
+      $(function () {
+          $("#updateInfo").click(function() {
+              location.href = "/member/myPage/info/modify";
+          })
+
+          $("#deleteBtn").click(function() {
+              location.href = "/member/myPage/info/delete";
+          })
+      })
+  </script>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="mt-4 border-top">
+  <div class="container w-75 pt-5">
+    <div class="d-flex">
+      <div th:replace="~{fragment/mypage :: sidebar}"></div>
+
+
+      <div style="width: 80%; height: 100vh;">
+        <h5 class="ms-5 mb-5 fw-bold">내 쿠폰 조회</h5>
+        <div class="ms-5 mt-3 bg-body-secondary rounded-3 d-flex align-items-center" style="height: 80px">
+          <div class="fw-bold p-4">회원가입 시 (가입이력 없는 경우) <span class="text-primary">1000원 할인쿠폰</span>제공!</div>
+        </div>
+        <div class="mt-5 ms-5 d-flex">
+            <div th:if="${coupons != null and coupons.size() > 0}">
+                <div>내 쿠폰 리스트 ( 1장 )</div>
+            </div>
+            <div th:unless="${coupons != null and coupons.size() > 0}">
+                <div>내 쿠폰 리스트 ( 0장 )</div>
+            </div>
+
+        </div>
+        <hr class="ms-5 mb-5">
+        <div class="ms-5 text-center" style="height: 200px">
+
+
+            <!-- 쿠폰이 존재하고 만료되지 않은 쿠폰이 있는 경우 -->
+            <div th:if="${coupons != null and coupons.size() > 0}">
+
+<!--                <div th:each="coupon : ${coupons}" th:if="${coupon.couponExpire != null and coupon.couponExpire.after(T(java.util.Date).newInstance())}">-->
+                <div th:each="coupon : ${coupons}" th:if="${coupon.couponExpire != null and coupon.couponExpire.isAfter(T(java.time.LocalDateTime).now())}">
+                        <li class="coupon_item">
+                            <div class="coupon_inner">
+                                <span class="left_box">
+                                <span class="coupon_logo">
+                                <img src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/img_coupon_logo_kyobo@2x.png" alt="KYOBO 교보문고">
+                                </span>
+                                <span class="coupon_val">1,000<span class="unit">원</span></span>
+                                </span>
+                                <span class="right_box"></span>
+                            </div>
+                        </li>
+                        <div class="mt-2" th:text="'회원가입 축하쿠폰 ( 가입일로부터 30일 )'"></div>
+                        <div class="mt-2" th:text="'쿠폰 만료일시 : ' + ${coupon.couponExpire.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy년 MM월 dd일 HH시 mm분 ss초'))}"  />
+
+                </div>
+            </div>
+
+            <!-- 쿠폰이 존재하지 않거나 만료된 쿠폰이 있는 경우 -->
+            <div th:unless="${coupons != null and coupons.size() > 0}">
+
+                    <img src="/images/user/warning.png" alt="경고" class="mt-5">
+                    <div class="mt-2">보유한 쿠폰이 없습니다.</div>
+
+            </div>
+
+        </div>
+
+        <hr class="ms-5">
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="~{fragment/footer :: footer}"></div>
+</body>
+</html>

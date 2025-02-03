@@ -35,5 +35,6 @@ public interface GoodsService {
     List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size);
 
     int getTotalNewItemsCount(Long memberNo, String year, String month, String week);
+
 }
 

@@ -38,6 +38,7 @@ public class SellerController {
     private final CartService cartService;
     private final PasswordEncoder passwordEncoder;
     private final CategoryService categoryService;
+    private final BackOfficeService backOfficeService;
 
     @ModelAttribute("seller")
     public Seller addSellerToModel(Principal principal) {
@@ -56,6 +57,8 @@ public class SellerController {
         return "seller/sellerAddSingleProduct";
     }
 
+
+    //단일 상품등록 프로세스
     @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String addSingleProductProcess(@RequestPart("goods") Goods goods,
                                           @RequestPart("goodsImages") List<MultipartFile> images,
@@ -72,6 +75,7 @@ public class SellerController {
         String businessNumber = seller.getBusinessNumber();
 
         System.out.println("goods:" + goods);
+
         goodsService.goodsSingleInsert(goods, images, businessNumber);
         return "redirect:/seller/main";
     }

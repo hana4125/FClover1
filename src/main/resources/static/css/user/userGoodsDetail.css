@@ -473,3 +473,358 @@ button.btn_line_primary.active {
 .Line{
     margin: 40px 0;
 }
+.tbl_prod_wrap .tbl_prod tbody td .form_spinner_box {
+    margin-top: 10px;
+}
+.form_spinner_box {
+    display: inline-block;
+    vertical-align: top;
+}
+.form_spinner_box.size_sm .ui-spinner {
+    width: 80px;
+    padding: 0 26px;
+}
+
+.form_spinner_box .ui-spinner {
+    position: relative;
+    display: block;
+    width: 102px;
+    padding: 0 33px;
+    background-color: #fff;
+    box-sizing: border-box;
+    font-size: 0;
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button.ui-spinner-down {
+    border-radius: 4px 0 0 4px;
+}
+
+.form_spinner_box .ui-spinner .ui-spinner-button.ui-spinner-down {
+    left: 0;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button {
+    width: 27px;
+    height: 30px;
+}
+.form_spinner_box .ui-spinner .ui-spinner-button {
+    display: block;
+    top: 0;
+    width: 34px;
+    height: 44px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.ui-spinner-down {
+    bottom: 0;
+}
+.ui-spinner-button {
+    width: 1.6em;
+    height: 50%;
+    font-size: .5em;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: absolute;
+    cursor: default;
+    display: block;
+    overflow: hidden;
+    right: 0;
+}
+.ui-button, .ui-button:active, .ui-button:hover, .ui-button:link, .ui-button:visited {
+    text-decoration: none;
+}
+.ui-button {
+    padding: .4em 1em;
+    display: inline-block;
+    line-height: normal;
+    margin-right: .1em;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: visible;
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button .ui-icon {
+    width: 10px;
+    height: 10px;
+    background-size: 10px 10px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_spinner_down_sm@2x.png);
+}
+
+.form_spinner_box .ui-spinner .ui-spinner-button .ui-icon {
+    width: 12px;
+    height: 12px;
+    background-size: 12px 12px;
+    background-image: url(http://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_spinner_down@2x.png);
+    text-align: center;
+    vertical-align: top;
+    margin: 0;
+}
+.ui-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -.25em;
+    position: relative;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+.form_spinner_box.size_sm .ui-spinner .form_spinner {
+    height: 30px;
+    font-size: 12px;
+}
+
+.form_spinner_box .ui-spinner .form_spinner {
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    padding: 1px 0 0 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    color: #000;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.ui-spinner-input {
+    border: 0;
+    background: 0 0;
+    color: inherit;
+    padding: .222em 0;
+    vertical-align: middle;
+    margin: .2em 2em .2em .4em;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+
+input:not([type="image" i], [type="range" i], [type="checkbox" i], [type="radio" i]) {
+    overflow-clip-margin: 0px !important;
+    overflow: clip !important;
+}
+
+input[type="number" i] {
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+
+input:not([type="file" i], [type="image" i], [type="checkbox" i], [type="radio" i]) {
+}
+
+input {
+
+    text-rendering: auto;
+    color: fieldtext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    appearance: auto;
+    -webkit-rtl-ordering: logical;
+    cursor: text;
+    background-color: field;
+    margin: 0em;
+    padding: 1px 0px;
+    border-width: 2px;
+    border-style: inset;
+    /*border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));*/
+    border-image: initial;
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button.ui-spinner-button.ui-spinner-up .ui-icon {
+    background-size: 10px 10px;
+    background-image: url(	https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_spinner_up_sm@2x.png);
+}
+
+.form_spinner_box .ui-spinner .ui-spinner-button.ui-spinner-button.ui-spinner-up .ui-icon {
+    background-size: 12px 12px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_spinner_up@2x.png);
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button .ui-icon {
+    width: 10px;
+    height: 10px;
+    background-size: 10px 10px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_spinner_down_sm@2x.png);
+}
+.form_spinner_box .ui-spinner .ui-spinner-button .ui-icon {
+    width: 12px;
+    height: 12px;
+    background-size: 12px 12px;
+    background-image: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_spinner_down@2x.png);
+    text-align: center;
+    vertical-align: top;
+    margin: 0;
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button.ui-spinner-up {
+    border-radius: 0 4px 4px 0;
+}
+
+.form_spinner_box .ui-spinner .ui-spinner-button.ui-spinner-up {
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+}
+.form_spinner_box.size_sm .ui-spinner .ui-spinner-button {
+    width: 27px;
+    height: 30px;
+}
+.form_spinner_box .ui-spinner .ui-spinner-button {
+    display: block;
+    top: 0;
+    width: 34px;
+    height: 44px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.ui-spinner-up {
+    top: 0;
+}
+.ui-spinner-button {
+    width: 1.6em;
+    height: 50%;
+    font-size: .5em;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: absolute;
+    cursor: default;
+    display: block;
+    overflow: hidden;
+    right: 0;
+}
+.ui-button, .ui-button:active, .ui-button:hover, .ui-button:link, .ui-button:visited {
+    text-decoration: none;
+}
+.ui-button {
+    padding: .4em 1em;
+    display: inline-block;
+    line-height: normal;
+    margin-right: .1em;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: visible;
+}
+/*.ui-button, .ui-menu-icons {*/
+/*    position: relative;*/
+/*}*/
+button {
+    background-color: transparent;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+
+.form_spinner_box.size_sm .ui-spinner .form_spinner {
+    height: 30px;
+    font-size: 12px;
+}
+.form_spinner_box .ui-spinner .form_spinner {
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    padding: 1px 0 0 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    color: #000;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.ui-spinner-input {
+    border: 0;
+    background: 0 0;
+    color: inherit;
+    padding: .222em 0;
+    vertical-align: middle;
+    margin: .2em 2em .2em .4em;
+}
+input, button, select, textarea {
+    vertical-align: middle;
+}
+input, button {
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, select, button, textarea, p, blockquote, table, th, td {
+    margin: 0;
+    padding: 0;
+}
+table, th, td, input, select, button, textarea, pre {
+    font: inherit;
+    color: inherit;
+}
+input:not([type="image" i], [type="range" i], [type="checkbox" i], [type="radio" i]) {
+    overflow-clip-margin: 0px !important;
+    overflow: clip !important;
+}
+input[type="number" i] {
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+input:not([type="file" i], [type="image" i], [type="checkbox" i], [type="radio" i]) {
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox  */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
