@@ -271,7 +271,7 @@
 <!--            <label for="selectAll" style="vertical-align: middle;">전체 선택</label>-->
             <div class="book-items mt-4">
                 <ul class="list-unstyled">
-                    <li th:each="goods : ${goodsList}">
+                    <li th:each="goods : ${bestGoodsList}">
                         <div class="category-list d-flex align-items-start mb-5">
                             <input type="checkbox" class="item-checkbox mt-1 ms-1"
                                    style="width: 18px; height: 18px;">
@@ -302,20 +302,6 @@
                                      width="36"
                                      height="36"
                                      alt="찜">
-                                <!--                                <img th:if="${goods.wishStatus == 'Y'}"-->
-<!--                                     src="/images/user/redHeart.png"-->
-<!--                                     class="heart me-2"-->
-<!--                                     th:data-id="${goods.goodsNo}"-->
-<!--                                     width="36"-->
-<!--                                     height="36"-->
-<!--                                     alt="찜">-->
-<!--                                <img th:if="${goods.wishStatus == 'N'}"-->
-<!--                                     src="/images/user/heart.png"-->
-<!--                                     class="heart me-2"-->
-<!--                                     th:data-id="${goods.goodsNo}"-->
-<!--                                     width="36"-->
-<!--                                     height="36"-->
-<!--                                     alt="찜">-->
                                 <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
                                      width="36" height="36" alt="장바구니">
                             </div>

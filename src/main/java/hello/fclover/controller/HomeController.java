@@ -56,11 +56,21 @@ public class HomeController {
         model.addAttribute("categoryList", categoryList);
 
         // 상품 목록 가져오기
-        List<Goods> goodsList = goodsService.getGoodsList(10);
-        model.addAttribute("goodsList", goodsList);
+        List<Goods> bestGoodsList = goodsService.getBestGoodsList(10);
+        model.addAttribute("bestGoodsList", bestGoodsList);
+
+        // 상품 목록 가져오기
+        List<Goods> steadyGoodsList = goodsService.getSteadyGoodsList(10);
+        model.addAttribute("steadyGoodsList", steadyGoodsList);
 
         // 대표 이미지 가져오기
-        for (Goods goods : goodsList) {
+        for (Goods goods : bestGoodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        // 대표 이미지 가져오기
+        for (Goods goods : steadyGoodsList) {
             GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
             goods.setMainImage(mainImage);
         }

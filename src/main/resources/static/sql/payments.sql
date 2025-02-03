@@ -28,6 +28,16 @@ CREATE TABLE `payments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;
 
 
+alter table payments
+add column goods_no bigint not null after order_id;
+
+alter table payments
+    add column payment_quantity bigint not null after order_id;
+
 commit;
 
 select* from payments;
+
+update payments
+set payment_quantity=80, goods_no=499863
+where payments_no = 1;

@@ -539,11 +539,21 @@ public class MemberController {
         }
 
         // 찜 상태가 포함된 상품 목록 조회
-        List<Goods> goodsList = goodsService.getGoodsWishStatus(memberNo, page, size);
-        model.addAttribute("goodsList", goodsList);
+        List<Goods> bestGoodsList = goodsService.getBestGoodsWishStatus(memberNo, page, size);
+        model.addAttribute("bestGoodsList", bestGoodsList);
 
         // 대표 이미지 가져오기
-        for (Goods goods : goodsList) {
+        for (Goods goods : bestGoodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        // 찜 상태가 포함된 상품 목록 조회
+        List<Goods> steadyGoodsList = goodsService.getSteadyGoodsWishStatus(memberNo, page, size);
+        model.addAttribute("steadyGoodsList", steadyGoodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : steadyGoodsList) {
             GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
             goods.setMainImage(mainImage);
         }

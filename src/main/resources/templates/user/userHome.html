@@ -227,7 +227,7 @@
     <div class="best-items mt-4">
         <ul class="best-list list-unstyled">
             <!--            <li th:each="goods : ${goodsList}">-->
-            <li th:each="goods, iterStat : ${goodsList}" th:if="${iterStat.index < 10}">
+            <li th:each="goods, iterStat : ${bestGoodsList}" th:if="${iterStat.index < 10}">
                 <span class="item-lank" style="font-size : 18px;" th:text="${goods.rowNum}"></span>
                 <div class="book-item mt-1">
                     <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
@@ -253,7 +253,7 @@
     </div>
     <div class="steady-items mt-4" style="display: none">
         <ul class="steady-list list-unstyled">
-            <li th:each="goods, iterStat : ${goodsList}" th:if="${iterStat.index < 10}">
+            <li th:each="goods, iterStat : ${steadyGoodsList}" th:if="${iterStat.index < 10}">
                 <span class="item-lank" style="font-size : 18px;" th:text="${goods.rowNum}"></span>
                 <div class="book-item mt-1">
                     <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
