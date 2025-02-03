@@ -402,16 +402,6 @@ public class MemberController {
         return ResponseEntity.ok("삭제된 상품 cartNo : " + cartNo);
     }
 
-    @GetMapping("/steadySeller")
-    public String steadySeller() {
-        return "user/userSteadyseller";
-    }
-
-    @GetMapping("/newItems")
-    public String newItems() {
-        return "user/userNewItems";
-    }
-
     @GetMapping("/sellerSignup")
     public String sellerSignup() {
         return "seller/sellerSignup";

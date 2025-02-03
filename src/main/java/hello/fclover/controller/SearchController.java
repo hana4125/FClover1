@@ -4,7 +4,9 @@ import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
 import hello.fclover.domain.Member;
-import hello.fclover.dto.GoodsSearchParam;
+import hello.fclover.dto.SearchDetailParamDTO;
+import hello.fclover.dto.SearchParamDTO;
+import hello.fclover.dto.SearchResponseDTO;
 import hello.fclover.service.CategoryService;
 import hello.fclover.service.GoodsService;
 import hello.fclover.service.MemberService;
@@ -14,12 +16,15 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
@@ -40,10 +45,12 @@ public class SearchController {
             String memberId = principal.getName();
             return memberService.findMemberById(memberId);
         }
+
         return null;
     }
 
     // 키워드 검색 기능
+    // TODO : 검색 결과 관련 로직 전부 서비스 계층으로 옮기기
     @GetMapping("/searchKeyword")
     public String keywordSearch(Model model,
             @RequestParam("keyword") String keyword,
@@ -117,9 +124,10 @@ public class SearchController {
     }
 
     // 상세 검색 기능
+    // TODO : 검색 결과 관련 로직 전부 서비스 계층으로 옮기기
     @GetMapping("/searchDetailResult")
     public String searchDetailResult(Model model,
-            GoodsSearchParam param,
+            SearchDetailParamDTO param,
             @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
@@ -166,4 +174,16 @@ public class SearchController {
 
         return "user/userSearchResult";
     }
+
+    @GetMapping("/refineAjax")
+    @ResponseBody
+    public ResponseEntity<SearchResponseDTO> refineResultsAjax(@ModelAttribute SearchParamDTO param) {
+
+        // 서비스 호출
+        SearchResponseDTO result = searchService.refineResult(param);
+
+        // JSON 으로 응답
+        return ResponseEntity.ok(result);
+    }
+
 }

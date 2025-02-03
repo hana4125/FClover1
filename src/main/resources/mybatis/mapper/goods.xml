@@ -7,9 +7,9 @@
   <insert id="goodsInsertText">
     insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
-     goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
+     goods_date, goods_pageCount, goods_bookSize, writer_content)
     values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
-            #{goodsCount}, current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
+             current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
   </insert>
 
   <select id="goodsNoselect">
@@ -143,7 +143,6 @@
     g.goods_writer AS goodsWriter,
     s.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
-    g.goods_count AS goodsCount
     FROM (
     SELECT *
     FROM (
@@ -213,7 +212,6 @@
     g.goods_writer AS goodsWriter,
     s.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
-    g.goods_count AS goodsCount
     <include refid="goodsWhereClause"/>
     <include refid="orderBy"/>
     LIMIT #{offset}, #{size}
@@ -229,11 +227,11 @@
   <insert id="insertGoods">
 
     INSERT INTO goods (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, writer_content,
-    goods_create_at, goods_count, goods_pagecount, goods_booksize)
+    goods_create_at, goods_pagecount, goods_booksize)
     VALUES
     <foreach collection="goods" item="g" separator=",">
       (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
-      #{g.goodsCreateAt},#{g.goodsCount},#{g.goodsPageCount},#{g.goodsBookSize})
+      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
     </foreach>
   </insert>
 
@@ -291,5 +289,9 @@
     <if test="week != null and week != ''">
       AND WEEK(goods_create_at) = #{week}
     </if>
+  </select>
+
+  <select id="searchByParam">
+
   </select>
 </mapper>

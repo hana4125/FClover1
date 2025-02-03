@@ -1,0 +1,25 @@
+package hello.fclover.dto;
+
+import lombok.Data;
+
+@Data
+public class SearchParamDTO {
+
+    // 검색 키워드
+    private String keyword;
+
+    // 검색 필터 관련 파라미터
+    private String cname;
+    private String chrc;
+    private String pbcm;
+
+    private int saprMin;
+    private int saprMax;
+
+    private String rlseDate;
+
+    // 페이징 관련 파라미터
+    private String sort = "latest";
+    private int page = 1;
+    private int size = 20;
+}

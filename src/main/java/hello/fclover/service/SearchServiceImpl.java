@@ -1,7 +1,10 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.Goods;
-import hello.fclover.dto.GoodsSearchParam;
+import hello.fclover.domain.GoodsImage;
+import hello.fclover.dto.SearchDetailParamDTO;
+import hello.fclover.dto.SearchParamDTO;
+import hello.fclover.dto.SearchResponseDTO;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class SearchServiceImpl implements SearchService {
 
     private final GoodsMapper goodsMapper;
+    private final GoodsService goodsService;
 
     @Override
     public int countByKeyword(String keyword) {
@@ -61,20 +65,20 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Map<String, Object> searchDetail(GoodsSearchParam goodsSearchParam, String sort, int offset, int size) {
+    public Map<String, Object> searchDetail(SearchDetailParamDTO searchDetailParamDTO, String sort, int offset, int size) {
         Map<String, Object> params = new HashMap<>();
-        params.put("name", goodsSearchParam.getCname());
-        params.put("writer", goodsSearchParam.getChrcDetail());
-        params.put("companyName", goodsSearchParam.getPbcmDetail());
+        params.put("name", searchDetailParamDTO.getCname());
+        params.put("writer", searchDetailParamDTO.getChrcDetail());
+        params.put("companyName", searchDetailParamDTO.getPbcmDetail());
 
-        params.put("cate", goodsSearchParam.getCate());
+        params.put("cate", searchDetailParamDTO.getCate());
 
-        params.put("minPrice", goodsSearchParam.getSaprmin());
-        params.put("maxPrice", goodsSearchParam.getSaprmax());
+        params.put("minPrice", searchDetailParamDTO.getSaprmin());
+        params.put("maxPrice", searchDetailParamDTO.getSaprmax());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate startDate = LocalDate.parse(goodsSearchParam.getRlseStr(), formatter);
-        LocalDate endDate = LocalDate.parse(goodsSearchParam.getRlseEnd(), formatter);
+        LocalDate startDate = LocalDate.parse(searchDetailParamDTO.getRlseStr(), formatter);
+        LocalDate endDate = LocalDate.parse(searchDetailParamDTO.getRlseEnd(), formatter);
         params.put("startDate", startDate);
         params.put("endDate", endDate);
 
@@ -88,7 +92,7 @@ public class SearchServiceImpl implements SearchService {
 
         long countEndTime = System.currentTimeMillis();
         long totalCountTime = countEndTime - countStartTime;
-        log.info("상세 검색어: '{}' 상세 count 완료 소요 시간: {} ms", goodsSearchParam.getRepKeyword(), totalCountTime);
+        log.info("상세 검색어: '{}' 상세 count 완료 소요 시간: {} ms", searchDetailParamDTO.getRepKeyword(), totalCountTime);
 
         long searchStartTime = System.currentTimeMillis();
 
@@ -96,10 +100,10 @@ public class SearchServiceImpl implements SearchService {
 
         long searchEndTime = System.currentTimeMillis();
         long totalSearchTime = searchEndTime - searchStartTime;
-        log.info("상세 검색어: '{}' 상세 검색 소요 시간 : {} ms", goodsSearchParam.getRepKeyword(), totalSearchTime);
+        log.info("상세 검색어: '{}' 상세 검색 소요 시간 : {} ms", searchDetailParamDTO.getRepKeyword(), totalSearchTime);
 
         long totalTime = totalCountTime + totalSearchTime;
-        log.info("상세 검색어: '{}' 상세 검색에 들어간 총 소요 시간: {} ms", goodsSearchParam.getRepKeyword(), totalTime);
+        log.info("상세 검색어: '{}' 상세 검색에 들어간 총 소요 시간: {} ms", searchDetailParamDTO.getRepKeyword(), totalTime);
 
         Map<String, Object> result = new HashMap<>();
         result.put("totalCount", totalCount);
@@ -108,5 +112,53 @@ public class SearchServiceImpl implements SearchService {
         return result;
     }
 
+    @Override
+    public SearchResponseDTO refineResult(SearchParamDTO searchParamDTO) {
+        int page = searchParamDTO.getPage();
+        int offset = (page - 1) * searchParamDTO.getSize();
+        List<Goods> goodsList = goodsMapper.searchByParam(searchParamDTO, offset);
+
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        int totalCount = goodsList.size();
+
+        int totalPages = (int)Math.ceil((double)totalCount / searchParamDTO.getSize());
+
+
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
+
+        SearchResponseDTO result = new SearchResponseDTO();
+        result.setSearchResults(goodsList);
+        result.setTotalCount(totalCount);
+        result.setCurrentPage(page);
+        result.setTotalPages(totalPages);
+        result.setStartPage(startPage);
+        result.setEndPage(endPage);
+        result.setSort(searchParamDTO.getSort());
+        result.setSize(searchParamDTO.getSize());
+
+        return result;
+    }
 
 }

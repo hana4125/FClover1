@@ -1,6 +1,7 @@
 package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Goods;
+import hello.fclover.dto.SearchParamDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -79,4 +80,8 @@ public interface GoodsMapper {
                       @Param("year") String year,
                       @Param("month") String month,
                       @Param("week") String week);
+
+
+    List<Goods> searchByParam(SearchParamDTO searchParamDTO, int offset);
+
 }
