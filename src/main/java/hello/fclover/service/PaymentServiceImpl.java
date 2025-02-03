@@ -76,6 +76,8 @@ public class PaymentServiceImpl implements PaymentService {
         connection.setConnectTimeout(10000);  // 연결 타임아웃 10초
         connection.setReadTimeout(10000);     // 읽기 타임아웃 10초
 
+        //각각의 호출상황에 맞게 수정하기.
+
         return connection;
     }
 

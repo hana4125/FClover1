@@ -3,6 +3,7 @@ package hello.fclover.service;
 import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
+import hello.fclover.domain.Settlement;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface BackOfficeService {
     List<Delivery> deliveryDoneOrderSearch();
 
     void changeDeliveryDoneStatus(int deliNo);
+
+    List<Settlement> sellerSettlementSearch();
 }

@@ -4,6 +4,7 @@ package hello.fclover.service;
 import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
+import hello.fclover.domain.Settlement;
 import hello.fclover.mybatis.mapper.BackOfficeMapper;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.mybatis.mapper.MemberMapper;
@@ -80,6 +81,12 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     public void changeDeliveryDoneStatus(int deliNo) {
         String deliStatus = "배송완료";
         dao.changeDeliveryDoneStatus(deliNo,deliStatus);
+    }
+
+    @Override
+    public List<Settlement> sellerSettlementSearch() {
+        List<Settlement> list = dao.sellerSettlementSearch();
+        return list;
     }
 
 }

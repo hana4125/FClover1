@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.Goods;
+import hello.fclover.domain.GoodsImage;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,5 +25,11 @@ public interface GoodsService {
     List<Goods> getGoodsWishStatus(Long memberNo, int page, int size);
 
     void getGoodsDetail(Long goodsNo, Model model);
+
+    GoodsImage getMainImageByGoodsNo(Long goodsNo);
+
+    List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size);
+
+    int getTotalNewItemsCount(Long memberNo, String year, String month, String week);
 }
 

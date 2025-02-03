@@ -1,13 +1,11 @@
 package hello.fclover.controller;
 
 
-import hello.fclover.domain.Delivery;
-import hello.fclover.domain.Member;
-import hello.fclover.domain.Payment;
-import hello.fclover.domain.Seller;
+import hello.fclover.domain.*;
 import hello.fclover.service.BackOfficeService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.SellerService;
+import hello.fclover.task.SettlementScheduledTasks;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +33,7 @@ public class BackOfficeController {
     private final PasswordEncoder passwordEncoder;
     private static final int SIGNUP_SUCCESS = 1;
     private static final int SIGNUP_FAILURE = 0;
+    private final SettlementScheduledTasks settlementScheduledTasks;
 
     @ModelAttribute("admin")
     public Member addAdminToModel(Principal principal) {
@@ -120,6 +119,7 @@ public class BackOfficeController {
     //판매자 정산관리
     @GetMapping("/SellerSettlement")
     public String SellerSettlement() {
+
         return "backOffice/boSellerSettlement";
     }
 
@@ -205,4 +205,23 @@ public class BackOfficeController {
         System.out.println("===========>여기는 컨트롤러 inTransitList = " + inTransitList);
         return inTransitList;
     }
+
+    //판매자 상품등록 승인
+    @GetMapping("/goodsApproval")
+    public String goodsApproval() {
+
+
+        return "backOffice/boSellerGoodsApproval";
+    }
+
+    //판매자 정산 데이터 조회
+    @GetMapping("/sellerSettlementSearch")
+    @ResponseBody
+    public List<Settlement> sellerSettlementSearch() {
+
+        List<Settlement> list = backOfficeService.sellerSettlementSearch();
+        return list;
+    }
+
+
 }

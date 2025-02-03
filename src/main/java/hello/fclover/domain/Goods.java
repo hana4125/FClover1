@@ -1,17 +1,12 @@
 package hello.fclover.domain;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -34,5 +29,6 @@ public class Goods {
     private String goodsBookSize;      // 상품 크기
     private String wishStatus; // 'Y' 또는 'N'
     private int rowNum; // 상품 순위
+    private GoodsImage mainImage;      // 대표 이미지
 }
 
