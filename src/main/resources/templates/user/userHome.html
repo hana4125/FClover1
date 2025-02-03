@@ -53,6 +53,10 @@
                 location.href = "/member/bestSeller";
             })
 
+            $(".steady").click(function () {
+                location.href = "/member/steadySeller";
+            })
+
             $(".new").click(function () {
                 location.href = "/member/newItems";
             })
@@ -235,7 +239,7 @@
                        class="show-detail">
                         <div class="img-box">
                             <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                             : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
+                             : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
                         </div>
                     </a>
                     <div class="item-info">
@@ -261,7 +265,7 @@
                        class="show-detail">
                         <div class="img-box">
                             <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                             : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
+                             : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
                         </div>
                     </a>
                     <div class="item-info">

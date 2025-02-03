@@ -247,11 +247,6 @@
 <!--        </aside>-->
         <div class="col-md-9">
             <div class="d-flex justify-content-end align-items-center mb-3">
-                <!-- 장바구니, 찜 버튼 -->
-                <!--            <div class="icon ms-auto mb-4">-->
-                <!--              <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
-                <!--              <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
-                <!--            </div>-->
 
                 <!-- 드롭다운 -->
                 <div class="dropdown me-2">
@@ -273,15 +268,15 @@
                 <ul class="list-unstyled">
                     <li th:each="goods : ${bestGoodsList}">
                         <div class="category-list d-flex align-items-start mb-5">
-                            <input type="checkbox" class="item-checkbox mt-1 ms-1"
-                                   style="width: 18px; height: 18px;">
+<!--                            <input type="checkbox" class="item-checkbox mt-1 ms-1"-->
+<!--                                   style="width: 18px; height: 18px;">-->
                             <div class="book-item mt-1">
                                 <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                                 <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                    class="show-detail">
                                     <div class="img-box">
                                         <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                                        : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
+                                        : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
                                     </div>
                                 </a>
                                 <div class="item-info">
