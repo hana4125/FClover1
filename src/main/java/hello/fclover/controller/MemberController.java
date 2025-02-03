@@ -401,7 +401,7 @@ public class MemberController {
 
     @PostMapping("/cart/delete")
     public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
-       
+
         String cartNo = data.get("cartNo");
         try {
             memberService.removeCartItems(Long.parseLong(cartNo));
