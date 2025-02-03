@@ -3,8 +3,6 @@ import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
 import hello.fclover.domain.PaginationResult;
 import hello.fclover.domain.Question;
-import hello.fclover.mail.EmailMessage;
-import hello.fclover.mail.EmailService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.NoticeService;
 import hello.fclover.service.QuestionService;
@@ -12,8 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +24,12 @@ import java.util.Map;
 @Controller
 @RequestMapping(value="/inquiry")
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = "noticeCache")
 public class InquirycenterController {
 
     private final MemberService memberService;
     private final NoticeService noticeService;
     private final QuestionService questionService;
-    private final EmailService emailService;
+
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -81,8 +76,6 @@ public class InquirycenterController {
 
     //공지사항 검색
     @GetMapping(value = "/notice/noti_list")
-    @Cacheable(value = "noticeCache", key = "#page + '-' + #limit + '-' + (#search_word == null ? '' : #search_word)", condition = "#search_word.length() > 0")
-
     public ModelAndView noticeList(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
@@ -178,8 +171,6 @@ public class InquirycenterController {
         }
         return mv;
     }
-
-
 
 
 

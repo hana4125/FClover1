@@ -6,49 +6,49 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Notice {
-    private int notino;
-    private String notititle;
-    private String notiname;
-    private String noticontent;
-    private String notidate;
+    private int notiNo;
+    private String notiTitle;
+    private String notiName;
+    private String notiContent;
+    private String notiDate;
 
-    public int getNotino() {
-        return notino;
+    public int getNotiNo() {
+        return notiNo;
     }
 
-    public void setNotino(int notino) {
-        this.notino = notino;
+    public void setNotiNo(int notiNo) {
+        this.notiNo = notiNo;
     }
 
-    public String getNotititle() {
-        return notititle;
+    public String getNotiTitle() {
+        return notiTitle;
     }
 
-    public void setNotititle(String notititle) {
-        this.notititle = notititle;
+    public void setNotiTitle(String notiTitle) {
+        this.notiTitle = notiTitle;
     }
 
-    public String getNotiname() {
-        return notiname;
+    public String getNotiName() {
+        return notiName;
     }
 
-    public void setNotiname(String notiname) {
-        this.notiname = notiname;
+    public void setNotiName(String notiName) {
+        this.notiName = notiName;
     }
 
-    public String getNoticontent() {
-        return noticontent;
+    public String getNotiContent() {
+        return notiContent;
     }
 
-    public void setNoticontent(String noticontent) {
-        this.noticontent = noticontent;
+    public void setNotiContent(String notiContent) {
+        this.notiContent = notiContent;
     }
 
-    public String getNotidate() {
-        return notidate;
+    public String getNotiDate() {
+        return notiDate;
     }
 
-    public void setNotidate(String notidate) {
-        this.notidate = notidate;
+    public void setNotiDate(String notiDate) {
+        this.notiDate = notiDate;
     }
 }

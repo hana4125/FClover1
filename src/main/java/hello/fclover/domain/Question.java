@@ -1,6 +1,5 @@
 package hello.fclover.domain;
 
-import hello.fclover.oauth2.dto.OAuth2Response;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,5 +27,4 @@ public class Question {
     private int cno;
     private String ccontent;
     private String cresponseat;
-
 }

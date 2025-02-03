@@ -5,63 +5,63 @@
 <mapper namespace="hello.fclover.mybatis.mapper.NoticeMapper">
 
     <select id="getListCount" resultType="int">
-        select count(*) from notice
+        select count(*) from NOTICE
     </select>
 
-    <select id="getBoardList" parameterType="map" resultType="notice">
-        SELECT noti_no as notiNo,
-               noti_title as notiTitle,
-               noti_name as notiName,
-               noti_content as notiContent,
-               noti_date as notiDate
-        FROM notice
-        ORDER BY noti_date DESC
+    <select id="getBoardList" parameterType="map" resultType="Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        ORDER BY noti_Date DESC
             LIMIT #{start}, #{limit}
     </select>
 
     <insert id="insertNotice">
-        <selectKey resultType="int" order="BEFORE" keyProperty="notino" keyColumn="noti_no">
-            select IFNULL(max(noti_no), 0) + 1 from notice
+        <selectKey resultType="int" order="BEFORE" keyProperty="notiNo" keyColumn="noti_No">
+            select IFNULL(max(noti_No), 0) + 1 from NOTICE
         </selectKey>
-        insert into notice
-        (noti_no,
-        noti_title, noti_name,
-        noti_content, noti_date)
+        insert into NOTICE
+        (noti_No,
+        noti_Title, noti_Name,
+        noti_Content, noti_Date)
         values
-        (#{notino},
-        #{notititle}, #{notiname},
-        #{noticontent}, now())
+        (#{notiNo},
+        #{notiTitle}, #{notiName},
+        #{notiContent}, now())
     </insert>
 
-    <select id="getDetail" parameterType="int" resultType="notice">
-        SELECT noti_no as notiNo,
-               noti_title as notiTitle,
-               noti_name as notiName,
-               noti_content as notiContent,
-               noti_date as notiDate
-        FROM notice
-        WHERE noti_no = #{num}
+    <select id="getDetail" parameterType="int" resultType="Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        WHERE noti_No = #{num}
     </select>
 
-    <select id="getSearchList" parameterType="map" resultType="notice">
-        SELECT noti_no as notiNo,
-               noti_title as notiTitle,
-               noti_name as notiName,
-               noti_content as notiContent,
-               noti_date as notiDate
-        FROM notice
-        WHERE noti_title LIKE  #{search_word}
-        ORDER BY noti_date DESC
+    <select id="getSearchList" parameterType="map" resultType="Notice">
+        SELECT noti_No as notiNo,
+               noti_Title as notiTitle,
+               noti_Name as notiName,
+               noti_Content as notiContent,
+               noti_Date as notiDate
+        FROM NOTICE
+        WHERE noti_Title LIKE  #{search_word}
+        ORDER BY noti_Date DESC
             LIMIT #{start}, #{size}
     </select>
 
 
     <select id="getSearchListCount" resultType="int">
         select  count(*)
-        from notice
+        from NOTICE
         <where>
             <if test="search_word != null and search_word != ''">
-                noti_title LIKE #{search_word}
+                noti_Title LIKE #{search_word}
             </if>
         </where>
     </select>
