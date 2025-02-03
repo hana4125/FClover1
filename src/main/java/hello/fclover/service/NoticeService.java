@@ -23,4 +23,6 @@ public interface NoticeService {
     int getSearchListCount( String searchWord);
 
     List<Notice> getSearchList( String searchWord, int page, int limit);
+
+    int deleteNotice(int notino);
 }

@@ -32,7 +32,7 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping(value="/member")
+@RequestMapping(value = "/member")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
@@ -166,7 +166,8 @@ public class MemberController {
 
         Member member = new Member();
 
-        member.setMemberId(memberId);;
+        member.setMemberId(memberId);
+        ;
         member.setName(name);
         member.setBirthdate(birthdate);
         member.setEmail(email);
@@ -244,7 +245,6 @@ public class MemberController {
         }
         return "redirect:/member/myPage/addressBook";
     }
-
 
 
     @Transactional
@@ -392,7 +392,7 @@ public class MemberController {
 
     @PostMapping("/cart/delete")
     public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
-        log.info("값이 넘어오나요?");
+       
         String cartNo = data.get("cartNo");
         try {
             memberService.removeCartItems(Long.parseLong(cartNo));
@@ -439,8 +439,8 @@ public class MemberController {
     }
 
     @GetMapping("/memberPay")
-    public String sellerPay(Principal principal,Model model) {
-        if(principal==null){
+    public String sellerPay(Principal principal, Model model) {
+        if (principal == null) {
             return "redirect:/login";
         }
         model.addAttribute("username", principal.getName());
@@ -482,7 +482,7 @@ public class MemberController {
         System.out.println("========>controller의 paymentRequest : " + paymentRequest);
 
         try {
-            HttpURLConnection connection =paymentService.createConnection("https://service.iamport.kr/payments/ready/imp03578475/nice/iamport00m?sandbox=true&store_id=store-a0b049dc-4590-4213-b1f5-d861a3ccae51&channelKey=channel-key-68c69d42-0462-4eb9-af59-5b26cb4100de");
+            HttpURLConnection connection = paymentService.createConnection("https://service.iamport.kr/payments/ready/imp03578475/nice/iamport00m?sandbox=true&store_id=store-a0b049dc-4590-4213-b1f5-d861a3ccae51&channelKey=channel-key-68c69d42-0462-4eb9-af59-5b26cb4100de");
 
             if (paymentService.isConnectionSuccessful(connection)) {
                 // 결제 처리
@@ -503,12 +503,12 @@ public class MemberController {
     }
 
     @GetMapping("/OrderCancel/{uid}")
-    public ResponseEntity<String> OrderCancel(@PathVariable("uid")String uid) {
+    public ResponseEntity<String> OrderCancel(@PathVariable("uid") String uid) {
         paymentService.cancelPayment(uid);
 
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
-  
+
 //    @GetMapping("/goodsDetail/{no}")
 //    public String goodsDetail(@PathVariable("no") Long goodsNo, @ModelAttribute("member") Member member, Model model) {
 //        // 카테고리 데이터 가져오기
@@ -543,6 +543,12 @@ public class MemberController {
         // 찜 상태가 포함된 상품 목록 조회
         List<Goods> goodsList = goodsService.getGoodsWithWishStatusList(memberNo, cateNo, sort, page, size);
         model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
 
         // 페이지네이션 정보 전달
         int totalItems = goodsService.getTotalGoodsCount(cateNo);
@@ -582,7 +588,18 @@ public class MemberController {
                              @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                              @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                              Model model) {
+        return prepareSellerPage(member, page, size, model, "/user/userBestseller");
+    }
 
+    @GetMapping("/steadySeller")
+    public String steadySeller(@ModelAttribute("member") Member member,
+                               @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                               @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                               Model model) {
+        return prepareSellerPage(member, page, size, model, "/user/userSteadyseller");
+    }
+
+    private String prepareSellerPage(Member member, int page, int size, Model model, String viewName) {
         // 카테고리 데이터 가져오기
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
@@ -597,22 +614,75 @@ public class MemberController {
         List<Goods> goodsList = goodsService.getGoodsWishStatus(memberNo, page, size);
         model.addAttribute("goodsList", goodsList);
 
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
 
         // 페이지네이션 정보 전달
-//        int totalItems = goodsService.getTotalBestGoodsCount();
         int totalItems = Math.min(goodsService.getTotalBestGoodsCount(memberNo), 100);
         int totalPages = (int) Math.ceil((double) totalItems / size);
 
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("size", size);
-        return "/user/userBestseller"; // 베스트 상세 페이지
+        return viewName;
+    }
+
+    @GetMapping("/newItems")
+    public String NewItems(@ModelAttribute("member") Member member,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                           @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                           @RequestParam(value = "year", required = false) String year,
+                           @RequestParam(value = "month", required = false) String month,
+                           @RequestParam(value = "week", required = false) String week,
+                           Model model) {
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 신상품 목록 조회: 정렬 방식과 일자 필터 적용
+        List<Goods> goodsList = goodsService.getNewItems(memberNo, year, month, week, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        // 페이지네이션 정보 전달
+        int actualTotalItems = goodsService.getTotalNewItemsCount(memberNo, year, month, week);
+        int totalItems = Math.min(actualTotalItems, 100); // 최대 100개로 제한
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("size", size);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        model.addAttribute("week", week);
+
+        return "/user/userNewItems";
     }
 
     @GetMapping("/gift")
     public String gift() {
         System.out.println("====");
         return "user/userGoodsDetail";
+    }
+    @GetMapping("/myPage/coupon")
+    public String coupon() {
+        System.out.println("====");
+        return "user/mypage/userMypageCoupon";
     }
 
 }

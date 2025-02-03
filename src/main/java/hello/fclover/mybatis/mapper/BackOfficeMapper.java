@@ -3,6 +3,7 @@ package hello.fclover.mybatis.mapper;
 import hello.fclover.domain.Delivery;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.Seller;
+import hello.fclover.domain.Settlement;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface BackOfficeMapper {
     List<Delivery> deliveryDoneSearch();
 
     void changeDeliveryDoneStatus(int deliNo, String deliStatus);
+
+    List<Settlement> sellerSettlementSearch();
 }

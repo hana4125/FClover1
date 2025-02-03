@@ -1,5 +1,6 @@
 package hello.fclover.mail;
 
+import hello.fclover.domain.Question;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -49,6 +51,8 @@ public class EmailService {
                 });
     }
 
+
+
     // 동기 방식
     public void sendMail(EmailMessage emailMessage)  {
         MimeMessage mimeMessage = mailSender.createMimeMessage(); // MimeMessage 객체 생성
@@ -75,4 +79,6 @@ public class EmailService {
             throw new RuntimeException(e);
         }
     }
+
+
 }

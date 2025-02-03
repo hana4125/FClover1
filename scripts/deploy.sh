@@ -19,12 +19,25 @@ else
   sleep 5
 fi
 
+
+
 echo "> Deploy - $JAR_NAME "
 
-source ~/.bashrc
+# .env 파일을 읽고 환경 변수 설정
+if [ -f .env ]; then
+  export $(cat .env | xargs)
+fi
 
-#nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
-#java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
-#nohup java -jar $JAR_PATH > /home/ubuntu/deploy.log 2>&1 &
-#nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
+# .env 파일에서 JASYPT_ENCRYPTOR_PASSWORD가 설정되었는지 확인
+echo "> Using JASYPT_ENCRYPTOR_PASSWORD: $JASYPT_ENCRYPTOR_PASSWORD"
+
+#
+#source ~/.bashrc
+#
+##nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+##java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+##nohup java -jar $JAR_PATH > /home/ubuntu/deploy.log 2>&1 &
+##nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
 nohup java -jar $JAR_NAME > /home/ubuntu/deploy.log 2>&1 &
+
+echo "> 배포 완료"

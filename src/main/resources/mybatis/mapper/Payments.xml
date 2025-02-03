@@ -22,7 +22,10 @@
             SELECT * FROM payments
            WHERE user_id=#{userId}
     </select>
-    <select id="findByPaymentDateBetweenAndStatus">
+    <select id="findByPaymentDateBetweenAndStatus" resultType="hello.fclover.domain.Payment">
+                SELECT * FROM payments
+                WHERE payment_date BETWEEN #{startDate} AND #{endDate}
+                AND status=#{paymentCompleted}
 
     </select>
 </mapper>
