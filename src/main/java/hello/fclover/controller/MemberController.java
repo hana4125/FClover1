@@ -80,6 +80,7 @@ public class MemberController {
         int result = memberService.signup(member);
 
         if (result == SIGNUP_SUCCESS) {
+            memberService.createCoupon(member.getMemberId());
             log.info("회원가입 완료");
             return "redirect:/";
         } else {
@@ -694,13 +695,22 @@ public class MemberController {
 
     @GetMapping("/gift")
     public String gift() {
-        System.out.println("====");
         return "user/userGoodsDetail";
     }
+
+
+    //내쿠폰 조회페이지
     @GetMapping("/myPage/coupon")
-    public String coupon() {
-        System.out.println("====");
+    public String coupon(Principal principal,Model model) {
+
+        String memberId  = principal.getName();
+        List<Coupon> coupons = memberService.getActiveCouponsForUser(memberId);
+        log.info("========> memberController의 coupons 조회 : " + coupons);
+
+        model.addAttribute("coupons", coupons);
+
         return "user/mypage/userMypageCoupon";
     }
+
 
 }

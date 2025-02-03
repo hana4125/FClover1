@@ -1,10 +1,7 @@
 package hello.fclover.service;
 
 
-import hello.fclover.domain.Delivery;
-import hello.fclover.domain.Payment;
-import hello.fclover.domain.Seller;
-import hello.fclover.domain.Settlement;
+import hello.fclover.domain.*;
 import hello.fclover.mybatis.mapper.BackOfficeMapper;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.mybatis.mapper.MemberMapper;
@@ -12,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -88,5 +86,19 @@ public class BackOfficeServiceImpl implements BackOfficeService {
         List<Settlement> list = dao.sellerSettlementSearch();
         return list;
     }
+
+    @Override
+    public List<Goods> sellerGoodsApprovalSearch() {
+        List<Goods> list = dao.sellerGoodsApprovalSearch();
+
+
+        return list;
+    }
+
+    @Override
+    public void goodsConfirmSuccess(Long goodsNo) {
+        dao.goodsConfirmSuccess(goodsNo);
+    }
+
 
 }

@@ -200,4 +200,6 @@ public class GoodsServiceImpl implements GoodsService {
 
         return uuid.toString() + insertDate + extension;
     }
+
+
 }

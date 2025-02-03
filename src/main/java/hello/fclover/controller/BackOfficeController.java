@@ -223,5 +223,24 @@ public class BackOfficeController {
         return list;
     }
 
+    //판매자 정산 데이터 조회
+    @GetMapping("/SellerGoodsApproval")
+    @ResponseBody
+    public List<Goods> SellerGoodsApproval() {
+
+        List<Goods> list = backOfficeService.sellerGoodsApprovalSearch();
+        return list;
+    }
+
+
+    //판매자상품등록 [승인완료]버튼 클릭 시
+    @GetMapping("/goodsConfirmSuccess")
+    @ResponseBody
+    public ResponseEntity<?> goodsConfirmSuccess(@RequestParam Long goodsNo) {
+
+        backOfficeService.goodsConfirmSuccess(goodsNo);
+
+        return ResponseEntity.ok().body("상품등록 승인완료되었습니다.");
+    }
 
 }
