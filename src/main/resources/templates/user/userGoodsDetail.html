@@ -152,15 +152,23 @@
                                                                                      alt="next"
                                                                                      draggable="false"></span></div>
                             <ul class="swiper-wrapper" id="slideList">
+                                <th:block th:if="${imageList.size == 0 }">
+                                    <li class="swiper-slide not_goods_image" style="width: 380px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
+                                        <img src="../../images/user/no_image_icon.png" alt="notGoodsImage"  class="notGoodsImage">
+                                    </li>
+                                </th:block>
+                                <th:block th:if="${imageList.size > 0 }">
                                 <th:block th:each="image : ${imageList}">
                                     <li class="prod_thumb_item swiper-slide swiper-slide-visible swiper-slide-active"
                                         style="width: 380px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
                                         <div class="blur_img_wrap portrait">
                                             <!-- 이미지 리스트를 반복하여 출력 -->
-                                            <img th:src="${image}" alt="Goods Image" width="400" height="600">
+                                            <img th:src="${image}" alt="Goods Image"  class="goodsImage" width="400" height="600">
                                         </div>
                                     </li>
                                 </th:block>
+                                </th:block>
+
                             </ul>
                         </div>
                     </div>

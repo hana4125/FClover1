@@ -25,3 +25,4 @@ update member
 set auth = 'ROLE_ADMIN'
 where member_id = 'admin';
 
+delete from member where member_id = 'userid';

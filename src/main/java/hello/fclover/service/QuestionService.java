@@ -84,6 +84,10 @@ public interface QuestionService {
 
     List<Question> BoardList(Integer currentPage, int limit);
 
+    List<Question> getFilteredQuestions(LocalDate startDate, LocalDate endDate, int page, int limit);
+
+    int getFilteredCount(LocalDate startDate, LocalDate endDate);
+
     void insertQuestion(Question question);
 
     Question Detail(int no);
@@ -94,13 +98,19 @@ public interface QuestionService {
     public List<Question> getCommentList(int board_num, int page);
 
     //댓글 등록하기
-    public int commentsInsert(Question c);
+    int commentsAdd(String ccontent, String memberid, int qno);
 
     //댓글 삭제
-    public int commentDelete(int num);
+    public int commentDelete(int cno);
 
     //댓글 수정
     public int commentsUpdate(Question co);
 
     String getQvalue(String qtype);
+
+    void saveInquiry(String phone, String email, String message, boolean alert);
+
+    Question getQuestionDetail(int qno);
+
+
 }

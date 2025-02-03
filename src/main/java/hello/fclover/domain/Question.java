@@ -1,5 +1,6 @@
 package hello.fclover.domain;
 
+import hello.fclover.oauth2.dto.OAuth2Response;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,14 +18,26 @@ public class Question {
     private String qcontent;
     private String responsephone;
     private String responseemail;
-    private String qalert;
+    private boolean qalert;
     private int qreref;
     private int qrelev;
     private int qreseq;
     private MultipartFile uploadfile;
 
-
     private int cno;
     private String ccontent;
     private String cresponseat;
+
+
+    public String getEmail() {
+        return this.responseemail;
+    }
+
+    public String getPhone() {
+        return this.responsephone;
+    }
+
+    public Object getQalert() {
+        return this.qalert;
+    }
 }

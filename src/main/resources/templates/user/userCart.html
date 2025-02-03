@@ -8,17 +8,130 @@
   <script src="/js/jquery-3.7.1.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/searchBox.css">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <style>
       .mt-6 {
           margin-top: 6rem;
       }
+
+      .imageBox {
+          width: 130px;
+          height: 180px;
+          border: 1px solid black;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .counter {
+          display: flex;
+          align-items: center;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 5px;
+          width: 100px;
+          justify-content: space-between;
+      }
+
+      .counter button {
+          background: none;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+      }
+
+      .counter input {
+          width: 30px;
+          text-align: center;
+          border: none;
+          font-size: 16px;
+      }
   </style>
   <script th:inline="javascript">
       $(function () {
-          $("#shopping").click(function() {
+
+          let token = $("meta[name='_csrf']").attr("content");
+          let header = $("meta[name='_csrf_header']").attr("content");
+
+          $("#shopping").click(function () {
               location.href = "/";
-          })
-      })
+          });
+
+          function updateTotalPrice(counter) {
+              let countInput = counter.find('.count');
+              let totalPriceSpan = counter.siblings('.total-price');
+              let unitPrice = parseInt(totalPriceSpan.attr('data-price'), 10);
+              let quantity = parseInt(countInput.val(), 10);
+              let totalPrice = unitPrice * quantity;
+
+              totalPriceSpan.text(totalPrice.toLocaleString());
+
+              updateTotalAmount(); // 상품 개별 금액 변경 후 총액 및 총 수량 업데이트
+          }
+
+          function updateTotalAmount() {
+              let totalAmount = 0;
+              let totalQuantity = 0;
+
+              $(".total-price").each(function () {
+                  totalAmount += parseInt($(this).text().replace(/,/g, "").replace("원", ""), 10);
+              });
+
+              $(".count").each(function () {
+                  totalQuantity += parseInt($(this).val(), 10);
+              });
+
+              let totalPayment = totalAmount; // 할인이 있다면 여기서 계산 가능
+
+              $(".total-amount").text(totalAmount.toLocaleString() + "원");
+              $(".total-payment").text(totalPayment.toLocaleString() + "원");
+              $(".order-btn").text(`주문하기(${totalQuantity})`); // 총 수량 표시
+          }
+
+          $('.decrease').click(function () {
+              let counter = $(this).closest('.counter');
+              let countInput = counter.find('.count');
+              let value = parseInt(countInput.val(), 10);
+              if (value > 1) {
+                  countInput.val(value - 1);
+                  updateTotalPrice(counter);
+              }
+          });
+
+          $('.increase').click(function () {
+              let counter = $(this).closest('.counter');
+              let countInput = counter.find('.count');
+              let value = parseInt(countInput.val(), 10);
+              countInput.val(value + 1);
+              updateTotalPrice(counter);
+          });
+
+          $(".btn-close").click(function () {
+              let cartItemDiv = $(this).closest("[data-cart-no]"); // 해당 상품 div
+              let cartNo = cartItemDiv.data("cart-no"); // cartNo 가져오기
+
+              console.log("삭제된 상품 cartNo:", cartNo); // 콘솔에 출력
+
+              cartItemDiv.remove(); // UI에서 상품 제거
+              updateTotalAmount(); // 삭제 후 총액 및 총 수량 업데이트
+
+              $.ajax({
+                  url: '/member/cart/delete',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({"cartNo" : cartNo}),
+                  beforeSend: function (xhr) {
+                      xhr.setRequestHeader(header, token);
+                  },
+                  success: function (result) {
+                      console.log(result);
+                  }
+              })
+          });
+
+          updateTotalAmount(); // 페이지 로드 시 초기 총 금액 및 총 수량 설정
+      });
   </script>
 </head>
 <body>
@@ -26,21 +139,71 @@
 <div class="mt-4 border-top">
   <div class="container w-75 mt-5 d-flex">
     <div style="width: 75%; height: 300vh">
-      <h3 style="font-weight: bold">장바구니(0)</h3>
+      <h3 style="font-weight: bold">장바구니(<span th:text="${cartItems.size()}"></span>)</h3>
       <hr>
-      <div style="height: 300px;" class="text-center">
-        <img src="/images/user/warning.png" alt="경고" class="mt-5">
-        <div style="font-weight: bold" class="mt-2">장바구니에 담긴 상품이 없습니다.</div>
-        <div class="mt-2">마음에 드는 상품을 담아보세요!</div>
-        <button id="shopping" class="btn btn-success mt-5">계속 쇼핑하기</button>
-      </div>
+      <th:block th:if="${cartItems.size() == 0}">
+        <div style="height: 300px;" class="text-center">
+          <img src="/images/user/warning.png" alt="경고" class="mt-5">
+          <div style="font-weight: bold" class="mt-2">장바구니에 담긴 상품이 없습니다.</div>
+          <div class="mt-2">마음에 드는 상품을 담아보세요!</div>
+          <button id="shopping" class="btn btn-success mt-5">계속 쇼핑하기</button>
+        </div>
+      </th:block>
+      <th:block th:unless="${cartItems.size() == 0}">
+        <div th:each="cartItem : ${cartItems}" th:data-cart-no="${cartItem.cartNo}">
+          <div class="border-top border-bottom border-1 border-secondary">
+            <div style="height: 200px;" class="d-flex">
+              <div style="width: 60%;" class="d-flex">
+                <div class="d-flex align-items-center">
+                  <div class="imageBox ms-2">
+                    <img th:src="${cartItem.mainImage != null ? cartItem.mainImage.goodsUrl + '/' + cartItem.mainImage.goodsImageName : '/images/user/book/item1.png'}" width="130px" height="180px" alt="상품이미지"/>
+                  </div>
+                </div>
+                <div class="mt-3 ms-2">
+                  <div class="mb-2">
+                    <span class="fw-bold">[도서] </span><span th:text="${cartItem.goodsName}"
+                                                            class="fw-bold">제목</span><br>
+                  </div>
+                  <div>
+                    <span th:text="${#numbers.formatInteger(cartItem.goodsPrice, 0, 'COMMA')}" class="fw-bold">가격</span><span>원</span>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center align-items-center border-start border-end border-1 border-secondary"
+                   style="width: 20%;">
+                <div class="text-center">
+                  <span class="total-price fw-bold"
+                        th:data-price="${cartItem.goodsPrice}"
+                        th:text="${#numbers.formatInteger(cartItem.goodsPrice * cartItem.cartQuantity, 0, 'COMMA')}">
+                  </span>원
+                  <div class="counter mt-2">
+                    <button class="decrease">-</button>
+                    <input type="text" class="count" th:value="${cartItem.cartQuantity}" readonly>
+                    <button class="increase">+</button>
+                  </div>
+                </div>
+              </div>
+              <div style="width: 20%; height: 100%;">
+                <div style="width: 100%; height: 20%; display: flex; align-items: center;">
+                  <button class="btn-close ms-auto me-2"></button>
+                </div>
+                <div style="width: 100%; height: 80%;" class="d-flex justify-content-center align-items-center">
+                  <div class="mb-3">
+                    <span th:text="${#temporals.format(cartItem.deliveryDate, 'M/d(E) 도착')}" class="fw-bold">배송일</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </th:block>
       <hr>
     </div>
     <div style="width: 25%; height: 300vh">
-      <div class="mt-6 ms-3 p-4 border rounded-3 sticky-top">
+      <div class="mt-6 ms-5 p-4 border rounded-3 sticky-top">
         <div class="d-flex justify-content-between">
           <p>상품 금액</p>
-          <span>0원</span>
+          <span class="total-amount">0원</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>상품 할인</p>
@@ -49,9 +212,9 @@
         <hr>
         <div class="d-flex justify-content-between">
           <p>결제 예정 금액</p>
-          <span>0원</span>
+          <span class="total-payment">0원</span>
         </div>
-        <button class="btn btn-primary form-control mt-3">주문하기(0)</button>
+        <button class="btn btn-primary form-control mt-3 order-btn">주문하기(0)</button>
       </div>
     </div>
   </div>

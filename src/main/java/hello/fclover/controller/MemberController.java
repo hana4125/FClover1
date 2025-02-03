@@ -1,6 +1,8 @@
 package hello.fclover.controller;
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.CartDTO;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.*;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.HttpURLConnection;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -331,14 +334,91 @@ public class MemberController {
 //    }
 
     @GetMapping("/myPage/wishlist")
-    public String myPageWishlist() {
+    public String myPageWishlist(Principal principal, Model model) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+        List<WishDTO> wishlist = memberService.getWishDTOList(memberNo);
+
+        for (WishDTO wishDTO : wishlist) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(wishDTO.getGoodsNo());
+            wishDTO.setMainImage(mainImage);
+        }
+
+        model.addAttribute("wishlist", wishlist);
         return "user/mypage/userMyPageWishlist";
     }
 
+    @PostMapping("/myPage/wishlist/delete")
+    public ResponseEntity<String> deleteWishList(Principal principal, @RequestBody Map<String, String> data) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+        String wishNo = data.get("wishNo");
+
+        try {
+            memberService.removeWishList(Long.parseLong(wishNo), memberNo);
+        } catch (NumberFormatException e) {
+            log.info(e.getMessage());
+        }
+
+        return ResponseEntity.ok(data + " 삭제 완료");
+    }
+
+    @PostMapping("/myPage/wishlist/deleteAll")
+    public ResponseEntity<String> deleteAllWishList(@RequestBody Map<String, String> data) {
+
+        String memberNo = data.get("memberNo");
+
+        try {
+            memberService.removeAllWishList(Long.parseLong(memberNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+
+        return ResponseEntity.ok("전체 삭제 완료");
+    }
+
     @GetMapping("/cart")
-    public String cart() {
+    public String cart(Principal principal, Model model) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+
+        List<CartDTO> cartItems = memberService.getCartItems(memberNo);
+
+        for (CartDTO cartItem : cartItems) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(cartItem.getGoodsNo());
+            cartItem.setMainImage(mainImage); // 이미지 불러오기
+            if (cartItem.getDeliveryDate() == null && cartItem.getCreatedAt() != null) {
+                LocalDateTime deliveryDate = cartItem.getCreatedAt().plusDays(3);
+                cartItem.setDeliveryDate(deliveryDate);
+            }
+        }
+
+        model.addAttribute("cartItems", cartItems);
+
         return "user/userCart";
     }
+
+    @PostMapping("/cart/delete")
+    public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
+       
+        String cartNo = data.get("cartNo");
+        try {
+            memberService.removeCartItems(Long.parseLong(cartNo));
+        } catch (NumberFormatException e) {
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok("삭제된 상품 cartNo : " + cartNo);
+    }
+
+/*    @GetMapping("/steadySeller")
+    public String steadySeller() {
+        return "user/userSteadyseller";
+    }*/
+
+/*    @GetMapping("/newItems")
+    public String newItems() {
+        return "user/userNewItems";
+    }*/
 
     @GetMapping("/sellerSignup")
     public String sellerSignup() {
@@ -616,6 +696,11 @@ public class MemberController {
     public String gift() {
         System.out.println("====");
         return "user/userGoodsDetail";
+    }
+    @GetMapping("/myPage/coupon")
+    public String coupon() {
+        System.out.println("====");
+        return "user/mypage/userMypageCoupon";
     }
 
 }

@@ -173,13 +173,13 @@
                   <td><span th:text="${num - (iterStat.index)}"></span></td>
                   <td>
                     <div class="ntitle">
-                      <a th:href="@{/inquiry/notice/detail(num=${b.notiNo})}">
-                        <span th:text="${b.notiTitle}"></span>
+                      <a th:href="@{/inquiry/notice/detail(num=${b.notino})}">
+                        <span th:text="${b.notititle}"></span>
                       </a>
                     </div>
                   </td>
-                  <td><div th:text="${b.notiName}"></div></td>
-                  <td><div th:text="${#strings.substring(b.notiDate, 2, 10)}"></div></td>
+                  <td><div th:text="${b.notiname}"></div></td>
+                  <td><div th:text="${#strings.substring(b.notidate, 2, 10)}"></div></td>
                 </tr>
               </th:block>
             </th:block>

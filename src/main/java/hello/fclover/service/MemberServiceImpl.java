@@ -2,6 +2,8 @@ package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.CartDTO;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public long getmemberNo(String memberId) {
+    public Long getmemberNo(String memberId) {
         return dao.selectMemberNo(memberId);
     }
 
@@ -154,5 +156,30 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return member.getProfilePicture();
+    }
+
+    @Override
+    public List<WishDTO> getWishDTOList(Long memberNo) {
+        return dao.selectWishDTOList(memberNo);
+    }
+
+    @Override
+    public void removeWishList(Long wishNo, Long memberNo) {
+        dao.deleteWishList(wishNo, memberNo);
+    }
+
+    @Override
+    public void removeAllWishList(Long memberNo) {
+        dao.deleteAllWishList(memberNo);
+    }
+
+    @Override
+    public List<CartDTO> getCartItems(Long memberNo) {
+        return dao.selectCartItems(memberNo);
+    }
+
+    @Override
+    public void removeCartItems(Long cartNo) {
+        dao.deleteCartItems(cartNo);
     }
 }

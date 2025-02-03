@@ -5,25 +5,25 @@
 <mapper namespace="hello.fclover.mybatis.mapper.QuestionMapper">
 
     <select id="TotalCount" resultType="int">
-        select count(*) from QnA
+        select count(*) from qna
     </select>
 
-    <select id="BoardList" parameterType="map" resultType="Question">
+    <select id="BoardList" parameterType="map" resultType="hello.fclover.domain.Question">
         SELECT q_no as qno,
                q_name as qname,
                q_create_at as qcreateat,
                q_content as qcontent,
                q_title as qtitle
-        FROM QnA
+        FROM qna
         ORDER BY q_no DESC
             LIMIT #{start}, #{limit}
     </select>
 
     <insert id="insertQuestion">
         <selectKey resultType="int" order="BEFORE" keyProperty="qno" keyColumn="q_no">
-            select IFNULL(max(q_no), 0) + 1 from QnA
+            select IFNULL(max(q_no), 0) + 1 from qna
         </selectKey>
-        insert into QnA
+        insert into qna
         (q_no,q_create_at,
         member_id,q_name,
         q_type, q_file, q_title,
@@ -37,7 +37,7 @@
         #{qalert},#{qreref},#{qrelev},#{qreseq})
     </insert>
 
-    <select id="Detail" parameterType="int" resultType="Question">
+    <select id="Detail" parameterType="int" resultType="hello.fclover.domain.Question">
         SELECT q_no,
                q_create_at,
                member_id,
@@ -52,18 +52,55 @@
                q_re_ref,
                q_re_lev,
                q_re_seq
-        FROM QnA
+        FROM qna
         WHERE q_no = #{num}
     </select>
 
     <select id="getQvalue" resultType="String">
         select q_value
-        from QnA_typelist
+        from qna_typelist
         where q_type = #{qtype}
     </select>
 
+    <select id="findByQno" parameterType="int" resultType="hello.fclover.domain.Question">
+        SELECT
+            q_no as qno,
+            q_create_at as qcreateat,
+            member_id as memberid,
+            q_name as qname,
+            q_type as qtype,
+            q_file as qfile,
+            q_title as qtitle,
+            q_content as qcontent,
+            response_phone as responsephone,
+            response_email as responseemail,
+            q_alert as qalert,
+            q_re_ref as qreref,
+            q_re_lev as qrelev,
+            q_re_seq as qreseq
+        FROM qna
+        WHERE q_no = #{qno}
+    </select>
+
+<!-- 기간 조회 -->
+    <!-- 기간 조회를 위한 쿼리 -->
+    <select id="getFilteredQuestions" resultType="Question">
+        SELECT *
+        FROM question
+        WHERE qcreateat BETWEEN #{startDate} AND #{endDate}
+        ORDER BY qno DESC
+            LIMIT #{start}, #{limit}
+    </select>
+
+    <!-- 기간 조회된 총 개수를 반환하는 쿼리 -->
+    <select id="getFilteredCount" resultType="int">
+        SELECT COUNT(*)
+        FROM question
+        WHERE qcreateat BETWEEN #{startDate} AND #{endDate}
+    </select>
+
 <!-- 댓글 기능   -->
-    <select id="getCommentList" resultType="Question">
+    <select id="getCommentList" resultType="hello.fclover.domain.Question">
         SELECT *
         FROM (
                  SELECT c_no as cno,
@@ -78,12 +115,10 @@
              ) AS result
     </select>
 
-    <insert id="commentsInsert">
+    <insert id="commentsAdd">
         INSERT INTO comments (member_id, c_content, c_response_at, q_no)
         VALUES (#{memberid}, #{ccontent}, NOW(), #{qno});
     </insert>
-
-
 
     <update id="commentsUpdate">
         update comments
@@ -91,8 +126,9 @@
         where c_no = #{cno}
     </update>
 
-    <delete id="commentsDelete">
-        delete comments
-        where cno = #{cno}
+    <delete id="commentDelete" parameterType="int">
+        DELETE FROM comments
+        WHERE c_no = #{cno}
     </delete>
+
 </mapper>
