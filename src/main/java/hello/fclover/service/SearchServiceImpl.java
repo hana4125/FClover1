@@ -115,8 +115,8 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public SearchResponseDTO refineResult(SearchParamDTO searchParamDTO) {
         int page = searchParamDTO.getPage();
-        int offset = (page - 1) * searchParamDTO.getSize();
-        List<Goods> goodsList = goodsMapper.searchByParam(searchParamDTO, offset);
+        searchParamDTO.setOffset((page - 1) * searchParamDTO.getSize());
+        List<Goods> goodsList = goodsMapper.searchByParam(searchParamDTO);
 
         for (Goods goods : goodsList) {
             GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());

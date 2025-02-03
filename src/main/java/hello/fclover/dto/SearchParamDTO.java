@@ -9,6 +9,8 @@ public class SearchParamDTO {
     private String keyword;
 
     // 검색 필터 관련 파라미터
+    private int cateNo;
+
     private String cname;
     private String chrc;
     private String pbcm;
@@ -22,4 +24,5 @@ public class SearchParamDTO {
     private String sort = "latest";
     private int page = 1;
     private int size = 20;
+    private int offset;
 }

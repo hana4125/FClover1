@@ -86,6 +86,7 @@ public interface GoodsMapper {
                       @Param("week") String week);
 
 
-    List<Goods> searchByParam(SearchParamDTO searchParamDTO, int offset);
+
+    List<Goods> searchByParam(SearchParamDTO searchParamDTO);
 
 }
