@@ -130,12 +130,16 @@
                     <!-- 삭제버튼 -->
                   </div>
                   <div class="d-flex">
-                    <div class="imageBox ms-4 mt-4">이미지</div>
+                    <div class="imageBox ms-4 mt-4">
+                      <a th:href="@{/goods/GoodsDetail/{no}(no=${wish.goodsNo})}">
+                        <img th:src="${wish.mainImage != null ? wish.mainImage.goodsUrl + '/' + wish.mainImage.goodsImageName : '/images/user/book/item1.png'}" width="180px" height="230px" alt="상품이미지"/>
+                      </a>
+                    </div>
                     <div class="textBox d-flex flex-column ms-4 mt-4">
                       <div><input type="hidden" id="wishNo" th:value="${wish.wishNo}"></div>
                       <div><input type="hidden" id="memberNo" th:value="${wish.memberNo}"></div>
-                      <div><span th:text="${wish.goodsName}"></span></div>
-                      <div><span th:text="${wish.goodsWriter}"></span></div>
+                      <div class="text-start">[도서] <span th:text="${wish.goodsName}"></span></div>
+                      <div class="text-start">[작가] <span th:text="${wish.goodsWriter}"></span></div>
                     </div>
                   </div>
                 </div>

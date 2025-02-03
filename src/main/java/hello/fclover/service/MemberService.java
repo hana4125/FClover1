@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
+import hello.fclover.domain.Coupon;
 import hello.fclover.domain.Member;
 import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
@@ -53,11 +54,15 @@ public interface MemberService {
 
     List<WishDTO> getWishDTOList(Long memberNo);
 
+    void createCoupon(String memberId);
+
     void removeWishList(Long wishNo, Long memberNo);
 
     void removeAllWishList(Long memberNo);
 
     List<CartDTO> getCartItems(Long memberNo);
 
-    void removeCartItems(Long cartNo);
+    void removeCartItems(long l);
+
+    List<Coupon> getActiveCouponsForUser(String memberId);
 }

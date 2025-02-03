@@ -1,8 +1,3 @@
-# jasypt 환경변수
-JASYPT_ENCRYPTOR_PASSWORD=fClover
-
-
-
 
 # Git 명령어
 

@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.AddressBook;
+import hello.fclover.domain.Coupon;
 import hello.fclover.domain.Member;
 import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
@@ -179,7 +180,26 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void removeCartItems(Long cartNo) {
-        dao.deleteCartItems(cartNo);
+    public void removeCartItems(long l) {
+
+    }
+
+//    @Override
+//    public void removeCartItems(Long cartNo) {
+//        dao.deleteCartItems(cartNo);
+//    }
+
+    @Override
+    public void createCoupon(String memberId) {
+        dao.createCoupon(memberId);
+    }
+
+
+
+    @Override
+    public List<Coupon> getActiveCouponsForUser(String memberId) {
+        List<Coupon> coupons = dao.getActiveCouponsForUser(memberId);
+
+        return coupons;
     }
 }

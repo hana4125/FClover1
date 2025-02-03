@@ -65,19 +65,30 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        return goodsMapper.findGoodsWithWishStatus(memberNo, cateNo, sort, offset, size);
+        return goodsMapper.findCategoryGoodsWishStatus(memberNo, cateNo, sort, offset, size);
     }
 
     @Override
-    public List<Goods> getGoodsList(int limit) {
-        return goodsMapper.findByRank(limit);
+    public List<Goods> getBestGoodsList(int limit) {
+        return goodsMapper.findByBestRank(limit);
+    }
+
+    @Override
+    public List<Goods> getSteadyGoodsList(int limit) {
+        return goodsMapper.findBySteadyRank(limit);
     }
 
     @Override
 //    @Cacheable(value = "GoodsMapper.findGoodsWishStatus")
-    public List<Goods> getGoodsWishStatus(Long memberNo, int page, int size) {
+    public List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
-        return goodsMapper.findGoodsWishStatus(memberNo, offset, size);
+        return goodsMapper.findBestGoodsWishStatus(memberNo, offset, size);
+    }
+
+    @Override
+    public List<Goods> getSteadyGoodsWishStatus(Long memberNo, int page, int size) {
+        int offset = (page - 1) * size;
+        return goodsMapper.findSteadyGoodsWishStatus(memberNo, offset, size);
     }
 
     public void getGoodsDetail(Long goodsNo, Model model) {
@@ -189,4 +200,6 @@ public class GoodsServiceImpl implements GoodsService {
 
         return uuid.toString() + insertDate + extension;
     }
+
+
 }

@@ -43,4 +43,12 @@
     <select id="sellerSettlementSearch">
         select * from settlements
     </select>
+    <select id="sellerGoodsApprovalSearch">
+        select goods_no,seller_no,cate_no,goods_name,goods_content,goods_price,goods_writer,writer_content,goods_create_at,goods_date,permission
+        from goods
+        where permission='승인대기중'
+    </select>
+    <update id="goodsConfirmSuccess">
+        update goods set permission='승인완료' where goods_no=#{goodsNo}
+    </update>
 </mapper>
