@@ -6,8 +6,8 @@
 
     <!-- Upsert 쿼리: 이미 (goods_no, member_no)가 있으면 cart_quantity를 +1, 없으면 새로 insert -->
     <insert id="upsertCart">
-        INSERT INTO cart (goods_no, member_no, cart_quantity)
-        VALUES (#{goodsNo}, #{memberNo}, 1)
+        INSERT INTO cart (goods_no, member_no, cart_quantity, created_at)
+        VALUES (#{goodsNo}, #{memberNo}, 1, NOW())
             ON DUPLICATE KEY UPDATE
                                  cart_quantity = cart_quantity + 1
     </insert>

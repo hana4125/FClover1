@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionMapper dao;
     private final EmailService emailService;
     private final NoticeMapper noticeMapper;
-    private final QuestionMapper questionMapper;
+
 
 
     @Override
@@ -43,8 +44,31 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<Question> getFilteredQuestions(LocalDate startDate, LocalDate endDate, int page, int limit) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("start", (page - 1) * limit); // 페이지네이션 시작 위치
+        map.put("limit", limit); // 페이지당 항목 수
+
+        return dao.getFilteredQuestions(map);
+    }
+
+    @Override
+    public int getFilteredCount(LocalDate startDate, LocalDate endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+
+        return dao.getFilteredCount(map);
+    }
+
+
+    @Override
     public void insertQuestion(Question question) {
+        log.info("Before insert - qno: {}", question.getQno());
         dao.insertQuestion(question);
+        log.info("After insert - qno: {}", question.getQno());
     }
 
     @Override
@@ -65,14 +89,15 @@ public class QuestionServiceImpl implements QuestionService {
         return dao.getCommentList(map);
     }
 
+    //댓글 작성
     @Override
-    public int commentsInsert(Question c) {
-        return dao.commentsInsert(c);
+    public int commentsAdd(String ccontent, String memberid, int qno) {
+        return dao.commentsAdd(ccontent, memberid, qno);
     }
 
     @Override
-    public int commentDelete(int num) {
-        return dao.commentDelete(num);
+    public int commentDelete(int cno) {
+        return dao.commentDelete(cno);
     }
 
 
@@ -110,6 +135,9 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
-
+    @Override
+    public Question getQuestionDetail(int qno) {
+        return dao.findByQno(qno);
+    }
 
 }
