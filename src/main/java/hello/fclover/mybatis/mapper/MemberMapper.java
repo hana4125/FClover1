@@ -3,7 +3,11 @@ package hello.fclover.mybatis.mapper;
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
+import hello.fclover.domain.Wish;
+import hello.fclover.dto.CartDTO;
+import hello.fclover.dto.WishDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +43,7 @@ public interface MemberMapper {
 
     void deleteMember(String memberId);
 
-    int selectMemberNo(String memberId);
+    Long selectMemberNo(String memberId);
 
     AddressBook selectDefaultAddress(Long memberNo);
 
@@ -48,4 +52,16 @@ public interface MemberMapper {
     int selectIsDefault(int addressNo);
 
     int deleteAddressBook(int addressNo);
+
+    List<Wish> selectWishList(Long memberNo);
+
+    List<WishDTO> selectWishDTOList(Long memberNo);
+
+    void deleteWishList(@Param("wishNo") Long wishNo, @Param("memberNo") Long memberNo);
+
+    void deleteAllWishList(Long memberNo);
+
+    List<CartDTO> selectCartItems(Long memberNo);
+
+    void deleteCartItems(Long cartNo);
 }
