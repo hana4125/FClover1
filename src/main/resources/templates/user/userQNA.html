@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
+  <script src="/js/qna_date.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
   <link rel="stylesheet" href="/css/user/notice.css">
   <link rel="stylesheet" href="/css/user/qna.css">
@@ -27,30 +28,22 @@
     })
   </script>
   <script th:inline="javascript">
-    $(function() {
-      // 검색 버튼 클릭 시
-      $(".search-btn").click(function() {
-        console.log("검색 버튼 클릭됨");
-        const searchWord = $("input[name='search_word']").val();
-        console.log("검색어:", searchWord);
-
-        if(searchWord.trim() === '') {
-          alert("검색어를 입력하세요");
-          $("input[name='search_word']").focus();
-          return false;
-        }
-
-        // 폼 제출
-        console.log("폼 제출 시도");
-        $("form").submit();
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".calendar-btn").forEach(function(button) {
+        button.addEventListener("click", function(event) {
+          event.preventDefault();
+          const inputField = this.parentElement.querySelector("input[type='date']");
+          inputField.style.display = "block";
+          inputField.showPicker();
+        });
       });
 
-      // Enter 키 입력 시에도 검색 실행
-      $("input[name='search_word']").keypress(function(e) {
-        if(e.keyCode === 13) {
-          e.preventDefault();
-          $(".search-btn").click();
-        }
+      document.querySelectorAll("input[type='date']").forEach(function(input) {
+        input.addEventListener("change", function() {
+          const displaySpan = this.parentElement.querySelector(".selected-date");
+          displaySpan.innerText = this.value;
+          this.style.display = "none";
+        });
       });
     });
 
@@ -139,7 +132,7 @@
               <div class="form_cont">
                 <div class="date_picker_box">
                   <!-- form_sel -->
-                  <select class="period-select">
+                  <select class="period-select" id="period-select">
                     <option value="1">최근 1개월</option>
                     <option value="2">최근 2개월</option>
                     <option value="3">최근 3개월</option>
@@ -147,17 +140,19 @@
                     <option value="0">직접입력</option>
                   </select>
                   <div class="date-picker-container">
-                    <div class="date-picker-wrapper">
-                      <input type="date" class="date-input start-date" placeholder="시작일">
-                      <button class="calendar-btn start-calendar-btn">
-                        <img src="/images/user/calendar.png" alt="날짜 선택">
+                    <div class="date-picker-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                      <span class="selected-date"></span>
+                      <input type="date" class="date-input start-date" style="display: none;">
+                      <button class="calendar-btn start-calendar-btn" style="margin-left: auto;">
+                        <img src="/images/user/calendar.png" alt="시작일 선택">
                       </button>
                     </div>
                     <span class="gap">~</span>
-                    <div class="date-picker-wrapper">
-                      <input type="date" class="date-input end-date" placeholder="종료일">
-                      <button class="calendar-btn end-calendar-btn">
-                        <img src="/images/user/calendar.png" alt="날짜 선택">
+                    <div class="date-picker-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                      <span class="selected-date"></span>
+                      <input type="date" class="date-input end-date" style="display: none;">
+                      <button class="calendar-btn end-calendar-btn" style="margin-left: auto;">
+                        <img src="/images/user/calendar.png" alt="종료일 선택">
                       </button>
                     </div>
                   </div>
@@ -216,13 +211,13 @@
             </tr>
             </thead>
             <tbody>
-            <th:block th:with="no=${totalcount - (currentPage - 1) * limit}">
+            <th:block th:with="qno=${totalcount - (currentPage - 1) * limit}">
               <th:block th:each="d, iterStat : ${questionlist}">
                 <tr>
-                  <td><span th:text="${no - (iterStat.index)}"></span></td>
+                  <td><span th:text="${qno - (iterStat.index)}"></span></td>
                   <td>
                     <div class="ntitle">
-                      <a th:href="@{/inquiry/question/detail(no=${d.qno})}">
+                      <a th:href="@{/inquiry/question/detail(qno=${d.qno})}">
                         <span th:text="${d.qtitle}"></span>
                       </a>
                     </div>

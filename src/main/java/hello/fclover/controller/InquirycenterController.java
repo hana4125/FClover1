@@ -12,17 +12,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,13 +163,43 @@ public class InquirycenterController {
         return "user/userQNA";
     }
 
+    @GetMapping("/question/filter")
+    public String filterQuestions(
+            @RequestParam(defaultValue = "1") Integer currentPage,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            Model m) {
+
+        int limit = 10;
+        LocalDate start = startDate != null ? LocalDate.parse(startDate) : LocalDate.now().minusMonths(1);
+        LocalDate end = endDate != null ? LocalDate.parse(endDate) : LocalDate.now();
+
+        int totalcount = questionService.getFilteredCount(start, end);
+        List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
+
+        PaginationResult rt = new PaginationResult(currentPage, limit, totalcount);
+        m.addAttribute("currentPage", currentPage);
+        m.addAttribute("maxpage", rt.getMaxpage());
+        m.addAttribute("startpage", rt.getStartpage());
+        m.addAttribute("endpage", rt.getEndpage());
+        m.addAttribute("totalcount", totalcount);
+        m.addAttribute("questionlist", questionlist);
+        m.addAttribute("limit", limit);
+        m.addAttribute("startDate", startDate);
+        m.addAttribute("endDate", endDate);
+
+        return "user/userQNA";
+    }
+
     @GetMapping(value = "/question/write")
     public String questionWrite() {
         return "user/userQNAWrite";
     }
 
+    //문의사항 관련
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question, @RequestParam(required = false) String alert) throws Exception {
+    public String noticeAdd(Question question,
+                            @RequestParam(required = false) String alert) throws Exception {
         // checkbox 값을 Boolean으로 변환
         question.setQalert(Boolean.parseBoolean(alert));
 
@@ -180,6 +211,7 @@ public class InquirycenterController {
 
         // 문의 저장
         questionService.insertQuestion(question);
+        log.info("Inserted question qno: {}", question.getQno());
 
         // 알림 요청이 true일 경우 이메일 발송
         if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
@@ -192,13 +224,49 @@ public class InquirycenterController {
             // 이메일 비동기 발송
             emailService.asyncSendMail(emailMessage);
         }
-        return "redirect:/inquiry/question";
+        log.info("Redirecting to detail page with qno: {}", question.getQno());
+        return "redirect:/inquiry/question/detail?qno=" + question.getQno();
     }
 
-    //문의사항 댓글
+
+    @PostMapping(value = "/commentAdd")
+    @ResponseBody
+    public int CommentsAdd(@RequestParam String ccontent,
+                           @AuthenticationPrincipal UserDetails userDetails,
+                           @RequestParam int qno) {
+        String memberid = userDetails.getUsername();
+        return questionService.commentsAdd(ccontent, memberid, qno);
+    }
+
+    @GetMapping("/question/detail")
+    public ModelAndView questionDetail(@RequestParam(value = "qno", required = false) Integer qno,
+            ModelAndView mv) {
+
+        // qno가 null이면 문의 목록 페이지로 리다이렉트
+        if (qno == null) {
+            mv.setViewName("redirect:/inquiry/question");
+            return mv;
+        }
+
+        // 질문을 qno(질문번호)로 조회
+        Question question = questionService.getQuestionDetail(qno);
+
+        // 질문이 없으면 에러 페이지로
+        if (question == null) {
+            mv.setViewName("error/error");
+            mv.addObject("message", "Question not found.");
+        } else {
+            mv.setViewName("user/userQnaDetail"); // 질문 상세 정보를 보여줄 뷰로
+            mv.addObject("questiondata", question);
+        }
+        return mv;
+    }
+
+        //문의사항 댓글
     @PostMapping(value = "/qlist")
     @ResponseBody
-    public Map<String, Object> CommentList(int qno, int page) {
+    public Map<String, Object> CommentList(@RequestParam(required = true) int qno,
+                                           @RequestParam(defaultValue = "1") int page) {
         List<Question> qlist = questionService.getCommentList(qno, page);
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -207,24 +275,23 @@ public class InquirycenterController {
         return map;
     }
 
-    @PostMapping(value = "/add")
-    @ResponseBody
-    public int commentAdd(Question c) {
-        return questionService.commentsInsert(c);
-    }
-
     @PostMapping(value = "/update")
     @ResponseBody
     public int commentUpdate(Question co) {
         return questionService.commentsUpdate(co);
     }
 
-    @PostMapping(value = "/inquiry/comment/delete")
+    @PostMapping(value = "/delete")
     @ResponseBody
-    public int commentDelete(int num) {
-        return questionService.commentDelete(num);
+    public ResponseEntity<Integer> commentDelete(@RequestParam("cno") int cno) {
+        try {
+            int result = questionService.commentDelete(cno);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그 확인을 위해
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+        }
     }
-
 }
 
 
