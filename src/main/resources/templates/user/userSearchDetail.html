@@ -55,7 +55,7 @@
   <main class="container_wrapper">
 
 
-    <script th:src="@{/js/search_detail.js}"></script>
+    <script th:src="@{/js/search/search_detail.js}"></script>
 
     <section class="contents_wrap" id="contents">
       <div class="contents_inner">
@@ -79,12 +79,15 @@
               </colgroup>
               <tbody>
               <tr>
-                <th scope="row">상품군</th>
+                <th scope="row">카테고리</th>
                 <td>
                   <div class="input-group" style="max-width: 222px;">
                     <select class="form-select" id="cateSel" name="cate" title="상품군 카테고리 선택">
-                      <option value="전체@ALL">전체</option>
-                      <!-- TODO : 정해진 카테고리만큼 추가하기 OR 카테고리 목록 스크립트로 불러오기 -->
+                      <option value="0">전체</option>
+                      <option th:each="category : ${categoryList}"
+                              th:value="${category.cateNo}"
+                              th:text="${category.cateName}">
+                      </option>
                     </select>
                   </div>
                 </td>

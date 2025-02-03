@@ -1,9 +1,8 @@
 package hello.fclover.controller;
 
-import hello.fclover.domain.Category;
-import hello.fclover.domain.Seller;
+import hello.fclover.domain.*;
 import hello.fclover.service.CategoryService;
-import hello.fclover.domain.Member;
+import hello.fclover.service.GoodsService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.SellerService;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.util.List;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ public class HomeController {
     private final CategoryService categoryService;
     private final MemberService memberService;
     private final SellerService sellerService;
+    private final GoodsService goodsService;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -53,6 +54,17 @@ public class HomeController {
     public String mainHome(Model model) {
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
+
+        // 상품 목록 가져오기
+        List<Goods> goodsList = goodsService.getGoodsList(10);
+        model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
         return "user/userHome";
     }
 

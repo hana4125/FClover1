@@ -36,6 +36,10 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public void insertNotice(Notice notice) {
+        log.info("Insert Notice: {}", notice);
+        if (notice.getNotititle() == null || notice.getNotiname() == null) {
+            throw new IllegalArgumentException("필수 필드 누락");
+        }
         dao.insertNotice(notice);
     }
 
@@ -67,5 +71,17 @@ public class NoticeServiceImpl implements NoticeService {
             map.put("size", limit);
 
         return dao.getSearchList(map);
+    }
+
+    @Override
+    public int deleteNotice(int notino) {
+        try {
+            int result = dao.deleteNotice(notino);
+            log.error("Delete attempt - notino: {}, rows affected: {}", notino, result);
+            return result;
+        } catch (Exception e) {
+            log.error("Delete failed - notino: {}, error: {}", notino, e.getMessage());
+            return 0;
+        }
     }
 }

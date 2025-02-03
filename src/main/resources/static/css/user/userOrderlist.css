@@ -436,7 +436,7 @@ thead {
     width: 0;
     margin: 0;
     padding: 0;
-    font: 0 / 0 Arial;
+    /*font: 0 / 0 Arial;*/
 }
 table {
     border-spacing: 0;
@@ -447,7 +447,6 @@ table, th, td, input, select, button, textarea, pre {
     font: inherit;
     color: inherit;
 }
-user agent stylesheet
 table {
     border-collapse: separate;
     text-indent: initial;
@@ -1453,4 +1452,12 @@ li {
     display: list-item;
     text-align: -webkit-match-parent;
     unicode-bidi: isolate;
+}
+.btn_filter_history{
+    border-style: none;
+    background-color: white;
+}
+.btn_delete_text{
+    border-style: none;
+    background-color: white;
 }

@@ -3,9 +3,123 @@
  * @doc 검색 필터 기능
  */
 
+// let saprminVal = "";
+// let saprmaxVal = "";
+// let saprFilterFlag = false;
+// let reKeywordSubmitFlag = false;
+// const filterArr = ['keyword', 'rekeyword', 'target', 'totalType', 'gbCode', 'page', 'ra', 'len', 'cat1', 'cat2', 'cat3', 'ebrent', 'ebdiv', 'exclFree', 'onlyFree', 'samPre', 'samUnlimit', 'cpn', 'evnt', 'rlseDate',
+//   'grd', 'pbcm', 'saprmin', 'saprmax', 'freeDlvr', 'stdvr', 'hotDlvr', 'ageOver', 'exclAgeOver', 'pod', 'separ', 'saleNo', 'exclOos', 'comb', 'revise', 'sale', 'kbcClst1', 'kbcClst2', 'saleCmdt',
+//   'repKeyword', 'repKeywordTarget', 'cname', 'chrcDetail', 'pbcmDetail','mdKeyword', 'composer', 'artist','conductor','performer','vocal','orchestra','akgi','label','tracksong','director','actor','rlseStr','rlseEnd','type','cate',
+//   'chrcCode','pbcmCode','chrc'];
+// const detailFilterStr = "|repKeyword|repKeywordTarget|cname|chrcDetail|pbcmDetail|mdKeyword|composer|artist|conductor|performer|vocal|orchestra|akgi|label|tracksong|director|actor|rlseStr|rlseEnd|type|cate|";
+// const detailFilterArr = ['repKeyword', 'repKeywordTarget', 'cname', 'chrcDetail', 'pbcmDetail', 'mdKeyword', 'composer', 'artist', 'conductor', 'performer', 'vocal', 'orchestra', 'akgi', 'label', 'tracksong', 'director', 'actor', 'rlseStr', 'rlseEnd', 'type', 'cate'];
+// const conditionFilterStr = "|chrcCode|pbcmCode|chrc|pbcm|cname|";
+//
 $(function () {
+//
+//   let cat_depth = $("#categoryDepthHidden").val();
+//   let cat_id = $("#categoryIdHidden").val();
+//   let totalTypeVal = getAutoSearchParam('totalType');
+//
+//   //재검색 키워드 이벤트 검색 가능 상태 변경
+//   $(document).on('keydown', '#rekeyword', function(key){
+//     if(key.key === 'Enter' && (key.originalEvent.isComposing === false)){
+//       reKeywordSubmitFlag = true;
+//     }
+//   });
+//
+//   //재검색 키워드 엔터키로 검색 설정
+//   $(document).on('keyup', '#rekeyword', function(key){
+//     if(key.key === 'Enter' && reKeywordSubmitFlag && (key.originalEvent.isComposing === false)){
+//       submitSearchRekeywordPage();
+//     }
+//   });
+//
+//   //재검색 돋보기 클릭시 이벤트
+//   $(document).on('click', '.btn_ip_search', function(){
+//     submitSearchRekeywordPage();
+//   });
+//
+//   //필터 검색 초기화 이벤트
+//   $(document).on('click', '.btn_reset', function(){
+//     if($("#searchType").val()=="DETAIL_SEARCH") {
+//       clearDetailFilter();
+//     }else{
+//       clearFilter();
+//     }
+//     $(".filter_list_box").show();
+//     $("#selected_filter_box").show();
+//   });
+//
+//   //최초 카테고리 필터 라벨 그리기
+//   drawCategoryLabel(cat_depth, cat_id, totalTypeVal);
+//
+//   //최초 기타 필터 라벨 그리기
+//   firstDrawEtcLabel();
+//
+//   //최초 함께 많이 본 카테고리 라벨 체크
+//   checkRecommendCategoryLabel();
+//
+//   //검색 필터 cat1 클릭 시
+//   $(document).on('click', '.cat_filter_depth2', function(){
+//
+//     var target = getAutoSearchParam('target');
+//     var totalType = getAutoSearchParam('totalType');
+//
+//     if(totalType != ""){
+//       target = totalType;
+//     }
+//
+//     if($(this).hasClass('active')){
+//       changeShopArea("", "");
+//       drawCategoryLabel("", "", target);
+//     }else{
+//       changeShopArea("cat1", this.value);
+//       drawCategoryLabel("cat1", this.value, target);
+//     }
+//
+//     $("input[name='filterRdo']").prop('checked', false);
+//   });
+//
+//   //검색 필터 cat2 클릭 시
+//   $(document).on('click', '.cat_filter_depth3', function(){
+//
+//     var target = getAutoSearchParam('target');
+//     var totalType = getAutoSearchParam('totalType');
+//
+//     if(totalType != ""){
+//       target = totalType;
+//     }
+//
+//     $("input[name='filterRdo']").prop('checked', false);
+//
+//     if($(this).hasClass('active')){
+//       search_catId = this.value.split('@@');
+//       changeShopArea("cat1", search_catId[0]);
+//       drawCategoryLabel("cat1", search_catId[0], target);
+//     }else{
+//       changeShopArea("cat2", this.value);
+//       drawCategoryLabel("cat2", this.value, target);
+//     }
+//   });
+//
+//   //검색 필터 cat3 변경 시
+//   $(document).on('change', "input[name='filterRdo']", function(){
+//
+//     var target = getAutoSearchParam('target');
+//     var totalType = getAutoSearchParam('totalType');
+//
+//     if(totalType != ""){
+//       target = totalType;
+//     }
+//
+//     changeShopArea("cat3", this.value);
+//     drawCategoryLabel("cat3", this.value, target);
+//
+//   });
+
   $(".show-detail").click(function () {
-    location.href = "/goodsDetail";
+    location.href = "/goods/GoodsDetail/{no}";
   })
 
   // URL에서 쿼리 파라미터 읽기
@@ -166,4 +280,5 @@ $(function () {
     location.href = `/payments?goodsNo=${goodsNo}`;
   })
 });
+
 

@@ -1,5 +1,7 @@
 package hello.fclover.mybatis.mapper;
 
+import hello.fclover.domain.Wish;
+import hello.fclover.dto.WishDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

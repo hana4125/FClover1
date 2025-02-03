@@ -3,6 +3,7 @@ package hello.fclover.mybatis.mapper;
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
+import hello.fclover.domain.Question;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
@@ -23,4 +24,6 @@ public interface NoticeMapper {
     int getSearchListCount(Map<String, Object> map);
 
     List<Notice> getSearchList(Map<String, Object> map);
+
+    int deleteNotice(int notino);
 }

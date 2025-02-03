@@ -5,10 +5,10 @@
 <mapper namespace="hello.fclover.mybatis.mapper.NoticeMapper">
 
     <select id="getListCount" resultType="int">
-        select count(*) from NOTICE
+        select count(*) from notice
     </select>
 
-    <select id="getBoardList" parameterType="map" resultType="Notice">
+    <select id="getBoardList" parameterType="map" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
                noti_Title as notiTitle,
                noti_Name as notiName,
@@ -20,20 +20,20 @@
     </select>
 
     <insert id="insertNotice">
-        <selectKey resultType="int" order="BEFORE" keyProperty="notiNo" keyColumn="noti_No">
-            select IFNULL(max(noti_No), 0) + 1 from NOTICE
+        <selectKey resultType="int" order="BEFORE" keyProperty="notino" keyColumn="noti_no">
+            select IFNULL(max(noti_no), 0) + 1 from notice
         </selectKey>
-        insert into NOTICE
-        (noti_No,
-        noti_Title, noti_Name,
-        noti_Content, noti_Date)
+        insert into notice
+        (noti_no,
+        noti_title, noti_name,
+        noti_content, noti_date)
         values
-        (#{notiNo},
-        #{notiTitle}, #{notiName},
-        #{notiContent}, now())
+        (#{notino},
+        #{notititle}, #{notiname},
+        #{noticontent}, now())
     </insert>
 
-    <select id="getDetail" parameterType="int" resultType="Notice">
+    <select id="getDetail" parameterType="int" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
                noti_Title as notiTitle,
                noti_Name as notiName,
@@ -43,7 +43,7 @@
         WHERE noti_No = #{num}
     </select>
 
-    <select id="getSearchList" parameterType="map" resultType="Notice">
+    <select id="getSearchList" parameterType="map" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
                noti_Title as notiTitle,
                noti_Name as notiName,
@@ -58,12 +58,19 @@
 
     <select id="getSearchListCount" resultType="int">
         select  count(*)
-        from NOTICE
+        from notice
         <where>
             <if test="search_word != null and search_word != ''">
-                noti_Title LIKE #{search_word}
+                noti_title LIKE #{search_word}
             </if>
         </where>
     </select>
+
+    <delete id="deleteNotice" parameterType="int">
+        <if test="_parameter != null">
+            DELETE FROM notice WHERE noti_no = #{notino}
+        </if>
+    </delete>
+
 
 </mapper>

@@ -4,12 +4,11 @@ member_id VARCHAR(20),
 c_content VARCHAR(300),
 c_response_at DATE,
 q_no BIGINT,
-FOREIGN KEY (q_no) REFERENCES QnA(q_no)
+FOREIGN KEY (q_no) REFERENCES qna(q_no)
 ON DELETE CASCADE
 );
 
-
+select * from comments;
 
 
 drop table comments;
-select * from comments;

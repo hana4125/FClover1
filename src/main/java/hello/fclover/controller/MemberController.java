@@ -1,6 +1,8 @@
 package hello.fclover.controller;
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.CartDTO;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.*;
@@ -21,15 +23,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.HttpURLConnection;
 import java.security.Principal;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping(value="/member")
+@RequestMapping(value = "/member")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
@@ -163,7 +166,8 @@ public class MemberController {
 
         Member member = new Member();
 
-        member.setMemberId(memberId);;
+        member.setMemberId(memberId);
+        ;
         member.setName(name);
         member.setBirthdate(birthdate);
         member.setEmail(email);
@@ -241,7 +245,6 @@ public class MemberController {
         }
         return "redirect:/member/myPage/addressBook";
     }
-
 
 
     @Transactional
@@ -331,18 +334,72 @@ public class MemberController {
 //    }
 
     @GetMapping("/myPage/wishlist")
-    public String myPageWishlist() {
+    public String myPageWishlist(Principal principal, Model model) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+        List<WishDTO> wishlist = memberService.getWishDTOList(memberNo);
+        model.addAttribute("wishlist", wishlist);
         return "user/mypage/userMyPageWishlist";
     }
 
+    @PostMapping("/myPage/wishlist/delete")
+    public ResponseEntity<String> deleteWishList(Principal principal, @RequestBody Map<String, String> data) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+        String wishNo = data.get("wishNo");
+
+        try {
+            memberService.removeWishList(Long.parseLong(wishNo), memberNo);
+        } catch (NumberFormatException e) {
+            log.info(e.getMessage());
+        }
+
+        return ResponseEntity.ok(data + " 삭제 완료");
+    }
+
+    @PostMapping("/myPage/wishlist/deleteAll")
+    public ResponseEntity<String> deleteAllWishList(@RequestBody Map<String, String> data) {
+
+        String memberNo = data.get("memberNo");
+
+        try {
+            memberService.removeAllWishList(Long.parseLong(memberNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+
+        return ResponseEntity.ok("전체 삭제 완료");
+    }
+
     @GetMapping("/cart")
-    public String cart() {
+    public String cart(Principal principal, Model model) {
+        String memberId = principal.getName();
+        Long memberNo = memberService.getmemberNo(memberId);
+
+        List<CartDTO> cartItems = memberService.getCartItems(memberNo);
+
+        for (CartDTO cartItem : cartItems) {
+            if (cartItem.getDeliveryDate() == null && cartItem.getCreatedAt() != null) {
+                LocalDateTime deliveryDate = cartItem.getCreatedAt().plusDays(3);
+                cartItem.setDeliveryDate(deliveryDate);
+            }
+        }
+
+        model.addAttribute("cartItems", cartItems);
+
         return "user/userCart";
     }
 
-    @GetMapping("/bestSeller")
-    public String bestSeller() {
-        return "user/userBestseller";
+    @PostMapping("/cart/delete")
+    public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
+       
+        String cartNo = data.get("cartNo");
+        try {
+            memberService.removeCartItems(Long.parseLong(cartNo));
+        } catch (NumberFormatException e) {
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok("삭제된 상품 cartNo : " + cartNo);
     }
 
     @GetMapping("/steadySeller")
@@ -382,8 +439,8 @@ public class MemberController {
     }
 
     @GetMapping("/memberPay")
-    public String sellerPay(Principal principal,Model model) {
-        if(principal==null){
+    public String sellerPay(Principal principal, Model model) {
+        if (principal == null) {
             return "redirect:/login";
         }
         model.addAttribute("username", principal.getName());
@@ -425,15 +482,19 @@ public class MemberController {
         System.out.println("========>controller의 paymentRequest : " + paymentRequest);
 
         try {
-            System.out.println("========>controller의 try문 안의 paymentRequest : " + paymentRequest);
-//            System.out.println("========>controller의 try문 안의 paymentService.savePayment(Payment.save(paymentRequest)) : " + paymentService.savePayment(Payment.save(paymentRequest)));
+            HttpURLConnection connection = paymentService.createConnection("https://service.iamport.kr/payments/ready/imp03578475/nice/iamport00m?sandbox=true&store_id=store-a0b049dc-4590-4213-b1f5-d861a3ccae51&channelKey=channel-key-68c69d42-0462-4eb9-af59-5b26cb4100de");
 
-            paymentService.savePayment(Payment.save(paymentRequest));
+            if (paymentService.isConnectionSuccessful(connection)) {
+                // 결제 처리
+                paymentService.savePayment(Payment.save(paymentRequest));
 
-//            System.out.println("========Controller====>Payment.save(paymentRequest)" + Payment.save(paymentRequest));
-            response.put("message", "Payment processed successfully.");
+                response.put("message", "Payment processed successfully.");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("message", "Failed to connect to payment service.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
 
-            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("message", "Failed to process payment.");
@@ -442,58 +503,186 @@ public class MemberController {
     }
 
     @GetMapping("/OrderCancel/{uid}")
-    public ResponseEntity<String> OrderCancel(@PathVariable("uid")String uid) {
+    public ResponseEntity<String> OrderCancel(@PathVariable("uid") String uid) {
         paymentService.cancelPayment(uid);
 
         return ResponseEntity.ok("Payment cancel processed successfully.");
     }
 
+//    @GetMapping("/goodsDetail/{no}")
+//    public String goodsDetail(@PathVariable("no") Long goodsNo, @ModelAttribute("member") Member member, Model model) {
+//        // 카테고리 데이터 가져오기
+//        Goods goods = goodsService.findGoodsByNo(goodsNo);
+//
+//        model.addAttribute("goods", goods);
+//        return "/user/userGoodsDetail";
+//    }
 
-    @GetMapping("/GoodsDetail")
-    public String GoodsDetail() {
+    @GetMapping("/category/{no}")
+    public String categoryDetail(@PathVariable("no") int cateNo,
+                                 @ModelAttribute("member") Member member,
+                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                                 Model model) {
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
+        // 현재 선택된 카테고리 객체 가져오기
+        Category selectedCategory = categoryService.getCategoryByNo(cateNo);
+        model.addAttribute("category", selectedCategory);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 찜 상태가 포함된 상품 목록 조회
+        List<Goods> goodsList = goodsService.getGoodsWithWishStatusList(memberNo, cateNo, sort, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        // 페이지네이션 정보 전달
+        int totalItems = goodsService.getTotalGoodsCount(cateNo);
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("sort", sort);
+        model.addAttribute("size", size);
+        return "/user/userCategory"; // 카테고리 상세 페이지
+    }
+
+    @GetMapping("/bestSeller")
+    public String bestSeller(@ModelAttribute("member") Member member,
+                             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                             @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                             Model model) {
+        return prepareSellerPage(member, page, size, model, "/user/userBestseller");
+    }
+
+    @GetMapping("/steadySeller")
+    public String steadySeller(@ModelAttribute("member") Member member,
+                               @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                               @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                               Model model) {
+        return prepareSellerPage(member, page, size, model, "/user/userSteadyseller");
+    }
+
+    private String prepareSellerPage(Member member, int page, int size, Model model, String viewName) {
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 찜 상태가 포함된 상품 목록 조회
+        List<Goods> goodsList = goodsService.getGoodsWishStatus(memberNo, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        // 페이지네이션 정보 전달
+        int totalItems = Math.min(goodsService.getTotalBestGoodsCount(memberNo), 100);
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("size", size);
+        return viewName;
+    }
+
+    @GetMapping("/newItems")
+    public String NewItems(@ModelAttribute("member") Member member,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                           @RequestParam(value = "size", required = false, defaultValue = "20") int size,
+                           @RequestParam(value = "year", required = false) String year,
+                           @RequestParam(value = "month", required = false) String month,
+                           @RequestParam(value = "week", required = false) String week,
+                           Model model) {
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 신상품 목록 조회: 정렬 방식과 일자 필터 적용
+        List<Goods> goodsList = goodsService.getNewItems(memberNo, year, month, week, page, size);
+        model.addAttribute("goodsList", goodsList);
+
+        // 대표 이미지 가져오기
+        for (Goods goods : goodsList) {
+            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+            goods.setMainImage(mainImage);
+        }
+
+        // 페이지네이션 정보 전달
+        int actualTotalItems = goodsService.getTotalNewItemsCount(memberNo, year, month, week);
+        int totalItems = Math.min(actualTotalItems, 100); // 최대 100개로 제한
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("size", size);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        model.addAttribute("week", week);
+
+        return "/user/userNewItems";
+    }
+
+    @GetMapping("/gift")
+    public String gift() {
         System.out.println("====");
         return "user/userGoodsDetail";
     }
+    @GetMapping("/myPage/coupon")
+    public String coupon() {
+        System.out.println("====");
+        return "user/mypage/userMypageCoupon";
+    }
 
-//    @GetMapping("/category/{no}")
-//    public String categoryDetail(@PathVariable("no") int cate_no,
-//                                 @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
-//                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-//                                 @RequestParam(value = "size", required = false, defaultValue = "20") int size,
-//                                 Model model) {
-//
-//        // 카테고리 데이터 가져오기
-//        List<Category> categoryList = categoryService.getCategoryList();
-//        model.addAttribute("categoryList", categoryList);
-//        // 상품 목록 가져오기
-//        List<Goods> goodsList = goodsService.getGoodsList(cate_no, sort, page, size);
-//        model.addAttribute("goodsList", goodsList);
-//
-//        // 페이지네이션 정보 전달
-//        int totalItems = goodsService.getTotalGoodsCount(cate_no);
-//        int totalPages = (int) Math.ceil((double) totalItems / size);
-//
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", totalPages);
-//        model.addAttribute("sort", sort);
-//        model.addAttribute("size", size);
-//
-//        if (member != null) {
-//            Long memberNo = member.getMemberNo();
-//            List<Long> wishlistGoodsNos = wishService.getWishlistGoodsNos(memberNo);
-//            model.addAttribute("wishlistGoodsNos", wishlistGoodsNos);
-//        } else {
-//            // If the user is not logged in, pass an empty list
-//            model.addAttribute("wishlistGoodsNos", new ArrayList<Long>());
-//        }
-//
-//
-//        return "/user/userCategory"; // 카테고리 상세 페이지
-//    }
-//
-//    @GetMapping("/gift")
-//    public String gift() {
-//        System.out.println("====");
-//        return "/user/gift";
-//    }
 }

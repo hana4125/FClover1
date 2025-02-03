@@ -1,10 +1,11 @@
 package hello.fclover.service;
 
+import hello.fclover.domain.Wish;
+import hello.fclover.dto.WishDTO;
 import hello.fclover.mybatis.mapper.WishMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Service

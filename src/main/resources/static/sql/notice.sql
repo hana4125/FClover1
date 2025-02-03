@@ -17,7 +17,8 @@ commit;
 ALTER TABLE notice
     ADD FULLTEXT (noti_title);
 
-ALTER TABLE notice RENAME COLUMN noti_Date TO noti_date;
+
+
 
 
 
