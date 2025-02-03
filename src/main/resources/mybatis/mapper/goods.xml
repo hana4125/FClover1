@@ -40,7 +40,7 @@
 
     <select id="findByBestRank" resultType="hello.fclover.domain.Goods">
         SELECT DISTINCT
-            ROW_NUMBER() OVER (ORDER BY (i.initial_stock - i.product_stock) DESC) AS rowNum,
+            ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
             g.goods_no,
             g.goods_name,
             g.goods_writer
@@ -54,7 +54,7 @@
 
     <select id="findBySteadyRank" resultType="hello.fclover.domain.Goods">
         SELECT DISTINCT
-            ROW_NUMBER() OVER (ORDER BY (i.initial_stock - i.product_stock) DESC) AS rowNum,
+            ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
             g.goods_no,
             g.goods_name,
             g.goods_writer
@@ -169,8 +169,9 @@
     g.GOODS_WRITER AS goodsWriter,
     s.company_name AS companyName,
     g.GOODS_CREATE_AT AS goodsCreateAt,
-    g.GOODS_COUNT AS goodsCount
+    (st.initial_stock - st.product_stock) AS goodsCount
     FROM goods g
+    JOIN stock st ON a.goods_no = st.goods_no
     JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE
     MATCH(g.GOODS_NAME, g.GOODS_WRITER, g.GOODS_CONTENT)
@@ -183,7 +184,7 @@
     ORDER BY
     <choose>
       <when test="sort == 'latest'">g.GOODS_CREATE_AT DESC</when>
-      <when test="sort == 'sales'">g.GOODS_COUNT DESC</when>
+      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
       <when test="sort == 'highPrice'">g.GOODS_PRICE DESC</when>
       <when test="sort == 'lowPrice'">g.GOODS_PRICE ASC</when>
       <when test="sort == 'name'">g.GOODS_NAME ASC</when>
@@ -237,8 +238,9 @@
     g.GOODS_WRITER AS goodsWriter,
     s.company_name AS companyName,
     g.GOODS_CREATE_AT AS goodsCreateAt,
-    g.GOODS_COUNT AS goodsCount
+    (st.initial_stock - st.product_stock) AS goodsCount
     FROM goods g
+    JOIN stock st ON a.goods_no = st.goods_no
     JOIN seller s ON g.SELLER_NO = s.seller_no
     WHERE 1 = 1
 
@@ -269,7 +271,7 @@
     ORDER BY
     <choose>
       <when test="sort == 'latest'">g.GOODS_CREATE_AT DESC</when>
-      <when test="sort == 'sales'">g.GOODS_COUNT DESC</when>
+      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
       <when test="sort == 'highPrice'">g.GOODS_PRICE DESC</when>
       <when test="sort == 'lowPrice'">g.GOODS_PRICE ASC</when>
       <when test="sort == 'name'">g.GOODS_NAME ASC</when>
@@ -289,11 +291,11 @@
   <!-- 데이터 Batch 삽입 -->
   <insert id="insertGoods">
     INSERT INTO goods (SELLER_NO, CATE_NO, GOODS_NAME, GOODS_CONTENT, GOODS_PRICE, GOODS_WRITER, WRITER_CONTENT,
-    GOODS_CREATE_AT, GOODS_COUNT, GOODS_PAGECOUNT, GOODS_BOOKSIZE)
+    GOODS_CREATE_AT, GOODS_PAGECOUNT, GOODS_BOOKSIZE)
     VALUES
     <foreach collection="goods" item="g" separator=",">
       (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
-      #{g.goodsCreateAt},#{g.goodsCount},#{g.goodsPageCount},#{g.goodsBookSize})
+      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
     </foreach>
   </insert>
 
