@@ -20,9 +20,13 @@ public interface GoodsService {
     // 찜 상태를 포함한 상품 목록 조회 메서드 추가
     List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size);
 
-    List<Goods> getGoodsList(int limit);
+    List<Goods> getBestGoodsList(int limit);
 
-    List<Goods> getGoodsWishStatus(Long memberNo, int page, int size);
+    List<Goods> getSteadyGoodsList(int limit);
+
+    List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size);
+
+    List<Goods> getSteadyGoodsWishStatus(Long memberNo, int page, int size);
 
     void getGoodsDetail(Long goodsNo, Model model);
 

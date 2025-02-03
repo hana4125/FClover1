@@ -87,8 +87,6 @@ commit ;
 
 select * from goods;
 
-delete from goods;
-
 SELECT
     goods_no,
     goods_name,

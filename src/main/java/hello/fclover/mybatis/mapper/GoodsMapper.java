@@ -12,12 +12,6 @@ public interface GoodsMapper {
     int goodsInsertText(Goods goods);
 
     Long goodsNoselect(Long sellerNo, String goodsName);
-  
-//    List<Goods> findAll(@Param("memberNo") Long memberNo,
-//                        @Param("cate_no") int cateNo,
-//                        @Param("sort") String sort,
-//                        @Param("offset") int offset,
-//                        @Param("size") int size);
 
     int countGoods(int cate_no);
 
@@ -30,7 +24,7 @@ public interface GoodsMapper {
 //    List<Goods> findGoodsByDetail(SearchDetailForm searchDetailForm);
 
     // 찜 상태를 포함한 상품 조회 메서드 추가
-    List<Goods> findGoodsWithWishStatus(
+    List<Goods> findCategoryGoodsWishStatus(
             @Param("memberNo") Long memberNo,
             @Param("cateNo") Integer cateNo,
             @Param("sort") String sort,
@@ -38,13 +32,23 @@ public interface GoodsMapper {
             @Param("size") Integer size
     );
 
-    List<Goods> findGoodsWishStatus(
+    List<Goods> findBestGoodsWishStatus(
             @Param("memberNo") Long memberNo,
             @Param("offset") Integer offset,
             @Param("size") Integer size
     );
 
-    List<Goods> findByRank(
+    List<Goods> findSteadyGoodsWishStatus(
+            @Param("memberNo") Long memberNo,
+            @Param("offset") Integer offset,
+            @Param("size") Integer size
+    );
+
+    List<Goods> findByBestRank(
+            @Param("limit") int limit
+    );
+
+    List<Goods> findBySteadyRank(
             @Param("limit") int limit
     );
   
