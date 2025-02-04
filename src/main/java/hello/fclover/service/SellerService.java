@@ -9,6 +9,4 @@ public interface SellerService {
     Seller findSellerById(String sellerId);
 
     String isSellerIdDuplicate(String sellerId);
-
-    Seller selectSellerByIdPassword(String sellerId, String password);
 }

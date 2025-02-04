@@ -12,6 +12,4 @@ public interface SellerMapper {
     Seller selectSellerById(String sellerId);
 
     String isSellerIdDuplicate(String sellerId);
-
-    Seller selectSellerByIdPassword(@Param("sellerId") String sellerId, @Param("password") String password);
 }
