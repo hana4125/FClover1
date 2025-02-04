@@ -70,7 +70,7 @@ public class DummyDataGenerator {
         // 초기화 시점에서 가져온 maximumCateNo를 재사용
         Integer cateNo = faker.number().numberBetween(MINIMUM_CATE_NO, maximumCateNo + 1);
 
-        String goodsName = faker.book().title();
+        String goodsName = faker.book().title() + faker.number().numberBetween(1, 100);
 
         String goodsContent = "이 책은 " + faker.book().genre() + " 장르의 책으로 " + faker.lorem().sentence().toLowerCase() + " 이다.";
 
@@ -86,10 +86,6 @@ public class DummyDataGenerator {
 
         Instant randomPastInstant = faker.timeAndDate().past(3650, TimeUnit.of(ChronoUnit.DAYS));
         LocalDate goodsCreateAt = LocalDate.ofInstant(randomPastInstant, ZoneId.systemDefault());
-
-        int MINIMUM_GOODS_COUNT = 0;
-        int MAXIMUM_GOODS_COUNT = 10000;
-        int goodsCount = faker.number().numberBetween(MINIMUM_GOODS_COUNT, MAXIMUM_GOODS_COUNT);
 
         int MINIMUM_PAGE_COUNT = 10;
         int MAXIMUM_PAGE_COUNT = 700;
@@ -110,7 +106,6 @@ public class DummyDataGenerator {
                 .goodsWriter(goodsWriter)
                 .writerContent(writerContent)
                 .goodsCreateAt(goodsCreateAt)
-                .goodsCount(goodsCount)
                 .goodsPageCount(goodsPageCount)
                 .goodsBookSize(goodsBookSize)
                 .build();
