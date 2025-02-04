@@ -53,6 +53,24 @@
             $(".new").click(function () {
                 location.href = "/member/newItems";
             })
+            $("#buy").click(function () {
+
+                var goodsNo = document.querySelector(".goodsNo").value;
+                var goodsName = document.querySelector(".goodsName").value;
+                var goodsPrice = document.querySelector(".goodsPrice").value;
+                var goodsWriter = document.querySelector(".goodsWriter").value;
+                var quantity = $("#prdNum10").val();  // 수량 가져오기
+
+
+                // URL에 값 붙여서 이동
+                location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+                    "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+                    "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+                    "&quantity=" + encodeURIComponent(quantity) +
+                    "&goodsNo=" +   encodeURIComponent(goodsNo) ;
+
+            })
+
 
             // 카테고리 버튼 동작
             $(function () {
@@ -99,6 +117,12 @@
     </script>
 </head>
 <body>
+<input type="hidden" class="goodsNo" th:value="${goods.goodsNo}">
+<input type="hidden" class="goodsName" th:value="${goods.goodsName}">
+<input type="hidden" class="goodsPrice" th:value="${goods.goodsPrice}">
+<input type="hidden" class="goodsWriter" th:value="${goods.goodsWriter}">
+
+
 <div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success">
@@ -333,7 +357,7 @@
                            style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px; background-color: transparent; border: 2px solid #5055b1; color : #5055b1;font-size: 14px;">
                             <span class="text" style="display: inline-block; text-align: center;">장바구니</span>
                         </a>
-                        <a href="/member/memberPay" id="buy" type="button" class="btn_lg btn_primary"
+                        <a href="#" id="buy" type="button" class="btn_lg btn_primary"
                            style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px;  border: none; color: white; font-size: 14px;">
                             <span class="text" style="display: inline-block; text-align: center;">바로구매</span>
                         </a>

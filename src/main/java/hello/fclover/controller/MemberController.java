@@ -448,11 +448,18 @@ public class MemberController {
     }
 
     @GetMapping("/memberPay")
-    public String sellerPay(Principal principal, Model model) {
+    public String sellerPay(@RequestParam String goodsName,@RequestParam int goodsPrice,@RequestParam String goodsWriter,@RequestParam int quantity, @RequestParam int goodsNo, Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
+
         model.addAttribute("username", principal.getName());
+        model.addAttribute("goodsName", goodsName);
+        model.addAttribute("goodsPrice", goodsPrice);
+        model.addAttribute("goodsWriter", goodsWriter);
+        model.addAttribute("quantity", quantity);
+        model.addAttribute("goodsNo", goodsNo);
+
         return "user/userPayments";
     }
 
