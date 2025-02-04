@@ -26,7 +26,6 @@ public class QuestionServiceImpl implements QuestionService {
     private final NoticeMapper noticeMapper;
 
 
-
     @Override
     public int TotalCount() {
         return dao.TotalCount();
@@ -43,32 +42,29 @@ public class QuestionServiceImpl implements QuestionService {
         return dao.BoardList(map);
     }
 
+    //기간 조회
     @Override
-    public List<Question> getFilteredQuestions(LocalDate startDate, LocalDate endDate, int page, int limit) {
+    public List<Question> getFilteredQuestions(LocalDate startDate, LocalDate endDate, int currentPage, int limit) {
+        int offset = (currentPage - 1) * limit;
+
         HashMap<String, Object> map = new HashMap<>();
         map.put("startDate", startDate);
         map.put("endDate", endDate);
-        map.put("start", (page - 1) * limit); // 페이지네이션 시작 위치
+        map.put("offset", offset);
         map.put("limit", limit); // 페이지당 항목 수
 
-        return dao.getFilteredQuestions(map);
+        return dao.findByDateBetween(map);
     }
 
+    //필터링된 총 개수 조회
     @Override
     public int getFilteredCount(LocalDate startDate, LocalDate endDate) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
-
-        return dao.getFilteredCount(map);
+        return dao.countByDateBetween(startDate, endDate);
     }
-
 
     @Override
     public void insertQuestion(Question question) {
-        log.info("Before insert - qno: {}", question.getQno());
         dao.insertQuestion(question);
-        log.info("After insert - qno: {}", question.getQno());
     }
 
     @Override
@@ -99,7 +95,6 @@ public class QuestionServiceImpl implements QuestionService {
     public int commentDelete(int cno) {
         return dao.commentDelete(cno);
     }
-
 
     @Override
     public int commentsUpdate(Question co) {

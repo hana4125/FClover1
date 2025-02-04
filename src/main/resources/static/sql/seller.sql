@@ -16,6 +16,9 @@ CREATE TABLE seller
     FULLTEXT KEY ft_idx_seller (company_name) WITH PARSER ngram
 ) ENGINE = InnoDB;
 
+
+drop table seller;
+
 SELECT * FROM seller;
 
 commit;

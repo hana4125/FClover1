@@ -163,6 +163,7 @@ public class InquirycenterController {
         return "user/userQNA";
     }
 
+    //문의 기간 조회
     @GetMapping("/question/filter")
     public String filterQuestions(
             @RequestParam(defaultValue = "1") Integer currentPage,
@@ -172,7 +173,7 @@ public class InquirycenterController {
 
         int limit = 10;
         LocalDate start = startDate != null ? LocalDate.parse(startDate) : LocalDate.now().minusMonths(1);
-        LocalDate end = endDate != null ? LocalDate.parse(endDate) : LocalDate.now();
+        LocalDate end = endDate != null ? LocalDate.parse(endDate).plusDays(1) : LocalDate.now().plusDays(1);
 
         int totalcount = questionService.getFilteredCount(start, end);
         List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
@@ -198,10 +199,9 @@ public class InquirycenterController {
 
     //문의사항 관련
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question,
-                            @RequestParam(required = false) String alert) throws Exception {
+    public String noticeAdd(Question question) throws Exception {
         // checkbox 값을 Boolean으로 변환
-        question.setQalert(Boolean.parseBoolean(alert));
+        //question.setQalert(Boolean.parseBoolean(alert));
 
         MultipartFile uploadfile = question.getUploadfile();
         if (!uploadfile.isEmpty()) {
@@ -211,7 +211,7 @@ public class InquirycenterController {
 
         // 문의 저장
         questionService.insertQuestion(question);
-        log.info("Inserted question qno: {}", question.getQno());
+
 
         // 알림 요청이 true일 경우 이메일 발송
         if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
@@ -224,7 +224,7 @@ public class InquirycenterController {
             // 이메일 비동기 발송
             emailService.asyncSendMail(emailMessage);
         }
-        log.info("Redirecting to detail page with qno: {}", question.getQno());
+
         return "redirect:/inquiry/question/detail?qno=" + question.getQno();
     }
 
@@ -235,7 +235,55 @@ public class InquirycenterController {
                            @AuthenticationPrincipal UserDetails userDetails,
                            @RequestParam int qno) {
         String memberid = userDetails.getUsername();
-        return questionService.commentsAdd(ccontent, memberid, qno);
+        log.info("댓글 작성 요청: memberid={}, qno={}, ccontent={}", memberid, qno, ccontent);
+        // 댓글 추가
+        int result = questionService.commentsAdd(ccontent, memberid, qno);
+        log.info("댓글 추가 결과: {}", result);
+
+        if (result > 0) {  // 댓글 추가 성공
+            Question question = questionService.getQuestionDetail(qno);
+            log.info("문의글 정보: {}", question);
+
+            // 알림 요청이 있고 이메일이 있는 경우에만 발송
+            if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null){
+                log.info("이메일 발송 시작: {}", question.getResponseemail());
+
+                EmailMessage emailMessage = EmailMessage.builder()
+                        .to(question.getResponseemail())
+                        .subject("[네잎클로버] 문의하신 글에 답변이 등록되었습니다.")
+                        .message(createEmailContent(question, ccontent))
+                        .build();
+                emailService.asyncSendMail(emailMessage);
+            }  else {
+                log.info("이메일 발송 조건 불충족: qalert={}, responseemail={}",
+                        question.getQalert(), question.getResponseemail());
+            }
+        }
+        return result;
+    }
+
+    private String createEmailContent(Question question, String ccontent) {
+        return String.format("""
+        안녕하세요, 네잎클로버입니다.
+        
+        문의하신 글에 답변이 등록되었습니다.
+        
+        [문의 제목]
+        %s
+        
+        [답변 내용]
+        %s
+        
+        자세한 내용은 아래 링크에서 확인하실 수 있습니다.
+        http://localhost:8080/inquiry/question/detail?qno=%d
+        
+        감사합니다.
+        네잎클로버 드림
+        """,
+                question.getQtitle(),
+                ccontent,
+                question.getQno()
+        );
     }
 
     @GetMapping("/question/detail")
@@ -256,13 +304,13 @@ public class InquirycenterController {
             mv.setViewName("error/error");
             mv.addObject("message", "Question not found.");
         } else {
-            mv.setViewName("user/userQnaDetail"); // 질문 상세 정보를 보여줄 뷰로
+            mv.setViewName("user/userQnaDetail");
             mv.addObject("questiondata", question);
         }
         return mv;
     }
 
-        //문의사항 댓글
+    //문의사항 댓글
     @PostMapping(value = "/qlist")
     @ResponseBody
     public Map<String, Object> CommentList(@RequestParam(required = true) int qno,
@@ -288,7 +336,7 @@ public class InquirycenterController {
             int result = questionService.commentDelete(cno);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            e.printStackTrace(); // 로그 확인을 위해
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
         }
     }

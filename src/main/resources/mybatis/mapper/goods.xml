@@ -7,9 +7,9 @@
   <insert id="goodsInsertText">
     insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
-     goods_date, goods_pageCount, goods_bookSize, writer_content)
+     goods_date, goods_pageCount, goods_bookSize, writer_content, permission)
     values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
-            current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
+            current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent}, '승인대기중')
   </insert>
 
   <select id="goodsNoselect">
@@ -152,7 +152,7 @@
           WHERE MATCH(s.company_name)
                       AGAINST(#{keyword} IN BOOLEAN MODE)) result
   </select>
-  
+
   <select id="countCategoryByKeyword" resultType="hello.fclover.dto.CategoryCountDTO">
     SELECT cate_no AS cateNo, COUNT(*) AS count
     FROM (
@@ -481,4 +481,42 @@
     </choose>
   </select>
 
+    <!-- 신상품 총 개수 조회 -->
+    <select id="countNewItems" resultType="int">
+        SELECT COUNT(*) FROM goods
+        WHERE 1=1
+        <!-- 일자별 필터 -->
+        <if test="year != null and year != ''">
+            AND YEAR(goods_create_at) = #{year}
+        </if>
+        <if test="month != null and month != ''">
+            AND MONTH(goods_create_at) = #{month}
+        </if>
+        <if test="week != null and week != ''">
+            AND WEEK(goods_create_at) = #{week}
+        </if>
+    </select>
+
+    <select id="sellerGoodsSearch">
+        select g.goods_no, c.cate_name, g.goods_name, g.goods_content, g.goods_price, g.goods_writer, g.writer_content,
+        g.goods_create_at, g.goods_pageCount, g.goods_bookSize, g.goods_date, g.update_at
+        from goods g left join category c ON g.cate_no = c.cate_no
+        where g.seller_no = #{sellerNo}
+        <if test="goodsName != null and goodsName != ''">
+            and g.goods_name = #{goodsName}
+        </if>
+        <if test="cateNo != null and cateNo !=''">
+            and g.cate_no = #{cateNo}
+        </if>
+        <if test="goodsWriter != null and goodsWriter !=''">
+            and g.goods_writer = #{goodsWriter}
+        </if>
+        <if test="createStartDate != null and createStartDate !=''">
+            and g.goods_date >= #{createStartDate}
+        </if>
+        <if test="createEndDate != null and createEndDate != ''">
+            and #{createEndDate} >= g.goods_date
+        </if>
+        order by g.goods_no desc
+    </select>
 </mapper>

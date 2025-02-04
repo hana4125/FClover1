@@ -86,7 +86,7 @@ public interface GoodsMapper {
                       @Param("month") String month,
                       @Param("week") String week);
 
-
+    List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword);
 
     List<Goods> searchByParam(SearchParamDTO searchParamDTO);
 

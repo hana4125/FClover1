@@ -10,9 +10,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +25,7 @@ import java.security.Principal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -38,6 +41,7 @@ public class SellerController {
     private final CartService cartService;
     private final PasswordEncoder passwordEncoder;
     private final CategoryService categoryService;
+    private final BackOfficeService backOfficeService;
 
     @ModelAttribute("seller")
     public Seller addSellerToModel(Principal principal) {
@@ -56,6 +60,8 @@ public class SellerController {
         return "seller/sellerAddSingleProduct";
     }
 
+
+    //단일 상품등록 프로세스
     @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String addSingleProductProcess(@RequestPart("goods") Goods goods,
                                           @RequestPart("goodsImages") List<MultipartFile> images,
@@ -72,6 +78,7 @@ public class SellerController {
         String businessNumber = seller.getBusinessNumber();
 
         System.out.println("goods:" + goods);
+
         goodsService.goodsSingleInsert(goods, images, businessNumber);
         return "redirect:/seller/main";
     }
@@ -147,4 +154,17 @@ public class SellerController {
     public String sellerMonthSettlement() {
         return "seller/sellerMonthSettlement";
     }
+
+    @PostMapping("/SearchGoodsProcess")
+    @ResponseBody
+    public ResponseEntity<?> searchGoodsProcess(@RequestParam Map<String, String> params,
+                                              Principal principal) {
+        System.out.println("params = " + params);
+
+        params.get("cateNo");
+        List<Goods> goodsList = goodsService.sellerGoodsSearch(params);
+        System.out.println("goodsList = " + goodsList);
+        return ResponseEntity.ok(goodsList);
+    }
 }
+

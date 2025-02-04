@@ -1,6 +1,7 @@
 package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.AddressBook;
+import hello.fclover.domain.Coupon;
 import hello.fclover.domain.Member;
 import hello.fclover.domain.Notice;
 import hello.fclover.domain.Wish;
@@ -52,6 +53,10 @@ public interface MemberMapper {
     int selectIsDefault(int addressNo);
 
     int deleteAddressBook(int addressNo);
+
+    void createCoupon(String memberId);
+
+    List<Coupon> getActiveCouponsForUser(String memberId);
 
     List<Wish> selectWishList(Long memberNo);
 
