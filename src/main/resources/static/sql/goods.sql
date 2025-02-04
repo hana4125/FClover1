@@ -20,7 +20,8 @@ CREATE TABLE GOODS
     UPDATE_AT           DATE,
     FULLTEXT INDEX ft_goods_idx (GOODS_NAME, GOODS_WRITER, GOODS_CONTENT) WITH PARSER ngram,
     FULLTEXT INDEX ft_goods_name_idx (GOODS_NAME) WITH PARSER ngram,
-    FULLTEXT INDEX ft_goods_writer_idx (GOODS_WRITER) WITH PARSER ngram
+    FULLTEXT INDEX ft_goods_writer_idx (GOODS_WRITER) WITH PARSER ngram,
+    INDEX idx_goods_date (GOODS_DATE)
 ) ENGINE=InnoDB;
 
 insert into GOODS values(1,1, 1,'GoodsName1','GoodsContent1',
