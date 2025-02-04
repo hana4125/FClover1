@@ -481,22 +481,6 @@
     </choose>
   </select>
 
-    <!-- 신상품 총 개수 조회 -->
-    <select id="countNewItems" resultType="int">
-        SELECT COUNT(*) FROM goods
-        WHERE 1=1
-        <!-- 일자별 필터 -->
-        <if test="year != null and year != ''">
-            AND YEAR(goods_create_at) = #{year}
-        </if>
-        <if test="month != null and month != ''">
-            AND MONTH(goods_create_at) = #{month}
-        </if>
-        <if test="week != null and week != ''">
-            AND WEEK(goods_create_at) = #{week}
-        </if>
-    </select>
-
     <select id="sellerGoodsSearch">
         select g.goods_no, c.cate_name, g.goods_name, g.goods_content, g.goods_price, g.goods_writer, g.writer_content,
         g.goods_create_at, g.goods_pageCount, g.goods_bookSize, g.goods_date, g.update_at
