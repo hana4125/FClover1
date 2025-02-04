@@ -22,18 +22,17 @@ public interface QuestionMapper {
     Question findByQno(int qno);
 
     //댓글
+    List<Question> getCommentList(Map<String, Integer> map);
+    int commentsAdd(String ccontent, String memberid, int qno);
     int commentsUpdate(Question co);
     int commentDelete(int cno);
 
     void insertQuestionSave(Question qs);
 
+    //기간조회
     List<Question> getFilteredQuestions(HashMap<String, Object> map);
-
-    int commentsAdd(String ccontent, String memberid, int qno);
-
     List<Question> findByDateBetween(HashMap<String, Object> map);
-
-    List<Question> getCommentList(Map<String, Integer> map);
-
     int countByDateBetween(LocalDate startDate, LocalDate endDate);
+    int countAll();
+    List<Question> findAll(HashMap<String, Object> map);
 }
