@@ -139,6 +139,37 @@ public class BackOfficeController {
         return sellers;
     }
 
+    @GetMapping("/pendingCheck")
+    @ResponseBody
+    public List<Seller> sellerPendingCheck() {
+        log.info("셀러 팬딩 체크" + backOfficeService.sellerPendingCheck().toString());
+        return backOfficeService.sellerPendingCheck();
+    }
+
+    @PostMapping("/pendingApproved")
+    @ResponseBody
+    public void sellerPendingApproved(@RequestBody Map<String, String> data) {
+        String sellerNo = data.get("sellerNo");
+
+        try {
+            backOfficeService.updateSellerApproved(Long.parseLong(sellerNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+
+    }
+
+    @PostMapping("/pendingRejected")
+    @ResponseBody
+    public void sellerPendingRejected(@RequestBody Map<String, String> data) {
+        String sellerNo = data.get("sellerNo");
+        try {
+            backOfficeService.updateSellerRejected(Long.parseLong(sellerNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+    }
+
     //결제정보 조회 데이터
     @GetMapping("/delivery/SearchOrder")
     @ResponseBody
