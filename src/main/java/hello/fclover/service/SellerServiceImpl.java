@@ -45,4 +45,9 @@ public class SellerServiceImpl implements SellerService {
     public String isSellerIdDuplicate(String sellerId) {
         return dao.isSellerIdDuplicate(sellerId);
     }
+
+    @Override
+    public Seller selectSellerByIdPassword(String sellerId, String password) {
+        return dao.selectSellerByIdPassword(sellerId, password);
+    }
 }

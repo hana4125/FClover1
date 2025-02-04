@@ -17,4 +17,8 @@
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
 
+    <select id="selectSellerByIdPassword">
+        SELECT * FROM seller WHERE seller_id = #{sellerId} AND password = #{password}
+    </select>
+
 </mapper>

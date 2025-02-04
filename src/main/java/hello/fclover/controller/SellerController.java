@@ -23,6 +23,7 @@ import java.security.Principal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -150,5 +151,15 @@ public class SellerController {
     @GetMapping("/sellerMonthSettlement")
     public String sellerMonthSettlement() {
         return "seller/sellerMonthSettlement";
+    }
+
+    @ResponseBody
+    @PostMapping("/pendingCheck")
+    public Seller pendingCheck(@RequestBody Map<String, String> data) {
+        String sellerId = data.get("sellerId");
+        String password = data.get("password");
+        log.info(sellerId);
+        log.info(password);
+        return sellerService.selectSellerByIdPassword(sellerId, password);
     }
 }
