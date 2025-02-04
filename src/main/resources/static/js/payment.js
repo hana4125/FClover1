@@ -1,5 +1,7 @@
-// 구매자 정보
 
+//구매할 상품 정보
+var totalPrice = $(".totalPrice").text();
+var goodsName = $(".goodsName").text();
 
 // const useremail = "as02268@naver.com"
 const username=document.getElementById("username").innerText;
@@ -41,7 +43,7 @@ function paymentProcess() {
                 pay_method: 'card', // 결제 방식
                 merchant_uid: "IMP" + generateMerchantUid(), // 결제 고유 번호
                 name: '상품명', // 제품명
-                amount: 1000, // 가격
+                amount: totalPrice, // 가격
 
                 /* 구매자 정보 */
                 // buyer_email: `${useremail}`,

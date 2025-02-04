@@ -243,4 +243,13 @@ public class BackOfficeController {
         return ResponseEntity.ok().body("상품등록 승인완료되었습니다.");
     }
 
+
+
+    //판매자 가입 상태
+    @GetMapping("/sellerApproval")
+    public String sellerApproval() {
+
+
+        return "backOffice/boSellerPending";
+    }
 }
