@@ -50,65 +50,11 @@ public class SearchController {
     }
 
     // 키워드 검색 기능
-    // TODO : 검색 결과 관련 로직 전부 서비스 계층으로 옮기기
     @GetMapping("/searchKeyword")
-    public String keywordSearch(Model model,
-            @RequestParam("keyword") String keyword,
-            @ModelAttribute("member") Member member,
-            @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
+    public String keywordSearch(Model model, @RequestParam("keyword") String keyword) {
 
-        int offset = (page - 1) * size;
-
-        Map<String, Object> result = searchService.searchByKeyword(keyword, sort, offset, size);
-
-        int totalCount = (int) result.get("totalCount");
-
-        int totalPages = (int) Math.ceil((double) totalCount / size);
-
-        List<Goods> searchResults = (List<Goods>) result.get("searchResults");
-
-        // TODO : 찜 상태는 완성되면 추가
-
-        // 대표 이미지 가져오기
-        for (Goods goods : searchResults) {
-            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
-            goods.setMainImage(mainImage);
-        }
-
-        // TODO : 중복되는 코드 메소드화 하거나 유틸 클래스로 빼기
-        int maxPageNumbersToShow = 10;
-        int startPage;
-        int endPage;
-
-        if (totalPages <= maxPageNumbersToShow) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (page <= 6) {
-                startPage = 1;
-                endPage = 10;
-            } else if (page + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = page - 5;
-                endPage = page + 4;
-            }
-        }
-
-        model.addAttribute("searchResults", searchResults);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("totalCount", totalCount);
-
-        model.addAttribute("sort", sort);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("size", size);
-
+        SearchResponseDTO result = searchService.searchByKeyword(keyword);
+        model.addAttribute("searchResult", result);
         return "user/userSearchResult";
     }
 
@@ -176,7 +122,6 @@ public class SearchController {
     }
 
     @GetMapping("/refineAjax")
-    @ResponseBody
     public ResponseEntity<SearchResponseDTO> refineResultsAjax(@ModelAttribute SearchParamDTO param) {
 
         // 서비스 호출

@@ -144,13 +144,30 @@
           WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
                       AGAINST(#{keyword} IN BOOLEAN MODE)
 
-          UNION ALL
+          UNION
 
           SELECT g.goods_no
           FROM goods g
-                 JOIN seller s ON g.seller_no = s.seller_no
+          LEFT JOIN seller s ON g.seller_no = s.seller_no
           WHERE MATCH(s.company_name)
                       AGAINST(#{keyword} IN BOOLEAN MODE)) result
+  </select>
+  
+  <select id="countCategoryByKeyword" resultType="hello.fclover.dto.CategoryCountDTO">
+    SELECT cate_no AS cateNo, COUNT(*) AS count
+    FROM (
+           SELECT g.goods_no, g.cate_no
+           FROM goods g
+           WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
+                       AGAINST(#{keyword} IN BOOLEAN MODE)
+           UNION
+           SELECT g.goods_no, g.cate_no
+           FROM goods g
+                  LEFT JOIN seller s ON g.seller_no = s.seller_no
+           WHERE MATCH(s.company_name)
+                       AGAINST(#{keyword} IN BOOLEAN MODE)
+         ) result
+    GROUP BY cate_no
   </select>
 
   <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
@@ -183,7 +200,7 @@
     AGAINST (#{keyword} IN BOOLEAN MODE)
     ) AS union_result
     ) g
-    JOIN stock st ON g.goods_no = st.goods_no
+    LEFT JOIN stock st ON g.goods_no = st.goods_no
     LEFT JOIN seller s ON g.seller_no = s.seller_no
 
     ORDER BY
@@ -240,8 +257,8 @@
     g.goods_create_at AS goodsCreateAt,
     (st.initial_stock - st.product_stock) AS goodsCount
     FROM goods g
-    JOIN stock st ON g.goods_no = st.goods_no
-    JOIN seller s ON g.seller_no = s.seller_no
+    LEFT JOIN stock st ON g.goods_no = st.goods_no
+    LEFT JOIN seller s ON g.seller_no = s.seller_no
     <include refid="goodsWhereClause"/>
 
     <!-- 정렬 조건 분기 처리 -->
@@ -294,7 +311,7 @@
     a.goods_create_at AS goodsCreateAt,
     CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
     FROM goods a
-    LEFT OUTER JOIN (
+    LEFT JOIN (
     SELECT *
     FROM wish
     WHERE member_no = #{memberNo}
@@ -352,7 +369,9 @@
         FROM goods g
         WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
         AGAINST (#{keyword} IN BOOLEAN MODE)
+
         UNION ALL
+
         SELECT g.*
         FROM goods g
         JOIN seller s ON g.seller_no = s.seller_no
@@ -360,7 +379,7 @@
         AGAINST (#{keyword} IN BOOLEAN MODE)
         ) AS union_result
         ) g
-        JOIN stock st ON g.goods_no = st.goods_no
+        LEFT JOIN stock st ON g.goods_no = st.goods_no
         LEFT JOIN seller s ON g.seller_no = s.seller_no
         <where>
           <!-- 추가 조건 -->
@@ -386,6 +405,7 @@
             AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
           </if>
         </where>
+
         ORDER BY
         <choose>
           <when test="sort == 'latest'">g.goods_create_at DESC</when>
@@ -394,6 +414,7 @@
           <when test="sort == 'lowPrice'">g.goods_price ASC</when>
           <when test="sort == 'name'">g.goods_name ASC</when>
         </choose>
+
         LIMIT #{offset}, #{size}
       </when>
 
@@ -411,7 +432,7 @@
         g.goods_create_at AS goodsCreateAt,
         (st.initial_stock - st.product_stock) AS goodsCount
         FROM goods g
-        JOIN stock st ON g.goods_no = st.goods_no
+        LEFT JOIN stock st ON g.goods_no = st.goods_no
         LEFT JOIN seller s ON g.seller_no = s.seller_no
         <where>
           <if test="cname != null and cname != ''">
@@ -445,6 +466,7 @@
             AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
           </if>
         </where>
+
         ORDER BY
         <choose>
           <when test="sort == 'latest'">g.goods_create_at DESC</when>
@@ -453,6 +475,7 @@
           <when test="sort == 'lowPrice'">g.goods_price ASC</when>
           <when test="sort == 'name'">g.goods_name ASC</when>
         </choose>
+
         LIMIT #{offset}, #{size}
       </otherwise>
     </choose>

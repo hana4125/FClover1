@@ -19,6 +19,7 @@ public class SearchParamDTO {
     private int saprMax;
 
     private String rlseDate;
+    private String reKeyword;
 
     // 페이징 관련 파라미터
     private String sort = "latest";

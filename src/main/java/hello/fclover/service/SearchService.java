@@ -9,7 +9,7 @@ public interface SearchService {
 
     int countByKeyword(String keyword);
 
-    Map<String, Object> searchByKeyword(String keyword, String sort, int offset, int size);
+    SearchResponseDTO searchByKeyword(String keyword);
 
     Map<String, Object> searchDetail(SearchDetailParamDTO searchDetailParamDTO, String sort, int offset, int size);
 
