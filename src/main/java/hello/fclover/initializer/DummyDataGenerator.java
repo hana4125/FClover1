@@ -110,7 +110,7 @@ public class DummyDataGenerator {
                 .goodsWriter(goodsWriter)
                 .writerContent(writerContent)
                 .goodsCreateAt(goodsCreateAt)
-                .goodsCount(goodsCount)
+//                .goodsCount(goodsCount)
                 .goodsPageCount(goodsPageCount)
                 .goodsBookSize(goodsBookSize)
                 .build();

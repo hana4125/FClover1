@@ -115,4 +115,11 @@
     <delete id="deleteCartItems">
         DELETE FROM cart WHERE cart_no = #{cartNo}
     </delete>
+    <insert id="createCoupon">
+        INSERT INTO coupon (member_id, coupon_name, coupon_amount)
+        VALUES (#{memberId}, '회원가입1000원할인쿠폰', 1000)
+    </insert>
+    <select id="getActiveCouponsForUser">
+        select * from coupon where member_id=#{memberId}
+    </select>
 </mapper>

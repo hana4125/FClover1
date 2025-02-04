@@ -6,31 +6,16 @@
   <insert id="goodsInsertText">
     insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
-     goods_count, goods_date, goods_pageCount, goods_bookSize, writer_content)
+     goods_date, goods_pageCount, goods_bookSize, writer_content, permission)
     values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
-            #{goodsCount}, current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent})
+            current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent}, '승인대기중')
   </insert>
+
   <select id="goodsNoselect">
     select goods_no
     from goods
     where seller_no = #{sellerNo}
       and goods_name = #{goodsName}
-  </select>
-
-  <!-- 모든 카테고리에 있는 상품 조회 -->
-  <select id="findAll" resultType="hello.fclover.domain.Goods">
-    SELECT *
-    FROM goods
-    WHERE cate_no = #{cate_no}
-    ORDER BY
-    <choose>
-      <when test="'latest'.equals(sort)">goods_date DESC</when>
-      <when test="'sales'.equals(sort)">goods_count DESC</when>
-      <when test="'highPrice'.equals(sort)">goods_price DESC</when>
-      <when test="'lowPrice'.equals(sort)">goods_price ASC</when>
-      <otherwise>goods_date DESC</otherwise>
-    </choose>
-    LIMIT #{offset}, #{size}
   </select>
 
   <!-- 전체 상품 수 계산 -->
@@ -47,26 +32,42 @@
     </select>
 
 
-  <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
-    SELECT *
-    FROM goods
-    WHERE goods_no = #{goods_no}
-  </select>
-
- <select id="findByRank" resultType="hello.fclover.domain.Goods">
-        SELECT
-            ROW_NUMBER() OVER (ORDER BY goods_count DESC) AS rowNum,
-            goods_no,
-            goods_name,
-            goods_writer
+    <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
+        SELECT *
         FROM goods
---         ORDER BY
---         goods_count DESC
+        WHERE goods_no = #{goods_no}
+    </select>
+
+    <select id="findByBestRank" resultType="hello.fclover.domain.Goods">
+        SELECT DISTINCT
+            ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
+            g.goods_no,
+            g.goods_name,
+            g.goods_writer
+        FROM goods g
+        JOIN stock s ON g.goods_no = s.goods_no
+        JOIN payments p ON p.goods_no = g.goods_no
+        WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+        ORDER BY (s.initial_stock - s.product_stock) DESC
         LIMIT #{limit}
     </select>
 
-    <!-- 찜 상태를 포함한 상품 조회 SQL 매핑 추가 -->
-    <select id="findGoodsWithWishStatus" resultType="hello.fclover.domain.Goods">
+    <select id="findBySteadyRank" resultType="hello.fclover.domain.Goods">
+        SELECT DISTINCT
+            ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
+            g.goods_no,
+            g.goods_name,
+            g.goods_writer
+        FROM goods g
+        JOIN stock s ON g.goods_no = s.goods_no
+        JOIN payments p ON p.goods_no = g.goods_no
+        WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
+        ORDER BY (s.initial_stock - s.product_stock) DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 찜 상태를 포함한 해당 카테고리 상품 조회 -->
+    <select id="findCategoryGoodsWishStatus" resultType="hello.fclover.domain.Goods">
         SELECT
         a.goods_no AS goodsNo,
         a.cate_no AS cateNo,
@@ -74,8 +75,8 @@
         a.goods_price AS goodsPrice,
         a.goods_writer AS goodsWriter,
         CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM
-        goods a
+        FROM goods a
+        JOIN stock s ON a.goods_no = s.goods_no
         LEFT OUTER JOIN (
         SELECT *
         FROM wish
@@ -87,7 +88,7 @@
         ORDER BY
         <choose>
             <when test="'latest' == sort">a.goods_date DESC</when>
-            <when test="'sales' == sort">a.goods_count DESC</when>
+            <when test="'sales' == sort">(s.initial_stock - s.product_stock) DESC</when>
             <when test="'highPrice' == sort">a.goods_price DESC</when>
             <when test="'lowPrice' == sort">a.goods_price ASC</when>
             <otherwise>a.goods_date DESC</otherwise>
@@ -95,23 +96,53 @@
         LIMIT #{offset}, #{size}
     </select>
 
-    <select id="findGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+    <select id="findBestGoodsWishStatus" resultType="hello.fclover.domain.Goods">
         SELECT
             a.goods_no AS goodsNo,
             a.goods_name AS goodsName,
             a.goods_price AS goodsPrice,
             a.goods_writer AS goodsWriter,
             CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM
-            goods a
+        FROM goods a
+                JOIN stock s ON a.goods_no = s.goods_no
                 LEFT OUTER JOIN (
                 SELECT *
                 FROM wish
                 WHERE member_no = #{memberNo}
             ) b
-                                ON a.goods_no = b.goods_no
+        ON a.goods_no = b.goods_no
+        WHERE a.goods_no IN (
+            SELECT DISTINCT goods_no
+            FROM payments
+            WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+        )
         ORDER BY
-            goods_count DESC
+            (s.initial_stock - s.product_stock) DESC
+            LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="findSteadyGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+        SELECT
+            a.goods_no AS goodsNo,
+            a.goods_name AS goodsName,
+            a.goods_price AS goodsPrice,
+            a.goods_writer AS goodsWriter,
+            CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+        FROM goods a
+                JOIN stock s ON a.goods_no = s.goods_no
+                LEFT OUTER JOIN (
+                SELECT *
+                FROM wish
+                WHERE member_no = #{memberNo}
+            ) b
+        ON a.goods_no = b.goods_no
+        WHERE a.goods_no IN (
+            SELECT DISTINCT goods_no
+            FROM payments
+            WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
+        )
+        ORDER BY
+            (s.initial_stock - s.product_stock) DESC
             LIMIT #{offset}, #{size}
     </select>
 
@@ -136,46 +167,47 @@
   </select>
 
   <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
-  <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
-    SELECT
-    g.goods_no AS goodsNo,
-    g.seller_no AS sellerNo,
-    g.cate_no AS cateNo,
-    g.goods_name AS goodsName,
-    g.goods_content AS goodsContent,
-    g.goods_price AS goodsPrice,
-    g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
-    g.goods_create_at AS goodsCreateAt,
-    g.goods_count AS goodsCount
-    FROM (
-    SELECT *
-    FROM (
-    SELECT g.*
-    FROM goods g
-    WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
+    <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
+        SELECT
+        g.goods_no AS goodsNo,
+        g.seller_no AS sellerNo,
+        g.cate_no AS cateNo,
+        g.goods_name AS goodsName,
+        g.goods_content AS goodsContent,
+        g.goods_price AS goodsPrice,
+        g.goods_writer AS goodsWriter,
+        s.company_name AS companyName,
+        g.goods_create_at AS goodsCreateAt,
+        (st.initial_stock - st.product_stock) AS goodsCount
+        FROM (
+        SELECT *
+        FROM (
+        SELECT g.*
+        FROM goods g
+        WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
+        AGAINST (#{keyword} IN BOOLEAN MODE)
 
-    UNION ALL
+        UNION ALL
 
-    SELECT g.*
-    FROM goods g
-    JOIN seller s ON g.seller_no = s.seller_no
-    WHERE MATCH(s.company_name)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-    ) AS union_result
-    ORDER BY
-    <choose>
-      <when test="sort == 'latest'">goods_create_at DESC</when>
-      <when test="sort == 'sales'">goods_count DESC</when>
-      <when test="sort == 'highPrice'">goods_price DESC</when>
-      <when test="sort == 'lowPrice'">goods_price ASC</when>
-      <when test="sort == 'name'">goods_name ASC</when>
-    </choose>
-    LIMIT #{size} OFFSET #{offset}
-    ) g
-    LEFT JOIN seller s ON g.seller_no = s.seller_no;
-  </select>
+        SELECT g.*
+        FROM goods g
+        JOIN seller s ON g.seller_no = s.seller_no
+        WHERE MATCH(s.company_name)
+        AGAINST (#{keyword} IN BOOLEAN MODE)
+        ) AS union_result
+        ORDER BY
+        <choose>
+            <when test="sort == 'latest'">goods_create_at DESC</when>
+            <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
+            <when test="sort == 'highPrice'">goods_price DESC</when>
+            <when test="sort == 'lowPrice'">goods_price ASC</when>
+            <when test="sort == 'name'">goods_name ASC</when>
+        </choose>
+        LIMIT #{size} OFFSET #{offset}
+        ) g
+        JOIN stock st ON a.goods_no = st.goods_no
+        LEFT JOIN seller s ON g.seller_no = s.seller_no;
+    </select>
 
   <!-- 상세 검색 개수 쿼리 -->
   <select id="countGoodsByParam" parameterType="map" resultType="int">
@@ -220,8 +252,9 @@
     g.goods_writer AS goodsWriter,
     s.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
-    g.goods_count AS goodsCount
+    (st.initial_stock - st.product_stock) AS goodsCount
     FROM goods g
+    JOIN stock st ON a.goods_no = st.goods_no
     JOIN seller s ON g.seller_no = s.seller_no
     WHERE 1 = 1
 
@@ -252,7 +285,7 @@
     ORDER BY
     <choose>
       <when test="sort == 'latest'">g.goods_create_at DESC</when>
-      <when test="sort == 'sales'">g.goods_count DESC</when>
+      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
       <when test="sort == 'highPrice'">g.goods_price DESC</when>
       <when test="sort == 'lowPrice'">g.goods_price ASC</when>
       <when test="sort == 'name'">g.goods_name ASC</when>
@@ -271,13 +304,12 @@
 
   <!-- 데이터 Batch 삽입 -->
   <insert id="insertGoods">
-
     INSERT INTO goods (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, writer_content,
-    goods_create_at, goods_count, goods_pagecount, goods_booksize)
+    goods_create_at, goods_pagecount, goods_booksize)
     VALUES
     <foreach collection="goods" item="g" separator=",">
       (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
-      #{g.goodsCreateAt},#{g.goodsCount},#{g.goodsPageCount},#{g.goodsBookSize})
+      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
     </foreach>
   </insert>
 
