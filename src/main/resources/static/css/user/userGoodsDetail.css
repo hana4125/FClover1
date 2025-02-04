@@ -111,16 +111,19 @@ element.style {
     height: auto;
     background-color: #fff;
 }
-.prod_thumb_item{
-    flex: 0 0 auto;       /* 크기 고정 */
-    width: 380px;         /* 하나의 슬라이드 너비 */
+
+.prod_thumb_item {
+    flex: 0 0 auto; /* 크기 고정 */
+    width: 380px; /* 하나의 슬라이드 너비 */
     height: auto;
 }
+
 /* 썸네일 이미지 래퍼 */
 .blur_img_wrap {
     position: relative;
     width: 100%;
 }
+
 .blur_img_wrap.portrait .blur_img_box {
     display: none;
 }
@@ -140,23 +143,28 @@ element.style {
     transition: opacity 1s ease-in-out;
     align-content: center;
 }
+
 .swiper-container .leftarrow {
     left: 0;
 }
+
 .swiper-container .rightarrow {
     left: 75%;
 }
+
 /* 화살표 hover 시 */
 .leftarrow:hover,
 .rightarrow:hover {
     transition: none;
     opacity: 0.8;
 }
+
 /* 화살표 이미지 */
 .swiper-container .leftarrow img {
     float: left;
     width: 60px;
 }
+
 .swiper-container .rightarrow img {
     float: right;
     width: 60px;
@@ -182,12 +190,12 @@ element.style {
     width: 40px;
     height: 40px;
 }
+
 .btn_wish.size_lg .ico_wish {
     width: 20px;
     height: 20px;
     margin-top: 9px;
-    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h20@2x.png)
-    center no-repeat;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h20@2x.png) center no-repeat;
     background-size: 20px 20px;
 }
 
@@ -197,8 +205,7 @@ element.style {
     width: 18px;
     height: 18px;
     margin-top: 12px;
-    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h20@2x.png)
-    center no-repeat;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/ico_heart_h20@2x.png) center no-repeat;
     background-size: 18px 18px;
     vertical-align: top;
     transition: background 0.2s ease-out;
@@ -210,8 +217,7 @@ element.style {
 .btn_info_popup .ico_question {
     border: 1px solid #d5d5d5;
     border-radius: 100%;
-    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/btn_tooltop_question_sm@2x.png)
-    center no-repeat;
+    background: url(https://contents.kyobobook.co.kr/resources/fo/images/common/ink/btn_tooltop_question_sm@2x.png) center no-repeat;
     background-size: 16px 16px;
 }
 
@@ -221,6 +227,7 @@ element.style {
 .product_detail_area.detail_img {
     text-align: center;
 }
+
 .product_detail_area.detail_img .inner img {
     display: block;
     max-width: 100%;
@@ -242,6 +249,7 @@ element.style {
     box-sizing: border-box;
     font-size: 0; /* 탭 간격 조절 */
 }
+
 .tab_list_wrap .tabs {
     display: inline-block;
     flex: 1 1 auto;
@@ -252,9 +260,11 @@ element.style {
     background-color: #fff;
     box-sizing: border-box;
 }
+
 .tab_list_wrap .tabs .tab_item:first-child {
     padding-right: 30px;
 }
+
 .tab_list_wrap .tabs .tab_item {
     position: relative;
     height: 100%;
@@ -264,6 +274,7 @@ element.style {
     background: none;
     box-sizing: border-box;
 }
+
 /* 탭 링크 */
 .tab_list_wrap .tabs .tab_item .tab_link {
     position: relative;
@@ -278,6 +289,7 @@ element.style {
     box-sizing: border-box;
     cursor: pointer;
 }
+
 .tab_list_wrap .tabs .tab_item .tab_link .tab_text {
     display: block;
     width: 100%;
@@ -289,9 +301,11 @@ element.style {
     transition: all 0.3s ease-out;
 
 }
-a{
+
+a {
     text-decoration: none;
 }
+
 /* =========================
    툴팁용 ico_arw
    ========================= */
@@ -310,6 +324,7 @@ a{
     vertical-align: top;
     box-sizing: border-box;
 }
+
 .tooltip_wrap.type_sm {
     height: 16px;
 }
@@ -344,9 +359,11 @@ a{
     transition: opacity 0.3s ease-out;
     visibility: hidden;
 }
+
 .tooltip_wrap.type_sm .tooltip_inner {
     top: 16px;
 }
+
 .tooltip_wrap.right .tooltip_inner {
     left: auto;
     right: 0;
@@ -357,6 +374,7 @@ a{
     padding-bottom: 16px;
     box-sizing: border-box;
 }
+
 .tooltip_wrap .tooltip_inner .tooltip_header .tooltip_head_title {
     font-size: 16px;
     line-height: 24px;
@@ -387,16 +405,20 @@ a{
     font-size: 0;
     text-align: center;
 }
+
 .btn_wrap.overlap.single {
     border-radius: 6px;
 }
+
 .btn_wrap [class^=btn_] + [class^=btn_] {
     margin-left: 6px;
 }
+
 .btn_wrap.overlap .btn_lg:not(:only-child):first-child,
 .btn_wrap.overlap .btn_sm:not(:only-child):first-child {
     border-radius: 6px 0 0 6px;
 }
+
 .btn_wrap.overlap .btn_lg:not(:only-child) {
     border-radius: 0;
 }
@@ -444,32 +466,49 @@ button.btn_line_primary.active {
 /* =========================
    END
    ========================= */
-.goodsDetail{
+.goodsDetail {
     padding-left: 50px;
 }
-.goodsName{
-    font-size:30px;
+
+.goodsName {
+    font-size: 30px;
     font-weight: bold;
 }
 
-.writer_title, .prod_price_title, .prod_guide_title{
-    font-size:20px;
+.writer_title, .prod_price_title, .prod_guide_title {
+    font-size: 20px;
     font-weight: bold;
 }
-.prodDetail-header{
-    font-size:24px;
+
+.prodDetail-header {
+    font-size: 24px;
     font-weight: bolder;
     margin: 20px 0 15px 0;
 }
-.writerDetail-header{
-    font-size:24px;
+
+.writerDetail-header {
+    font-size: 24px;
     font-weight: bolder;
     margin: 20px 0 0 0;
 }
-.writerDetail-title{
-    font-size:20px;
+
+.writerDetail-title {
+    font-size: 20px;
     margin-bottom: 10px;
 }
-.Line{
+
+.Line {
     margin: 40px 0;
+}
+.not_goods_image{
+    align-content: center;
+    width: 400px;
+    height: 600px
+}
+.notGoodsImage {
+    margin-left:150px;
+    list-style-type: none;
+    width: 80px;
+    height: 80px
+
 }

@@ -27,6 +27,8 @@ public class Goods {
     private LocalDateTime goodsDate;   // 상품 등록일
     private int goodsPageCount;        // 상품 페이지 수
     private String goodsBookSize;      // 상품 크기
+    private LocalDateTime updateAt;           // 상품 수정일
+    private String cateName;           // 카테고리 이름
     private String wishStatus; // 'Y' 또는 'N'
     private int rowNum; // 상품 순위
     private GoodsImage mainImage;      // 대표 이미지

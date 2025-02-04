@@ -79,4 +79,6 @@ public interface GoodsMapper {
                       @Param("year") String year,
                       @Param("month") String month,
                       @Param("week") String week);
+
+    List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword);
 }

@@ -7,15 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.Map;
 
 
 @Controller
@@ -31,9 +30,6 @@ public class GoodsController {
         System.out.println("model = " + model.getAttribute("imageList"));
         return "user/userGoodsDetail";
     }
-   /* @PostMapping("/SearchGoodsProcess")
-    public List<Goods> searchGoodsProcess(@ModelAttribute Goods goods) {
-        List<Goods> list = new ArrayList<>();
-        return list;
-    }*/
+
+
 }

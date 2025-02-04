@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsService {
    void goodsSingleInsert(Goods goods, List<MultipartFile> images, String SellerNumber) throws IOException;
@@ -31,5 +32,7 @@ public interface GoodsService {
     List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size);
 
     int getTotalNewItemsCount(Long memberNo, String year, String month, String week);
+
+    List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword);
 }
 

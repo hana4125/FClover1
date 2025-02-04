@@ -60,8 +60,8 @@
             goods_name,
             goods_writer
         FROM goods
-        ORDER BY
-        goods_count DESC
+--         ORDER BY
+--         goods_count DESC
         LIMIT #{limit}
     </select>
 
@@ -335,5 +335,28 @@
         <if test="week != null and week != ''">
             AND WEEK(goods_create_at) = #{week}
         </if>
+    </select>
+
+    <select id="sellerGoodsSearch">
+        select g.goods_no, c.cate_name, g.goods_name, g.goods_content, g.goods_price, g.goods_writer, g.writer_content,
+        g.goods_create_at, g.goods_pageCount, g.goods_bookSize, g.goods_date, g.update_at
+        from goods g left join category c ON g.cate_no = c.cate_no
+        where g.seller_no = #{sellerNo}
+        <if test="goodsName != null and goodsName != ''">
+            and g.goods_name = #{goodsName}
+        </if>
+        <if test="cateNo != null and cateNo !=''">
+            and g.cate_no = #{cateNo}
+        </if>
+        <if test="goodsWriter != null and goodsWriter !=''">
+            and g.goods_writer = #{goodsWriter}
+        </if>
+        <if test="createStartDate != null and createStartDate !=''">
+            and g.goods_date >= #{createStartDate}
+        </if>
+        <if test="createEndDate != null and createEndDate != ''">
+            and #{createEndDate} >= g.goods_date
+        </if>
+        order by g.goods_no desc
     </select>
 </mapper>
