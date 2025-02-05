@@ -434,7 +434,7 @@ public class MemberController {
     }
 
     @GetMapping("/memberPay")
-    public String sellerPay(@RequestParam String goodsName,@RequestParam int goodsPrice,@RequestParam String goodsWriter,@RequestParam int quantity, @RequestParam int goodsNo, Principal principal, Model model) {
+    public String sellerPay(@RequestParam String goodsName,@RequestParam int goodsPrice,@RequestParam String goodsWriter,@RequestParam int quantity, @RequestParam Long goodsNo, Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -448,6 +448,8 @@ public class MemberController {
 
         return "user/userPayments";
     }
+
+
 
     @GetMapping("/memberPayDone")
     public String sellerPayDone() {

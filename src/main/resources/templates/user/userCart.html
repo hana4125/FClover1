@@ -57,6 +57,22 @@
           $("#shopping").click(function () {
               location.href = "/";
           });
+        $("#order").click(function () {
+          // var goodsNo = document.querySelector(".goodsNo").value;
+          // var goodsName = document.querySelector(".goodsName").value;
+          // var goodsPrice = document.querySelector(".goodsPrice").value;
+          // var goodsWriter = document.querySelector(".goodsWriter").value;
+          // var quantity = $("#prdNum10").val();  // 수량 가져오기
+          //
+          //
+          // // URL에 값 붙여서 이동
+          // location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+          //         "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+          //         "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+          //         "&quantity=" + encodeURIComponent(quantity) +
+          //         "&goodsNo=" +   encodeURIComponent(goodsNo) ;
+
+        });
 
           function updateTotalPrice(counter) {
               let countInput = counter.find('.count');
@@ -133,6 +149,7 @@
   </script>
 </head>
 <body>
+
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="mt-4 border-top">
   <div class="container w-75 mt-5 d-flex">
@@ -149,9 +166,18 @@
       </th:block>
       <th:block th:unless="${cartItems.size() == 0}">
         <div th:each="cartItem : ${cartItems}" th:data-cart-no="${cartItem.cartNo}">
+<!--          <input type="hidden" class="goodsNo" th:value="${cartItems.goodsNo}">-->
+<!--          <input type="hidden" class="goodsName" th:value="${cartItems.goodsName}">-->
+<!--          <input type="hidden" class="goodsPrice" th:value="${cartItems.goodsPrice}">-->
+<!--          <input type="hidden" class="goodsWriter" th:value="${cartItems.goodsWriter}">-->
           <div class="border-top border-bottom border-1 border-secondary">
             <div style="height: 200px;" class="d-flex">
               <div style="width: 60%;" class="d-flex">
+                <div class="mt-3 ms-2">
+                  <label>
+                    <input type="checkbox" class="checkboxCart" th:value="${cartItem.goodsNo}">
+                  </label>
+                </div>
                 <div class="d-flex align-items-center">
                   <div class="imageBox ms-2">
                     <a th:href="@{/goods/GoodsDetail/{no}(no=${cartItem.goodsNo})}">
@@ -213,7 +239,7 @@
           <p>결제 예정 금액</p>
           <span class="total-payment">0원</span>
         </div>
-        <button class="btn btn-primary form-control mt-3 order-btn">주문하기(0)</button>
+        <button id="order" class="btn btn-primary form-control mt-3 order-btn">주문하기(0)</button>
       </div>
     </div>
   </div>
