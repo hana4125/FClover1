@@ -42,7 +42,7 @@ function paymentProcess() {
                 pg: 'nice.iamport00m',
                 pay_method: 'card', // 결제 방식
                 merchant_uid: "IMP" + generateMerchantUid(), // 결제 고유 번호
-                name: '상품명', // 제품명
+                name: goodsName, // 제품명
                 amount: totalPrice, // 가격
 
                 /* 구매자 정보 */

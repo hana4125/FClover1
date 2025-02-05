@@ -207,10 +207,23 @@
 
         $(function () {
             $(".buy-now-btn").click(function () {
-                const goodsNo = $(this).data("id");
+        //         const goodsNo = $(this).data("id");
+        //
+        //         // 바로구매 페이지로 이동
+        //         location.href = `/payments?goodsNo=${goodsNo}`;
+        var goodsNo = document.querySelector(".goodsNo").value;
+        var goodsName = document.querySelector(".goodsName").value;
+        var goodsPrice = document.querySelector(".goodsPrice").value;
+        var goodsWriter = document.querySelector(".goodsWriter").value;
+        var quantity = 1;  // 수량 가져오기
 
-                // 바로구매 페이지로 이동
-                location.href = `/payments?goodsNo=${goodsNo}`;
+
+        // URL에 값 붙여서 이동
+        location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+            "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+            "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+            "&quantity=" + encodeURIComponent(quantity) +
+            "&goodsNo=" +   encodeURIComponent(goodsNo) ;
             })
         })
     </script>
@@ -317,10 +330,18 @@
                                     <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
                                     <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                        class="show-detail">
+                                        <input type="hidden" class="goodsNo" th:value="${goods.goodsNo}">
+                                        <input type="hidden" class="goodsWriter" th:value="${goods.goodsWriter}">
+                                        <input type="hidden" class="goodsName" th:value="${goods.goodsName}">
+                                        <input type="hidden" class="goodsPrice" th:value="${goods.goodsPrice}">
+                                        <input type="hidden" class="quantity" th:value="1">
+
+
                                         <span class="item-name" th:text="${goods.goodsName}"></span>
                                     </a>
                                     <br>
                                     <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                                    <span class="item-price" th:text="${goods.goodsPrice}"></span>
                                 </div>
                             </div>
                             <div class="icon ms-auto mb-4">
@@ -335,7 +356,7 @@
                                      width="36" height="36" alt="장바구니">
                             </div>
                             <!-- 바로구매 버튼 -->
-                            <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
+                            <button id="buy" class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
                             </button>
                         </div>
                     </li>
