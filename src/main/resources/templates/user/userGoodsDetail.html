@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
     <link rel="stylesheet" href="/css/user/userGoodsDetail.css">
+    <link rel="stylesheet" href="/css/user/category.css">
 
 
     <script th:inline="javascript">
@@ -28,7 +29,7 @@
             })
 
             $("#categoryItem").click(function () {
-                location.href = "/member/category";
+                location.href = "/goods/category/{no}";
             })
 
             $(".show-detail").click(function () {
@@ -39,19 +40,19 @@
                 e.preventDefault(); // 기본 동작 방지
                 if ($(".best-title").hasClass("active")) {
                     // 베스트셀러 탭이 활성화된 경우
-                    location.href = "/member/bestSeller";
+                    location.href = "/goods/bestSeller";
                 } else if ($(".steady-title").hasClass("active")) {
                     // 스테디셀러 탭이 활성화된 경우
-                    location.href = "/member/steadySeller";
+                    location.href = "/goods/steadySeller";
                 }
             });
 
             $(".best").click(function () {
-                location.href = "/member/bestSeller";
+                location.href = "/goods/bestSeller";
             })
 
             $(".new").click(function () {
-                location.href = "/member/newItems";
+                location.href = "/goods/newItems";
             })
 
             // 카테고리 버튼 동작
@@ -123,8 +124,7 @@
 </div>
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
-    <h4 class="text-center mb-3">카테고리</h4><br>
-
+    <div th:replace="~{fragment/category :: category}"></div>
 </div>
 
 <div class="container d-flex justify-content-center">

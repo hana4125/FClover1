@@ -83,7 +83,7 @@ insert into GOODS values(12,2, 4,'GoodsName12','GoodsContent12',
                          current_timestamp());
 
 
-commit ;
+commit;
 
 select * from goods;
 
@@ -96,6 +96,10 @@ FROM goods
 ORDER BY
     goods_date DESC
 LIMIT 100;
+
+update goods
+set goods_name = '소년이 온다', goods_writer = '한강'
+where goods_no = 500004;
 
 
 
