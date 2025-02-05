@@ -38,7 +38,17 @@
                       xhr.setRequestHeader(header, token);
                   },
                   success: function(response) {
-                      console.log(response);
+                      if (!response) {
+                          $("#loginForm").submit();
+                      } else if (response.permission === 'Pending') {
+                          alert("가입 승인 대기 상태입니다. 관리자한테 문의하세요.");
+                      } else if (response.permission === 'Rejected') {
+                          alert("가입 승인이 거절되었습니다. 관리자한테 문의하세요.");
+                      } else if (response.permission === 'Approved') {
+                          $("#loginForm").submit();
+                      } else {
+                          alert("오류 발생");
+                      }
                   }
               })
           })

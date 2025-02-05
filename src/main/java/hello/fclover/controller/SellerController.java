@@ -172,6 +172,7 @@ public class SellerController {
             return null;
         }
 
+        log.info(seller.toString());
         return seller;
     }
 }
