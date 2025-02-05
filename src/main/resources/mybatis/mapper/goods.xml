@@ -3,6 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.GoodsMapper">
+
   <insert id="goodsInsertText">
     insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
@@ -26,148 +27,330 @@
   </select>
 
 
-    <select id="countBestGoods" resultType="int">
-        SELECT COUNT(*)
-        FROM goods
-    </select>
+  <select id="countBestGoods" resultType="int">
+    SELECT COUNT(*)
+    FROM goods
+  </select>
 
 
-    <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
-        SELECT *
-        FROM goods
-        WHERE goods_no = #{goods_no}
-    </select>
+  <select id="findGoodsById" resultType="hello.fclover.domain.Goods">
+    SELECT *
+    FROM goods
+    WHERE goods_no = #{goods_no}
+  </select>
 
-    <select id="findByBestRank" resultType="hello.fclover.domain.Goods">
-        SELECT DISTINCT
-            ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
-            g.goods_no,
-            g.goods_name,
-            g.goods_writer
-        FROM goods g
-        JOIN stock s ON g.goods_no = s.goods_no
-        JOIN payments p ON p.goods_no = g.goods_no
-        WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
-        ORDER BY (s.initial_stock - s.product_stock) DESC
-        LIMIT #{limit}
-    </select>
 
-    <select id="findBySteadyRank" resultType="hello.fclover.domain.Goods">
-        SELECT DISTINCT
-            ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
-            g.goods_no,
-            g.goods_name,
-            g.goods_writer
-        FROM goods g
-        JOIN stock s ON g.goods_no = s.goods_no
-        JOIN payments p ON p.goods_no = g.goods_no
-        WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
-        ORDER BY (s.initial_stock - s.product_stock) DESC
-        LIMIT #{limit}
-    </select>
+  <select id="findByBestRank" resultType="hello.fclover.domain.Goods">
+    SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
+                    g.goods_no,
+                    g.goods_name,
+                    g.goods_writer
+    FROM goods g
+           JOIN stock s ON g.goods_no = s.goods_no
+           JOIN payments p ON p.goods_no = g.goods_no
+    WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+    ORDER BY (s.initial_stock - s.product_stock) DESC
+    LIMIT #{limit}
+  </select>
 
-    <!-- 찜 상태를 포함한 해당 카테고리 상품 조회 -->
-    <select id="findCategoryGoodsWishStatus" resultType="hello.fclover.domain.Goods">
-        SELECT
-        a.goods_no AS goodsNo,
-        a.cate_no AS cateNo,
-        a.goods_name AS goodsName,
-        a.goods_price AS goodsPrice,
-        a.goods_writer AS goodsWriter,
-        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM goods a
-        JOIN stock s ON a.goods_no = s.goods_no
-        LEFT OUTER JOIN (
-        SELECT *
-        FROM wish
-        WHERE member_no = #{memberNo}
-        ) b
-        ON a.goods_no = b.goods_no
-        WHERE
-        a.cate_no = #{cateNo}
-        ORDER BY
-        <choose>
-            <when test="'latest' == sort">a.goods_date DESC</when>
-            <when test="'sales' == sort">(s.initial_stock - s.product_stock) DESC</when>
-            <when test="'highPrice' == sort">a.goods_price DESC</when>
-            <when test="'lowPrice' == sort">a.goods_price ASC</when>
-            <otherwise>a.goods_date DESC</otherwise>
-        </choose>
-        LIMIT #{offset}, #{size}
-    </select>
 
-    <select id="findBestGoodsWishStatus" resultType="hello.fclover.domain.Goods">
-        SELECT
-            a.goods_no AS goodsNo,
-            a.goods_name AS goodsName,
-            a.goods_price AS goodsPrice,
-            a.goods_writer AS goodsWriter,
-            CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM goods a
-                JOIN stock s ON a.goods_no = s.goods_no
-                LEFT OUTER JOIN (
-                SELECT *
-                FROM wish
-                WHERE member_no = #{memberNo}
-            ) b
-        ON a.goods_no = b.goods_no
-        WHERE a.goods_no IN (
-            SELECT DISTINCT goods_no
-            FROM payments
-            WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
-        )
-        ORDER BY
-            (s.initial_stock - s.product_stock) DESC
-            LIMIT #{offset}, #{size}
-    </select>
+  <select id="findBySteadyRank" resultType="hello.fclover.domain.Goods">
+    SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
+                    g.goods_no,
+                    g.goods_name,
+                    g.goods_writer
+    FROM goods g
+           JOIN stock s ON g.goods_no = s.goods_no
+           JOIN payments p ON p.goods_no = g.goods_no
+    WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
+    ORDER BY (s.initial_stock - s.product_stock) DESC
+    LIMIT #{limit}
+  </select>
 
-    <select id="findSteadyGoodsWishStatus" resultType="hello.fclover.domain.Goods">
-        SELECT
-            a.goods_no AS goodsNo,
-            a.goods_name AS goodsName,
-            a.goods_price AS goodsPrice,
-            a.goods_writer AS goodsWriter,
-            CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM goods a
-                JOIN stock s ON a.goods_no = s.goods_no
-                LEFT OUTER JOIN (
-                SELECT *
-                FROM wish
-                WHERE member_no = #{memberNo}
-            ) b
-        ON a.goods_no = b.goods_no
-        WHERE a.goods_no IN (
-            SELECT DISTINCT goods_no
-            FROM payments
-            WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
-        )
-        ORDER BY
-            (s.initial_stock - s.product_stock) DESC
-            LIMIT #{offset}, #{size}
-    </select>
+
+  <!-- 찜 상태를 포함한 해당 카테고리 상품 조회 -->
+  <select id="findCategoryGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+    SELECT
+    a.goods_no AS goodsNo,
+    a.cate_no AS cateNo,
+    a.goods_name AS goodsName,
+    a.goods_price AS goodsPrice,
+    a.goods_writer AS goodsWriter,
+    CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+    FROM goods a
+    JOIN stock s ON a.goods_no = s.goods_no
+    LEFT OUTER JOIN (
+    SELECT *
+    FROM wish
+    WHERE member_no = #{memberNo}
+    ) b
+    ON a.goods_no = b.goods_no
+    WHERE
+    a.cate_no = #{cateNo}
+    ORDER BY
+    <choose>
+      <when test="'latest' == sort">a.goods_date DESC</when>
+      <when test="'sales' == sort">(s.initial_stock - s.product_stock) DESC</when>
+      <when test="'highPrice' == sort">a.goods_price DESC</when>
+      <when test="'lowPrice' == sort">a.goods_price ASC</when>
+      <otherwise>a.goods_date DESC</otherwise>
+    </choose>
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <select id="findBestGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+    SELECT a.goods_no                                        AS goodsNo,
+           a.goods_name                                      AS goodsName,
+           a.goods_price                                     AS goodsPrice,
+           a.goods_writer                                    AS goodsWriter,
+           CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+    FROM goods a
+           JOIN stock s ON a.goods_no = s.goods_no
+           LEFT OUTER JOIN (SELECT *
+                            FROM wish
+                            WHERE member_no = #{memberNo}) b
+                           ON a.goods_no = b.goods_no
+    WHERE a.goods_no IN (SELECT DISTINCT goods_no
+                         FROM payments
+                         WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY))
+    ORDER BY (s.initial_stock - s.product_stock) DESC
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <select id="findSteadyGoodsWishStatus" resultType="hello.fclover.domain.Goods">
+    SELECT a.goods_no                                        AS goodsNo,
+           a.goods_name                                      AS goodsName,
+           a.goods_price                                     AS goodsPrice,
+           a.goods_writer                                    AS goodsWriter,
+           CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+    FROM goods a
+           JOIN stock s ON a.goods_no = s.goods_no
+           LEFT OUTER JOIN (SELECT *
+                            FROM wish
+                            WHERE member_no = #{memberNo}) b
+                           ON a.goods_no = b.goods_no
+    WHERE a.goods_no IN (SELECT DISTINCT goods_no
+                         FROM payments
+                         WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR))
+    ORDER BY (s.initial_stock - s.product_stock) DESC
+    LIMIT #{offset}, #{size}
+  </select>
 
   <!-- 키워드 검색 총 개수 조회-->
   <select id="countGoodsByKeyword" resultType="int">
     SELECT COUNT(*)
+    FROM (SELECT g.goods_no
+          FROM goods g
+          WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
+                      AGAINST(#{keyword} IN BOOLEAN MODE)
+
+          UNION
+
+          SELECT g.goods_no
+          FROM goods g
+          LEFT JOIN seller s ON g.seller_no = s.seller_no
+          WHERE MATCH(s.company_name)
+                      AGAINST(#{keyword} IN BOOLEAN MODE)) result
+  </select>
+
+  <select id="countCategoryByKeyword" resultType="hello.fclover.dto.CategoryCountDTO">
+    SELECT cate_no AS cateNo, COUNT(*) AS count
     FROM (
-           SELECT g.goods_no
+           SELECT g.goods_no, g.cate_no
            FROM goods g
            WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-             AGAINST (#{keyword} IN BOOLEAN MODE)
-
-           UNION ALL
-
-           SELECT g.goods_no
+                       AGAINST(#{keyword} IN BOOLEAN MODE)
+           UNION
+           SELECT g.goods_no, g.cate_no
            FROM goods g
-             JOIN seller s ON g.seller_no = s.seller_no
+                  LEFT JOIN seller s ON g.seller_no = s.seller_no
            WHERE MATCH(s.company_name)
-             AGAINST (#{keyword} IN BOOLEAN MODE)
+                       AGAINST(#{keyword} IN BOOLEAN MODE)
          ) result
-
+    GROUP BY cate_no
   </select>
 
   <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
-    <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
+  <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
+    SELECT
+    g.goods_no AS goodsNo,
+    g.seller_no AS sellerNo,
+    g.cate_no AS cateNo,
+    g.goods_name AS goodsName,
+    g.goods_content AS goodsContent,
+    g.goods_price AS goodsPrice,
+    g.goods_writer AS goodsWriter,
+    s.company_name AS companyName,
+    g.goods_create_at AS goodsCreateAt,
+    (st.initial_stock - st.product_stock) AS goodsCount
+    FROM (
+    SELECT *
+    FROM (
+    SELECT g.*
+    FROM goods g
+    WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
+    AGAINST (#{keyword} IN BOOLEAN MODE)
+
+    UNION ALL
+
+    SELECT g.*
+    FROM goods g
+    JOIN seller s ON g.seller_no = s.seller_no
+    WHERE MATCH(s.company_name)
+    AGAINST (#{keyword} IN BOOLEAN MODE)
+    ) AS union_result
+    ) g
+    LEFT JOIN stock st ON g.goods_no = st.goods_no
+    LEFT JOIN seller s ON g.seller_no = s.seller_no
+
+    ORDER BY
+    <choose>
+      <when test="sort == 'latest'">g.goods_create_at DESC</when>
+      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
+      <when test="sort == 'highPrice'">g.goods_price DESC</when>
+      <when test="sort == 'lowPrice'">g.goods_price ASC</when>
+      <when test="sort == 'name'">g.goods_name ASC</when>
+    </choose>
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <sql id="goodsWhereClause">
+    <where>
+      <if test="name != null and name != ''">
+        AND MATCH(g.goods_name) AGAINST (#{name} IN BOOLEAN MODE)
+      </if>
+      <if test="writer != null and writer != ''">
+        AND MATCH(g.goods_writer) AGAINST (#{writer} IN BOOLEAN MODE)
+      </if>
+      <if test="companyName != null and companyName != ''">
+        AND MATCH(s.company_name) AGAINST (#{companyName} IN BOOLEAN MODE)
+      </if>
+      <if test="cate != null and cate != 0">
+        AND g.cate_no = #{cate}
+      </if>
+      <if test="minPrice != null and maxPrice != null">
+        AND g.goods_price BETWEEN #{minPrice} AND #{maxPrice}
+      </if>
+      <if test="startDate != null and endDate != null">
+        AND g.goods_create_at BETWEEN #{startDate} AND #{endDate}
+      </if>
+    </where>
+  </sql>
+
+  <!-- 상세 검색 개수 쿼리 -->
+  <select id="countGoodsByParam" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    <include refid="goodsWhereClause"/>
+  </select>
+
+  <!-- 상세 검색 쿼리 -->
+  <select id="findGoodsByParam" parameterType="map" resultType="hello.fclover.domain.Goods">
+    SELECT
+    g.goods_no AS goodsNo,
+    g.seller_no AS sellerNo,
+    g.cate_no AS cateNo,
+    g.goods_name AS goodsName,
+    g.goods_content AS goodsContent,
+    g.goods_price AS goodsPrice,
+    g.goods_writer AS goodsWriter,
+    s.company_name AS companyName,
+    g.goods_create_at AS goodsCreateAt,
+    (st.initial_stock - st.product_stock) AS goodsCount
+    FROM goods g
+    LEFT JOIN stock st ON g.goods_no = st.goods_no
+    LEFT JOIN seller s ON g.seller_no = s.seller_no
+    <include refid="goodsWhereClause"/>
+
+    <!-- 정렬 조건 분기 처리 -->
+    ORDER BY
+    <choose>
+      <when test="sort == 'latest'">g.goods_create_at DESC</when>
+      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
+      <when test="sort == 'highPrice'">g.goods_price DESC</when>
+      <when test="sort == 'lowPrice'">g.goods_price ASC</when>
+      <when test="sort == 'name'">g.goods_name ASC</when>
+    </choose>
+
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <!-- DB 데이터 존재 확인 -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*)
+    FROM goods
+  </select>
+
+  <!-- 데이터 Batch 삽입 -->
+  <insert id="insertGoods">
+    INSERT INTO goods (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, writer_content,
+    goods_create_at, goods_pagecount, goods_booksize)
+    VALUES
+    <foreach collection="goods" item="g" separator=",">
+      (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
+      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
+    </foreach>
+  </insert>
+
+  <!-- 대량 삽입을 위한 인덱스 조작용 -->
+  <!--  <update id="dropFullTextIndex">-->
+  <!--    ALTER TABLE GOODS DROP INDEX ft_goods_idx;-->
+  <!--  </update>-->
+
+  <!--  <update id="createFullTextIndex">-->
+  <!--    ALTER TABLE GOODS-->
+  <!--        ADD FULLTEXT KEY ft_goods_idx (GOODS_NAME, GOODS_CONTENT, GOODS_WRITER) WITH PARSER ngram-->
+  <!--  </update>-->
+
+  <!-- 신상품 목록 조회 -->
+  <select id="selectNewItems" resultType="hello.fclover.domain.Goods">
+    SELECT
+    a.goods_no AS goodsNo,
+    a.goods_name AS goodsName,
+    a.goods_price AS goodsPrice,
+    a.goods_writer AS goodsWriter,
+    a.goods_create_at AS goodsCreateAt,
+    CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+    FROM goods a
+    LEFT JOIN (
+    SELECT *
+    FROM wish
+    WHERE member_no = #{memberNo}
+    ) b ON a.goods_no = b.goods_no
+    WHERE 1=1
+    <!-- 일자별 필터 -->
+    <if test="year != null and year != ''">
+      AND YEAR(goods_create_at) = #{year}
+    </if>
+    <if test="month != null and month != ''">
+      AND MONTH(goods_create_at) = #{month}
+    </if>
+    <if test="week != null and week != ''">
+      AND WEEK(goods_create_at) = #{week}
+    </if>
+    ORDER BY goods_create_at DESC
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <!-- 신상품 총 개수 조회 -->
+  <select id="countNewItems" resultType="int">
+    SELECT COUNT(*) FROM goods
+    WHERE 1=1
+    <!-- 일자별 필터 -->
+    <if test="year != null and year != ''">
+      AND YEAR(goods_create_at) = #{year}
+    </if>
+    <if test="month != null and month != ''">
+      AND MONTH(goods_create_at) = #{month}
+    </if>
+    <if test="week != null and week != ''">
+      AND WEEK(goods_create_at) = #{week}
+    </if>
+  </select>
+
+  <select id="searchByParam" parameterType="hello.fclover.dto.SearchParamDTO" resultType="hello.fclover.domain.Goods">
+    <choose>
+      <!-- 조건: cname, chrc, pbcm 값이 모두 없을 경우 -->
+      <when test="(cname == null or cname == '') and (chrc == null or chrc == '') and (pbcm == null or pbcm == '')">
         SELECT
         g.goods_no AS goodsNo,
         g.seller_no AS sellerNo,
@@ -195,177 +378,129 @@
         WHERE MATCH(s.company_name)
         AGAINST (#{keyword} IN BOOLEAN MODE)
         ) AS union_result
+        ) g
+        LEFT JOIN stock st ON g.goods_no = st.goods_no
+        LEFT JOIN seller s ON g.seller_no = s.seller_no
+        <where>
+          <!-- 추가 조건 -->
+          <if test="cateNo != null and cateNo != 0">
+            AND g.cate_no = #{cateNo}
+          </if>
+          <if test="saprMin != null and saprMax != null">
+            AND g.goods_price BETWEEN #{saprMin} AND #{saprMax}
+          </if>
+          <if test="rlseDate == '3M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '6M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '1Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '3Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '5Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
+          </if>
+        </where>
+
         ORDER BY
         <choose>
-            <when test="sort == 'latest'">goods_create_at DESC</when>
-            <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
-            <when test="sort == 'highPrice'">goods_price DESC</when>
-            <when test="sort == 'lowPrice'">goods_price ASC</when>
-            <when test="sort == 'name'">goods_name ASC</when>
+          <when test="sort == 'latest'">g.goods_create_at DESC</when>
+          <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
+          <when test="sort == 'highPrice'">g.goods_price DESC</when>
+          <when test="sort == 'lowPrice'">g.goods_price ASC</when>
+          <when test="sort == 'name'">g.goods_name ASC</when>
         </choose>
-        LIMIT #{size} OFFSET #{offset}
-        ) g
-        JOIN stock st ON a.goods_no = st.goods_no
-        LEFT JOIN seller s ON g.seller_no = s.seller_no;
-    </select>
 
-  <!-- 상세 검색 개수 쿼리 -->
-  <select id="countGoodsByParam" parameterType="map" resultType="int">
-    SELECT COUNT(*)
-    FROM goods g
-    JOIN seller s ON g.seller_no = s.seller_no
-    WHERE 1 = 1
-
-    <!-- 검색 조건 분기 -->
-    <if test="name != null and name != ''">
-      AND MATCH(g.goods_name)
-      AGAINST (#{name} IN BOOLEAN MODE)
-    </if>
-    <if test="writer != null and writer != ''">
-      AND MATCH(g.goods_writer)
-      AGAINST (#{writer} IN BOOLEAN MODE)
-    </if>
-    <if test="companyName != null and companyName != ''">
-      AND MATCH(s.company_name)
-      AGAINST (#{companyName} IN BOOLEAN MODE)
-    </if>
-    <if test="cate != null and cate != 0">
-      AND g.cate_no = #{cate}
-    </if>
-    <if test="minPrice != null and maxPrice != null">
-      AND g.goods_price BETWEEN #{minPrice} AND #{maxPrice}
-    </if>
-    <if test="startDate != null and endDate != null">
-      AND g.goods_create_at BETWEEN #{startDate} AND #{endDate}
-    </if>
-  </select>
-
-  <!-- 상세 검색 쿼리 -->
-  <select id="findGoodsByParam" parameterType="map" resultType="hello.fclover.domain.Goods">
-    SELECT
-    g.goods_no AS goodsNo,
-    g.seller_no AS sellerNo,
-    g.cate_no AS cateNo,
-    g.goods_name AS goodsName,
-    g.goods_content AS goodsContent,
-    g.goods_price AS goodsPrice,
-    g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
-    g.goods_create_at AS goodsCreateAt,
-    (st.initial_stock - st.product_stock) AS goodsCount
-    FROM goods g
-    JOIN stock st ON a.goods_no = st.goods_no
-    JOIN seller s ON g.seller_no = s.seller_no
-    WHERE 1 = 1
-
-    <!-- 검색 조건 분기 -->
-    <if test="name != null and name != ''">
-      AND MATCH(g.goods_name)
-      AGAINST (#{name} IN BOOLEAN MODE)
-    </if>
-    <if test="writer != null and writer != ''">
-      AND MATCH(g.goods_writer)
-      AGAINST (#{writer} IN BOOLEAN MODE)
-    </if>
-    <if test="companyName != null and companyName != ''">
-      AND MATCH(s.company_name)
-      AGAINST (#{companyName} IN BOOLEAN MODE)
-    </if>
-    <if test="cate != null and cate != 0">
-      AND g.cate_no = #{cate}
-    </if>
-    <if test="minPrice != null and maxPrice != null">
-      AND g.goods_price BETWEEN #{minPrice} AND #{maxPrice}
-    </if>
-    <if test="startDate != null and endDate != null">
-      AND g.goods_create_at BETWEEN #{startDate} AND #{endDate}
-    </if>
-
-    <!-- 정렬 조건 분기 처리 -->
-    ORDER BY
-    <choose>
-      <when test="sort == 'latest'">g.goods_create_at DESC</when>
-      <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
-      <when test="sort == 'highPrice'">g.goods_price DESC</when>
-      <when test="sort == 'lowPrice'">g.goods_price ASC</when>
-      <when test="sort == 'name'">g.goods_name ASC</when>
-    </choose>
-
-    <!-- LIMIT & OFFSET -->
-    LIMIT #{size}
-    OFFSET #{offset}
-  </select>
-
-  <!-- DB 데이터 존재 확인 -->
-  <select id="countAll" resultType="long">
-    SELECT COUNT(*)
-    FROM goods
-  </select>
-
-  <!-- 데이터 Batch 삽입 -->
-  <insert id="insertGoods">
-    INSERT INTO goods (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, writer_content,
-    goods_create_at, goods_pagecount, goods_booksize)
-    VALUES
-    <foreach collection="goods" item="g" separator=",">
-      (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
-      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
-    </foreach>
-  </insert>
-
-  <!-- 대량 삽입을 위한 인덱스 조작용 -->
-<!--  <update id="dropFullTextIndex">-->
-<!--    ALTER TABLE GOODS DROP INDEX ft_goods_idx;-->
-<!--  </update>-->
-
-<!--  <update id="createFullTextIndex">-->
-<!--    ALTER TABLE GOODS-->
-<!--        ADD FULLTEXT KEY ft_goods_idx (GOODS_NAME, GOODS_CONTENT, GOODS_WRITER) WITH PARSER ngram-->
-<!--  </update>-->
-
-    <!-- 신상품 목록 조회 -->
-    <select id="selectNewItems" resultType="hello.fclover.domain.Goods">
-        SELECT
-        a.goods_no        AS goodsNo,
-        a.goods_name      AS goodsName,
-        a.goods_price     AS goodsPrice,
-        a.goods_writer    AS goodsWriter,
-        a.goods_create_at AS goodsCreateAt,
-        CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
-        FROM goods a
-        LEFT OUTER JOIN (
-        SELECT *
-        FROM wish
-        WHERE member_no = #{memberNo}
-        ) b ON a.goods_no = b.goods_no
-        WHERE 1=1
-        <!-- 일자별 필터 -->
-        <if test="year != null and year != ''">
-            AND YEAR(goods_create_at) = #{year}
-        </if>
-        <if test="month != null and month != ''">
-            AND MONTH(goods_create_at) = #{month}
-        </if>
-        <if test="week != null and week != ''">
-            AND WEEK(goods_create_at) = #{week}
-        </if>
-        ORDER BY goods_create_at DESC
         LIMIT #{offset}, #{size}
-    </select>
+      </when>
 
-    <!-- 신상품 총 개수 조회 -->
-    <select id="countNewItems" resultType="int">
-        SELECT COUNT(*) FROM goods
-        WHERE 1=1
-        <!-- 일자별 필터 -->
-        <if test="year != null and year != ''">
-            AND YEAR(goods_create_at) = #{year}
+      <!-- 조건: cname, chrc, pbcm 중 하나라도 값이 있을 경우 -->
+      <otherwise>
+        SELECT
+        g.goods_no AS goodsNo,
+        g.seller_no AS sellerNo,
+        g.cate_no AS cateNo,
+        g.goods_name AS goodsName,
+        g.goods_content AS goodsContent,
+        g.goods_price AS goodsPrice,
+        g.goods_writer AS goodsWriter,
+        s.company_name AS companyName,
+        g.goods_create_at AS goodsCreateAt,
+        (st.initial_stock - st.product_stock) AS goodsCount
+        FROM goods g
+        LEFT JOIN stock st ON g.goods_no = st.goods_no
+        LEFT JOIN seller s ON g.seller_no = s.seller_no
+        <where>
+          <if test="cname != null and cname != ''">
+            AND MATCH(g.goods_name) AGAINST (#{cname} IN BOOLEAN MODE)
+          </if>
+          <if test="chrc != null and chrc != ''">
+            AND MATCH(g.goods_writer) AGAINST (#{chrc} IN BOOLEAN MODE)
+          </if>
+          <if test="pbcm != null and pbcm != ''">
+            AND MATCH(s.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
+          </if>
+          <if test="cateNo != null and cateNo != 0">
+            AND g.cate_no = #{cateNo}
+          </if>
+          <if test="saprMin != null and saprMax != null">
+            AND g.goods_price BETWEEN #{saprMin} AND #{saprMax}
+          </if>
+          <if test="rlseDate == '3M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '6M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '1Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '3Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '5Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
+          </if>
+        </where>
+
+        ORDER BY
+        <choose>
+          <when test="sort == 'latest'">g.goods_create_at DESC</when>
+          <when test="sort == 'sales'">(st.initial_stock - st.product_stock) DESC</when>
+          <when test="sort == 'highPrice'">g.goods_price DESC</when>
+          <when test="sort == 'lowPrice'">g.goods_price ASC</when>
+          <when test="sort == 'name'">g.goods_name ASC</when>
+        </choose>
+
+        LIMIT #{offset}, #{size}
+      </otherwise>
+    </choose>
+  </select>
+
+    <select id="sellerGoodsSearch">
+        select g.goods_no, c.cate_name, g.goods_name, g.goods_content, g.goods_price, g.goods_writer, g.writer_content,
+        g.goods_create_at, g.goods_pageCount, g.goods_bookSize, g.goods_date, g.update_at
+        from goods g left join category c ON g.cate_no = c.cate_no
+        where g.seller_no = #{sellerNo}
+        <if test="goodsName != null and goodsName != ''">
+            and g.goods_name = #{goodsName}
         </if>
-        <if test="month != null and month != ''">
-            AND MONTH(goods_create_at) = #{month}
+        <if test="cateNo != null and cateNo !=''">
+            and g.cate_no = #{cateNo}
         </if>
-        <if test="week != null and week != ''">
-            AND WEEK(goods_create_at) = #{week}
+        <if test="goodsWriter != null and goodsWriter !=''">
+            and g.goods_writer = #{goodsWriter}
         </if>
+        <if test="createStartDate != null and createStartDate !=''">
+            and g.goods_date >= #{createStartDate}
+        </if>
+        <if test="createEndDate != null and createEndDate != ''">
+            and #{createEndDate} >= g.goods_date
+        </if>
+        order by g.goods_no desc
     </select>
 </mapper>

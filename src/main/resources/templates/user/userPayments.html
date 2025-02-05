@@ -56,8 +56,14 @@
         <div style="font-weight: bold" class="mt-2">배송 요청사항 : none</div>
         <div style="font-weight: bold" class="mt-2">공동현관 출입방법 : none</div>
         <hr>
-        <div style="font-weight: bold" class="mt-2">총 주문상품 : 1 개</div>
-        <div style="font-weight: bold" class="mt-2">주문상품 이름 :  [ 한강 ] 소년이 온다. &nbsp;&nbsp;수량 : 1개 &nbsp;&nbsp; 금액 : 42,120원 </div>
+        <div style="font-weight: bold" class="mt-2">총 주문상품 :
+           <span th:text="${quantity}"></span>
+            개</div>
+        <div style="font-weight: bold" class="mt-2">
+            주문상품 이름 :
+            <span class="goodsName" th:text="${goodsName}"></span> &nbsp;&nbsp;
+            수량 : <span th:text="${quantity}"></span> &nbsp;&nbsp;
+            금액 : <span th:text="${goodsPrice}"></span> 원 </div>
         <hr>
         <div style="font-weight: bold" class="mt-2">할인쿠폰 : </div>
         <div style="font-weight: bold" class="mt-2">사용가능한 쿠폰이 없습니다.</div>
@@ -82,7 +88,7 @@
         <hr>
         <div class="d-flex justify-content-between">
           <p>최종 결제 금액</p>
-          <span>42,120원</span>
+          <span><span class="totalPrice" th:text="${goodsPrice}"></span> 원</span>
         </div>
         <button class="btn btn-primary form-control mt-3" id="payment-button">결제하기</button>
         <script type="text/javascript" th:src="@{/js/payment.js}"></script>

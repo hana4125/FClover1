@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
     <title>Back Office </title>
     <!-- DataTables CSS -->
@@ -18,29 +17,61 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-
-
-
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
-
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <script>
+        $(function() {
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
 
+            $(document).on('click', '.approved', function() {
+                let $row = $(this).closest('tr');
+                let sellerNo = $row.find('td:eq(0)').text();
 
+                $row.find('td:eq(7)').text('Approved');
+
+                $.ajax({
+                    url: '/bo/pendingApproved',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({"sellerNo" : sellerNo}),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    }
+                })
+            })
+
+            $(document).on('click', '.rejected', function() {
+                let $row = $(this).closest('tr');
+                let sellerNo = $row.find('td:eq(0)').text();
+
+                $row.find('td:eq(7)').text('Rejected');
+
+                $.ajax({
+                    url: '/bo/pendingRejected',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({"sellerNo" : sellerNo}),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    }
+                })
+            })
+        })
+    </script>
 </head>
 
 <body id="page-top">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
-
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/bo/main">
             <div class="sidebar-brand-icon rotate-n-15">
@@ -62,7 +93,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
@@ -77,7 +107,6 @@
                     <a class="collapse-item" href="/bo/sellerApproval">판매자 가입 승인/거절</a>
                 </div>
             </div>
-
         </li>
 
         <!-- Nav Item - Utilities Collapse Menu -->
@@ -93,9 +122,7 @@
 
                 </div>
             </div>
-
         </li>
-
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -115,15 +142,12 @@
                     <a class="collapse-item" href="/bo/deliveryDone">배송완료</a>
                 </div>
             </div>
-
         </li>
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-
-
     </ul>
     <!-- End of Sidebar -->
 
@@ -140,7 +164,6 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -169,12 +192,11 @@
                         </div>
                     </li>
 
-
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<!--                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${admin.name}">Admin</span>-->
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${admin.name}">Admin</span>
                             <img class="img-profile rounded-circle"
                                  src="/images/user/profile.png">
                         </a>
@@ -200,9 +222,7 @@
                             </a>
                         </div>
                     </li>
-
                 </ul>
-
             </nav>
             <!-- End of Topbar -->
 
@@ -211,42 +231,32 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">여기는 판매자 상품등록/취소 페이지입니다</h1>
+                    <h1 class="h3 mb-0 text-gray-800">판매자 가입 승인 페이지</h1>
                     <!--                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i-->
                     <!--                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
                 </div>
 
-                <table id="paymentTable" class="display" style="width:100%">
+                <table id="sellerPending" class="display" style="width:100%">
                     <thead>
                     <tr>
-                        <th>goods_no</th>
                         <th>seller_no</th>
-                        <th>cate_no</th>
-                        <th>goods_name</th>
-                        <th>goods_content</th>
-                        <th>goods_price</th>
-                        <th>goods_writer</th>
-                        <th>writer_content</th>
-                        <th>goods_create_at</th>
-                        <th>goods_date</th>
+                        <th>seller_id</th>
+                        <th>name</th>
+                        <th>email</th>
+                        <th>phone_number</th>
+                        <th>business_number</th>
+                        <th>company_name</th>
                         <th>permission</th>
-                        <th>승인완료</th>
-
+                        <th>승인 버튼</th>
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
-
-
-
-
-
-
                 </table>
                 <script>
                     $(document).ready(function() {
                         // 데이터 테이블 초기화
-                        $('#paymentTable').DataTable({
+                        $('#sellerPending').DataTable({
                             "paging": true,
                             "searching": true,
                             "ordering": true,
@@ -267,52 +277,28 @@
                                 }
                             },
                             "ajax": {
-                                "url": "/bo/SellerGoodsApproval",
+                                "url": "/bo/pendingCheck",
                                 "type": "GET",
                                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
                             },
                             "columns": [
-                                { "data": "goodsNo" },
                                 { "data": "sellerNo" },
-                                { "data": "cateNo" },
-                                { "data": "goodsName" },
-                                { "data": "goodsContent" },
-                                { "data": "goodsPrice" },
-                                { "data": "goodsWriter" },
-                                { "data": "writerContent" },
-                                { "data": "goodsCreateAt" },
-                                { "data": "goodsDate" },
+                                { "data": "sellerId" },
+                                { "data": "name" },
+                                { "data": "email" },
+                                { "data": "phoneNumber" },
+                                { "data": "businessNumber" },
+                                { "data": "companyName" },
                                 { "data": "permission" },
                                 {
-                                  "data": null,
-                                  "render": function(data, type, row) {
-                                    return `<button class="confirm-btn" data-goods-no="${row.goodsNo}">승인완료</button>`;
+                                  "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
+                                  "render": function() {
+                                    return `<button class="approved">승인</button> <button class="rejected">거절</button>`;
                                   }
                                 }
                             ]
                         });
                     });
-
-
-                    // 승인완료 버튼 클릭 이벤트
-                    $(document).on('click', '.confirm-btn', async function() {
-                      const goodsNo = $(this).data('goods-no');
-                      const response = await fetch(`/bo/goodsConfirmSuccess?goodsNo=${goodsNo}`, {
-                        method: 'GET',
-                        headers: {
-                          'Content-Type': 'application/json'
-                        }
-                      });
-
-                      if (response.ok) {
-                        const result = await response.text();
-                        alert(`상품승인완료 요청이 성공적으로 처리되었습니다.`);
-                      } else {
-                        alert('상품승인완료 요청에 실패했습니다.');
-                      }
-                    });
-
-
                 </script>
             </div>
             <!-- /.container-fluid -->
@@ -355,7 +341,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <a class="btn btn-primary" href="/bo/logout">Logout</a>
             </div>
         </div>
     </div>

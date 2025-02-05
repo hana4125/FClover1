@@ -46,11 +46,6 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
-        return "redirect:/member/main";
-    }
-
-    @GetMapping("/member/main")
     public String mainHome(Model model) {
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);

@@ -121,6 +121,11 @@ public class GoodsServiceImpl implements GoodsService {
         return Math.min(count, 100); // 최대 100개로 제한
     }
 
+    @Override
+    public List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword) {
+        return goodsMapper.sellerGoodsSearch(searchKeyword);
+    }
+
     private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);

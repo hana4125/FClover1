@@ -18,5 +18,5 @@ public class Seller {
     private String admissionAt;     // `admisson_at` (varchar(200))
     private LocalDateTime createAt;     // `create_at` (timestamp)
     private LocalDateTime updatedAt;    // `updated_at` (timestamp)
-
+    private String permission;
 }

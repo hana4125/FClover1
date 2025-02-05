@@ -62,7 +62,7 @@ public interface MemberService {
 
     List<CartDTO> getCartItems(Long memberNo);
 
-    void removeCartItems(long l);
+    void removeCartItems(Long cartNo);
 
     List<Coupon> getActiveCouponsForUser(String memberId);
 }

@@ -28,4 +28,10 @@ public interface BackOfficeService {
     List<Goods> sellerGoodsApprovalSearch();
 
     void goodsConfirmSuccess(Long goodsNo);
+
+    List<Seller> sellerPendingCheck();
+
+    void updateSellerApproved(Long sellerNo);
+
+    void updateSellerRejected(Long sellerNo);
 }

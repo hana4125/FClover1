@@ -51,4 +51,16 @@
     <update id="goodsConfirmSuccess">
         update goods set permission='승인완료' where goods_no=#{goodsNo}
     </update>
+
+    <select id="sellerPendingCheck">
+        SELECT seller_no, seller_id, name, email, phone_number, business_number, company_name, permission FROM seller
+    </select>
+
+    <update id="updateSellerApproved">
+        UPDATE seller SET permission = 'Approved' WHERE seller_no = #{sellerNo}
+    </update>
+
+    <update id="updateSellerRejected">
+        UPDATE seller SET permission = 'Rejected' WHERE seller_no = #{sellerNo}
+    </update>
 </mapper>
