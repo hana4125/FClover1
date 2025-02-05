@@ -15,16 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.math.BigInteger;
 import java.security.Principal;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +57,6 @@ public class SellerController {
         return "seller/sellerAddSingleProduct";
     }
 
-
     //단일 상품등록 프로세스
     @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String addSingleProductProcess(@RequestPart("goods") Goods goods,
@@ -92,7 +87,6 @@ public class SellerController {
         return "seller/sellerProductDetail";
     }
 
-
     @GetMapping("/main")
     public String signup(Principal principal) {
 
@@ -102,6 +96,8 @@ public class SellerController {
 
         return "seller/sellerMain";
     }
+
+
 
     @GetMapping("/signup")
     public String sellerSignupForm() {
