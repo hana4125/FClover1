@@ -179,15 +179,11 @@ public class MemberServiceImpl implements MemberService {
         return dao.selectCartItems(memberNo);
     }
 
+
     @Override
-    public void removeCartItems(long l) {
-
+    public void removeCartItems(Long cartNo) {
+        dao.deleteCartItems(cartNo);
     }
-
-//    @Override
-//    public void removeCartItems(Long cartNo) {
-//        dao.deleteCartItems(cartNo);
-//    }
 
     @Override
     public void createCoupon(String memberId) {

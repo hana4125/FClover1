@@ -100,5 +100,18 @@ public class BackOfficeServiceImpl implements BackOfficeService {
         dao.goodsConfirmSuccess(goodsNo);
     }
 
+    @Override
+    public List<Seller> sellerPendingCheck() {
+        return dao.sellerPendingCheck();
+    }
 
+    @Override
+    public void updateSellerApproved(Long sellerNo) {
+        dao.updateSellerApproved(sellerNo);
+    }
+
+    @Override
+    public void updateSellerRejected(Long sellerNo) {
+        dao.updateSellerRejected(sellerNo);
+    }
 }

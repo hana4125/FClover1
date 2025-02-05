@@ -111,8 +111,6 @@
               let cartItemDiv = $(this).closest("[data-cart-no]"); // 해당 상품 div
               let cartNo = cartItemDiv.data("cart-no"); // cartNo 가져오기
 
-              console.log("삭제된 상품 cartNo:", cartNo); // 콘솔에 출력
-
               cartItemDiv.remove(); // UI에서 상품 제거
               updateTotalAmount(); // 삭제 후 총액 및 총 수량 업데이트
 
@@ -139,7 +137,7 @@
 <div class="mt-4 border-top">
   <div class="container w-75 mt-5 d-flex">
     <div style="width: 75%; height: 300vh">
-      <h3 style="font-weight: bold">장바구니(<span th:text="${cartItems.size()}"></span>)</h3>
+      <h3 style="font-weight: bold">장바구니</h3>
       <hr>
       <th:block th:if="${cartItems.size() == 0}">
         <div style="height: 300px;" class="text-center">
