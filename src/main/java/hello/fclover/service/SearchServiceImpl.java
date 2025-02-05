@@ -12,7 +12,9 @@ import hello.fclover.dto.SearchResponseDTO;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import hello.fclover.mybatis.mapper.SearchLogMapper;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -24,6 +26,9 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 @Service
@@ -327,8 +332,21 @@ public class SearchServiceImpl implements SearchService {
         return result;
     }
 
-    // 검색 로그 삽입 로직(작업중)
+    // 검색 로그 삽입 로직
     private void insertSearchLog(String keyword, String sessionId, Member member) {
+
+        // 동일 세션에서 같은 검색어를 연속해서 검색시 로그 삽입하지 않음 (로그 오염 방지)
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes) {
+            HttpSession session = ((ServletRequestAttributes) requestAttributes).getRequest().getSession();
+            String lastKeyword = (String) session.getAttribute("lastSearchKeyword");
+
+            if (keyword.equals(lastKeyword)) {
+                return;
+            } else {
+                session.setAttribute("lastSearchKeyword", keyword);
+            }
+        }
 
         SearchLogDTO searchLogDTO = new SearchLogDTO();
 
@@ -339,6 +357,15 @@ public class SearchServiceImpl implements SearchService {
         if (member != null) {
             searchLogDTO.setMemberNo(member.getMemberNo());
 
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate birthDate = LocalDate.parse(member.getBirthdate(), formatter);
+
+            LocalDate today = LocalDate.now();
+            int age = Period.between(birthDate, today).getYears();
+
+            int decade = (age / 10) * 10;
+            searchLogDTO.setMemberAgeRange(decade + "대");
 
 
             if(member.getGender().equals("male")) {

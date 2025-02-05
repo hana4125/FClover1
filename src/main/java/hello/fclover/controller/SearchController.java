@@ -46,7 +46,7 @@ public class SearchController {
     }
 
 
-    // 키워드 검색 결과
+    // 키워드 검색
     @GetMapping("/searchKeyword")
     public String keywordSearch(Model model,
             @RequestParam("keyword") String keyword,
