@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
+    // TODO : 시간 측정 로직 AOP 로 적용하기
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
     private final CategoryMapper categoryMapper;
@@ -61,7 +62,6 @@ public class SearchServiceImpl implements SearchService {
         long countEndTime = System.currentTimeMillis();
         long totalCountTime = countEndTime - countStartTime;
         log.info("검색어: '{}' count 완료 소요 시간: {} ms", keyword, totalCountTime);
-
 
         long searchStartTime = System.currentTimeMillis();
 
@@ -134,7 +134,6 @@ public class SearchServiceImpl implements SearchService {
                 .min();
 
 
-
         // OptionalInt 값이 존재하는 경우에만 값을 가져옴
         if (maxPriceOpt.isPresent()) {
             int maxPrice = maxPriceOpt.getAsInt();
@@ -142,11 +141,11 @@ public class SearchServiceImpl implements SearchService {
             result.setMaxPrice(maxPrice);
             result.setMinPrice(minPrice);
         }
+
         result.setSearchResults(searchResults);
         result.setKeyword(keyword);
         result.setTotalCount(totalCount);
         result.setCategoryList(sortedCategoryMap);
-
 
         result.setSort(sort);
         result.setCurrentPage(page);
@@ -158,8 +157,16 @@ public class SearchServiceImpl implements SearchService {
         return result;
     }
 
+    // 상세 검색
     @Override
-    public Map<String, Object> searchDetail(SearchDetailParamDTO searchDetailParamDTO, String sort, int offset, int size) {
+    public SearchResponseDTO searchDetail(SearchDetailParamDTO searchDetailParamDTO) {
+
+        SearchResponseDTO result = new SearchResponseDTO();
+
+        String sort = "latest";
+        int page = 1;
+        int size = 20;
+        int offset = 0;
 
         Map<String, Object> params = new HashMap<>();
 
@@ -201,16 +208,47 @@ public class SearchServiceImpl implements SearchService {
         long totalTime = totalCountTime + totalSearchTime;
         log.info("상세 검색어: '{}' 상세 검색에 들어간 총 소요 시간: {} ms", searchDetailParamDTO.getRepKeyword(), totalTime);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("totalCount", totalCount);
-        result.put("searchResults", searchResults);
+        int totalPages = (int) Math.ceil((double) totalCount / size);
+
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
+
+        result.setSearchResults(searchResults);
+        result.setKeyword(result.getKeyword());
+        result.setSort(sort);
+        result.setCurrentPage(page);
+        result.setTotalPages(totalPages);
+        result.setSize(size);
+        result.setStartPage(startPage);
+        result.setEndPage(endPage);
+        result.setTotalCount(totalCount);
 
         return result;
     }
 
+    // 검색 결과 필터 및 정렬
     @Override
     public SearchResponseDTO refineResult(SearchParamDTO searchParamDTO) {
+
         int page = searchParamDTO.getPage();
+
         searchParamDTO.setOffset((page - 1) * searchParamDTO.getSize());
         List<Goods> goodsList = goodsMapper.searchByParam(searchParamDTO);
 

@@ -11,7 +11,7 @@ public interface SearchService {
 
     SearchResponseDTO searchByKeyword(String keyword);
 
-    Map<String, Object> searchDetail(SearchDetailParamDTO searchDetailParamDTO, String sort, int offset, int size);
+    SearchResponseDTO searchDetail(SearchDetailParamDTO searchDetailParamDTO);
 
     SearchResponseDTO refineResult(SearchParamDTO searchParamDTO);
 }

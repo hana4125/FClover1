@@ -36,8 +36,8 @@ public class SearchController {
     private final SearchService searchService;
     private final CategoryService categoryService;
     private final MemberService memberService;
-    private final GoodsService goodsService;
 
+    // 멤버 로그인 정보
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
 
@@ -49,78 +49,42 @@ public class SearchController {
         return null;
     }
 
-    // 키워드 검색 기능
+
+    // 키워드 검색 결과
     @GetMapping("/searchKeyword")
     public String keywordSearch(Model model, @RequestParam("keyword") String keyword) {
 
         SearchResponseDTO result = searchService.searchByKeyword(keyword);
         model.addAttribute("searchResult", result);
+
         return "user/userSearchResult";
     }
 
 
+    // 상세 검색 페이지
     @GetMapping("/searchDetail")
     public String detailSearch(Model model) {
 
         List<Category> categoryList = categoryService.getCategoryList();
-
         model.addAttribute("categoryList", categoryList);
 
         return "user/userSearchDetail";
     }
 
-    // 상세 검색 기능
-    // TODO : 검색 결과 관련 로직 전부 서비스 계층으로 옮기기
+
+    // 상세 검색 결과
+    // TODO : 검색 로직 전부 서비스 계층으로 옮기기
     @GetMapping("/searchDetailResult")
-    public String searchDetailResult(Model model,
-            SearchDetailParamDTO param,
-            @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort,
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
+    public String searchDetailResult(Model model, SearchDetailParamDTO param) {
 
-        int offset = (page - 1) * size;
-
-        Map<String, Object> result = searchService.searchDetail(param, sort, offset, size);
-
-        List<Goods> searchResults = (List<Goods>) result.get("searchResults");
-
-        int totalCount = (int) result.get("totalCount");
-
-        int totalPages = (int) Math.ceil((double) totalCount / size);
-
-        int maxPageNumbersToShow = 10;
-        int startPage;
-        int endPage;
-
-        if (totalPages <= maxPageNumbersToShow) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (page <= 6) {
-                startPage = 1;
-                endPage = 10;
-            } else if (page + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = page - 5;
-                endPage = page + 4;
-            }
-        }
-
-        model.addAttribute("searchResults", searchResults);
-        model.addAttribute("keyword", param.getRepKeyword());
-        model.addAttribute("sort", sort);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("size", size);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("totalCount", totalCount);
+        SearchResponseDTO result = searchService.searchDetail(param);
+        model.addAttribute("searchResult", result);
 
         return "user/userSearchResult";
     }
 
+
+    // 검색 필터링 Ajax
     @GetMapping("/refineAjax")
     public ResponseEntity<SearchResponseDTO> refineResultsAjax(@ModelAttribute SearchParamDTO param) {
 
