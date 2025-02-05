@@ -15,16 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.math.BigInteger;
 import java.security.Principal;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +55,7 @@ public class SellerController {
     public String addSingleProduct(Model model, Goods goods) {
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
-        return "seller/sellerAddSingleProduct";
+        return "sellerAddSingleProduct";
     }
 
 
@@ -89,7 +86,7 @@ public class SellerController {
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
 
-        return "seller/sellerProductDetail";
+        return "sellerProductDetail";
     }
 
 
