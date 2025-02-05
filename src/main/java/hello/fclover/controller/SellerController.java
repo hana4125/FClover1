@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -174,5 +176,16 @@ public class SellerController {
 
         log.info(seller.toString());
         return seller;
+    @PostMapping("/SearchGoodsProcess")
+    @ResponseBody
+    public ResponseEntity<?> searchGoodsProcess(@RequestParam Map<String, String> params,
+                                              Principal principal) {
+        System.out.println("params = " + params);
+
+        params.get("cateNo");
+        List<Goods> goodsList = goodsService.sellerGoodsSearch(params);
+        System.out.println("goodsList = " + goodsList);
+        return ResponseEntity.ok(goodsList);
     }
 }
+
