@@ -1,10 +1,16 @@
 package hello.fclover.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Seller {
 
     private Long sellerNo;                // `id` (auto incremented primary key)
