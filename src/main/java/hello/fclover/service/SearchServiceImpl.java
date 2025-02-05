@@ -3,12 +3,15 @@ package hello.fclover.service;
 import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
+import hello.fclover.domain.Member;
 import hello.fclover.dto.CategoryCountDTO;
 import hello.fclover.dto.SearchDetailParamDTO;
+import hello.fclover.dto.SearchLogDTO;
 import hello.fclover.dto.SearchParamDTO;
 import hello.fclover.dto.SearchResponseDTO;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
+import hello.fclover.mybatis.mapper.SearchLogMapper;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -31,6 +34,7 @@ public class SearchServiceImpl implements SearchService {
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
     private final CategoryMapper categoryMapper;
+    private final SearchLogMapper searchLogMapper;
 
     @Override
     public int countByKeyword(String keyword) {
@@ -38,7 +42,9 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public SearchResponseDTO searchByKeyword(String keyword) {
+    public SearchResponseDTO searchByKeyword(String keyword, String sessionId, Member member) {
+
+        insertSearchLog(keyword, sessionId, member);
 
         SearchResponseDTO result = new SearchResponseDTO();
 
@@ -319,6 +325,30 @@ public class SearchServiceImpl implements SearchService {
         result.setCategoryList(categoryList);
 
         return result;
+    }
+
+    // 검색 로그 삽입 로직(작업중)
+    private void insertSearchLog(String keyword, String sessionId, Member member) {
+
+        SearchLogDTO searchLogDTO = new SearchLogDTO();
+
+        searchLogDTO.setSearchKeyword(keyword);
+
+        searchLogDTO.setSessionId(sessionId);
+
+        if (member != null) {
+            searchLogDTO.setMemberNo(member.getMemberNo());
+
+
+
+            if(member.getGender().equals("male")) {
+                searchLogDTO.setMemberGender("M");
+            } else if (member.getGender().equals("female")) {
+                searchLogDTO.setMemberGender("F");
+            } else {
+                searchLogDTO.setMemberGender("N");
+            }
+        }
     }
 
 }
