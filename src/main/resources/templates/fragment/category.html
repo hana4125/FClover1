@@ -6,7 +6,7 @@
             <h2 class="text-center mt-2 mb-4">카테고리</h2>
             <div class="row">
                 <div class="col-md-4" th:each="category : ${categoryList}">
-                    <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
+                    <a th:href="@{/goods/category/{no}(no=${category.cateNo})}"
                        th:text="${category.cateName}"
                        class="category-item"
                        style="margin-left: 65px; white-space: nowrap; text-align: left; font-size: 18px;"></a>

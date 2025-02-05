@@ -12,8 +12,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.xml.stream.events.Comment;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,8 +100,11 @@ public class InquirycenterController {
         System.out.println("페이지: " + page);
         System.out.println("검색어: " + search_word);
 
-        int listcount = noticeService.getSearchListCount(search_word);
-        List<Notice> list = noticeService.getSearchList( search_word, page, limit);
+        // 검색어가 없을 경우 처리
+        String searchQuery = search_word.trim().isEmpty() ? null : search_word;
+
+        int listcount = noticeService.getSearchListCount(searchQuery);
+        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit);
         PaginationResult result = new PaginationResult(page, limit, listcount);
 
         System.out.println("listcount = " + listcount);
@@ -104,15 +112,16 @@ public class InquirycenterController {
 
         mv.setViewName("user/userNotice");
         mv.addObject("page", page);
-        mv.addObject("maxpage",result.getMaxpage());
-        mv.addObject("startpage",result.getStartpage());
-        mv.addObject("endpage",result.getEndpage());
-        mv.addObject("noticelist",list);
-        mv.addObject("search_word",search_word);
-        mv.addObject("limit",limit);
-        mv.addObject("listcount",listcount);
+        mv.addObject("maxpage", result.getMaxpage());
+        mv.addObject("startpage", result.getStartpage());
+        mv.addObject("endpage", result.getEndpage());
+        mv.addObject("noticelist", list);
+        mv.addObject("search_word", search_word);
+        mv.addObject("limit", limit);
+        mv.addObject("listcount", listcount);
         return mv;
     }
+
 
     //공지사항 삭제
     @PostMapping(value = "/notice/delete")
@@ -167,14 +176,14 @@ public class InquirycenterController {
     @GetMapping("/question/filter")
     public String filterQuestions(
             @RequestParam(defaultValue = "1") Integer currentPage,
-            @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String endDate,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
             Model m) {
 
-        int limit = 10;
-        LocalDate start = startDate != null ? LocalDate.parse(startDate) : LocalDate.now().minusMonths(1);
-        LocalDate end = endDate != null ? LocalDate.parse(endDate).plusDays(1) : LocalDate.now().plusDays(1);
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate).plusDays(1);
 
+        int limit = 10;
         int totalcount = questionService.getFilteredCount(start, end);
         List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
 
@@ -192,6 +201,8 @@ public class InquirycenterController {
         return "user/userQNA";
     }
 
+
+
     @GetMapping(value = "/question/write")
     public String questionWrite() {
         return "user/userQNAWrite";
@@ -199,19 +210,14 @@ public class InquirycenterController {
 
     //문의사항 관련
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question) throws Exception {
-        // checkbox 값을 Boolean으로 변환
-        //question.setQalert(Boolean.parseBoolean(alert));
+    public String noticeAdd(Question question,
+                            @RequestParam("uploadfile") MultipartFile uploadfile) throws Exception {
 
-        MultipartFile uploadfile = question.getUploadfile();
         if (!uploadfile.isEmpty()) {
-            String fileDBName = questionService.saveUploadFile(uploadfile, "/src/main/resources/static/upload");
+            String fileDBName = questionService.saveUploadFile(uploadfile);
             question.setQfile(fileDBName);
         }
-
-        // 문의 저장
         questionService.insertQuestion(question);
-
 
         // 알림 요청이 true일 경우 이메일 발송
         if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
@@ -268,10 +274,8 @@ public class InquirycenterController {
         
         문의하신 글에 답변이 등록되었습니다.
         
-        [문의 제목]
         %s
         
-        [답변 내용]
         %s
         
         자세한 내용은 아래 링크에서 확인하실 수 있습니다.
@@ -310,36 +314,105 @@ public class InquirycenterController {
         return mv;
     }
 
+    //문의사항 삭제
+    @PostMapping(value = "/question/delete")
+    public String deleteQuestion(@RequestBody Map<String, Integer> body,
+                                 RedirectAttributes rattr,
+                                 Principal principal) {
+        int qno = body.get("num");
+
+        // 관리자 권한 체크
+        if (!principal.getName().equals("admin")) {
+            rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
+            return "redirect:/inquiry/question/detail?qno=" + qno;
+        }
+
+        int result = questionService.deleteQuestion(qno);
+
+        if (result > 0) {
+            rattr.addFlashAttribute("successMessage", "문의사항이 삭제되었습니다.");
+            return "redirect:/inquiry/question";
+        } else {
+            rattr.addFlashAttribute("errorMessage", "삭제 실패");
+            return "redirect:/inquiry/question/detail?qno=" + qno;
+        }
+    }
+
+
+
+
+
     //문의사항 댓글
-    @PostMapping(value = "/qlist")
+    @PostMapping("/qlist")
     @ResponseBody
-    public Map<String, Object> CommentList(@RequestParam(required = true) int qno,
-                                           @RequestParam(defaultValue = "1") int page) {
+    public Map<String, Object> getCommentList(
+            @RequestParam int qno,
+            @RequestParam int page,
+            Authentication authentication
+    ) {
+        Map<String, Object> response = new HashMap<>();
+
+        // 기존 댓글 목록 로직
         List<Question> qlist = questionService.getCommentList(qno, page);
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("qlist", qlist);
+        // 관리자 권한 확인
+        boolean isAdmin = authentication != null &&
+                authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        return map;
+        response.put("qlist", qlist);
+        response.put("isAdmin", isAdmin);
+
+        return response;
     }
 
     @PostMapping(value = "/update")
     @ResponseBody
-    public int commentUpdate(Question co) {
-        return questionService.commentsUpdate(co);
-    }
-
-    @PostMapping(value = "/delete")
-    @ResponseBody
-    public ResponseEntity<Integer> commentDelete(@RequestParam("cno") int cno) {
+    public ResponseEntity<Integer> commentUpdate(@RequestParam("cno") int cno,
+                                                 @RequestParam("ccontent") String ccontent) {
         try {
-            int result = questionService.commentDelete(cno);
+            System.out.println("수정 요청: cno=" + cno + ", 내용=" + ccontent); // 디버깅
+            Question co = new Question();
+            co.setCno(cno);
+            co.setCcontent(ccontent);
+            int result = questionService.commentsUpdate(co);
             return ResponseEntity.ok(result);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
         }
     }
+
+
+    @PostMapping(value = "/delete")
+    @ResponseBody
+    public ResponseEntity<Integer> commentDelete(
+            @RequestParam("cno") int cno,
+            Authentication authentication
+    ) {
+        // 현재 로그인한 사용자의 권한 확인
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(0);
+        }
+
+        try {
+            int result = questionService.commentDelete(cno);
+
+            if (result > 0) {
+                return ResponseEntity.ok(1);
+            } else {
+                return ResponseEntity.ok(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+        }
+    }
+
 }
 
 

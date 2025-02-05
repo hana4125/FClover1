@@ -11,6 +11,7 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
+    <link rel="stylesheet" href="/css/user/category.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -26,15 +27,15 @@
             })
 
             $(".category-item").click(function () {
-                location.href = "/member/category/{no}";
+                location.href = "/goods/category/{no}";
             })
 
             $(".best").click(function () {
-                location.href = "/member/bestSeller";
+                location.href = "/goods/bestSeller";
             })
 
             $(".new").click(function () {
-                location.href = "/member/newItems";
+                location.href = "/goods/newItems";
             })
 
             $(".show-detail").click(function () {
@@ -218,18 +219,7 @@
     </div>
 </div>
 <div id="categoryView">
-    <h4 class="text-center">카테고리</h4><br>
-    <div class="category-list">
-        <ul class="list-unstyled">
-            <!-- categoryList의 각 요소를 반복하여 출력 -->
-            <li th:each="category : ${categoryList}">
-                <!-- 카테고리 이름 출력 -->
-                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
-                   th:text="${category.cateName}"
-                   class="category-item"></a>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="~{fragment/category :: category}"></div>
 </div>
 
 <div class="container w-75 mt-5">

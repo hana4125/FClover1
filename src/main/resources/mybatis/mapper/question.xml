@@ -100,8 +100,24 @@
         WHERE q_create_at BETWEEN #{startDate} AND #{endDate}
     </select>
 
+    <select id="findAll" parameterType="map" resultType="Question">
+        SELECT * FROM questions
+        ORDER BY created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
 
-<!-- 댓글 기능   -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM questions
+    </select>
+
+    <!-- 문의글 삭제-->
+    <delete id="deleteQuestion" parameterType="int">
+        <if test="_parameter != null">
+        DELETE FROM qna WHERE qno = #{qno}
+        </if>
+    </delete>
+
+    <!-- 댓글 기능   -->
     <select id="getCommentList" resultType="hello.fclover.domain.Question">
         SELECT *
         FROM (
@@ -132,5 +148,7 @@
         DELETE FROM comments
         WHERE c_no = #{cno}
     </delete>
+
+
 
 </mapper>

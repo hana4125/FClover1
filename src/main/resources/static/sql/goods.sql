@@ -99,6 +99,10 @@ ORDER BY
     goods_date DESC
 LIMIT 100;
 
+update goods
+set goods_name = '소년이 온다', goods_writer = '한강'
+where goods_no = 500004;
+
 
 
 
