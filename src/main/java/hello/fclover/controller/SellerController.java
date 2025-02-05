@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,11 +24,11 @@ import java.security.Principal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
 @Controller
-
 @RequiredArgsConstructor
 @RequestMapping(value = "/seller")
 public class SellerController {
@@ -151,4 +152,47 @@ public class SellerController {
     public String sellerMonthSettlement() {
         return "seller/sellerMonthSettlement";
     }
+
+    //구매자 리스트 조회
+    @GetMapping(value = "/buyerList")
+    public ModelAndView getBuyerList(
+            @RequestParam(value = "n", defaultValue = "1") int n,
+            @RequestParam(value = "search_word", required = false) String searchWord,
+            HttpServletRequest request) {
+
+        ModelAndView mnv = new ModelAndView();
+        List<Map<String, Object>> orderList = sellerService.getListDetail(n, searchWord);
+
+        // 페이징 관련 변수 계산
+        int totalCount = orderList.size(); // 전체 데이터 수
+        int pageSize = 10; // 한 페이지당 보여줄 게시물 수
+        int blockSize = 5; // 페이지 블록 크기
+
+        // 시작페이지와 끝페이지 계산
+        int startPage = ((n - 1) / blockSize) * blockSize + 1;
+        int endPage = Math.min(startPage + blockSize - 1, (totalCount + pageSize - 1) / pageSize);
+
+        if (orderList == null) {
+            mnv.setViewName("error/error");
+            mnv.addObject("url", request.getRequestURL());
+            mnv.addObject("message", "구매자 주문 정보를 찾을 수 없습니다.");
+        } else {
+            mnv.setViewName("seller/sellerBuyerList");
+            mnv.addObject("orderList", orderList);
+            mnv.addObject("search_word", searchWord);
+
+            // 페이징 관련 변수 전달
+            mnv.addObject("startpage", startPage);
+            mnv.addObject("endpage", endPage);
+            mnv.addObject("totalCount", totalCount);
+            mnv.addObject("pageSize", pageSize);
+            mnv.addObject("n", n); // 현재 페이지 번호
+        }
+        return mnv;
+    }
+
+
+
+
+
 }
