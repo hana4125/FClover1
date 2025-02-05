@@ -16,5 +16,4 @@
     <select id="isSellerIdDuplicate">
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
-
 </mapper>

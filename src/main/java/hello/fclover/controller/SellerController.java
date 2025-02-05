@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -155,6 +156,26 @@ public class SellerController {
         return "seller/sellerMonthSettlement";
     }
 
+    @ResponseBody
+    @PostMapping("/pendingCheck")
+    public Seller pendingCheck(@RequestBody Map<String, String> data) {
+        String sellerId = data.get("sellerId");
+        String password = data.get("password");
+
+        Seller seller = sellerService.findSellerById(sellerId);
+
+        if (seller == null) {
+            return null;
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (!passwordEncoder.matches(password, seller.getPassword())) {
+            return null;
+        }
+
+        log.info(seller.toString());
+        return seller;
     @PostMapping("/SearchGoodsProcess")
     @ResponseBody
     public ResponseEntity<?> searchGoodsProcess(@RequestParam Map<String, String> params,
