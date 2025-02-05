@@ -14,14 +14,14 @@ CREATE TABLE GOODS
     GOODS_WRITER        VARCHAR(20) not null , #--상품 저자
     WRITER_CONTENT      VARCHAR(150),
     GOODS_CREATE_AT     DATE, #--상품 발행일
-    GOODS_COUNT         INT, #--상품 총 판매수량 (베스트/스테디셀러 확인위해 필요한 값)
     GOODS_DATE          TIMESTAMP DEFAULT CURRENT_TIMESTAMP, #--상품 등록일
     GOODS_PAGECOUNT     INT,
     GOODS_BOOKSIZE      VARCHAR(10),
     UPDATE_AT           DATE,
     FULLTEXT INDEX ft_goods_idx (GOODS_NAME, GOODS_WRITER, GOODS_CONTENT) WITH PARSER ngram,
     FULLTEXT INDEX ft_goods_name_idx (GOODS_NAME) WITH PARSER ngram,
-    FULLTEXT INDEX ft_goods_writer_idx (GOODS_WRITER) WITH PARSER ngram
+    FULLTEXT INDEX ft_goods_writer_idx (GOODS_WRITER) WITH PARSER ngram,
+    INDEX idx_goods_date (GOODS_DATE)
 ) ENGINE=InnoDB;
 
 insert into GOODS values(1,1, 1,'GoodsName1','GoodsContent1',
@@ -85,14 +85,16 @@ insert into GOODS values(12,2, 4,'GoodsName12','GoodsContent12',
 
 commit;
 
-select * from goods;
+select * from GOODS;
+
+delete from GOODS;
 
 SELECT
     goods_no,
     goods_name,
     goods_writer,
     goods_date
-FROM goods
+FROM GOODS
 ORDER BY
     goods_date DESC
 LIMIT 100;
@@ -100,6 +102,8 @@ LIMIT 100;
 update goods
 set goods_name = '소년이 온다', goods_writer = '한강'
 where goods_no = 500004;
+
+
 
 
 

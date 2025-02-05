@@ -3,120 +3,7 @@
  * @doc 검색 필터 기능
  */
 
-// let saprminVal = "";
-// let saprmaxVal = "";
-// let saprFilterFlag = false;
-// let reKeywordSubmitFlag = false;
-// const filterArr = ['keyword', 'rekeyword', 'target', 'totalType', 'gbCode', 'page', 'ra', 'len', 'cat1', 'cat2', 'cat3', 'ebrent', 'ebdiv', 'exclFree', 'onlyFree', 'samPre', 'samUnlimit', 'cpn', 'evnt', 'rlseDate',
-//   'grd', 'pbcm', 'saprmin', 'saprmax', 'freeDlvr', 'stdvr', 'hotDlvr', 'ageOver', 'exclAgeOver', 'pod', 'separ', 'saleNo', 'exclOos', 'comb', 'revise', 'sale', 'kbcClst1', 'kbcClst2', 'saleCmdt',
-//   'repKeyword', 'repKeywordTarget', 'cname', 'chrcDetail', 'pbcmDetail','mdKeyword', 'composer', 'artist','conductor','performer','vocal','orchestra','akgi','label','tracksong','director','actor','rlseStr','rlseEnd','type','cate',
-//   'chrcCode','pbcmCode','chrc'];
-// const detailFilterStr = "|repKeyword|repKeywordTarget|cname|chrcDetail|pbcmDetail|mdKeyword|composer|artist|conductor|performer|vocal|orchestra|akgi|label|tracksong|director|actor|rlseStr|rlseEnd|type|cate|";
-// const detailFilterArr = ['repKeyword', 'repKeywordTarget', 'cname', 'chrcDetail', 'pbcmDetail', 'mdKeyword', 'composer', 'artist', 'conductor', 'performer', 'vocal', 'orchestra', 'akgi', 'label', 'tracksong', 'director', 'actor', 'rlseStr', 'rlseEnd', 'type', 'cate'];
-// const conditionFilterStr = "|chrcCode|pbcmCode|chrc|pbcm|cname|";
-//
 $(function () {
-//
-//   let cat_depth = $("#categoryDepthHidden").val();
-//   let cat_id = $("#categoryIdHidden").val();
-//   let totalTypeVal = getAutoSearchParam('totalType');
-//
-//   //재검색 키워드 이벤트 검색 가능 상태 변경
-//   $(document).on('keydown', '#rekeyword', function(key){
-//     if(key.key === 'Enter' && (key.originalEvent.isComposing === false)){
-//       reKeywordSubmitFlag = true;
-//     }
-//   });
-//
-//   //재검색 키워드 엔터키로 검색 설정
-//   $(document).on('keyup', '#rekeyword', function(key){
-//     if(key.key === 'Enter' && reKeywordSubmitFlag && (key.originalEvent.isComposing === false)){
-//       submitSearchRekeywordPage();
-//     }
-//   });
-//
-//   //재검색 돋보기 클릭시 이벤트
-//   $(document).on('click', '.btn_ip_search', function(){
-//     submitSearchRekeywordPage();
-//   });
-//
-//   //필터 검색 초기화 이벤트
-//   $(document).on('click', '.btn_reset', function(){
-//     if($("#searchType").val()=="DETAIL_SEARCH") {
-//       clearDetailFilter();
-//     }else{
-//       clearFilter();
-//     }
-//     $(".filter_list_box").show();
-//     $("#selected_filter_box").show();
-//   });
-//
-//   //최초 카테고리 필터 라벨 그리기
-//   drawCategoryLabel(cat_depth, cat_id, totalTypeVal);
-//
-//   //최초 기타 필터 라벨 그리기
-//   firstDrawEtcLabel();
-//
-//   //최초 함께 많이 본 카테고리 라벨 체크
-//   checkRecommendCategoryLabel();
-//
-//   //검색 필터 cat1 클릭 시
-//   $(document).on('click', '.cat_filter_depth2', function(){
-//
-//     var target = getAutoSearchParam('target');
-//     var totalType = getAutoSearchParam('totalType');
-//
-//     if(totalType != ""){
-//       target = totalType;
-//     }
-//
-//     if($(this).hasClass('active')){
-//       changeShopArea("", "");
-//       drawCategoryLabel("", "", target);
-//     }else{
-//       changeShopArea("cat1", this.value);
-//       drawCategoryLabel("cat1", this.value, target);
-//     }
-//
-//     $("input[name='filterRdo']").prop('checked', false);
-//   });
-//
-//   //검색 필터 cat2 클릭 시
-//   $(document).on('click', '.cat_filter_depth3', function(){
-//
-//     var target = getAutoSearchParam('target');
-//     var totalType = getAutoSearchParam('totalType');
-//
-//     if(totalType != ""){
-//       target = totalType;
-//     }
-//
-//     $("input[name='filterRdo']").prop('checked', false);
-//
-//     if($(this).hasClass('active')){
-//       search_catId = this.value.split('@@');
-//       changeShopArea("cat1", search_catId[0]);
-//       drawCategoryLabel("cat1", search_catId[0], target);
-//     }else{
-//       changeShopArea("cat2", this.value);
-//       drawCategoryLabel("cat2", this.value, target);
-//     }
-//   });
-//
-//   //검색 필터 cat3 변경 시
-//   $(document).on('change', "input[name='filterRdo']", function(){
-//
-//     var target = getAutoSearchParam('target');
-//     var totalType = getAutoSearchParam('totalType');
-//
-//     if(totalType != ""){
-//       target = totalType;
-//     }
-//
-//     changeShopArea("cat3", this.value);
-//     drawCategoryLabel("cat3", this.value, target);
-//
-//   });
 
   $(".show-detail").click(function () {
     location.href = "/goods/GoodsDetail/{no}";
@@ -279,6 +166,191 @@ $(function () {
     // 바로구매 페이지로 이동
     location.href = `/payments?goodsNo=${goodsNo}`;
   })
+
+
+
+  /**
+   * URL 쿼리스트링을 업데이트합니다.
+   * @param {String} param - 쿼리 파라미터 이름
+   * @param {String} value - 설정할 값 (빈 문자열이나 null이면 해당 파라미터 삭제)
+   * @returns {URLSearchParams} 업데이트된 URLSearchParams 객체
+   */
+  function updateQueryString(param, value) {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // 값이 있으면 설정, 없으면 해당 파라미터 삭제
+    if (value && value.trim() !== "") {
+      urlParams.set(param, value);
+    } else {
+      urlParams.delete(param);
+    }
+
+    // URL 업데이트 (페이지 리로딩 없이)
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    history.pushState(null, '', newUrl);
+
+    return urlParams;
+  }
+
+  /**
+   * 현재 URL의 쿼리스트링을 기반으로 Ajax GET 요청을 보내 검색 결과를 업데이트합니다.
+   */
+  function fetchSearchResults() {
+    const urlParams = new URLSearchParams(window.location.search);
+    $.ajax({
+      url: '/search/refineAjax',       // 검색 엔드포인트 (필요에 따라 변경)
+      type: 'GET',
+      data: urlParams.toString(), // 쿼리스트링 데이터를 그대로 전송 (ex: category=12&sort=latest&...)
+      dataType: 'json',
+      success: function (response) {
+        renderResults(response);
+      },
+      error: function (xhr, status, error) {
+        console.error('검색 결과 불러오기 실패:', error);
+      }
+    });
+  }
+
+  /**
+   * Ajax 응답으로 받은 데이터를 기반으로 결과 영역을 갱신합니다.
+   * (예시에서는 기존 <ul class="prod_list"> 영역을 지우고 새로운 항목들을 추가)
+   */
+  function renderResults(data) {
+    // 예시: 헤더 업데이트
+    $('#resultKeyword').text("'" + (new URLSearchParams(window.location.search)).get('keyword') + "' 검색 결과");
+    $('#resultCount').text("전체 " + data.totalCount + "건");
+
+    // 결과 리스트 업데이트 (기존 내용 지우기)
+    const $prodList = $('.prod_list');
+    $prodList.empty();
+
+    if (!data.searchResults || data.searchResults.length === 0) {
+      $prodList.append('<li>검색 결과가 없습니다.</li>');
+      return;
+    }
+
+    // 검색 결과가 있을 경우 각 항목을 추가
+    $.each(data.searchResults, function (index, goods) {
+      const listItem = `
+        <li class="prod_item d-flex justify-content-between align-items-start">
+          <div class="prod_area d-flex align-items-start mb-5">
+            <a href="/goods/GoodsDetail/${goods.goodsNo}" class="show-detail">
+              <div class="img-box">
+                <img src="${goods.mainImage ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName : '/images/user/book/img.png'}"
+                     style="width:200px; height:280px;"/>
+              </div>
+            </a>
+            <div class="item-info ms-3">
+              <a href="/goods/GoodsDetail/${goods.goodsNo}" class="show-detail">
+                <span class="item-name">${goods.goodsName}</span>
+              </a>
+              <div class="prod_desc_info">
+                <span>${goods.goodsContent}</span>
+              </div>
+              <div class="prod_author_info">
+                <span class="item-author">${goods.goodsWriter}</span>
+                <div class="prod_publish">
+                  ${ goods.companyName ? `<span class="prod_publish">${goods.companyName}</span>` : '<span class="prod_publish">출판사 없음</span>' }
+                  <span class="date">${formatDate(goods.goodsCreateAt)}</span>
+                </div>
+                <div class="prod_price">
+                  <span class="val">${formatPrice(goods.goodsPrice)}</span>
+                  <span class="unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      `;
+      $prodList.append(listItem);
+    });
+
+    // 필요 시 페이징 렌더링 등 추가 처리
+    renderPagination(data);
+  }
+
+  // 날짜 및 가격 포맷 함수 (필요 시 수정)
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('ko-KR', options);
+  }
+
+  function formatPrice(price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function renderPagination(data) {
+    // 예시: 페이징 영역 업데이트 (필요에 따라 구현)
+    const pagination = $('#pagination ul');
+    pagination.empty();
+
+    const currentPage = data.currentPage;
+    const totalPages = data.totalPages;
+    const startPage = data.startPage;
+    const endPage = data.endPage;
+
+    // 이전 페이지 버튼
+    const prevClass = (currentPage <= 1) ? 'disabled' : '';
+    const prevPage = currentPage - 1;
+    pagination.append(`<li class="page-item ${prevClass}"><a class="page-link" href="#" data-page="${prevPage}">&lt;</a></li>`);
+
+    // 페이지 번호 버튼들
+    for (let i = startPage; i <= endPage; i++) {
+      const activeClass = (currentPage === i) ? 'active' : '';
+      pagination.append(`<li class="page-item ${activeClass}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
+    }
+
+    // 다음 페이지 버튼
+    const nextClass = (currentPage >= totalPages) ? 'disabled' : '';
+    const nextPage = currentPage + 1;
+    pagination.append(`<li class="page-item ${nextClass}"><a class="page-link" href="#" data-page="${nextPage}">&gt;</a></li>`);
+  }
+
+  /* 이벤트 핸들러 */
+
+  // 필터나 정렬 변경 시 (예를 들어 드롭다운, input 등)
+  // 각각의 요소에 change 또는 keyup 이벤트를 붙여 바로 updateQueryString() 호출
+  $('.filter, .sort').on('change keyup', function () {
+    // 예를 들어, 요소의 name 속성이 쿼리 파라미터 이름으로 사용됨
+    const param = $(this).attr('name');
+    const value = $(this).val();
+    updateQueryString(param, value);
+    fetchSearchResults();
+  });
+
+  // 카테고리 클릭 이벤트 (예: 카테고리 목록의 각 항목에 .category-item 클래스와 data-catno 속성이 있다고 가정)
+  $('.category-item').on('click', function (e) {
+    e.preventDefault();
+    const catNo = $(this).data('catno');
+    updateQueryString('category', catNo);
+    fetchSearchResults();
+  });
+
+  // 페이징 버튼 클릭 (페이징 영역에 data-page 속성을 활용)
+  $('#pagination').on('click', '.page-link', function (e) {
+    e.preventDefault();
+    const page = $(this).data('page');
+    if (page && !$(this).parent().hasClass('disabled')) {
+      updateQueryString('page', page);
+      fetchSearchResults();
+    }
+  });
+
+  // 브라우저 뒤로/앞으로 이동 시 처리
+  window.onpopstate = function () {
+    // URL의 쿼리스트링에 따라 UI(필터, 정렬, 카테고리 등)를 재설정하는 로직을 추가할 수 있음.
+    // 여기서는 단순히 Ajax 요청을 재실행합니다.
+    fetchSearchResults();
+  };
+
+  // depth1 버튼 클릭 시 해당 filter_cont_box 토글
+  $('.btn_filter_depth1').on('click', function(){
+    // 버튼에 active 클래스를 토글하여 스타일 변경
+    $(this).toggleClass('active');
+    // 같은 depth1 메뉴 내의 filter_cont_box를 slideToggle으로 보이거나 숨김
+    $(this).closest('.menu_item.item_depth1').find('.filter_cont_box').slideToggle();
+  });
+
+
 });
-
-

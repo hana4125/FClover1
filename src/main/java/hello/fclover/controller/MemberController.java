@@ -77,6 +77,7 @@ public class MemberController {
         int result = memberService.signup(member);
 
         if (result == SIGNUP_SUCCESS) {
+            memberService.createCoupon(member.getMemberId());
             log.info("회원가입 완료");
             return "redirect:/";
         } else {
@@ -397,7 +398,7 @@ public class MemberController {
 
     @PostMapping("/cart/delete")
     public ResponseEntity<String> deleteCart(@RequestBody Map<String, String> data) {
-       
+
         String cartNo = data.get("cartNo");
         try {
             memberService.removeCartItems(Long.parseLong(cartNo));
@@ -416,17 +417,6 @@ public class MemberController {
     public String newItems() {
         return "user/userNewItems";
     }*/
-
-    @GetMapping("/sellerSignup")
-    public String sellerSignup() {
-        return "seller/sellerSignup";
-    }
-
-    @GetMapping("/sellerLogin")
-    public String sellerLogin() {
-        return "seller/sellerLogin";
-    }
-
     @PostMapping("/memberUpdate")
     public String memberUpdate(@ModelAttribute Member member) {
         String encPassword = passwordEncoder.encode(member.getPassword());
@@ -444,11 +434,18 @@ public class MemberController {
     }
 
     @GetMapping("/memberPay")
-    public String sellerPay(Principal principal, Model model) {
+    public String sellerPay(@RequestParam String goodsName,@RequestParam int goodsPrice,@RequestParam String goodsWriter,@RequestParam int quantity, @RequestParam int goodsNo, Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
+
         model.addAttribute("username", principal.getName());
+        model.addAttribute("goodsName", goodsName);
+        model.addAttribute("goodsPrice", goodsPrice);
+        model.addAttribute("goodsWriter", goodsWriter);
+        model.addAttribute("quantity", quantity);
+        model.addAttribute("goodsNo", goodsNo);
+
         return "user/userPayments";
     }
 
@@ -525,13 +522,22 @@ public class MemberController {
 
     @GetMapping("/gift")
     public String gift() {
-        System.out.println("====");
         return "user/userGoodsDetail";
     }
+
+
+    //내쿠폰 조회페이지
     @GetMapping("/myPage/coupon")
-    public String coupon() {
-        System.out.println("====");
+    public String coupon(Principal principal,Model model) {
+
+        String memberId  = principal.getName();
+        List<Coupon> coupons = memberService.getActiveCouponsForUser(memberId);
+        log.info("========> memberController의 coupons 조회 : " + coupons);
+
+        model.addAttribute("coupons", coupons);
+
         return "user/mypage/userMypageCoupon";
     }
+
 
 }

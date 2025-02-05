@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .successHandler(sellerLoginSuccessHandler)
                         .failureHandler(sellerLoginFailHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/seller/login", "/seller/signup", "/seller/signupProcess").permitAll()
+                        .requestMatchers("/seller/login", "/seller/signup", "/seller/signupProcess", "/seller/pendingCheck").permitAll()
                         .requestMatchers("/seller/**").hasRole("SELLER"))
                 .logout((lo) -> lo.logoutUrl("/seller/logout")
                         .logoutSuccessUrl("/")

@@ -139,6 +139,37 @@ public class BackOfficeController {
         return sellers;
     }
 
+    @GetMapping("/pendingCheck")
+    @ResponseBody
+    public List<Seller> sellerPendingCheck() {
+        log.info("셀러 팬딩 체크" + backOfficeService.sellerPendingCheck().toString());
+        return backOfficeService.sellerPendingCheck();
+    }
+
+    @PostMapping("/pendingApproved")
+    @ResponseBody
+    public void sellerPendingApproved(@RequestBody Map<String, String> data) {
+        String sellerNo = data.get("sellerNo");
+
+        try {
+            backOfficeService.updateSellerApproved(Long.parseLong(sellerNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+
+    }
+
+    @PostMapping("/pendingRejected")
+    @ResponseBody
+    public void sellerPendingRejected(@RequestBody Map<String, String> data) {
+        String sellerNo = data.get("sellerNo");
+        try {
+            backOfficeService.updateSellerRejected(Long.parseLong(sellerNo));
+        } catch (NumberFormatException e) {
+            log.info("숫자로 변환할 수 없습니다.");
+        }
+    }
+
     //결제정보 조회 데이터
     @GetMapping("/delivery/SearchOrder")
     @ResponseBody
@@ -223,5 +254,33 @@ public class BackOfficeController {
         return list;
     }
 
+    //판매자 정산 데이터 조회
+    @GetMapping("/SellerGoodsApproval")
+    @ResponseBody
+    public List<Goods> SellerGoodsApproval() {
 
+        List<Goods> list = backOfficeService.sellerGoodsApprovalSearch();
+        return list;
+    }
+
+
+    //판매자상품등록 [승인완료]버튼 클릭 시
+    @GetMapping("/goodsConfirmSuccess")
+    @ResponseBody
+    public ResponseEntity<?> goodsConfirmSuccess(@RequestParam Long goodsNo) {
+
+        backOfficeService.goodsConfirmSuccess(goodsNo);
+
+        return ResponseEntity.ok().body("상품등록 승인완료되었습니다.");
+    }
+
+
+
+    //판매자 가입 상태
+    @GetMapping("/sellerApproval")
+    public String sellerApproval() {
+
+
+        return "backOffice/boSellerPending";
+    }
 }

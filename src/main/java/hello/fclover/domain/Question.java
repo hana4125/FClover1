@@ -18,7 +18,7 @@ public class Question {
     private String qcontent;
     private String responsephone;
     private String responseemail;
-    private boolean qalert;
+    private boolean qalert=true;
     private int qreref;
     private int qrelev;
     private int qreseq;
