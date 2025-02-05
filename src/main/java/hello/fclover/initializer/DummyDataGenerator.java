@@ -1,6 +1,8 @@
 package hello.fclover.initializer;
 
 import hello.fclover.domain.Goods;
+import hello.fclover.domain.Seller;
+import hello.fclover.domain.Stock;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import jakarta.annotation.PostConstruct;
 import java.time.Instant;
@@ -68,7 +70,7 @@ public class DummyDataGenerator {
 
         int MINIMUM_CATE_NO = 1;
         // 초기화 시점에서 가져온 maximumCateNo를 재사용
-        Integer cateNo = faker.number().numberBetween(MINIMUM_CATE_NO, maximumCateNo + 1);
+        int cateNo = faker.number().numberBetween(MINIMUM_CATE_NO, maximumCateNo + 1);
 
         String goodsName = faker.book().title() + faker.number().numberBetween(1, 100);
 
@@ -109,5 +111,22 @@ public class DummyDataGenerator {
                 .goodsPageCount(goodsPageCount)
                 .goodsBookSize(goodsBookSize)
                 .build();
+    }
+
+    // 단일 Seller 생성
+    private Seller generateOneSeller() {
+
+        // TODO : Seller 더미 데이터 생성하기
+
+        return Seller.builder()
+                .build();
+    }
+
+    private Stock generateOneStock() {
+
+        // TODO : Stock 더미 데이터 생성하기 -> Goods 객체와 연계해서 생성하기
+
+
+        return Stock.builder().build();
     }
 }

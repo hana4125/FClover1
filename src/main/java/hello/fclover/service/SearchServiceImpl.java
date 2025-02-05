@@ -3,13 +3,18 @@ package hello.fclover.service;
 import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
+import hello.fclover.domain.Member;
 import hello.fclover.dto.CategoryCountDTO;
 import hello.fclover.dto.SearchDetailParamDTO;
+import hello.fclover.dto.SearchLogDTO;
 import hello.fclover.dto.SearchParamDTO;
 import hello.fclover.dto.SearchResponseDTO;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
+import hello.fclover.mybatis.mapper.SearchLogMapper;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,15 +26,20 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
+    // TODO : 시간 측정 로직 AOP 로 적용하기
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
     private final CategoryMapper categoryMapper;
+    private final SearchLogMapper searchLogMapper;
 
     @Override
     public int countByKeyword(String keyword) {
@@ -37,7 +47,9 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public SearchResponseDTO searchByKeyword(String keyword) {
+    public SearchResponseDTO searchByKeyword(String keyword, String sessionId, Member member) {
+
+        insertSearchLog(keyword, sessionId, member);
 
         SearchResponseDTO result = new SearchResponseDTO();
 
@@ -61,7 +73,6 @@ public class SearchServiceImpl implements SearchService {
         long countEndTime = System.currentTimeMillis();
         long totalCountTime = countEndTime - countStartTime;
         log.info("검색어: '{}' count 완료 소요 시간: {} ms", keyword, totalCountTime);
-
 
         long searchStartTime = System.currentTimeMillis();
 
@@ -134,7 +145,6 @@ public class SearchServiceImpl implements SearchService {
                 .min();
 
 
-
         // OptionalInt 값이 존재하는 경우에만 값을 가져옴
         if (maxPriceOpt.isPresent()) {
             int maxPrice = maxPriceOpt.getAsInt();
@@ -142,11 +152,11 @@ public class SearchServiceImpl implements SearchService {
             result.setMaxPrice(maxPrice);
             result.setMinPrice(minPrice);
         }
+
         result.setSearchResults(searchResults);
         result.setKeyword(keyword);
         result.setTotalCount(totalCount);
         result.setCategoryList(sortedCategoryMap);
-
 
         result.setSort(sort);
         result.setCurrentPage(page);
@@ -158,8 +168,16 @@ public class SearchServiceImpl implements SearchService {
         return result;
     }
 
+    // 상세 검색
     @Override
-    public Map<String, Object> searchDetail(SearchDetailParamDTO searchDetailParamDTO, String sort, int offset, int size) {
+    public SearchResponseDTO searchDetail(SearchDetailParamDTO searchDetailParamDTO) {
+
+        SearchResponseDTO result = new SearchResponseDTO();
+
+        String sort = "latest";
+        int page = 1;
+        int size = 20;
+        int offset = 0;
 
         Map<String, Object> params = new HashMap<>();
 
@@ -201,16 +219,47 @@ public class SearchServiceImpl implements SearchService {
         long totalTime = totalCountTime + totalSearchTime;
         log.info("상세 검색어: '{}' 상세 검색에 들어간 총 소요 시간: {} ms", searchDetailParamDTO.getRepKeyword(), totalTime);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("totalCount", totalCount);
-        result.put("searchResults", searchResults);
+        int totalPages = (int) Math.ceil((double) totalCount / size);
+
+        int maxPageNumbersToShow = 10;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (page <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (page + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = page - 5;
+                endPage = page + 4;
+            }
+        }
+
+        result.setSearchResults(searchResults);
+        result.setKeyword(result.getKeyword());
+        result.setSort(sort);
+        result.setCurrentPage(page);
+        result.setTotalPages(totalPages);
+        result.setSize(size);
+        result.setStartPage(startPage);
+        result.setEndPage(endPage);
+        result.setTotalCount(totalCount);
 
         return result;
     }
 
+    // 검색 결과 필터 및 정렬
     @Override
     public SearchResponseDTO refineResult(SearchParamDTO searchParamDTO) {
+
         int page = searchParamDTO.getPage();
+
         searchParamDTO.setOffset((page - 1) * searchParamDTO.getSize());
         List<Goods> goodsList = goodsMapper.searchByParam(searchParamDTO);
 
@@ -281,6 +330,52 @@ public class SearchServiceImpl implements SearchService {
         result.setCategoryList(categoryList);
 
         return result;
+    }
+
+    // 검색 로그 삽입 로직
+    private void insertSearchLog(String keyword, String sessionId, Member member) {
+
+        // 동일 세션에서 같은 검색어를 연속해서 검색시 로그 삽입하지 않음 (로그 오염 방지)
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes) {
+            HttpSession session = ((ServletRequestAttributes) requestAttributes).getRequest().getSession();
+            String lastKeyword = (String) session.getAttribute("lastSearchKeyword");
+
+            if (keyword.equals(lastKeyword)) {
+                return;
+            } else {
+                session.setAttribute("lastSearchKeyword", keyword);
+            }
+        }
+
+        SearchLogDTO searchLogDTO = new SearchLogDTO();
+
+        searchLogDTO.setSearchKeyword(keyword);
+
+        searchLogDTO.setSessionId(sessionId);
+
+        if (member != null) {
+            searchLogDTO.setMemberNo(member.getMemberNo());
+
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate birthDate = LocalDate.parse(member.getBirthdate(), formatter);
+
+            LocalDate today = LocalDate.now();
+            int age = Period.between(birthDate, today).getYears();
+
+            int decade = (age / 10) * 10;
+            searchLogDTO.setMemberAgeRange(decade + "대");
+
+
+            if(member.getGender().equals("male")) {
+                searchLogDTO.setMemberGender("M");
+            } else if (member.getGender().equals("female")) {
+                searchLogDTO.setMemberGender("F");
+            } else {
+                searchLogDTO.setMemberGender("N");
+            }
+        }
     }
 
 }

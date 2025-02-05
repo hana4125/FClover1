@@ -46,8 +46,8 @@
                     g.goods_name,
                     g.goods_writer
     FROM goods g
-           JOIN stock s ON g.goods_no = s.goods_no
-           JOIN payments p ON p.goods_no = g.goods_no
+           LEFT JOIN stock s ON g.goods_no = s.goods_no
+           LEFT JOIN payments p ON p.goods_no = g.goods_no
     WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
     ORDER BY (s.initial_stock - s.product_stock) DESC
     LIMIT #{limit}
@@ -60,8 +60,8 @@
                     g.goods_name,
                     g.goods_writer
     FROM goods g
-           JOIN stock s ON g.goods_no = s.goods_no
-           JOIN payments p ON p.goods_no = g.goods_no
+           LEFT JOIN stock s ON g.goods_no = s.goods_no
+           LEFT JOIN payments p ON p.goods_no = g.goods_no
     WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
     ORDER BY (s.initial_stock - s.product_stock) DESC
     LIMIT #{limit}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.fclover.mybatis.mapper.SearchLogMapper">
+
+  <insert id="insertSearchLog" parameterType="hello.fclover.dto.SearchLogDTO">
+    INSERT INTO search_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      search_keyword,
+      <if test="memberNo != null">member_no,</if>
+      <if test="memberAgeRange != null">member_age_range,</if>
+      <if test="memberGender != null">member_gender,</if>
+      session_id
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      #{searchKeyword},
+      <if test="memberNo != null">#{memberNo},</if>
+      <if test="memberAgeRange != null">#{memberAgeRange},</if>
+      <if test="memberGender != null">#{memberGender},</if>
+      #{sessionId}
+    </trim>
+  </insert>
+
+
+
+
+
+</mapper>
