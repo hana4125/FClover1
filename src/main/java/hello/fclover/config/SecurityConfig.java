@@ -94,7 +94,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/member/main", true)
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout((lo) -> lo.logoutUrl("/member/logout")
                         .logoutSuccessUrl("/member/main")
