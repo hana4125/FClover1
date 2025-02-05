@@ -59,5 +59,21 @@ public class SellerServiceImpl implements SellerService {
         return dao.getListDetail(params);
     }
 
+    @Override
+    public int getSearchListCount(String search) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("search", "%"+search+"%");
+        return dao.getSearchListCount(map);
+    }
+
+    @Override
+    public List<Seller> getSearchList(String search, int page, int limit) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("search", "%"+search+"%");
+        map.put("start",(page-1) * limit);
+        map.put("size",limit);
+        return dao.getSearchList(map);
+    }
+
 
 }

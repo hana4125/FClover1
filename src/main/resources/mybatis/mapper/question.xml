@@ -110,7 +110,12 @@
         SELECT COUNT(*) FROM questions
     </select>
 
-
+    <!-- 문의글 삭제-->
+    <delete id="deleteQuestion" parameterType="int">
+        <if test="_parameter != null">
+        DELETE FROM qna WHERE qno = #{qno}
+        </if>
+    </delete>
 
     <!-- 댓글 기능   -->
     <select id="getCommentList" resultType="hello.fclover.domain.Question">

@@ -35,4 +35,6 @@ public interface QuestionMapper {
     int countByDateBetween(LocalDate startDate, LocalDate endDate);
     int countAll();
     List<Question> findAll(HashMap<String, Object> map);
+
+    int deleteQuestion(int qno);
 }
