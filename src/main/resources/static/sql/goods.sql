@@ -1,9 +1,9 @@
-DROP TABLE GOODS;
+DROP TABLE goods;
 
-truncate TABLE GOODS;
+truncate TABLE goods;
 
 -- FK 설정해야 함
-CREATE TABLE GOODS
+CREATE TABLE goods
 (
     GOODS_NO            bigint AUTO_INCREMENT PRIMARY KEY ,
     SELLER_NO           bigint not null, #-판매자아이디
@@ -24,60 +24,60 @@ CREATE TABLE GOODS
     INDEX idx_goods_date (GOODS_DATE)
 ) ENGINE=InnoDB;
 
-insert into GOODS values(1,1, 1,'GoodsName1','GoodsContent1',
+insert into goods values(1,1, 1,'GoodsName1','GoodsContent1',
                          20000,'writer1', 'writerContent1',sysdate(),
                          1000, CURRENT_TIMESTAMP(), 300, 1,
                           current_timestamp());
-insert into GOODS values(2,2, 1,'GoodsName2','GoodsContent2',
+insert into goods values(2,2, 1,'GoodsName2','GoodsContent2',
                          30000,'writer2', 'writerContent2', sysdate(),
                          2000, CURRENT_TIMESTAMP(), 350, 2,
                           current_timestamp());
 
-insert into GOODS values(3,2, 2,'GoodsName3','GoodsContent3',
+insert into goods values(3,2, 2,'GoodsName3','GoodsContent3',
                          30000,'writer2', 'writerContent2', sysdate(),
                          3000, CURRENT_TIMESTAMP(), 350, 2,
                          current_timestamp());
 
-insert into GOODS values(4,2, 2,'GoodsName4','GoodsContent4',
+insert into goods values(4,2, 2,'GoodsName4','GoodsContent4',
                          30000,'writer2', 'writerContent2', sysdate(),
                          4000, CURRENT_TIMESTAMP(), 400, 2,
                          current_timestamp());
 
-insert into GOODS values(5,2, 2,'GoodsName5','GoodsContent5',
+insert into goods values(5,2, 2,'GoodsName5','GoodsContent5',
                          35000,'writer3', 'writerContent3', sysdate(),
                          5000, CURRENT_TIMESTAMP(), 400, 2,
                          current_timestamp());
 
-insert into GOODS values(6,2, 2,'GoodsName6','GoodsContent6',
+insert into goods values(6,2, 2,'GoodsName6','GoodsContent6',
                          35000,'writer3', 'writerContent3', sysdate(),
                          6000, CURRENT_TIMESTAMP(), 300, 2,
                          current_timestamp());
 
-insert into GOODS values(7,1, 3,'GoodsName7','GoodsContent7',
+insert into goods values(7,1, 3,'GoodsName7','GoodsContent7',
                          20000,'writer1', 'writerContent1',sysdate(),
                          7000, CURRENT_TIMESTAMP(), 300, 1,
                          current_timestamp());
-insert into GOODS values(8,2, 3,'GoodsName8','GoodsContent8',
+insert into goods values(8,2, 3,'GoodsName8','GoodsContent8',
                          30000,'writer2', 'writerContent2', sysdate(),
                          8000, CURRENT_TIMESTAMP(), 350, 2,
                          current_timestamp());
 
-insert into GOODS values(9,2, 3,'GoodsName9','GoodsContent9',
+insert into goods values(9,2, 3,'GoodsName9','GoodsContent9',
                          35000,'writer2', 'writerContent2', sysdate(),
                          9000, CURRENT_TIMESTAMP(), 350, 2,
                          current_timestamp());
 
-insert into GOODS values(10,2, 4,'GoodsName10','GoodsContent10',
+insert into goods values(10,2, 4,'GoodsName10','GoodsContent10',
                          20000,'writer2', 'writerContent2', sysdate(),
                          10000, CURRENT_TIMESTAMP(), 400, 2,
                          current_timestamp());
 
-insert into GOODS values(11,2, 4,'GoodsName11','GoodsContent11',
+insert into goods values(11,2, 4,'GoodsName11','GoodsContent11',
                          35000,'writer3', 'writerContent3', sysdate(),
                          11000, CURRENT_TIMESTAMP(), 400, 2,
                          current_timestamp());
 
-insert into GOODS values(12,2, 4,'GoodsName12','GoodsContent12',
+insert into goods values(12,2, 4,'GoodsName12','GoodsContent12',
                          35000,'writer3', 'writerContent3', sysdate(),
                          12000, CURRENT_TIMESTAMP(), 300, 2,
                          current_timestamp());
@@ -85,16 +85,16 @@ insert into GOODS values(12,2, 4,'GoodsName12','GoodsContent12',
 
 commit;
 
-select * from GOODS;
+select * from goods;
 
-delete from GOODS;
+delete from goods;
 
 SELECT
     goods_no,
     goods_name,
     goods_writer,
     goods_date
-FROM GOODS
+FROM goods
 ORDER BY
     goods_date DESC
 LIMIT 100;
