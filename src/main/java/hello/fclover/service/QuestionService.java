@@ -37,4 +37,6 @@ public interface QuestionService {
     int getTotalCount();
     List<Question> getAllQuestions(Integer currentPage, int limit);
     int TotalCount();
+
+    int deleteQuestion(int qno);
 }

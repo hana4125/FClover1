@@ -40,6 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
     public int TotalCount() {
         return dao.TotalCount();
     }
+
     //게시글 목록 조회
     @Override
     public List<Question> BoardList(Integer currentPage, int limit) {
@@ -144,6 +145,18 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question Detail(int no) {
         return dao.Detail(no);
+    }
+
+    //문의글 삭제
+    @Override
+    public int deleteQuestion(int qno) {
+        try {
+            int result = dao.deleteQuestion(qno);
+            return result;
+        }catch (Exception e){
+            log.error("삭제 실패", qno, e.getMessage());
+        }
+        return 0;
     }
 
     //댓글 목록 가져오기

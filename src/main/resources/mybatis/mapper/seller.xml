@@ -41,6 +41,11 @@
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <select id="getSearchList" parameterType="map">
+
+    </select>
+
+
 
 
 </mapper>

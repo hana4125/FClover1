@@ -3,6 +3,7 @@ package hello.fclover.controller;
 
 import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
+import hello.fclover.domain.PaginationResult;
 import hello.fclover.domain.Seller;
 import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -224,9 +225,28 @@ public class SellerController {
         return mnv;
     }
 
+    //구매자 검색
+    @GetMapping(value = "/buyerSearch")
+    public ModelAndView getBuyerSearch(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "30") int limit,
+            ModelAndView mv,
+            @RequestParam(defaultValue = "") String search){
 
+        int searchlistcount =  sellerService.getSearchListCount(search);
+        List<Seller> buyList = sellerService.getSearchList(search,page,limit);
+        PaginationResult result = new PaginationResult(page,limit,searchlistcount);
 
-
+        mv.setViewName("seller/sellerBuyerList");
+        mv.addObject("page",page);
+        mv.addObject("maxpage",result.getMaxpage());
+        mv.addObject("startpage",result.getStartpage());
+        mv.addObject("endpage",result.getEndpage());
+        mv.addObject("buyList", buyList);
+        mv.addObject("limit",limit);
+        mv.addObject("searchlistcount",searchlistcount);
+        return mv;
+    }
 
 }
 

@@ -12,61 +12,50 @@ $(function () {
 		$("#message").text("게시글 번호가 없습니다.").show();
 	}
 
-	function getList(currentPage) {
+    function getList(currentPage) {
+        $.ajax({
+            type: "post",
+            url: "/inquiry/qlist",
+            data: {
+                qno: parseInt($("#board_num").val()),
+                page: parseInt(currentPage)
+            },
+            beforeSend: function (xhr) {
+                if (token && header) {
+                    xhr.setRequestHeader(header, token);
+                }
+            },
+            dataType: "json",
+            success: function (rdata) {
+                if (rdata.qlist && rdata.qlist.length > 0) {
+                    $("#comment-list").empty();
 
-		$.ajax({
-			type: "post",
-			url: "/inquiry/qlist",
-			data: {
-				qno: parseInt($("#board_num").val()),
-				page: parseInt(currentPage)
-			},
-			beforeSend: function (xhr) {
-				if (token && header) {
-					xhr.setRequestHeader(header, token);
-				}
-			},
-			dataType: "json",
-			success: function (rdata) {
-				if (rdata.qlist && rdata.qlist.length > 0) {
-					$("#comment-list").empty();
-
-					$(rdata.qlist).each(function () {
-						console.log("개별 댓글 데이터:", this);
-						let output = `
-				           <div class="comment-container">
+                    $(rdata.qlist).each(function () {
+                        let output = `
+                        <div class="comment-container">
                             <div class="comment-main">
                                 <span class="comment-author">${this.memberid}</span>
                                 <span class="comment-content">${this.ccontent}</span>
                                 <span class="comment-date">${this.cresponseat}</span>
                             </div>
+                            ${rdata.isAdmin ? `
                             <div class="comment-actions">
                                 <a href="#" class="text-button edit">수정</a>
                                 <span class="separator">|</span>
                                 <a href="#" class="text-button remove">삭제</a>
                                 <input type='hidden' value='${this.cno}'>
                             </div>
+                            ` : ''}
                         </div>
                     `;
-						$("#comment-list").append(output);
-					});
-
-					if (rdata.totalCount > $("#comment-list .comment-container").length) {
-						$("#message").text("더보기").show();
-					} else {
-						$("#message").text("").hide();
-					}
-				} else {
-					$("#comment-list").empty();
-					$("#message").text("댓글이 없습니다.").show();
-				}
-			},
-			error: function (xhr, status, error) {
-				console.error("AJAX 오류:", xhr.responseText);
-				$("#message").text("댓글을 불러오는 데 실패했습니다.").show();
-			}
-		});
-	}
+                        $("#comment-list").append(output);
+                    });
+                } else {
+                    $("#comment-list").empty();
+                }
+            }
+        });
+    }
 	let cno = null; // 선택한 댓글의 ID 저장
 
 // 수정 버튼 클릭 이벤트
@@ -134,36 +123,39 @@ $(function () {
 		});
 	});
 
-	$(document).on("click", ".remove", function () {
-		const cno = $(this).siblings("input[type='hidden']").val();
-		if (!cno) {
-			alert("삭제할 댓글의 ID를 찾을 수 없습니다.");
-			return;
-		}
-		if (!confirm("정말 삭제하시겠습니까?"))
-			return;
-		$.ajax({
-			type: "post",
-			url: "/inquiry/delete",
-			data: { cno: cno },
-			beforeSend: function (xhr) {
-				if (token && header) {
-					xhr.setRequestHeader(header, token);
-				}
-			},
-			success: function (result) {
-				if (result === 1) {
-					alert("댓글이 삭제되었습니다.");
-					getList(1);
-				} else {
-					alert("댓글 삭제에 실패했습니다.");
-				}
-			},
-			error: function (xhr, status, error) {
-				console.error("AJAX 오류:", error);
-				alert("댓글 삭제 중 오류가 발생했습니다.");
-			}
-		});
-	});
+    $(document).on("click", ".remove", function () {
+        const cno = $(this).siblings("input[type='hidden']").val();
+        if (!cno) {
+            alert("삭제할 댓글의 ID를 찾을 수 없습니다.");
+            return;
+        }
+        if (!confirm("정말 삭제하시겠습니까?"))
+            return;
+
+        $.ajax({
+            type: "post",
+            url: "/inquiry/delete",
+            data: { cno: cno },
+            beforeSend: function (xhr) {
+                if (token && header) {
+                    xhr.setRequestHeader(header, token);
+                }
+            },
+            success: function (result) {
+                if (result === 1) {
+                    alert("댓글이 삭제되었습니다.");
+                    getList(1);
+                } else if (result === 403) {
+                    alert("삭제 권한이 없습니다.");
+                } else {
+                    alert("댓글 삭제에 실패했습니다.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX 오류:", error);
+                alert("댓글 삭제 중 오류가 발생했습니다.");
+            }
+        });
+    });
 
 });
