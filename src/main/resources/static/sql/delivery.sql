@@ -1,6 +1,5 @@
 CREATE TABLE delivery
 (
-
     deli_no BIGINT primary key AUTO_INCREMENT,
     payments_no BIGINT,
     inven_goods_no BIGINT,

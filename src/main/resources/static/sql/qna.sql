@@ -21,4 +21,8 @@ select * from qna;
 ALTER TABLE qna MODIFY COLUMN q_alert ENUM('y', 'n');
 
 
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE qna;
+SET FOREIGN_KEY_CHECKS = 1;
+
 

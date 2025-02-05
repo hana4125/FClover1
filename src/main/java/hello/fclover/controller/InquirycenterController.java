@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,8 +174,19 @@ public class InquirycenterController {
             Model m) {
 
         int limit = 10;
-        LocalDate start = startDate != null ? LocalDate.parse(startDate) : LocalDate.now().minusMonths(1);
-        LocalDate end = endDate != null ? LocalDate.parse(endDate).plusDays(1) : LocalDate.now().plusDays(1);
+        LocalDate start = null;
+        LocalDate end = null;
+
+        if (startDate == null || endDate == null) {
+            return "redirect:/inquiry/question/list"; // 전체 리스트 페이지로 이동
+        }
+
+        try {
+            start = LocalDate.parse(startDate);
+            end = LocalDate.parse(endDate).plusDays(1); // 종료일 포함
+        } catch (DateTimeParseException e) {
+            return "redirect:/inquiry/question/list"; // 날짜 형식 오류 시 전체 목록으로 이동
+        }
 
         int totalcount = questionService.getFilteredCount(start, end);
         List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
@@ -192,6 +205,8 @@ public class InquirycenterController {
         return "user/userQNA";
     }
 
+
+
     @GetMapping(value = "/question/write")
     public String questionWrite() {
         return "user/userQNAWrite";
@@ -199,19 +214,14 @@ public class InquirycenterController {
 
     //문의사항 관련
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question) throws Exception {
-        // checkbox 값을 Boolean으로 변환
-        //question.setQalert(Boolean.parseBoolean(alert));
+    public String noticeAdd(Question question,
+                            @RequestParam("uploadfile") MultipartFile uploadfile) throws Exception {
 
-        MultipartFile uploadfile = question.getUploadfile();
         if (!uploadfile.isEmpty()) {
-            String fileDBName = questionService.saveUploadFile(uploadfile, "/src/main/resources/static/upload");
+            String fileDBName = questionService.saveUploadFile(uploadfile);
             question.setQfile(fileDBName);
         }
-
-        // 문의 저장
         questionService.insertQuestion(question);
-
 
         // 알림 요청이 true일 경우 이메일 발송
         if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
@@ -268,10 +278,8 @@ public class InquirycenterController {
         
         문의하신 글에 답변이 등록되었습니다.
         
-        [문의 제목]
         %s
         
-        [답변 내용]
         %s
         
         자세한 내용은 아래 링크에서 확인하실 수 있습니다.
@@ -325,21 +333,41 @@ public class InquirycenterController {
 
     @PostMapping(value = "/update")
     @ResponseBody
-    public int commentUpdate(Question co) {
-        return questionService.commentsUpdate(co);
-    }
-
-    @PostMapping(value = "/delete")
-    @ResponseBody
-    public ResponseEntity<Integer> commentDelete(@RequestParam("cno") int cno) {
+    public ResponseEntity<Integer> commentUpdate(@RequestParam("cno") int cno,
+                                                 @RequestParam("ccontent") String ccontent) {
         try {
-            int result = questionService.commentDelete(cno);
+            System.out.println("수정 요청: cno=" + cno + ", 내용=" + ccontent); // 디버깅
+            Question co = new Question();
+            co.setCno(cno);
+            co.setCcontent(ccontent);
+            int result = questionService.commentsUpdate(co);
             return ResponseEntity.ok(result);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
         }
     }
+
+
+    @PostMapping(value = "/delete")
+    @ResponseBody
+    public ResponseEntity<Integer> commentDelete(@RequestParam("cno") int cno) {
+        try {
+            System.out.println("삭제 요청: cno = " + cno); // 디버깅
+            int result = questionService.commentDelete(cno);
+
+            if (result > 0) {
+                return ResponseEntity.ok(1);
+            } else {
+                return ResponseEntity.ok(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+        }
+    }
+
 }
 
 
