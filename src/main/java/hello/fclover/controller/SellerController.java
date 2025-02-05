@@ -176,10 +176,12 @@ public class SellerController {
 
         log.info(seller.toString());
         return seller;
+    }
+
     @PostMapping("/SearchGoodsProcess")
     @ResponseBody
     public ResponseEntity<?> searchGoodsProcess(@RequestParam Map<String, String> params,
-                                              Principal principal) {
+                                                Principal principal) {
         System.out.println("params = " + params);
 
         params.get("cateNo");
