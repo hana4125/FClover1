@@ -44,6 +44,7 @@
   </script>
 </head>
 <body>
+<input type="hidden" th:value="${goodsNo}" class="goodsNo">
 <div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="mt-4 border-top">
@@ -63,7 +64,7 @@
           <br>
           <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
         <div  class="mt-2">총 주문상품 :
-           <span th:text="${quantity}"></span>
+           <span class="quantity" th:text="${quantity}"></span>
             개</div>
               <br>
 <!--        <div  class="mt-2">-->

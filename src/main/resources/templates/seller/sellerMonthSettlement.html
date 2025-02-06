@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <style>
+      button[type=submit] {
+          all: unset;
+          cursor: pointer;
+      }
+
+      div a {
+          text-decoration: none;
+          color: black;
+          cursor: pointer;
+      }
+
+      div li a:hover {
+          text-decoration: underline;
+          cursor: pointer;
+      }
+
+      #logo {
+          width: 300px;
+          height: 66px;
+          cursor: pointer;
+      }
+  </style>
+  <script>
+    $(function() {
+        $("#logo").click(function() {
+            location.href ="/seller/main";
+        })
+      $(".singleProduct").click(function(){
+        location.href = "addSingleProduct"
+      })
+    })
+  </script>
+</head>
+<body>
+<div class="bg-light mb-3">
+  <div class="container w-75">
+    <div class="top-menu d-flex justify-content-end">
+      <th:block th:if="${seller == null}">
+        <a class="pe-2" href="/member/login">로그인</a>
+        <a class="pe-2" href="/member/signup">회원가입</a>
+        <a class="pe-2" href="#">고객센터</a>
+        <a class="pe-2" href="/seller/login">판매자 로그인</a>
+        <a class="pe-2" href="/seller/signup">판매자 가입</a>
+      </th:block>
+      <th:block th:if="${seller != null}">
+        <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+        <form th:action="@{/seller/logout}" method="post">
+          <button type="submit" class="pe-2">로그아웃</button>
+        </form>
+      </th:block>
+    </div>
+  </div>
+</div>
+<div class="mt-4">
+  <div class="container w-75">
+    <img src="/images/user/fClover.png" id="logo" width="300px" height="66px" alt="메인로고" class="mb-3">
+  </div>
+  <hr>
+  <div class="container w-75">
+    <div class="d-flex mt-5">
+      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+        <div class="bg-primary rounded-3 p-4">
+          <table class="ms-3">
+            <tr>
+              <td><img class="profile" src="/images/user/profile.png" alt="프로필"></td>
+            </tr>
+            <tr>
+              <td>
+                <th:block th:if="${seller != null}">
+                  <span class="fs-4 text-white fw-bold" th:text="${seller.name}"></span><span class="text-white fw-bold">님</span>
+                </th:block>
+                <th:block th:if="${seller == null}">
+                  <span class="ms-2 fs-4 text-white fw-bold">Seller님</span>
+                </th:block>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="container mt-5">
+          <!-- 쇼핑내역 -->
+          <div class="mb-4">
+            <h5 class="fw-bold">결제/정산내역</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">일 정산내역</a></li>
+              <li><a href="#">월 정산내역</a></li>
+            </ul>
+          </div>
+
+          <!-- 라이브러리 -->
+          <div class="mb-4">
+            <h5 class="fw-bold">구매고객 리스트</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">구매자 리스트 조회</a></li>
+            </ul>
+          </div>
+
+          <!--회원정보-->
+          <div class="mb-4">
+            <h5 class="fw-bold">상품등록</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">자동등록</a></li>
+              <li><a href="#" class="singleProduct">수동등록</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div style="width: 80%; height: 100vh;">
+        <h5 class="ms-5 fw-bold">판매자 월정산 페이지</h5>
+        <hr class="ms-5 mb-5">
+        <table class="table table-striped ms-5">
+          <tr>
+            <td>정산번호</td>
+            <td>판매자 아이디</td>
+            <td>총금액</td>
+            <td>주문상태</td>
+            <td>결제일</td>
+          </tr>
+          <tr>
+            <td>0001</td>
+            <td>test1234</td>
+            <td>42,500</td>
+            <td>paid</td>
+            <td>250101</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

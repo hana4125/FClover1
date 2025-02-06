@@ -99,8 +99,7 @@ public class BackOfficeController {
     @ResponseBody
     public List<Delivery> deliveryReadyAsync() {
         List<Delivery> list = backOfficeService.deliveryReadyOrderSearch();
-
-        System.out.println("=======>여기는 controller list = " + list);
+        log.info("=======>여기는 controller(/deliveryReadyAsync) : " + list);
         return list;
     }
 

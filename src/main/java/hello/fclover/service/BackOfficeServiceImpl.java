@@ -52,9 +52,9 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     @Override
     public void insertTrackingNumber(int deliNo, int deliveryNum, String deliveryCompany,String deliStatus) {
 
-        System.out.println("deliNo = " + deliNo);
-        System.out.println("deliveryNum = " + deliveryNum);
-        System.out.println("deliveryCompany = " + deliveryCompany);
+//        System.out.println("deliNo = " + deliNo);
+//        System.out.println("deliveryNum = " + deliveryNum);
+//        System.out.println("deliveryCompany = " + deliveryCompany);
 
         //배송번호에 대한 운송장 정보 저장
         dao.insertTrackingNumber(deliNo,deliveryNum,deliveryCompany,deliStatus);
