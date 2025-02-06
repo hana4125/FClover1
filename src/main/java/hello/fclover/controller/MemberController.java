@@ -2,6 +2,7 @@ package hello.fclover.controller;
 
 import hello.fclover.domain.*;
 import hello.fclover.dto.CartDTO;
+import hello.fclover.dto.PaymentGoodsDTO;
 import hello.fclover.dto.WishDTO;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
@@ -474,9 +475,13 @@ public class MemberController {
     //마이페이지 주문/배송 조회
     @GetMapping("/myPage/orderDelivery")
     public String myPageOrderDelivery(Principal principal, Model model) {
-        List<Payment> payment = paymentService.searchList(principal.getName());
-        System.out.println("principal = " + principal.getName());
-        System.out.println("===========>여기는 controller ===============payment = " + payment);
+        List<PaymentGoodsDTO> payment = paymentService.searchList(principal.getName());
+
+
+        //payments 테이블의 godosNo 기반으로 한 goodsname 넘겨주어야 함
+
+        log.info("principal = " + principal.getName());
+        log.info("===========>여기는 controller ===============payment = " + payment);
         model.addAttribute("list", payment);
         return "user/mypage/userOrderlist";
     }
@@ -484,10 +489,11 @@ public class MemberController {
 
     //마이페이지 주문/배송조회 상세보기
     @GetMapping("/myPage/memberOrderListDetail")
-    public String OrderListDetail(@RequestParam("orderId") Long orderId, Model model) {
+    public String OrderListDetail(@RequestParam("orderId") Long orderId, Model model,Principal principal) {
+        PaymentGoodsDTO payment = paymentService.searchOneOrderDetail(principal.getName(),orderId);
+        log.info("======================>여기는 컨트롤러(/memberOrderListDetail) : orderId = " + orderId);
 
-        System.out.println("======================>여기는 컨트롤러 : orderId = " + orderId);
-
+        model.addAttribute("list", payment);
         model.addAttribute("orderId", orderId);
 
         return "user/mypage/userOrderlistDetail";

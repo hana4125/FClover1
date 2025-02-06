@@ -21,7 +21,9 @@ public class Payment {
     private Long paymentsNo;// 결제 ID
     private Long partnerId;        // 파트너 ID (nullable)
     private String userId;           // 사용자 ID
-    private Long orderId;          // 주문 ID
+    private Long orderId;// 주문 ID
+    private int quantity; //주문 수량
+    private Long goodsNo; //상품번호
     private BigDecimal paymentAmount; // 결제 금액
     private LocalDate paymentDate; // 결제 일자
     private String impUid;         // 결제 고유 ID (nullable)
@@ -42,6 +44,8 @@ public class Payment {
                 .userId(paymentReq.getUserId())
                 .orderId(paymentReq.getOrderId())
                 .impUid(paymentReq.getImpUid())
+                .quantity(paymentReq.getQuantity())
+                .goodsNo(paymentReq.getGoodsNo())
                 .paymentDate(paymentReq.getPaymentDate())
                 .paymentMethod(paymentReq.getPayMethod())
                 .merchantUid(paymentReq.getMerchantUid())

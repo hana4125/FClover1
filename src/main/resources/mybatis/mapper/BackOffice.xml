@@ -17,11 +17,23 @@
     </select>
 
     <insert id="insertDeliveryReadyList">
-        insert into delivery(payments_no,deli_status) values(#{orderId},#{status})
+        insert into delivery(payments_no,deli_status,deli_date) values(#{orderId},#{status},current_timestamp)
     </insert>
 
     <select id="deliveryReadyOrderSearch">
-        select deli_no,deli_status from delivery where deli_status='배송준비중'
+#         select deli_no,deli_status from delivery where deli_status='배송준비중'
+    select
+        d.payments_no,
+        p.user_id,
+        d.deli_no,
+        d.deli_status,
+        d.deli_date
+    FROM payments p right outer JOIN delivery d ON p.order_id = d.payments_no
+    WHERE d.deli_status='배송준비중'
+
+
+
+
     </select>
 
     <update id="insertTrackingNumber">

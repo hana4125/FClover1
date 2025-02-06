@@ -221,19 +221,16 @@
         <table id="paymentTable" class="display" style="width:100%">
           <thead>
           <tr>
-            <th>ID</th>
+            <th>SELLER NO</th>
             <th>SELLER ID</th>
-            <th>SELLER PASS</th>
             <th>SELLER NAME</th>
             <th>SELLER EMAIL</th>
             <th>SELLER PHONE</th>
             <th>SELLER NUMBER</th>
             <th>COMPANY NAME</th>
             <th>ADMISSION AT</th>
-            <th>SELLER BIRTH</th>
-            <th>SELLER GENDER</th>
-            <th>CREATED AT</th>
             <th>UPDATED AT</th>
+            <th>PERMISSION</th>
 <!--            <th>Actions</th> &lt;!&ndash; 결제 취소 버튼을 위한 열 추가 &ndash;&gt;-->
           </tr>
           </thead>
@@ -274,19 +271,16 @@
                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
               },
               "columns": [
-                { "data": "id" },
+                { "data": "sellerNo" },
                 { "data": "sellerId" },
-                { "data": "sellerPass" },
-                { "data": "sellerName" },
-                { "data": "sellerEmail" },
-                { "data": "sellerPhone" },
-                { "data": "sellerNumber" },
+                { "data": "name" },
+                { "data": "email" },
+                { "data": "phoneNumber" },
+                { "data": "businessNumber" },
                 { "data": "companyName" },
                 { "data": "admissionAt" },
-                { "data": "sellerBirth" },
-                { "data": "sellerGender" },
-                { "data": "createAt" },
-                { "data": "updatedAt" }
+                { "data": "updatedAt" },
+                { "data": "permission" }
 
               ]
             });

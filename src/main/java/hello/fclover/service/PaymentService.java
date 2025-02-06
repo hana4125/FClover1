@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
+import hello.fclover.dto.PaymentGoodsDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.List;
 @Service
 public interface PaymentService {
 
-    List<Payment> searchList(String userId);
+    List<PaymentGoodsDTO> searchList(String userId);
 
     Payment save(PaymentReq paymentReq);
 
@@ -22,4 +23,6 @@ public interface PaymentService {
     HttpURLConnection createConnection(String urlString) throws Exception;
 
     boolean isConnectionSuccessful(HttpURLConnection connection);
+
+    PaymentGoodsDTO searchOneOrderDetail(String name, Long orderId);
 }
