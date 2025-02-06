@@ -26,3 +26,27 @@ set auth = 'ROLE_ADMIN'
 where member_id = 'admin';
 
 delete from member where member_id = 'userid';
+
+SELECT *
+FROM (
+         SELECT
+             ROW_NUMBER() OVER (ORDER BY d.deli_date DESC) AS no,
+        d.deli_no AS deliNo,
+        -- 주문일시는 현재 날짜/시간을 반환하도록 변경
+        NOW() AS orderDate,
+        d.deli_status AS deliStatus,
+        g.GOODS_NAME AS goodsName,
+        d.deli_quan AS quantity,
+        d.deli_date AS deliveryDate
+         FROM GOODS g
+             LEFT JOIN delivery d ON g.GOODS_NO = d.inven_goods_no
+
+         WHERE 1=1
+
+     ) AS temp
+ORDER BY temp.orderDate DESC
+    LIMIT 10 OFFSET 0;
+
+select *
+from goods g join delivery
+on g.goods_no = delivery.inven_goods_no

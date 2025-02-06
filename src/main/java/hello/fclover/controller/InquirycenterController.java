@@ -122,7 +122,6 @@ public class InquirycenterController {
         return mv;
     }
 
-
     //공지사항 삭제
     @PostMapping(value = "/notice/delete")
     public String deleteNotice(@RequestBody Map<String, Integer> body,
@@ -151,6 +150,8 @@ public class InquirycenterController {
             return "redirect:/inquiry/notice/detail?num=" + notino;
         }
     }
+
+
 
     //문의사항
     @GetMapping("/question")
@@ -201,50 +202,43 @@ public class InquirycenterController {
         return "user/userQNA";
     }
 
-
-
+    //문의사항 작성
     @GetMapping(value = "/question/write")
     public String questionWrite() {
         return "user/userQNAWrite";
     }
 
-    //문의사항 관련
+    //문의사항 파일 등록
     @PostMapping(value = "/question/plus")
-    public String noticeAdd(Question question,
-                            @RequestParam("uploadfile") MultipartFile uploadfile) throws Exception {
+    public String noticeAdd(
+            Question question,
+            @RequestParam(value = "qnaImage", required = false) MultipartFile multipartFile) throws Exception {
 
-        if (!uploadfile.isEmpty()) {
-            String fileDBName = questionService.saveUploadFile(uploadfile);
+        // 요청이 들어왔는지 확인
+        System.out.println("noticeAdd 요청 도착");
+
+        if (multipartFile != null) {
+            System.out.println("파일 이름: " + multipartFile.getOriginalFilename());
+            System.out.println("파일 크기: " + multipartFile.getSize());
+        } else {
+            System.out.println("qnaImage 파일이 포함되지 않음");
+        }
+
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String fileDBName = questionService.saveFile(multipartFile);
             question.setQfile(fileDBName);
         }
         questionService.insertQuestion(question);
-
-        // 알림 요청이 true일 경우 이메일 발송
-        if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
-            EmailMessage emailMessage = EmailMessage.builder()
-                    .to(question.getResponseemail())
-                    .subject("답변 알림")
-                    .message("귀하의 문의에 대한 답변이 등록되었습니다.")
-                    .build();
-
-            // 이메일 비동기 발송
-            emailService.asyncSendMail(emailMessage);
-        }
-
         return "redirect:/inquiry/question/detail?qno=" + question.getQno();
     }
-
-
+    /*댓글 달리면 이메일 발송*/
     @PostMapping(value = "/commentAdd")
     @ResponseBody
     public int CommentsAdd(@RequestParam String ccontent,
                            @AuthenticationPrincipal UserDetails userDetails,
                            @RequestParam int qno) {
         String memberid = userDetails.getUsername();
-        log.info("댓글 작성 요청: memberid={}, qno={}, ccontent={}", memberid, qno, ccontent);
-        // 댓글 추가
         int result = questionService.commentsAdd(ccontent, memberid, qno);
-        log.info("댓글 추가 결과: {}", result);
 
         if (result > 0) {  // 댓글 추가 성공
             Question question = questionService.getQuestionDetail(qno);
@@ -292,7 +286,7 @@ public class InquirycenterController {
 
     @GetMapping("/question/detail")
     public ModelAndView questionDetail(@RequestParam(value = "qno", required = false) Integer qno,
-            ModelAndView mv) {
+                                       ModelAndView mv) {
 
         // qno가 null이면 문의 목록 페이지로 리다이렉트
         if (qno == null) {
@@ -339,9 +333,6 @@ public class InquirycenterController {
     }
 
 
-
-
-
     //문의사항 댓글
     @PostMapping("/qlist")
     @ResponseBody
@@ -365,7 +356,7 @@ public class InquirycenterController {
 
         return response;
     }
-
+    //문의사항 댓글 수정
     @PostMapping(value = "/update")
     @ResponseBody
     public ResponseEntity<Integer> commentUpdate(@RequestParam("cno") int cno,
@@ -384,7 +375,7 @@ public class InquirycenterController {
         }
     }
 
-
+    //문의사항 댓글 삭제
     @PostMapping(value = "/delete")
     @ResponseBody
     public ResponseEntity<Integer> commentDelete(

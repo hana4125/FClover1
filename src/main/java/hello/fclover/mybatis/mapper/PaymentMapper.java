@@ -18,7 +18,7 @@ public interface PaymentMapper {
 
     List<PaymentGoodsDTO> searchList(String userId);
 
-    List<Payment> findByPaymentDateBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, String paymentCompleted);
+    List<Payment> findByPaymentDateBetweenAndStatus(String startDate, String endDate, String paymentCompleted);
 
     PaymentGoodsDTO searchOneOrderDetail(String userId, Long orderId);
 }

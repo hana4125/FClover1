@@ -38,15 +38,26 @@
                 location.href = "/goods/GoodsDetail/{no}";
             })
 
-            $(".show-plus").click(function (e) {
-                e.preventDefault(); // 기본 동작 방지
-                if ($(".best-title").hasClass("active")) {
-                    // 베스트셀러 탭이 활성화된 경우
+            $(".show-plus-best").click(function () {
+                // e.preventDefault(); // 기본 동작 방지
+                // if ($(".best-title").hasClass("active")) {
+                //     // 베스트셀러 탭이 활성화된 경우
                     location.href = "/goods/bestSeller";
-                } else if ($(".steady-title").hasClass("active")) {
-                    // 스테디셀러 탭이 활성화된 경우
-                    location.href = "/goods/steadySeller";
-                }
+                // } else if ($(".steady-title").hasClass("active")) {
+                //     // 스테디셀러 탭이 활성화된 경우
+                //     location.href = "/goods/steadySeller";
+                // }
+            });
+
+            $(".show-plus-steady").click(function () {
+                // e.preventDefault(); // 기본 동작 방지
+                // if ($(".best-title").hasClass("active")) {
+                //     // 베스트셀러 탭이 활성화된 경우
+                location.href = "/goods/steadySeller";
+                // } else if ($(".steady-title").hasClass("active")) {
+                //     // 스테디셀러 탭이 활성화된 경우
+                //     location.href = "/goods/steadySeller";
+                // }
             });
 
             $(".best").click(function () {
@@ -86,19 +97,19 @@
             })
 
             // 베스트 및 스테디 클릭 이벤트 처리
-            $("#best").click(function () {
-                $(this).addClass("active").siblings(".steady-title").removeClass("active");
-                // 베스트 데이터 표시
-                $(".best-items").show();
-                $(".steady-items").hide();
-            })
-
-            $("#steady").click(function () {
-                $(this).addClass("active").siblings(".best-title").removeClass("active");
-                // 스테디 데이터 표시
-                $(".steady-items").show();
-                $(".best-items").hide();
-            })
+            // $("#best").click(function () {
+            //     $(this).addClass("active").siblings(".steady-title").removeClass("active");
+            //     // 베스트 데이터 표시
+            //     $(".best-items").show();
+            //     $(".steady-items").hide();
+            // })
+            //
+            // $("#steady").click(function () {
+            //     $(this).addClass("active").siblings(".best-title").removeClass("active");
+            //     // 스테디 데이터 표시
+            //     $(".steady-items").show();
+            //     $(".best-items").hide();
+            // })
         })
     </script>
 </head>
@@ -209,12 +220,11 @@
 
 <!-- 베스트 스테디 샐러 -->
 <div class="container w-75 mt-5">
-
     <div class="d-flex align-items-center justify-content-start">
-        <h2 class="mb-4 me-3 best-title active" id="best">베스트셀러</h2>
-        <h2 class="mb-4 mx-3" style="color: gray; font-size:15px">|</h2>
-        <h2 class="mb-4 ms-3 steady-title" id="steady">스테디셀러</h2>
-        <a href="#" class="show-plus"><h3>더보기 +</h3></a>
+        <h3 class="mb-4 me-3 best-title" id="best">베스트</h3>
+<!--        <h3 class="mb-4 mx-3" style="color: gray; font-size:15px">|</h3>-->
+<!--        <h3 class="mb-4 ms-3 steady-title" id="steady">스테디</h3>-->
+        <a href="#" class="show-plus-best">더보기 +</a>
     </div>
 
     <div class="best-items mt-4">
@@ -244,7 +254,12 @@
             </li>
         </ul>
     </div>
-    <div class="steady-items mt-4" style="display: none">
+
+    <div class="d-flex align-items-center justify-content-start">
+        <h3 class="mt-5 mb-4 steady-title" id="steady">스테디</h3>
+        <a href="#" class="show-plus-steady">더보기 +</a>
+    </div>
+    <div class="steady-items mt-4">
         <ul class="steady-list list-unstyled">
             <li th:each="goods, iterStat : ${steadyGoodsList}" th:if="${iterStat.index < 10}">
                 <span class="item-lank" style="font-size : 18px;" th:text="${goods.rowNum}"></span>
