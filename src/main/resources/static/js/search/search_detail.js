@@ -84,7 +84,6 @@ $(function () {
 });
 
 //상세검색 실행
-/** @todo 프론트에서 보내지는 양식에 맞춰 상세검색 로직 짜기 */
 function goDetailSearchResult() {
   let cateVal = $("#cateSel").val();
 

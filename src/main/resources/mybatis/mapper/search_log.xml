@@ -3,6 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hello.fclover.mybatis.mapper.SearchLogMapper">
 
+  <!-- 검색 로그 삽입 -->
   <insert id="insertSearchLog" parameterType="hello.fclover.dto.SearchLogDTO">
     INSERT INTO search_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -10,7 +11,8 @@
       <if test="memberNo != null">member_no,</if>
       <if test="memberAgeRange != null">member_age_range,</if>
       <if test="memberGender != null">member_gender,</if>
-      session_id
+      session_id,
+      search_datetime
     </trim>
     VALUES
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -18,12 +20,17 @@
       <if test="memberNo != null">#{memberNo},</if>
       <if test="memberAgeRange != null">#{memberAgeRange},</if>
       <if test="memberGender != null">#{memberGender},</if>
-      #{sessionId}
+      #{sessionId},
+      #{searchDatetime}
     </trim>
   </insert>
 
-
-
+  <!-- 특정 기간 검색 로그 조회 -->
+  <select id="findLogsBetween" resultType="hello.fclover.dto.SearchLogDTO">
+    SELECT search_log_no, search_keyword, member_gender, member_age_range, search_datetime
+    FROM search_log
+    WHERE search_datetime BETWEEN #{start} AND #{end}
+  </select>
 
 
 </mapper>

@@ -14,6 +14,7 @@ import hello.fclover.mybatis.mapper.GoodsMapper;
 import hello.fclover.mybatis.mapper.SearchLogMapper;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -35,7 +36,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
-    // TODO : 시간 측정 로직 AOP 로 적용하기
+    // TODO : 시간 측정 로그 AOP 로 적용하도록 수정하기
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
     private final CategoryMapper categoryMapper;
@@ -365,7 +366,13 @@ public class SearchServiceImpl implements SearchService {
             int age = Period.between(birthDate, today).getYears();
 
             int decade = (age / 10) * 10;
-            searchLogDTO.setMemberAgeRange(decade + "대");
+            if (decade < 10) {
+                searchLogDTO.setMemberAgeRange(null);
+            } else if (decade > 40) {
+                searchLogDTO.setMemberAgeRange("40대");
+            } else {
+                searchLogDTO.setMemberAgeRange(decade + "대");
+            }
 
 
             if(member.getGender().equals("male")) {
@@ -376,6 +383,10 @@ public class SearchServiceImpl implements SearchService {
                 searchLogDTO.setMemberGender("N");
             }
         }
+
+        searchLogDTO.setSearchDatetime(LocalDateTime.now());
+
+        searchLogMapper.insertSearchLog(searchLogDTO);
     }
 
 }
