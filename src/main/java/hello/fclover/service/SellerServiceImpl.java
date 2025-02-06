@@ -5,14 +5,15 @@ import hello.fclover.domain.Settlement;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.mybatis.mapper.SettlementMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -49,13 +50,18 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public List<Map<String, Object>> getListDetail(int n, String searchWord) {
+    public List<Map<String, Object>> getListDetail(int page, String searchWord, int pageSize) {
         Map<String, Object> params = new HashMap<>();
         params.put("searchWord", searchWord);
-        params.put("pageSize", 10);  // 페이지 사이즈
-        params.put("offset", (n - 1) * 10);  // offset 계산
+        params.put("pageSize", pageSize);  // 페이지 크기 반영
+        params.put("offset", (page - 1) * pageSize);  // 페이지네이션 적용
 
         return dao.getListDetail(params);
+    }
+
+    @Override
+    public int getListCount(String searchWord) {
+        return dao.getListCount(searchWord);
     }
 
     @Override
@@ -81,6 +87,8 @@ public class SellerServiceImpl implements SellerService {
 
         return settlements;
     }
+
+
 
 
 }

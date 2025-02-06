@@ -102,7 +102,7 @@
         <div class="content-area mb-4">
           <div th:text="${questiondata.qcontent}" class="mb-3"></div>
           <div th:if="${questiondata.qfile != null}" class="mt-2">
-            <img th:src="@{'/uploads/' + ${questiondata.qfile}}" style="width:100px;">
+            <img th:src="${questiondata.qfile}" style="max-width:100%; width:auto; height:auto;">
           </div>
         </div>
 
