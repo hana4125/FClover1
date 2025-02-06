@@ -3,12 +3,14 @@ package hello.fclover.service;
 import hello.fclover.domain.Seller;
 import hello.fclover.domain.Settlement;
 import hello.fclover.mybatis.mapper.SellerMapper;
+import hello.fclover.mybatis.mapper.SettlementMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +21,11 @@ import java.util.Map;
 public class SellerServiceImpl implements SellerService {
 
     private final SellerMapper dao;
+    private final SettlementMapper settlementMapper;
 
     public static Settlement create(Long partnerId, BigDecimal totalAmount, LocalDate paymentDate) {
         Settlement settlement = new Settlement();
-        settlement.setPartnerId(partnerId);
+        settlement.setSellerId(partnerId);
         settlement.setTotalAmount(totalAmount);
         settlement.setStatus("completed");
         settlement.setPaymentDate(paymentDate);
@@ -75,6 +78,14 @@ public class SellerServiceImpl implements SellerService {
         map.put("start",(page-1) * limit);
         map.put("size",limit);
         return dao.getSearchList(map);
+    }
+
+    @Override
+    public List<Settlement> searchDaySettlement(Long partnerId) {
+
+        List<Settlement> settlements = settlementMapper.searchDaySettlement(partnerId);
+
+        return settlements;
     }
 
 

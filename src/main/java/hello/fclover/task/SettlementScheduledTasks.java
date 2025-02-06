@@ -7,7 +7,10 @@ import hello.fclover.mybatis.mapper.SettlementMapper;
 import hello.fclover.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import org.apache.ibatis.session.SqlSession;
+//import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
@@ -41,7 +45,7 @@ public class SettlementScheduledTasks {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 1 0 * * ?")
     @SchedulerLock(name = "ScheduledTask_run")
     public void dailySettlement(){
         LocalDate yesterday = LocalDate.now().minusDays(1);
@@ -66,11 +70,18 @@ public class SettlementScheduledTasks {
     }
 
     private Map<Long, BigDecimal> getSettlementMap(LocalDateTime startDate, LocalDateTime endDate){
-        List<Payment> paymentList = paymentMapper.findByPaymentDateBetweenAndStatus(startDate, endDate, PAYMENT_COMPLETED);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String formattedStartDate = startDate.format(formatter);
+        String formattedEndDate = endDate.format(formatter);
+
+        List<Payment> paymentList = paymentMapper.findByPaymentDateBetweenAndStatus(formattedStartDate, formattedEndDate, PAYMENT_COMPLETED);
+        System.out.println("paymentList = " + paymentList);
 
         return paymentList.stream()
                 .collect(Collectors.groupingBy(
-                        Payment::getPartnerId,
+                        Payment::getSellerId,
                         Collectors.reducing(
                                 BigDecimal.ZERO,
                                 Payment::getPaymentAmount,
@@ -81,24 +92,29 @@ public class SettlementScheduledTasks {
     }
 
 
-    private void processSettlements(Map<Long, BigDecimal> settlementMap, LocalDate paymentDate){
+    private int processSettlements(Map<Long, BigDecimal> settlementMap, LocalDate paymentDate){
         ForkJoinPool customForkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors()); //ParrallelStream을 이용한 병렬처리
 
+        int result = 0;
         try{
             customForkJoinPool.submit(() ->
                     settlementMap.entrySet().parallelStream()
                             .forEach(entry->{
                                 Settlement settlement = Settlement.create(entry.getKey(), entry.getValue(), paymentDate);
                                 settlementMapper.save(settlement);
+
+
                             })
+
                     );
+            result++;
         }catch (Exception e){
            e.printStackTrace();
         }finally {
             customForkJoinPool.shutdown();
         }
 
-
+            return result;
     }
 
 
