@@ -16,4 +16,36 @@
     <select id="isSellerIdDuplicate">
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
+
+
+    <select id="getListDetail" resultType="Map" parameterType="map">
+        SELECT
+        ROW_NUMBER() OVER(ORDER BY d.deli_date DESC) AS no,
+        d.deli_no AS deliNo,
+        d.deli_date AS orderDate,
+        d.deli_status AS deliStatus,
+        g.GOODS_NAME AS goodsName,
+        d.deli_quan AS quantity,
+        m.member_no AS memberNo,
+        m.name AS customerName,
+        d.deli_date AS deliveryDate,
+        d.deli_date AS completionDate
+        FROM GOODS g
+        LEFT JOIN delivery d ON g.GOODS_NO = d.inven_goods_no
+        LEFT JOIN member m ON d.deli_cus_name = m.name
+        WHERE 1=1
+        <if test="searchWord != null and searchWord != ''">
+            AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%')
+            OR m.name LIKE CONCAT('%', #{searchWord}, '%'))
+        </if>
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="getSearchList" parameterType="map">
+
+    </select>
+
+
+
+
 </mapper>

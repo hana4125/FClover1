@@ -85,7 +85,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/member/main", "/member/login", "/member/signup", "/member/signupProcess",
                                 "/member/find-id", "/member/find-id-ok", "/member/send-code-id", "member/send-code-password",
-                                "/member/reset-password","/member/reset-password-ok", "/inquiry/**", "/member/category/**", "/goods/GoodsDetail/**").permitAll()
+                                "/member/reset-password","/member/reset-password-ok", "/inquiry/**",
+                                "/goods/category/**", "/goods/bestSeller","/goods/steadySeller", "/goods/newItems","/goods/GoodsDetail/**", "/search/**").permitAll()
                         .requestMatchers("/inquiry/notice/write").hasAnyAuthority("ROLE_ADMIN","ROLE_MEMBER")
                         .requestMatchers("/inquiry/question/**").hasAnyRole("ADMIN","MEMBER")
                         .requestMatchers("/member/**").hasRole("MEMBER")
@@ -94,7 +95,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/{registrationId}")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/member/main", true)
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout((lo) -> lo.logoutUrl("/member/logout")
                         .logoutSuccessUrl("/member/main")
