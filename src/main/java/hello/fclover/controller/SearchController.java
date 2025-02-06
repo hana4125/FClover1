@@ -11,9 +11,14 @@ import hello.fclover.service.SearchService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
@@ -32,6 +38,7 @@ public class SearchController {
     private final SearchService searchService;
     private final CategoryService categoryService;
     private final MemberService memberService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     // 멤버 로그인 정보
     @ModelAttribute("member")
@@ -97,5 +104,26 @@ public class SearchController {
         // JSON 으로 응답
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/api/popular-keywords")
+    @ResponseBody
+    public List<String> getPopularKeywords(
+            @RequestParam(value = "gender", defaultValue = "ALL") String gender,
+            @RequestParam(value = "ageRange", defaultValue = "ALL") String ageRange,
+            @RequestParam(value = "limit", defaultValue = "10") int limit) {
+
+        // Redis Key 구성
+        String redisKey = "popular:" + gender + ":" + ageRange;
+
+        // Redis Sorted Set 에서 점수가 높은 순으로 상위 limit 개 항목 조회
+        Set<ZSetOperations.TypedTuple<String>> resultSet = redisTemplate.opsForZSet()
+                .reverseRangeWithScores(redisKey, 0, limit - 1);
+
+        // 조회 결과를 Keyword 리스트로 변환
+        return (resultSet != null) ? resultSet.stream()
+                .map(ZSetOperations.TypedTuple::getValue)
+                .collect(Collectors.toList()) : new ArrayList<>();
+    }
+
 
 }
