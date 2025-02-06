@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/user/home.css}">
     <link rel="stylesheet"  th:href="@{/css/user/searchBox.css}">
     <link rel="stylesheet"  th:href="@{/css/seller.css}">
+    <link rel="stylesheet" href="/css/sellerpagination.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -100,18 +101,20 @@
         </tr>
         </thead>
             <tbody>
-            <tr th:each="order : ${orderList}">
-                <td th:text="${order.no}"></td>
+            <tr th:if="${orderList.isEmpty()}">
+                <td colspan="8" class="text-center" th:text="${message}">구매자 주문 정보가 없습니다.</td>
+            </tr>
+            <tr th:each="order : ${orderList}" th:unless="${orderList.isEmpty()}">
+                <td th:text="${orderStat.count}"></td>
                 <td th:text="${order.deliNo}"></td>
-                <td th:text="${order.orderDate}"></td>
+                <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${order.deliStatus}"></td>
                 <td th:text="${order.goodsName}"></td>
                 <td th:text="${order.quantity}"></td>
                 <td th:text="${order.customerName}"></td>
-                <td th:text="${order.deliveryDate}"></td>
+                <td th:text="${order.deliveryDate != null ? #temporals.format(order.deliveryDate, 'yyyy-MM-dd') : '-'}"></td>
             </tr>
             </tbody>
-
         </table>
     </div>
     <!-- 페이지네이션 -->

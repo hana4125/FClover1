@@ -19,46 +19,44 @@
 
 
     <select id="getListDetail" resultType="Map" parameterType="map">
-        SELECT *
-        FROM (
         SELECT
-        ROW_NUMBER() OVER (ORDER BY d.deli_date DESC) AS no,
-        d.deli_no AS deliNo,
-        -- 주문일시는 현재 날짜/시간을 반환하도록 변경
-        NOW() AS orderDate,
+        ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+        p.payments_no AS deliNo,
+        p.payment_date AS orderDate,
         d.deli_status AS deliStatus,
         g.GOODS_NAME AS goodsName,
         d.deli_quan AS quantity,
-        m.member_no AS memberNo,
-        m.name AS customerName,
+        m.member_id AS customerName,
         d.deli_date AS deliveryDate
-        FROM GOODS g
-        LEFT JOIN delivery d ON g.GOODS_NO = d.inven_goods_no
-        LEFT JOIN member m ON d.deli_cus_name = m.name
-        WHERE 1=1
-        <if test="searchWord != null and searchWord != ''">
-            AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%')
-            OR m.name LIKE CONCAT('%', #{searchWord}, '%'))
-        </if>
-        ) AS temp
-        ORDER BY temp.orderDate DESC
-        LIMIT #{pageSize} OFFSET #{offset}
+        FROM payments p
+        LEFT JOIN delivery d ON p.payments_no = d.payments_no
+        LEFT JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+        LEFT JOIN member m ON p.user_id = m.member_id
+        <where>
+            <if test="searchWord != null and searchWord != ''">
+                AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%')
+                OR m.member_id LIKE CONCAT('%', #{searchWord}, '%'))
+            </if>
+        </where>
+        ORDER BY p.payment_date DESC
+        LIMIT #{offset}, #{pageSize}
     </select>
 
-
-
-
-    <select id="getListCount" resultType="int" parameterType="map">
+    <select id="getListCount" resultType="int" parameterType="string">
         SELECT COUNT(*)
-        FROM GOODS g
-        LEFT JOIN delivery d ON g.GOODS_NO = d.inven_goods_no
-        LEFT JOIN member m ON d.deli_cus_name = m.name
-        WHERE 1=1
-        <if test="searchWord != null and searchWord != ''">
-            AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%')
-            OR m.name LIKE CONCAT('%', #{searchWord}, '%'))
-        </if>
+        FROM payments p
+        LEFT JOIN delivery d ON p.payments_no = d.payments_no
+        LEFT JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+        LEFT JOIN member m ON p.user_id = m.member_id
+        <where>
+            <if test="searchWord != null and searchWord != ''">
+                AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%') OR m.member_id LIKE CONCAT('%', #{searchWord}, '%'))
+            </if>
+        </where>
     </select>
+
+
+
 
     <select id="getSearchList" parameterType="map">
 

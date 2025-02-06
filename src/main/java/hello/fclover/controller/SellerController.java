@@ -194,13 +194,13 @@ public class SellerController {
     public ModelAndView getBuyerList(
             @RequestParam(value = "n", defaultValue = "1") int page,
             @RequestParam(value = "search_word", required = false) String searchWord,
+            @RequestParam(value = "size", defaultValue = "10") int pagesize,
             HttpServletRequest request) {
 
         ModelAndView mnv = new ModelAndView();
 
         // 전체 구매자 주문 목록 개수 가져오기
-        int totalcount = sellerService.getListCount(searchWord);  // 총 개수 조회
-        int pagesize = 10; // 한 페이지당 보여줄 게시물 수
+        int totalcount = sellerService.getListCount(searchWord);
 
         // 현재 페이지에 해당하는 구매자 리스트 가져오기
         List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize);
@@ -208,48 +208,26 @@ public class SellerController {
         // PaginationResult 사용
         PaginationResult result = new PaginationResult(page, pagesize, totalcount);
 
-
-
-            if(orderList.isEmpty())
+        if(orderList.isEmpty()) {
             mnv.addObject("message", "구매자 주문 정보가 없습니다.");
+        }
 
-            mnv.setViewName("seller/sellerBuyerList");
-            mnv.addObject("orderList", orderList);
-            mnv.addObject("search_word", searchWord);
+        mnv.setViewName("seller/sellerBuyerList");
+        mnv.addObject("orderList", orderList);
+        mnv.addObject("search_word", searchWord);
+        mnv.addObject("searchlistcount", totalcount);
+        mnv.addObject("size", pagesize);
 
-            // 페이지네이션 데이터 추가
-            mnv.addObject("startpage", result.getStartpage());
-            mnv.addObject("endpage", result.getEndpage());
-            mnv.addObject("maxpage", result.getMaxpage());
-            mnv.addObject("totalcount", totalcount);
-            mnv.addObject("pagesize", pagesize);
-            mnv.addObject("page", page); // 현재 페이지 번호
+        // 페이지네이션 데이터 추가
+        mnv.addObject("startpage", result.getStartpage());
+        mnv.addObject("endpage", result.getEndpage());
+        mnv.addObject("maxpage", result.getMaxpage());
+        mnv.addObject("totalcount", totalcount);
+        mnv.addObject("pagesize", pagesize);
+        mnv.addObject("page", page);
+        mnv.addObject("n", page);  // 템플릿에서 사용하는 변수명 맞추기
 
         return mnv;
-    }
-
-
-    //구매자 검색
-    @GetMapping(value = "/buyerSearch")
-    public ModelAndView getBuyerSearch(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "30") int limit,
-            ModelAndView mv,
-            @RequestParam(defaultValue = "") String search){
-
-        int searchlistcount =  sellerService.getSearchListCount(search);
-        List<Seller> buyList = sellerService.getSearchList(search,page,limit);
-        PaginationResult result = new PaginationResult(page,limit,searchlistcount);
-
-        mv.setViewName("seller/sellerBuyerList");
-        mv.addObject("page",page);
-        mv.addObject("maxpage",result.getMaxpage());
-        mv.addObject("startpage",result.getStartpage());
-        mv.addObject("endpage",result.getEndpage());
-        mv.addObject("buyList", buyList);
-        mv.addObject("limit",limit);
-        mv.addObject("searchlistcount",searchlistcount);
-        return mv;
     }
 
 }

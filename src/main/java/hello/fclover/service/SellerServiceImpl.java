@@ -52,7 +52,6 @@ public class SellerServiceImpl implements SellerService {
         params.put("searchWord", searchWord);
         params.put("pageSize", pageSize);  // 페이지 크기 반영
         params.put("offset", (page - 1) * pageSize);  // 페이지네이션 적용
-
         return dao.getListDetail(params);
     }
 
