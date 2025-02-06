@@ -130,9 +130,9 @@ public class SearchController {
                 .collect(Collectors.toList())
                 : new ArrayList<>();
 
-        // 기준 시각 (예: 현재 시각)을 "MM.DD.HH:mm" 형식으로 포맷
-        // (day-of-month는 소문자 dd를 사용합니다. 예: "03.15.14:30")
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd.HH:mm");
+        // 기준 시각 (예: 현재 시각)을 "yyyy.MM.DD.HH:mm" 형식으로 포맷
+        // (day-of-month는 소문자 dd를 사용합니다. 예: "2025.03.15.14:30")
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm");
         LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
         String baseTime = now.format(formatter);
 

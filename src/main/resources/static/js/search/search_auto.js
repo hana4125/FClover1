@@ -534,12 +534,12 @@ function riseCall(age,gender) {
       addHtml  +="                                <select title='연령기준 정렬' id='ageSel'>";
       addHtml  +="                                    <option value='ALL'>전연령</option>";
       const ageRange = ['10대', '20대', '30대', '40대']
-      for(let range in ageRange){
+      for(let range of ageRange){
         let selected = "";
         let upperChr = "";
-        if (i==age) selected = "selected";
-        if (i=='40대') upperChr ="↑"
-        addHtml  +="                                <option value='"+i+"' "+selected+">"+i+upperChr+"</option>";
+        if (range == age) selected = "selected";
+        if (range == '40대') upperChr ="↑"
+        addHtml  +="                                <option value='"+range+"' "+selected+">"+range+upperChr+"</option>";
       }
       addHtml  +="                                </select>";
       addHtml  +="                            </div>";
