@@ -2,6 +2,7 @@ package hello.fclover.controller;
 
 import hello.fclover.domain.Category;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.PopularKeywordResponseDTO;
 import hello.fclover.dto.SearchDetailParamDTO;
 import hello.fclover.dto.SearchParamDTO;
 import hello.fclover.dto.SearchResponseDTO;
@@ -11,6 +12,8 @@ import hello.fclover.service.SearchService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -105,9 +108,10 @@ public class SearchController {
         return ResponseEntity.ok(result);
     }
 
+    // 인기 검색어 조회 Ajax
     @GetMapping("/api/popular-keywords")
     @ResponseBody
-    public List<String> getPopularKeywords(
+    public PopularKeywordResponseDTO getPopularKeywords(
             @RequestParam(value = "gender", defaultValue = "ALL") String gender,
             @RequestParam(value = "ageRange", defaultValue = "ALL") String ageRange,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
@@ -117,12 +121,22 @@ public class SearchController {
 
         // Redis Sorted Set 에서 점수가 높은 순으로 상위 limit 개 항목 조회
         Set<ZSetOperations.TypedTuple<String>> resultSet = redisTemplate.opsForZSet()
-                .reverseRangeWithScores(redisKey, 0, limit - 1);
+                        .reverseRangeWithScores(redisKey, 0, limit - 1);
 
         // 조회 결과를 Keyword 리스트로 변환
-        return (resultSet != null) ? resultSet.stream()
+        List<String> keywords = (resultSet != null)
+                ? resultSet.stream()
                 .map(ZSetOperations.TypedTuple::getValue)
-                .collect(Collectors.toList()) : new ArrayList<>();
+                .collect(Collectors.toList())
+                : new ArrayList<>();
+
+        // 기준 시각 (예: 현재 시각)을 "MM.DD.HH:mm" 형식으로 포맷
+        // (day-of-month는 소문자 dd를 사용합니다. 예: "03.15.14:30")
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd.HH:mm");
+        LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
+        String baseTime = now.format(formatter);
+
+        return new PopularKeywordResponseDTO(keywords, baseTime);
     }
 
 

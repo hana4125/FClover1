@@ -36,7 +36,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
-    // TODO : 시간 측정 로직 AOP 로 적용하기
+    // TODO : 시간 측정 로그 AOP 로 적용하도록 수정하기
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
     private final CategoryMapper categoryMapper;
@@ -366,7 +366,13 @@ public class SearchServiceImpl implements SearchService {
             int age = Period.between(birthDate, today).getYears();
 
             int decade = (age / 10) * 10;
-            searchLogDTO.setMemberAgeRange(decade + "대");
+            if (decade < 10) {
+                searchLogDTO.setMemberAgeRange(null);
+            } else if (decade > 40) {
+                searchLogDTO.setMemberAgeRange("40대");
+            } else {
+                searchLogDTO.setMemberAgeRange(decade + "대");
+            }
 
 
             if(member.getGender().equals("male")) {
