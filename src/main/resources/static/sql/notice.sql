@@ -17,6 +17,9 @@ commit;
 ALTER TABLE notice
     ADD FULLTEXT (noti_title);
 
+DELETE FROM notice WHERE noti_no = 1;
+
+
 
 
 

@@ -68,12 +68,14 @@
 
     <div class="summary-container">
         <p class="order-count">
-            구매자<span class="to_green"> [[${totalOrders}]]</span>건
+            구매자<span class="to_green"> [[${searchlistcount}]]</span>건
         </p>
 
         <div class="pagination-controls">
-            <select id="itemsPerPage" th:attr="onchange='window.location.href=\'?size=\' + this.value'">
-                <option th:value="0" th:text="'전체'" th:selected="${size == 0}"></option>
+            <select id="itemsPerPage" th:onchange="|window.location.href='/seller/buyerList?search_word='
+                    + encodeURIComponent('[[${search_word}]]') + '&n=[[${n}]]&size=' + this.value|">
+
+            <option th:value="0" th:text="'전체'" th:selected="${size == 0}"></option>
                 <option th:value="5" th:text="'5'" th:selected="${size == 5}"></option>
                 <option th:value="10" th:text="'10'" th:selected="${size == 10}"></option>
                 <option th:value="20" th:text="'20'" th:selected="${size == 20}"></option>
@@ -94,28 +96,27 @@
             <th>도서명</th>
             <th>수량</th>
             <th>구매자</th>
-            <th>배송일자</th>
-            <th>배송완료일자</th>
+            <th>배송일</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="order : ${orderList}">
-            <td th:text="${order['no']}"></td>
-            <td th:text="${order['deliNo']}"></td>
-            <td th:text="${order['orderDate']}"></td>
-            <td th:text="${order['deliStatus']}"></td>
-            <td th:text="${order['goodsName']}"></td>
-            <td th:text="${order['quantity']}"></td>
-            <td th:text="${order['customerName']}"></td>
-            <td th:text="${order['deliveryDate']}"></td>
-            <td th:text="${order['completionDate']}"></td>
-        </tr>
-        </tbody>
-    </table>
+            <tbody>
+            <tr th:each="order : ${orderList}">
+                <td th:text="${order.no}"></td>
+                <td th:text="${order.deliNo}"></td>
+                <td th:text="${order.orderDate}"></td>
+                <td th:text="${order.deliStatus}"></td>
+                <td th:text="${order.goodsName}"></td>
+                <td th:text="${order.quantity}"></td>
+                <td th:text="${order.customerName}"></td>
+                <td th:text="${order.deliveryDate}"></td>
+            </tr>
+            </tbody>
+
+        </table>
     </div>
     <!-- 페이지네이션 -->
     <div style="text-align: center;">
-        <th:block th:replace="~{fragment/paging :: paging('/seller/buyerList', 'n=' + ${n} + '&search_word=' + (${search_word} ?: ''))}"/>
+        <th:block th:replace="~{fragment/paging :: paging('/seller/buyerList', 'page=' + ${page} + '&search_word=' + (${search_word} ?: ''))}"/>
     </div>
 </div>
 </body>

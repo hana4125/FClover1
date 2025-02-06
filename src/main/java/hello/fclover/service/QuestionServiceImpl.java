@@ -1,7 +1,6 @@
 package hello.fclover.service;
-
-
-
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import hello.fclover.domain.Question;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
@@ -12,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,9 +28,9 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionMapper dao;
     private final EmailService emailService;
     private final NoticeMapper noticeMapper;
-
-    @Value("${file.upload.directory}")
-    private String uploadDirectory;
+    private final AmazonS3 amazonS3;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     //게시글 개수 조회
     @Override
@@ -98,42 +95,20 @@ public class QuestionServiceImpl implements QuestionService {
 
     //파일 업로드
     @Override
-    public String saveUploadFile(MultipartFile uploadfile) throws Exception {
-        if (uploadfile.isEmpty()) {
-            return null;
-        }
+    public String saveFile(MultipartFile multipartFile) throws Exception {
 
-        File directory = new File(uploadDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
+        String originalFilename = multipartFile.getOriginalFilename();
+        String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
 
-        String originalFilename = uploadfile.getOriginalFilename(); //원본 파일명 가져오기
-        String fileExtension = getFileExtension(originalFilename);
-        String fileDBName = generateUniqueFileName(originalFilename);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
 
-        // 파일 저장
-        Path filePath = Paths.get(uploadDirectory, fileDBName);
-        Files.copy(uploadfile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        return fileDBName;
+        amazonS3.putObject(bucket, uniqueFileName, multipartFile.getInputStream(), metadata);
+        return amazonS3.getUrl(bucket, uniqueFileName).toString();
     }
 
-    /**  파일명 생성 (날짜 + 랜덤값) */
-    private String generateUniqueFileName(String fileExtension) {
-        LocalDateTime now = LocalDateTime.now();
-        return String.format("file_%s_%s.%s",
-                now.format(DateTimeFormatter.BASIC_ISO_DATE),
-                UUID.randomUUID().toString().substring(0, 8),
-                fileExtension);
-    }
 
-    /**  파일 확장자 가져오기 */
-    private String getFileExtension(String fileName) {
-        return Optional.ofNullable(fileName)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(fileName.lastIndexOf(".") + 1))
-                .orElse("");
-    }
 
     /**  현재 날짜 가져오기 */
     public int[] getCurrentDate() {
