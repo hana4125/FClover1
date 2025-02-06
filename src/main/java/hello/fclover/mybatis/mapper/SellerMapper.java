@@ -2,6 +2,7 @@ package hello.fclover.mybatis.mapper;
 
 
 import hello.fclover.domain.Seller;
+import hello.fclover.domain.Settlement;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

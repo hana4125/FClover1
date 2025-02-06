@@ -19,7 +19,7 @@ public class Payment {
 
 
     private Long paymentsNo;// 결제 ID
-    private Long partnerId;        // 파트너 ID (nullable)
+    private Long sellerId;        // 파트너 ID (nullable)
     private String userId;           // 사용자 ID
     private Long orderId;// 주문 ID
     private int quantity; //주문 수량
@@ -40,7 +40,7 @@ public class Payment {
 
     public static Payment save(PaymentReq paymentReq) {
         return Payment.builder()
-                .partnerId(paymentReq.getPartnerId())
+                .sellerId(paymentReq.getPartnerId())
                 .userId(paymentReq.getUserId())
                 .orderId(paymentReq.getOrderId())
                 .impUid(paymentReq.getImpUid())
