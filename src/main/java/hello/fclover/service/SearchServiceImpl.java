@@ -14,6 +14,7 @@ import hello.fclover.mybatis.mapper.GoodsMapper;
 import hello.fclover.mybatis.mapper.SearchLogMapper;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -376,6 +377,10 @@ public class SearchServiceImpl implements SearchService {
                 searchLogDTO.setMemberGender("N");
             }
         }
+
+        searchLogDTO.setSearchDatetime(LocalDateTime.now());
+
+        searchLogMapper.insertSearchLog(searchLogDTO);
     }
 
 }

@@ -10,7 +10,8 @@
       <if test="memberNo != null">member_no,</if>
       <if test="memberAgeRange != null">member_age_range,</if>
       <if test="memberGender != null">member_gender,</if>
-      session_id
+      session_id,
+      search_datetime
     </trim>
     VALUES
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -18,7 +19,8 @@
       <if test="memberNo != null">#{memberNo},</if>
       <if test="memberAgeRange != null">#{memberAgeRange},</if>
       <if test="memberGender != null">#{memberGender},</if>
-      #{sessionId}
+      #{sessionId},
+      #{searchDatetime}
     </trim>
   </insert>
 
