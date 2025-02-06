@@ -57,7 +57,7 @@ public class SellerController {
     public String addSingleProduct(Model model, Goods goods) {
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
-        return "sellerAddSingleProduct";
+        return "seller/sellerAddSingleProduct";
     }
 
     //단일 상품등록 프로세스
@@ -87,7 +87,7 @@ public class SellerController {
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
 
-        return "sellerProductDetail";
+        return "seller/sellerProductDetail";
     }
 
     @GetMapping("/main")

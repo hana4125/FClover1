@@ -373,6 +373,10 @@
                                     </a>
                                     <br>
                                     <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                                    <div class="prod_price">
+                                        <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
+                                        <span class="unit">원&nbsp;</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="icon ms-auto mb-4">
