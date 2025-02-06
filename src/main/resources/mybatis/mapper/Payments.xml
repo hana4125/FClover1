@@ -9,7 +9,7 @@
     </insert>
     <insert id="savePayment">
         INSERT INTO payments (seller_id, user_id, order_id, payment_amount, payment_quantity,goods_no,payment_date, imp_uid, payment_method, merchant_uid, pg_provider, pg_type, pg_tid, status, card_name, card_number, created_at, updated_at)
-        VALUES (#{partnerId}, #{userId}, #{orderId}, #{paymentAmount}, #{quantity}, #{goodsNo},#{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
+        VALUES (#{sellerId}, #{userId}, #{orderId}, #{paymentAmount}, #{quantity}, #{goodsNo},#{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
     </insert>
 
 
@@ -62,10 +62,10 @@
                  INNER JOIN goods g ON p.goods_no = g.goods_no
         WHERE p.user_id = #{userId}
     </select>
-    <select id="findByPaymentDateBetweenAndStatus" resultType="hello.fclover.domain.Payment">
-                SELECT * FROM payments
-                WHERE payment_date BETWEEN #{startDate} AND #{endDate}
-                AND status=#{paymentCompleted}
+    <select id="findByPaymentDateBetweenAndStatus">
+                SELECT payments_no,seller_id,user_id,order_id,payment_quantity,goods_no,payment_amount,imp_uid,payment_method,merchant_uid,pg_provider,pg_type,pg_tid,status,card_name,card_number,created_at,updated_at
+                FROM payments
+                WHERE payment_date BETWEEN #{startDate} AND #{endDate} AND status=#{paymentCompleted}
 
     </select>
     <select id="searchOneOrderDetail" resultType="hello.fclover.dto.PaymentGoodsDTO">

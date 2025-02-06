@@ -1,10 +1,7 @@
 package hello.fclover.controller;
 
 
-import hello.fclover.domain.Category;
-import hello.fclover.domain.Goods;
-import hello.fclover.domain.PaginationResult;
-import hello.fclover.domain.Seller;
+import hello.fclover.domain.*;
 import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -144,7 +141,13 @@ public class SellerController {
 
     //판매자 일정산 페이지
     @GetMapping("/sellerDaySettlement")
-    public String sellerDaySettlement() {
+    public String sellerDaySettlement(Principal principal, Model model) {
+
+        List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
+        model.addAttribute("daySettlement", daySettlement);
+        System.out.println("principal = " + principal.getName());
+        System.out.println("daySettlement = " + daySettlement);
+
         return "seller/sellerDaySettlement";
     }
 

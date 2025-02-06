@@ -29,6 +29,9 @@
         insert into settlements (seller_id,total_amount,status,payment_date,created_at,updated_at)
         values (#{partnerId},#{totalAmount},#{status},#{paymentDate},#{createdAt},#{updatedAt})
     </insert>
+    <select id="searchDaySettlement">
+        select * from settlements where seller_id=#{partnerId};
+    </select>
 
 
 
