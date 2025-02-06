@@ -17,7 +17,7 @@ public interface QuestionService {
     List<Question> BoardList(Integer currentPage, int limit);
     
     void insertQuestion(Question question);
-    String saveUploadFile(MultipartFile uploadfile) throws Exception;
+    String saveFile(MultipartFile multipartFile) throws Exception;
     Question Detail(int no);
 
     // 댓글 관련 기능

@@ -16,9 +16,12 @@ public interface SellerMapper {
 
     String isSellerIdDuplicate(String sellerId);
 
+
     List<Map<String, Object>> getListDetail(Map<String, Object> params);
+    int getListCount(String searchWord);
 
     int getSearchListCount(Map<String, Object> map);
-
     List<Seller> getSearchList(Map<String, Object> map);
+
+
 }
