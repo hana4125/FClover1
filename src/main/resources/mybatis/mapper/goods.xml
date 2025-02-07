@@ -41,28 +41,34 @@
 
 
   <select id="findByBestRank" resultType="hello.fclover.domain.Goods">
-    SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
+    SELECT ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
                     g.goods_no,
                     g.goods_name,
                     g.goods_writer
     FROM goods g
            LEFT JOIN stock s ON g.goods_no = s.goods_no
-           LEFT JOIN payments p ON p.goods_no = g.goods_no
-    WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+           JOIN (
+                SELECT DISTINCT goods_no
+                FROM payments
+                WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+           ) p ON g.goods_no = p.goods_no
     ORDER BY (s.initial_stock - s.product_stock) DESC
     LIMIT #{limit}
   </select>
 
 
   <select id="findBySteadyRank" resultType="hello.fclover.domain.Goods">
-    SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
+    SELECT ROW_NUMBER() OVER (ORDER BY (s.initial_stock - s.product_stock) DESC) AS rowNum,
                     g.goods_no,
                     g.goods_name,
                     g.goods_writer
     FROM goods g
            LEFT JOIN stock s ON g.goods_no = s.goods_no
-           LEFT JOIN payments p ON p.goods_no = g.goods_no
-    WHERE p.payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
+           JOIN (
+                SELECT DISTINCT goods_no
+                FROM payments
+                WHERE payment_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
+           ) p ON g.goods_no = p.goods_no
     ORDER BY (s.initial_stock - s.product_stock) DESC
     LIMIT #{limit}
   </select>
