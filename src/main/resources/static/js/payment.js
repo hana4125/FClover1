@@ -1,5 +1,9 @@
-// 구매자 정보
 
+//구매할 상품 정보
+var totalPrice = $(".totalPrice").text();
+var goodsName = $(".goodsName").text();
+var quantity = $(".quantity").text();
+var goodsNo = $(".goodsNo").val();
 
 // const useremail = "as02268@naver.com"
 const username=document.getElementById("username").innerText;
@@ -40,8 +44,8 @@ function paymentProcess() {
                 pg: 'nice.iamport00m',
                 pay_method: 'card', // 결제 방식
                 merchant_uid: "IMP" + generateMerchantUid(), // 결제 고유 번호
-                name: '상품명', // 제품명
-                amount: 1000, // 가격
+                name: goodsName, // 제품명
+                amount: totalPrice, // 가격
 
                 /* 구매자 정보 */
                 // buyer_email: `${useremail}`,
@@ -59,6 +63,8 @@ function paymentProcess() {
                     rsp.userId = `${username}`;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
                     rsp.orderId = "12341234" + generateMerchantUid();   // orderId 값 설정 (주문 관련 정보로 설정 가능)
                     rsp.paymentDate = new Date().toISOString().split('T')[0];  // paymentDate를 현재 날짜로 설정 (yyyy-mm-dd 형식)
+                    rsp.quantity = quantity;
+                    rsp.goodsNo = goodsNo;
 
                     console.log("=====>payment.js의 rsp : " +rsp);
                     // Send the payment details to your Spring Boot backend

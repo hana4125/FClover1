@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
+import hello.fclover.dto.PaymentGoodsDTO;
 import hello.fclover.mybatis.mapper.PaymentMapper;
 import hello.fclover.util.PaymentClient;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Payment> searchList(String userId) {
-        List<Payment> payments =  dao.searchList(userId);
+    public List<PaymentGoodsDTO> searchList(String userId) {
+        List<PaymentGoodsDTO> paymentGoodsList =  dao.searchList(userId);
 
-        return payments;
+        return paymentGoodsList;
     }
 
     @Transactional
@@ -100,5 +101,12 @@ public class PaymentServiceImpl implements PaymentService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public PaymentGoodsDTO searchOneOrderDetail(String userId, Long orderId) {
+        PaymentGoodsDTO paymentGoodsList =  dao.searchOneOrderDetail(userId,orderId);
+
+        return paymentGoodsList;
     }
 }

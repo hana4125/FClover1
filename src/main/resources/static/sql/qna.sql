@@ -16,17 +16,13 @@ CREATE TABLE qna(
     PRIMARY KEY (q_no)
 );
 
-commit;
-
-
-DROP TABLE qna;
-
 select * from qna;
 
 ALTER TABLE qna MODIFY COLUMN q_alert ENUM('y', 'n');
 
 
-
-
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE qna;
+SET FOREIGN_KEY_CHECKS = 1;
 
 

@@ -199,7 +199,43 @@
       <artifactId>spring-security-oauth2-client</artifactId>
       <version>6.2.4</version>
     </dependency>
+
+    <!-- redis -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-cache</artifactId>
+    </dependency>
+
+<!--     Spring Boot Starter Data Redis -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+<!--     Spring Data Redis -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-redis</artifactId>
+    </dependency>
+
+    <!-- Spring Data Redis Starter -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+      <version>3.2.5</version>
+    </dependency>
+    
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-common</artifactId>
+        <version>4.1.117.Final</version> <!-- 최신 버전으로 변경 -->
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>

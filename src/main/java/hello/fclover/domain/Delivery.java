@@ -13,12 +13,13 @@ import java.time.LocalDateTime;
 public class Delivery {
 
     private Long deliNo;
-    private Long orderId;
-    private String userId;
+    private Long paymentsNo;
+    private int invenGoodsNo;
+    private String deliType;
+    private int deliQuan;
+    private String deliContent;
+    private LocalDateTime deliDate;
+    private String deliCusName;
     private String deliStatus;
-    private int deliNum;
-    private String deliCompany;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
 }

@@ -11,6 +11,7 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
+    <link rel="stylesheet" href="/css/user/category.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -26,15 +27,19 @@
             })
 
             $(".category-item").click(function () {
-                location.href = "/member/category/{no}";
+                location.href = "/goods/category/{no}";
             })
 
             $(".best").click(function () {
-                location.href = "/member/bestSeller";
+                location.href = "/goods/bestSeller";
+            })
+
+            $(".steady").click(function () {
+                location.href = "/goods/steadySeller";
             })
 
             $(".new").click(function () {
-                location.href = "/member/newItems";
+                location.href = "/goods/newItems";
             })
 
             $(".show-detail").click(function () {
@@ -262,18 +267,7 @@
 </div>
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
-    <h4 class="text-center">카테고리</h4><br>
-    <div class="category-list">
-        <ul class="list-unstyled">
-            <!-- categoryList의 각 요소를 반복하여 출력 -->
-            <li th:each="category : ${categoryList}">
-                <!-- 카테고리 이름 출력 -->
-                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
-                   th:text="${category.cateName}"
-                   class="category-item"></a>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="~{fragment/category :: category}"></div>
 </div>
 
 <div class="container w-75 mt-5">
@@ -357,22 +351,22 @@
                 </div>
             </div>
             <!-- 전체 선택 체크박스 -->
-                        <input type="checkbox" id="selectAll" class="all-checkbox me-1"
-                               style="width: 20px; height: 20px; vertical-align: middle;">
-                        <label for="selectAll" style="vertical-align: middle;">전체 선택</label>
+<!--                        <input type="checkbox" id="selectAll" class="all-checkbox me-1"-->
+<!--                               style="width: 20px; height: 20px; vertical-align: middle;">-->
+<!--                        <label for="selectAll" style="vertical-align: middle;">전체 선택</label>-->
             <div class="book-items mt-4">
                 <ul class="list-unstyled">
                     <li th:each="goods : ${goodsList}">
                         <div class="category-list d-flex align-items-start mb-5">
-                            <input type="checkbox" class="item-checkbox mt-1 ms-1"
-                                   style="width: 18px; height: 18px;">
+<!--                            <input type="checkbox" class="item-checkbox mt-1 ms-1"-->
+<!--                                   style="width: 18px; height: 18px;">-->
                             <div class="book-item mt-1">
                                 <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                                 <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                    class="show-detail">
                                     <div class="img-box">
                                         <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                                        : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
+                                        : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
                                     </div>
                                 </a>
                                 <div class="item-info">
@@ -383,6 +377,10 @@
                                     </a>
                                     <br>
                                     <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                                    <div class="prod_price">
+                                        <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
+                                        <span class="unit">원&nbsp;</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="icon ms-auto mb-4">

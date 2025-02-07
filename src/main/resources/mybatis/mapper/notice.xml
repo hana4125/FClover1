@@ -14,7 +14,7 @@
                noti_Name as notiName,
                noti_Content as notiContent,
                noti_Date as notiDate
-        FROM NOTICE
+        FROM notice
         ORDER BY noti_Date DESC
             LIMIT #{start}, #{limit}
     </select>
@@ -39,32 +39,39 @@
                noti_Name as notiName,
                noti_Content as notiContent,
                noti_Date as notiDate
-        FROM NOTICE
+        FROM notice
         WHERE noti_No = #{num}
     </select>
 
     <select id="getSearchList" parameterType="map" resultType="hello.fclover.domain.Notice">
         SELECT noti_No as notiNo,
-               noti_Title as notiTitle,
-               noti_Name as notiName,
-               noti_Content as notiContent,
-               noti_Date as notiDate
-        FROM NOTICE
-        WHERE noti_Title LIKE  #{search_word}
+        noti_Title as notiTitle,
+        noti_Name as notiName,
+        noti_Content as notiContent,
+        noti_Date as notiDate
+        FROM notice
+        <where>
+            <if test="search_word != null and search_word != ''">
+                MATCH(noti_Title) AGAINST(#{search_word} IN BOOLEAN MODE)
+            </if>
+        </where>
         ORDER BY noti_Date DESC
-            LIMIT #{start}, #{size}
+        LIMIT #{start}, #{size}
     </select>
+
 
 
     <select id="getSearchListCount" resultType="int">
-        select  count(*)
-        from notice
+        SELECT COUNT(*)
+        FROM notice
         <where>
             <if test="search_word != null and search_word != ''">
-                noti_title LIKE #{search_word}
+                MATCH(noti_Title) AGAINST(#{search_word} IN BOOLEAN MODE)
             </if>
         </where>
     </select>
+
+
 
     <delete id="deleteNotice" parameterType="int">
         <if test="_parameter != null">

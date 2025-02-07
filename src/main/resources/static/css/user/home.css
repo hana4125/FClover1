@@ -62,13 +62,8 @@
 
 .best-title,
 .steady-title {
-    cursor: pointer;
-    color: gray;
-}
-
-.best-title.active,
-.steady-title.active {
-    color: black;
+    font-size: 2em;
+    text-align: left;
     font-weight: bold;
 }
 
@@ -100,16 +95,17 @@
     margin-bottom: 20px;    /* 아래쪽 간격 추가 */
 }
 
-.show-plus {
+.show-plus-best,
+.show-plus-steady {
     margin-left: auto;
     text-decoration: none;
     font-weight: bold;
     font-size: 18px;
-    margin-top: -25px;
     color: #333;
 }
 
-.show-plus:hover {
+.show-plus-best:hover,
+.show-plus-steady:hover {
     color: #007bff;
 }
 

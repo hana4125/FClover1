@@ -14,7 +14,7 @@ function deleteNotice(notino) {
 			.then(response => {
 				if (response.ok) {
 					alert('삭제되었습니다.');
-					window.location.href = '/inquiry/notice/noti_list';
+					window.location.href = '/inquiry/noti_list';
 				} else {
 					alert('삭제 실패했습니다.');
 				}

@@ -8,6 +8,7 @@
   <script src="/js/jquery-3.7.1.js"></script>
   <script src="/js/qna_date.js"></script>
   <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
   <link rel="stylesheet" href="/css/user/notice.css">
   <link rel="stylesheet" href="/css/user/qna.css">
   <link rel="stylesheet" href="/css/user/pagination.css">
@@ -132,28 +133,20 @@
               <div class="form_cont">
                 <div class="date_picker_box">
                   <!-- form_sel -->
-                  <select class="period-select" id="period-select">
+                  <select class="period-select" id="period-select" name="term">
+                    <option value="all">전체</option>
                     <option value="1">최근 1개월</option>
-                    <option value="2">최근 2개월</option>
                     <option value="3">최근 3개월</option>
                     <option value="6">최근 6개월</option>
                     <option value="0">직접입력</option>
                   </select>
                   <div class="date-picker-container">
                     <div class="date-picker-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                      <span class="selected-date"></span>
-                      <input type="date" class="date-input start-date" style="display: none;">
-                      <button class="calendar-btn start-calendar-btn" style="margin-left: auto;">
-                        <img src="/images/user/calendar.png" alt="시작일 선택">
-                      </button>
+                      <input type="date" class="date-input start-date">
                     </div>
                     <span class="gap">~</span>
                     <div class="date-picker-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                      <span class="selected-date"></span>
-                      <input type="date" class="date-input end-date" style="display: none;">
-                      <button class="calendar-btn end-calendar-btn" style="margin-left: auto;">
-                        <img src="/images/user/calendar.png" alt="종료일 선택">
-                      </button>
+                        <input type="date" class="date-input end-date">
                     </div>
                   </div>
                 </div>
@@ -180,17 +173,6 @@
               <span class="ct_green">[[${totalcount}]]</span>건
             </p>
 
-            <th:block th:if="${listcount > 0}">
-              <div class="rows" style="width: 110px;">
-                <select class="form-control" id="viewcount" th:onchange="filterData()">
-                  <option value="전체" selected>1</option>
-                  <option value="공지사항">3</option>
-                  <option value="이벤트">5</option>
-                  <option value="이벤트">7</option>
-                  <option value="이벤트">10</option>
-                </select>
-              </div>
-            </th:block>
 
           </div>
 
@@ -231,9 +213,11 @@
           </table>
 
         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+          <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">
             <a th:href="@{/inquiry/question/write}">
               <button type="button" class="btn btn-primary" style="width:93px; height: 36px; font-size: 13px;">문의하기</button>
             </a>
+          </th:block>
         </div>
 
         <!--pagination-->

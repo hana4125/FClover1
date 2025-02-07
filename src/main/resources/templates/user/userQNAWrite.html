@@ -26,7 +26,7 @@
         location.href="/myPage";
       })
 
-      const fileDOM = document.querySelector('#uploadfile');
+      const fileDOM = document.querySelector('#qnaImage');
       const preview = document.querySelector('#attach_img');
 
       fileDOM.addEventListener('change', () => {
@@ -171,7 +171,7 @@
                     <div class="w_full">
                       <div class="col_box">
                       <div class="form-group mt-2">
-                        <input name="qtitle" id="InquiryTitle" type="text" maxlength="20"
+                        <input name="qtitle" id="InquiryTitle" type="text" maxlength="30"
                                class="form-control" placeholder="제목을 입력해 주세요.">
                       </div>
                       </div>
@@ -198,7 +198,7 @@
                           <img src="" id="attach_img">
                         </span>
 <!--                        <button class="btn_remove_img" type="button"></button>-->
-                        <input type="file" name="uploadfile" id="uploadfile" style="display: none">
+                        <input type="file" name="qnaImage" id="qnaImage" style="display: none">
                       </span>
                     </span>
                     </label>
@@ -213,6 +213,7 @@
           </tbody>
          </table>
             <hr class="hr-divider">
+
             <!--답변 알림-->
             <div class="tbl_row_wrap">
               <div class="title_size_sm">
@@ -232,7 +233,7 @@
                   <td>
                     <div class="form_cont">
                       <div class="vaild_check">
-                        <input id="InqPhoneNumber" name="phone" maxlength="20" placeholder="휴대폰 번호를 입력해 주세요.">
+                        <input id="InqPhoneNumber" name="responsephone" maxlength="20" placeholder="휴대폰 번호를 입력해 주세요.">
                       </div>
                     </div>
                   </td>
@@ -243,11 +244,10 @@
                   </th>
                   <td>
                     <div class="valid_check">
-                      <input id="InqEmail" name="email" maxlength="100" placeholder="이메일을 입력해 주세요.">
+                      <input id="InqEmail" name="responseemail" maxlength="100" placeholder="이메일을 입력해 주세요.">
                     </div>
                     <span class="form_chk">
-                      <input type="checkbox" id="alert" name="alert" value="true">
-                      <input type="hidden" name="alert" value="false">
+                      <input type="checkbox" id="alert" name="qalert" value="1">
                       <label for="alert"><span>답변알림 요청</span></label>
                     </span>
                   </td>

@@ -21,6 +21,8 @@
 
 
 
+
+
   <!-- Custom fonts for this template-->
   <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link
@@ -54,7 +56,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-      <a class="nav-link" href="boMain.html">
+      <a class="nav-link" href="/bo/main">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>
@@ -74,7 +76,7 @@
         <div class="bg-white py-2 collapse-inner rounded">
           <a class="collapse-item" href="/bo/info">판매자 정보 조회</a>
           <a class="collapse-item" href="/bo/goodsApproval">판매자 상품등록 승인/거절</a>
-
+          <a class="collapse-item" href="/bo/sellerApproval">판매자 가입 승인/거절</a>
         </div>
       </div>
 
@@ -219,19 +221,16 @@
         <table id="paymentTable" class="display" style="width:100%">
           <thead>
           <tr>
-            <th>ID</th>
+            <th>SELLER NO</th>
             <th>SELLER ID</th>
-            <th>SELLER PASS</th>
             <th>SELLER NAME</th>
             <th>SELLER EMAIL</th>
             <th>SELLER PHONE</th>
             <th>SELLER NUMBER</th>
             <th>COMPANY NAME</th>
             <th>ADMISSION AT</th>
-            <th>SELLER BIRTH</th>
-            <th>SELLER GENDER</th>
-            <th>CREATED AT</th>
             <th>UPDATED AT</th>
+            <th>PERMISSION</th>
 <!--            <th>Actions</th> &lt;!&ndash; 결제 취소 버튼을 위한 열 추가 &ndash;&gt;-->
           </tr>
           </thead>
@@ -272,19 +271,16 @@
                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
               },
               "columns": [
-                { "data": "id" },
+                { "data": "sellerNo" },
                 { "data": "sellerId" },
-                { "data": "sellerPass" },
-                { "data": "sellerName" },
-                { "data": "sellerEmail" },
-                { "data": "sellerPhone" },
-                { "data": "sellerNumber" },
+                { "data": "name" },
+                { "data": "email" },
+                { "data": "phoneNumber" },
+                { "data": "businessNumber" },
                 { "data": "companyName" },
                 { "data": "admissionAt" },
-                { "data": "sellerBirth" },
-                { "data": "sellerGender" },
-                { "data": "createAt" },
-                { "data": "updatedAt" }
+                { "data": "updatedAt" },
+                { "data": "permission" }
 
               ]
             });
@@ -332,7 +328,7 @@
       <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" href="login.html">Logout</a>
+        <a class="btn btn-primary" href="/bo/logout">Logout</a>
       </div>
     </div>
   </div>
@@ -354,7 +350,6 @@
 <!-- Page level custom scripts -->
 <script src="/js/demo/chart-area-demo.js"></script>
 <script src="/js/demo/chart-pie-demo.js"></script>
-
 </body>
 
 </html>

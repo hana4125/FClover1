@@ -13,10 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentReq {
-    private Long partnerId;
+    private Long partnerId; //sellerNo
     private String userId;
     private Long orderId;
     private LocalDate paymentDate;
+    private int quantity;
+    private Long goodsNo;
 
     @JsonProperty("imp_uid")
     private String impUid;       // imp_uid

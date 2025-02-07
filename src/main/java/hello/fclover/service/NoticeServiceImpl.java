@@ -31,10 +31,6 @@ public class NoticeServiceImpl implements NoticeService {
         map.put("start", startrow);
         map.put("limit", limit);
 
-        log.info("getBoardList - start: {}, limit: {}", map.get("start"), map.get("limit"));
-        List<Notice> resultList = dao.getBoardList(map);
-        log.info("Result from dao.getBoardList: {}", resultList);
-
         return dao.getBoardList(map);
     }
 
@@ -58,24 +54,35 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public int getSearchListCount( String search_word) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    public int getSearchListCount(String search_word) {
+        Map<String, Object> map = new HashMap<>();
 
-            map.put("search_word",  "%"+ search_word + "%");
+        // 검색어가 없으면 전체 개수 반환
+        if (search_word == null || search_word.trim().isEmpty()) {
+            map.put("search_word", null);
+        } else {
+            map.put("search_word", search_word);
+        }
 
         return dao.getSearchListCount(map);
     }
 
     @Override
-    public List<Notice> getSearchList( String search_word, int page, int limit) {
+    public List<Notice> getSearchList(String search_word, int page, int limit) {
+        Map<String, Object> map = new HashMap<>();
 
-        Map<String, Object> map = new HashMap<String, Object>();
-            map.put("search_word",  "%"+ search_word + "%");
-            map.put("start", (page - 1) * limit);
-            map.put("size", limit);
+        if (search_word == null || search_word.trim().isEmpty()) {
+            map.put("search_word", null);
+        } else {
+            map.put("search_word", search_word);
+        }
+
+        map.put("start", (page - 1) * limit);
+        map.put("size", limit);
 
         return dao.getSearchList(map);
     }
+
 
     @Override
     public int deleteNotice(int notino) {

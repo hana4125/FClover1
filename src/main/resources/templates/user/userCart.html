@@ -57,6 +57,22 @@
           $("#shopping").click(function () {
               location.href = "/";
           });
+        $("#order").click(function () {
+          // var goodsNo = document.querySelector(".goodsNo").value;
+          // var goodsName = document.querySelector(".goodsName").value;
+          // var goodsPrice = document.querySelector(".goodsPrice").value;
+          // var goodsWriter = document.querySelector(".goodsWriter").value;
+          // var quantity = $("#prdNum10").val();  // 수량 가져오기
+          //
+          //
+          // // URL에 값 붙여서 이동
+          // location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+          //         "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+          //         "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+          //         "&quantity=" + encodeURIComponent(quantity) +
+          //         "&goodsNo=" +   encodeURIComponent(goodsNo) ;
+
+        });
 
           function updateTotalPrice(counter) {
               let countInput = counter.find('.count');
@@ -111,8 +127,6 @@
               let cartItemDiv = $(this).closest("[data-cart-no]"); // 해당 상품 div
               let cartNo = cartItemDiv.data("cart-no"); // cartNo 가져오기
 
-              console.log("삭제된 상품 cartNo:", cartNo); // 콘솔에 출력
-
               cartItemDiv.remove(); // UI에서 상품 제거
               updateTotalAmount(); // 삭제 후 총액 및 총 수량 업데이트
 
@@ -135,11 +149,12 @@
   </script>
 </head>
 <body>
+
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="mt-4 border-top">
   <div class="container w-75 mt-5 d-flex">
     <div style="width: 75%; height: 300vh">
-      <h3 style="font-weight: bold">장바구니(<span th:text="${cartItems.size()}"></span>)</h3>
+      <h3 style="font-weight: bold">장바구니</h3>
       <hr>
       <th:block th:if="${cartItems.size() == 0}">
         <div style="height: 300px;" class="text-center">
@@ -151,18 +166,28 @@
       </th:block>
       <th:block th:unless="${cartItems.size() == 0}">
         <div th:each="cartItem : ${cartItems}" th:data-cart-no="${cartItem.cartNo}">
+<!--          <input type="hidden" class="goodsNo" th:value="${cartItems.goodsNo}">-->
+<!--          <input type="hidden" class="goodsName" th:value="${cartItems.goodsName}">-->
+<!--          <input type="hidden" class="goodsPrice" th:value="${cartItems.goodsPrice}">-->
+<!--          <input type="hidden" class="goodsWriter" th:value="${cartItems.goodsWriter}">-->
           <div class="border-top border-bottom border-1 border-secondary">
             <div style="height: 200px;" class="d-flex">
               <div style="width: 60%;" class="d-flex">
+                <div class="mt-3 ms-2">
+                  <label>
+                    <input type="checkbox" class="checkboxCart" th:value="${cartItem.goodsNo}">
+                  </label>
+                </div>
                 <div class="d-flex align-items-center">
                   <div class="imageBox ms-2">
-                    <img th:src="${cartItem.mainImage != null ? cartItem.mainImage.goodsUrl + '/' + cartItem.mainImage.goodsImageName : '/images/user/book/item1.png'}" width="130px" height="180px" alt="상품이미지"/>
+                    <a th:href="@{/goods/GoodsDetail/{no}(no=${cartItem.goodsNo})}">
+                      <img th:src="${cartItem.mainImage != null ? cartItem.mainImage.goodsUrl + '/' + cartItem.mainImage.goodsImageName : '/images/user/book/item1.png'}" width="130px" height="180px" alt="상품이미지"/>
+                    </a>
                   </div>
                 </div>
                 <div class="mt-3 ms-2">
                   <div class="mb-2">
-                    <span class="fw-bold">[도서] </span><span th:text="${cartItem.goodsName}"
-                                                            class="fw-bold">제목</span><br>
+                    <span class="fw-bold">[도서] </span><span th:text="${cartItem.goodsName}" class="fw-bold">제목</span><br>
                   </div>
                   <div>
                     <span th:text="${#numbers.formatInteger(cartItem.goodsPrice, 0, 'COMMA')}" class="fw-bold">가격</span><span>원</span>
@@ -214,7 +239,7 @@
           <p>결제 예정 금액</p>
           <span class="total-payment">0원</span>
         </div>
-        <button class="btn btn-primary form-control mt-3 order-btn">주문하기(0)</button>
+        <button id="order" class="btn btn-primary form-control mt-3 order-btn">주문하기(0)</button>
       </div>
     </div>
   </div>

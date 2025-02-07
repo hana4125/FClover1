@@ -8,8 +8,8 @@
 
     </insert>
     <insert id="savePayment">
-        INSERT INTO payments (seller_id, user_id, order_id, payment_amount, payment_date, imp_uid, payment_method, merchant_uid, pg_provider, pg_type, pg_tid, status, card_name, card_number, created_at, updated_at)
-        VALUES (#{partnerId}, #{userId}, #{orderId}, #{paymentAmount}, #{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
+        INSERT INTO payments (seller_id, user_id, order_id, payment_amount, payment_quantity,goods_no,payment_date, imp_uid, payment_method, merchant_uid, pg_provider, pg_type, pg_tid, status, card_name, card_number, created_at, updated_at)
+        VALUES (#{sellerNo}, #{userId}, #{orderId}, #{paymentAmount}, #{quantity}, #{goodsNo},#{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
     </insert>
 
 
@@ -18,14 +18,98 @@
     </select>
 
 
-    <select id="searchList" resultType="hello.fclover.domain.Payment">
-            SELECT * FROM payments
-           WHERE user_id=#{userId}
-    </select>
-    <select id="findByPaymentDateBetweenAndStatus" resultType="hello.fclover.domain.Payment">
-                SELECT * FROM payments
-                WHERE payment_date BETWEEN #{startDate} AND #{endDate}
-                AND status=#{paymentCompleted}
+    <select id="searchList" resultType="hello.fclover.dto.PaymentGoodsDTO">
+        SELECT
+            p.payments_no,
+            p.seller_id,
+            p.user_id,
+            p.order_id,
+            p.payment_quantity,
+            p.goods_no,
+            p.payment_amount,
+            p.payment_date,
+            p.imp_uid,
+            p.payment_method,
+            p.merchant_uid,
+            p.pg_provider,
+            p.pg_type,
+            p.pg_tid,
+            p.status,
+            p.card_name,
+            p.card_number,
+            p.created_at,
+            p.updated_at,
 
+            g.seller_no,
+            g.cate_no,
+            g.goods_name,
+            g.goods_content,
+            g.goods_price,
+            g.goods_writer,
+#             g.company_name,
+            g.writer_content,
+            g.goods_create_at,
+            g.goods_date,
+            g.goods_pagecount,
+            g.goods_booksize,
+            g.update_at,
+#             g.cate_name,
+#             g.wish_status,
+#             g.row_num,
+#             g.main_image,
+            g.permission
+        FROM payments p
+                 INNER JOIN goods g ON p.goods_no = g.goods_no
+        WHERE p.user_id = #{userId}
+    </select>
+    <select id="findByPaymentDateBetweenAndStatus">
+                SELECT payments_no,seller_id,user_id,order_id,payment_quantity,goods_no,payment_amount,imp_uid,payment_method,merchant_uid,pg_provider,pg_type,pg_tid,status,card_name,card_number,created_at,updated_at
+                FROM payments
+                WHERE payment_date BETWEEN #{startDate} AND #{endDate} AND status=#{paymentCompleted}
+
+    </select>
+    <select id="searchOneOrderDetail" resultType="hello.fclover.dto.PaymentGoodsDTO">
+        SELECT
+            p.payments_no,
+            p.seller_id,
+            p.user_id,
+            p.order_id,
+            p.payment_quantity,
+            p.goods_no,
+            p.payment_amount,
+            p.payment_date,
+            p.imp_uid,
+            p.payment_method,
+            p.merchant_uid,
+            p.pg_provider,
+            p.pg_type,
+            p.pg_tid,
+            p.status,
+            p.card_name,
+            p.card_number,
+            p.created_at,
+            p.updated_at,
+
+            g.seller_no,
+            g.cate_no,
+            g.goods_name,
+            g.goods_content,
+            g.goods_price,
+            g.goods_writer,
+#             g.company_name,
+            g.writer_content,
+            g.goods_create_at,
+            g.goods_date,
+            g.goods_pagecount,
+            g.goods_booksize,
+            g.update_at,
+#             g.cate_name,
+#             g.wish_status,
+#             g.row_num,
+#             g.main_image,
+            g.permission
+        FROM payments p
+                 INNER JOIN goods g ON p.goods_no = g.goods_no
+        WHERE p.user_id = #{userId} and p.order_id = #{orderId}
     </select>
 </mapper>
