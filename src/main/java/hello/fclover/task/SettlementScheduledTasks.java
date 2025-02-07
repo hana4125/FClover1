@@ -81,7 +81,7 @@ public class SettlementScheduledTasks {
 
         return paymentList.stream()
                 .collect(Collectors.groupingBy(
-                        Payment::getSellerId,
+                        Payment::getSellerNo,
                         Collectors.reducing(
                                 BigDecimal.ZERO,
                                 Payment::getPaymentAmount,

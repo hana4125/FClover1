@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentReq {
-    private Long partnerId;
+    private Long partnerId; //sellerNo
     private String userId;
     private Long orderId;
     private LocalDate paymentDate;
