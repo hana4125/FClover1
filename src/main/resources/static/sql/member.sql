@@ -42,4 +42,31 @@ FROM payments p
          LEFT JOIN member m ON p.user_id = m.member_id;
 
 
+SELECT
+    ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+    p.payments_no AS orderNo,
+    p.payment_date AS orderDate,
+    d.deli_status AS deliStatus,
+    g.GOODS_NAME AS goodsName,
+    d.deli_quan AS quantity,
+    m.member_id AS customerName,
+    d.deli_date AS deliveryDate
+FROM payments p
+         LEFT JOIN delivery d ON p.payments_no = d.payments_no
+         LEFT JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+         LEFT JOIN member m ON p.user_id = m.member_id
+    ORDER BY p.payment_date DESC;
 
+
+
+SELECT
+    ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+    p.payments_no AS orderNo,
+    p.payment_date AS orderDate,
+    d.deli_status AS deliStatus,
+    d.deli_quan AS quantity,
+    d.deli_date AS deliveryDate
+FROM payments p
+          JOIN delivery d ON p.payments_no = d.payments_no
+
+ORDER BY p.payment_date DESC

@@ -1,20 +1,20 @@
-function deleteNotice(notino) {
+function deleteQuestion(qno) {
 	if (confirm('정말 삭제하시겠습니까?')) {
 		const token = document.querySelector('meta[name="_csrf"]').content;
 		const header = document.querySelector('meta[name="_csrf_header"]').content;
 
-		fetch('/inquiry/notice/delete', {
+		fetch('/inquiry/question/delete', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				[header]: token
 			},
-			body: JSON.stringify({ num: notino })
+			body: JSON.stringify({ num: qno })
 		})
 			.then(response => {
 				if (response.ok) {
 					alert('삭제되었습니다.');
-					window.location.href = '/inquiry/noti_list';
+					window.location.href = '/inquiry/question';
 				} else {
 					alert('삭제 실패했습니다.');
 				}
