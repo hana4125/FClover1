@@ -66,15 +66,15 @@
             <select id="itemsPerPage" th:onchange="|window.location.href='/seller/buyerList?search_word='
                     + encodeURIComponent('[[${search_word}]]') + '&n=[[${n}]]&size=' + this.value|">
 
-                <option th:value="0" th:text="'전체'" th:selected="${size == 0}"></option>
-                <option th:value="5" th:text="'5'" th:selected="${size == 5}"></option>
-                <option th:value="10" th:text="'10'" th:selected="${size == 10}"></option>
-                <option th:value="20" th:text="'20'" th:selected="${size == 20}"></option>
+                <option th:value="all">전체</option>
+                <option th:value="deliNo">주문번호</option>
+                <option th:value="goodsName">도서명</option>
+                <option th:value="customerName">구매자ID</option>
             </select>
         </div>
 
         <form method="get" action="/seller/buyerList">
-            <input type="text" name="search_word" placeholder="검색어 입력">
+            <input type="text" name="search_word" placeholder="검색어 입력하세요">
             <button type="submit">검색</button>
         </form>
     </div>
