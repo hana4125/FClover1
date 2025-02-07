@@ -18,15 +18,6 @@ drop table delivery;
 
 select * from delivery;
 
-insert into delivery values
-(4,5,1, null,1,
- null, now(),null,'배송완료');
 
-insert into delivery values
-    (5,6,1, null,1,
-     null, now(),null,'배송6');
 
-insert into delivery values
-    (6,7,1, null,1,
-     null, now(),null,'배송7');
 

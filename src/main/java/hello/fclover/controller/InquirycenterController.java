@@ -132,22 +132,16 @@ public class InquirycenterController {
         // 관리자 권한 체크
         if (!principal.getName().equals("admin")) {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
-            return "redirect:/inquiry/notice/detail?num=" + notino;
+            return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
-
-        System.out.println("Delete Request - notino: " + notino);
-        System.out.println("Current User: " + principal.getName());
-
         int result = noticeService.deleteNotice(notino);
-
-        System.out.println("Delete Result: " + result);
-
         if (result > 0) {
             rattr.addFlashAttribute("successMessage", "공지사항이 삭제되었습니다.");
+            log.info("Redirecting to path: /inquiry/notice/noti_list");
             return "redirect:/inquiry/notice/noti_list";
         } else {
             rattr.addFlashAttribute("errorMessage", "삭제 실패");
-            return "redirect:/inquiry/notice/detail?num=" + notino;
+            return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
     }
 
