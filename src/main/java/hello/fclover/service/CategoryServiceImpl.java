@@ -26,10 +26,10 @@ public class CategoryServiceImpl implements CategoryService {
         long totalCountTime = countEndTime - countStartTime;
         log.info("카테고리 가져오기 소요 시간: {} ms", totalCountTime);
         return result;
-
     }
 
     @Override
+    @Cacheable(value = "CategoryMapper.findTitle")
     public Category getCategoryByNo(int cateNo) {
         return categoryMapper.findTitle(cateNo);
     }
