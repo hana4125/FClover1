@@ -218,7 +218,24 @@
       <artifactId>spring-data-redis</artifactId>
     </dependency>
 
+    <!-- Spring Data Redis Starter -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+      <version>3.2.5</version>
+    </dependency>
+    
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-common</artifactId>
+        <version>4.1.117.Final</version> <!-- 최신 버전으로 변경 -->
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>

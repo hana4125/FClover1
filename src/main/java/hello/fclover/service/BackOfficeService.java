@@ -11,7 +11,7 @@ public interface BackOfficeService {
 
     List<Seller> searchSeller();
 
-    void InsertdeliveryReadyList(Long orderId, String userId);
+    void InsertdeliveryReadyList(Long paymentsNo, String userId);
 
     List<Delivery> deliveryReadyOrderSearch();
 

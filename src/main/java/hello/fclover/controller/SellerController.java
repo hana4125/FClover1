@@ -1,10 +1,7 @@
 package hello.fclover.controller;
 
 
-import hello.fclover.domain.Category;
-import hello.fclover.domain.Goods;
-import hello.fclover.domain.PaginationResult;
-import hello.fclover.domain.Seller;
+import hello.fclover.domain.*;
 import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -144,7 +142,13 @@ public class SellerController {
 
     //판매자 일정산 페이지
     @GetMapping("/sellerDaySettlement")
-    public String sellerDaySettlement() {
+    public String sellerDaySettlement(Principal principal, Model model) {
+
+        List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
+        model.addAttribute("daySettlement", daySettlement);
+        System.out.println("principal = " + principal.getName());
+        System.out.println("daySettlement = " + daySettlement);
+
         return "seller/sellerDaySettlement";
     }
 
@@ -191,40 +195,42 @@ public class SellerController {
     //구매자 리스트 조회
     @GetMapping(value = "/buyerList")
     public ModelAndView getBuyerList(
-            @RequestParam(value = "n", defaultValue = "1") int n,
+            @RequestParam(value = "n", defaultValue = "1") int page,
             @RequestParam(value = "search_word", required = false) String searchWord,
             HttpServletRequest request) {
 
         ModelAndView mnv = new ModelAndView();
-        List<Map<String, Object>> orderList = sellerService.getListDetail(n, searchWord);
 
-        // 페이징 관련 변수 계산
-        int totalCount = orderList.size(); // 전체 데이터 수
-        int pageSize = 10; // 한 페이지당 보여줄 게시물 수
-        int blockSize = 5; // 페이지 블록 크기
+        // 전체 구매자 주문 목록 개수 가져오기
+        int totalcount = sellerService.getListCount(searchWord);  // 총 개수 조회
+        int pagesize = 10; // 한 페이지당 보여줄 게시물 수
 
-        // 시작페이지와 끝페이지 계산
-        int startPage = ((n - 1) / blockSize) * blockSize + 1;
-        int endPage = Math.min(startPage + blockSize - 1, (totalCount + pageSize - 1) / pageSize);
+        // 현재 페이지에 해당하는 구매자 리스트 가져오기
+        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize);
 
-        if (orderList == null) {
-            mnv.setViewName("error/error");
-            mnv.addObject("url", request.getRequestURL());
-            mnv.addObject("message", "구매자 주문 정보를 찾을 수 없습니다.");
-        } else {
+        // PaginationResult 사용
+        PaginationResult result = new PaginationResult(page, pagesize, totalcount);
+
+
+
+            if(orderList.isEmpty())
+            mnv.addObject("message", "구매자 주문 정보가 없습니다.");
+
             mnv.setViewName("seller/sellerBuyerList");
             mnv.addObject("orderList", orderList);
             mnv.addObject("search_word", searchWord);
 
-            // 페이징 관련 변수 전달
-            mnv.addObject("startpage", startPage);
-            mnv.addObject("endpage", endPage);
-            mnv.addObject("totalCount", totalCount);
-            mnv.addObject("pageSize", pageSize);
-            mnv.addObject("n", n); // 현재 페이지 번호
-        }
+            // 페이지네이션 데이터 추가
+            mnv.addObject("startpage", result.getStartpage());
+            mnv.addObject("endpage", result.getEndpage());
+            mnv.addObject("maxpage", result.getMaxpage());
+            mnv.addObject("totalcount", totalcount);
+            mnv.addObject("pagesize", pagesize);
+            mnv.addObject("page", page); // 현재 페이지 번호
+
         return mnv;
     }
+
 
     //구매자 검색
     @GetMapping(value = "/buyerSearch")

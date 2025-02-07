@@ -1,5 +1,8 @@
 package hello.fclover.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import hello.fclover.domain.AddressBook;
 import hello.fclover.domain.Coupon;
 import hello.fclover.domain.Member;
@@ -8,11 +11,13 @@ import hello.fclover.dto.WishDTO;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,8 +32,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
+    private final AmazonS3 amazonS3;
+
+    @Value("${cloud.aws.s3.bucket}")
+    String bucket;
+
     private final MemberMapper dao;
-    private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
 
     @Override
     public int signup(Member member) {
@@ -139,17 +148,22 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
         }
 
-        String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(UPLOAD_DIR + fileName);
-        Files.createDirectories(filePath.getParent()); // 폴더 생성
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        amazonS3.putObject(bucket, "profile/" + fileName, file.getInputStream(), metadata);
+
 
         Member member = dao.selectMemberById(memberId);
         if (member == null) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
         }
 
-        member.setProfilePicture(fileName);
+        log.info("이미지 경로 : " + amazonS3.getUrl(bucket, "profile/" + fileName).toString());
+        member.setProfilePicture(amazonS3.getUrl(bucket, "profile/" +  fileName).toString());
+
         int result = dao.updateProfile(member);
 
         if (result != 1) {

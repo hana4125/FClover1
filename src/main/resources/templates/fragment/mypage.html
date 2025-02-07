@@ -37,7 +37,7 @@
                 <img src="/images/user/profile.png" alt="기본 프로필 이미지">
               </div>
               <div class="thumb-box profile border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-                <img th:src="@{|/upload/${member.profilePicture}|}" alt="프로필 이미지">
+                <img th:src="@{${member.profilePicture}}" alt="프로필 이미지">
               </div>
               <span class="badge profile text-bg-danger rounded-circle opacity-75" style="position: relative; left: 50px; bottom: 25px; cursor: pointer"><img width="15" height="20" src="/images/user/edit.png"></span>
             </div>
