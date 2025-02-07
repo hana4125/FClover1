@@ -12,7 +12,7 @@ public interface BackOfficeMapper {
 
     List<Seller> searchSeller();
 
-    void insertDeliveryReadyList(Long orderId, String userId, String status);
+    void insertDeliveryReadyList(Long paymentsNo, String userId, String status);
 
     List<Delivery> deliveryReadyOrderSearch();
 
