@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
+  <script src="/js/qna_btn.js"></script>
   <script src="/js/qna_reply.js"></script>
   <link rel="stylesheet" type="text/css" th:href="@{/css/user/home.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/user/searchBox.css}">
@@ -85,7 +86,8 @@
                 <th:block th:if="${questiondata.qname == pinfo.username || pinfo.username=='admin'}">
                   <div class="button-group">
                     <a th:href="@{'modifyView?num=' + ${questiondata.qno}}" class="text-button me-2">수정</a>
-                    <a href="#" th:onclick="'deleteNotice(' + ${questiondata.qno} + ')'" class="text-button">삭제</a>
+                    <span class="separator">|</span>
+                    <a href="#" th:onclick="'deleteQuestion(' + ${questiondata.qno} + ')'" class="text-button">삭제</a>
                   </div>
                 </th:block>
               </th:block>

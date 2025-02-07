@@ -19,10 +19,11 @@ public interface SellerMapper {
 
 
     List<Map<String, Object>> getListDetail(Map<String, Object> params);
-    int getListCount(String searchWord);
+    int getListCount(Map<String, Object> params);
 
     int getSearchListCount(Map<String, Object> map);
     List<Seller> getSearchList(Map<String, Object> map);
 
+    long getselectNo(String sellerId);
 
 }
