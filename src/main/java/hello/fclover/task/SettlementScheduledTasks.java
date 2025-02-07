@@ -4,7 +4,6 @@ import hello.fclover.domain.Payment;
 import hello.fclover.domain.Settlement;
 import hello.fclover.mybatis.mapper.PaymentMapper;
 import hello.fclover.mybatis.mapper.SettlementMapper;
-import hello.fclover.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
