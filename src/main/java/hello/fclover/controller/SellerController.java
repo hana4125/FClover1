@@ -198,10 +198,10 @@ public class SellerController {
     @GetMapping(value = "/buyerList")
     public ModelAndView getBuyerList(
             Principal principal,
-            @RequestParam(value = "n", defaultValue = "1") int page,
+            @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String searchWord,
             @RequestParam(defaultValue = "") String searchField,
-            @RequestParam(value = "size", defaultValue = "10") int pagesize,
+            @RequestParam(value = "size", defaultValue = "3") int limit,
             HttpServletRequest request) {
 
 
@@ -209,13 +209,13 @@ public class SellerController {
         String sellerId = principal.getName();
         Long sellerNo = sellerService.getselectNo(sellerId);
 
+
         // 전체 구매자 주문 목록 개수 가져오기
-        int totalcount = sellerService.getListCount(searchWord,sellerNo);
-
+        int totalcount = sellerService.getListCount(searchWord,sellerNo,searchField);
         // 현재 페이지에 해당하는 구매자 리스트 가져오기
-        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize,sellerNo);
+        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, limit,sellerNo,searchField);
 
-        PaginationResult result = new PaginationResult(page, pagesize, totalcount);
+        PaginationResult result = new PaginationResult(page, limit, totalcount);
 
         if(orderList.isEmpty()) {
             mnv.addObject("message", "구매자 주문 정보가 없습니다.");
@@ -223,17 +223,16 @@ public class SellerController {
 
         mnv.setViewName("seller/sellerBuyerList");
         mnv.addObject("orderList", orderList);
-        mnv.addObject("search_word", searchWord);
+        mnv.addObject("searchWord", searchWord);
+        mnv.addObject("searchField", searchField);
         mnv.addObject("searchlistcount", totalcount);
-        mnv.addObject("size", pagesize);
-
         mnv.addObject("startpage", result.getStartpage());
         mnv.addObject("endpage", result.getEndpage());
         mnv.addObject("maxpage", result.getMaxpage());
         mnv.addObject("totalcount", totalcount);
-        mnv.addObject("pagesize", pagesize);
+        mnv.addObject("limit", limit);
         mnv.addObject("page", page);
-        mnv.addObject("n", page);
+
 
         return mnv;
     }

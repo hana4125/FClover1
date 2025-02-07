@@ -62,19 +62,17 @@
     <div class="order-header">구매자 주문 목록</div>
 
     <div class="search-container">
+        <form method="get" action="/seller/buyerList">
         <div class="pagination-controls">
-            <select id="itemsPerPage" th:onchange="|window.location.href='/seller/buyerList?search_word='
-                    + encodeURIComponent('[[${search_word}]]') + '&n=[[${n}]]&size=' + this.value|">
-
-                <option th:value="all">전체</option>
-                <option th:value="deliNo">주문번호</option>
-                <option th:value="goodsName">도서명</option>
-                <option th:value="customerName">구매자ID</option>
+            <select id="itemsPerPage" name="searchField">
+                <option th:value="dgc">전체</option>
+                <option th:value="d">주문번호</option>
+                <option th:value="g">도서명</option>
+                <option th:value="c">구매자ID</option>
             </select>
         </div>
 
-        <form method="get" action="/seller/buyerList">
-            <input type="text" name="search_word" placeholder="검색어 입력하세요">
+            <input type="text" name="searchWord" placeholder="검색어 입력하세요">
             <button type="submit">검색</button>
         </form>
     </div>
@@ -119,7 +117,7 @@
     </div>
     <!-- 페이지네이션 -->
     <div style="text-align: center;">
-        <th:block th:replace="~{fragment/paging :: paging('/seller/buyerList', 'page=' + ${page} + '&search_word=' + (${search_word} ?: ''))}"/>
+        <th:block th:replace="~{fragment/paging :: paging('/seller/buyerList', '&search_word=' + (${searchWord} ?: ''))}"/>
     </div>
 </div>
 </body>

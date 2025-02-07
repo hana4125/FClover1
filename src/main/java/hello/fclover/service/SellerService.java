@@ -19,12 +19,8 @@ public interface SellerService {
 
 
 
-    List<Map<String, Object>> getListDetail(int n, String searchWord, int pageSize, long sellerNo);
-    public int getListCount(String searchWord, long sellerNo);
-
-    int getSearchListCount(String searchWord);
-    List<Seller> getSearchList(String searchWord, int page, int limit);
-
+    List<Map<String, Object>> getListDetail(int n, String searchWord, int pageSize, long sellerNo,String searchField);
+    public int getListCount(String searchWord, long sellerNo, String searchField);
 
     List<Settlement> searchDaySettlement(Long partnerId);
     long getselectNo(String sellerId);
