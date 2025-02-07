@@ -133,7 +133,7 @@
               <div class="form_cont">
                 <div class="date_picker_box">
                   <!-- form_sel -->
-                  <select class="period-select" id="period-select">
+                  <select class="period-select" id="period-select" name="term">
                     <option value="all">전체</option>
                     <option value="1">최근 1개월</option>
                     <option value="3">최근 3개월</option>
@@ -142,19 +142,11 @@
                   </select>
                   <div class="date-picker-container">
                     <div class="date-picker-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                      <span class="selected-date"></span>
-                      <input type="date" class="date-input start-date" style="display: none;">
-                      <button class="calendar-btn start-calendar-btn" style="margin-left: auto;">
-                        <img src="/images/user/calendar.png" alt="시작일 선택">
-                      </button>
+                      <input type="date" class="date-input start-date">
                     </div>
                     <span class="gap">~</span>
                     <div class="date-picker-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                      <span class="selected-date"></span>
-                      <input type="date" class="date-input end-date" style="display: none;">
-                      <button class="calendar-btn end-calendar-btn" style="margin-left: auto;">
-                        <img src="/images/user/calendar.png" alt="종료일 선택">
-                      </button>
+                        <input type="date" class="date-input end-date">
                     </div>
                   </div>
                 </div>

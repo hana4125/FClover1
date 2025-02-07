@@ -88,7 +88,11 @@
     <select id="findByDateBetween" resultType="hello.fclover.domain.Question">
         SELECT *
         FROM qna
-        WHERE q_create_at BETWEEN #{startDate} AND #{endDate}
+        <where>
+            <if test='startDate != null  and endDate != null'>
+                q_create_at BETWEEN #{startDate} AND #{endDate}
+            </if>
+        </where>
         ORDER BY q_no DESC
             LIMIT #{offset}, #{limit}
     </select>
@@ -97,7 +101,11 @@
     <select id="countByDateBetween" resultType="int">
         SELECT COUNT(*)
         FROM qna
-        WHERE q_create_at BETWEEN #{startDate} AND #{endDate}
+        <where>
+            <if test='startDate != null  and endDate != null'>
+                q_create_at BETWEEN #{startDate} AND #{endDate}
+            </if>
+        </where>
     </select>
 
     <select id="findAll" parameterType="map" resultType="Question">
@@ -112,9 +120,8 @@
 
     <!-- 문의글 삭제-->
     <delete id="deleteQuestion" parameterType="int">
-        <if test="_parameter != null">
-        DELETE FROM qna WHERE qno = #{qno}
-        </if>
+        DELETE FROM qna
+        WHERE q_no = #{qno}
     </delete>
 
     <!-- 댓글 기능   -->

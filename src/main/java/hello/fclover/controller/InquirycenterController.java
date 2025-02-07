@@ -177,13 +177,17 @@ public class InquirycenterController {
     @GetMapping("/question/filter")
     public String filterQuestions(
             @RequestParam(defaultValue = "1") Integer currentPage,
-            @RequestParam String startDate,
-            @RequestParam String endDate,
+
+            @RequestParam(defaultValue = "") String startDate,
+            @RequestParam(defaultValue = "") String endDate,
             Model m) {
+        LocalDate start =null;
+        LocalDate end=null;
 
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate).plusDays(1);
-
+         if(!(startDate.equals("") && endDate.equals(""))) {
+              start = LocalDate.parse(startDate);
+              end = LocalDate.parse(endDate);
+         }
         int limit = 10;
         int totalcount = questionService.getFilteredCount(start, end);
         List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
@@ -196,6 +200,7 @@ public class InquirycenterController {
         m.addAttribute("totalcount", totalcount);
         m.addAttribute("questionlist", questionlist);
         m.addAttribute("limit", limit);
+
         m.addAttribute("startDate", startDate);
         m.addAttribute("endDate", endDate);
 
@@ -320,9 +325,8 @@ public class InquirycenterController {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
             return "redirect:/inquiry/question/detail?qno=" + qno;
         }
-
         int result = questionService.deleteQuestion(qno);
-
+        log.debug("삭제 결과 - qno: {}, result: {}", qno, result);
         if (result > 0) {
             rattr.addFlashAttribute("successMessage", "문의사항이 삭제되었습니다.");
             return "redirect:/inquiry/question";

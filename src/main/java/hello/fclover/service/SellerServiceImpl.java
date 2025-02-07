@@ -50,17 +50,22 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public List<Map<String, Object>> getListDetail(int page, String searchWord, int pageSize) {
+    public List<Map<String, Object>> getListDetail(int page, String searchWord, int pageSize ,long sellerNo) {
         Map<String, Object> params = new HashMap<>();
+
         params.put("searchWord", searchWord);
+        params.put("sellerNo", sellerNo);
         params.put("pageSize", pageSize);  // 페이지 크기 반영
         params.put("offset", (page - 1) * pageSize);  // 페이지네이션 적용
         return dao.getListDetail(params);
     }
 
     @Override
-    public int getListCount(String searchWord) {
-        return dao.getListCount(searchWord);
+    public int getListCount(String searchWord, long sellerNo) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("searchWord", searchWord);
+        params.put("sellerNo", sellerNo);
+        return dao.getListCount(params);
     }
 
     @Override
@@ -87,7 +92,10 @@ public class SellerServiceImpl implements SellerService {
         return settlements;
     }
 
-
+    @Override
+    public long getselectNo(String sellerId) {
+        return dao.getselectNo(sellerId);
+    }
 
 
 }

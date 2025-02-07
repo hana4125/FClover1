@@ -49,7 +49,7 @@
     <div class="container w-75 ms-auto">
         <div class="top-menu">
             <th:block th:if="${seller != null}">
-                <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+                <a href="/seller/main" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
                 <form th:action="@{/seller/logout}" method="post">
                     <button type="submit" class="pe-2">로그아웃</button>
                 </form>
@@ -60,7 +60,19 @@
 
 <div class="container">
     <div class="order-header">구매자 주문 목록</div>
+
     <div class="search-container">
+        <div class="pagination-controls">
+            <select id="itemsPerPage" th:onchange="|window.location.href='/seller/buyerList?search_word='
+                    + encodeURIComponent('[[${search_word}]]') + '&n=[[${n}]]&size=' + this.value|">
+
+                <option th:value="0" th:text="'전체'" th:selected="${size == 0}"></option>
+                <option th:value="5" th:text="'5'" th:selected="${size == 5}"></option>
+                <option th:value="10" th:text="'10'" th:selected="${size == 10}"></option>
+                <option th:value="20" th:text="'20'" th:selected="${size == 20}"></option>
+            </select>
+        </div>
+
         <form method="get" action="/seller/buyerList">
             <input type="text" name="search_word" placeholder="검색어 입력">
             <button type="submit">검색</button>
@@ -69,21 +81,9 @@
 
     <div class="summary-container">
         <p class="order-count">
-            구매자<span class="to_green"> [[${searchlistcount}]]</span>건
+            구매<span class="to_green"> [[${searchlistcount}]]</span>건
         </p>
-
-        <div class="pagination-controls">
-            <select id="itemsPerPage" th:onchange="|window.location.href='/seller/buyerList?search_word='
-                    + encodeURIComponent('[[${search_word}]]') + '&n=[[${n}]]&size=' + this.value|">
-
-            <option th:value="0" th:text="'전체'" th:selected="${size == 0}"></option>
-                <option th:value="5" th:text="'5'" th:selected="${size == 5}"></option>
-                <option th:value="10" th:text="'10'" th:selected="${size == 10}"></option>
-                <option th:value="20" th:text="'20'" th:selected="${size == 20}"></option>
-            </select>
-        </div>
     </div>
-
 
     <!-- 주문 목록 테이블 -->
     <div class="table-container">

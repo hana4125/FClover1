@@ -17,6 +17,9 @@
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
 
+    <select id="getselectNo" resultType="long">
+        SELECT seller_no FROM seller WHERE seller_id = #{sellerId}
+    </select>
 
     <select id="getListDetail" resultType="Map" parameterType="map">
         SELECT
@@ -28,11 +31,14 @@
         d.deli_quan AS quantity,
         m.member_id AS customerName,
         d.deli_date AS deliveryDate
+        from (select *
         FROM payments p
-        LEFT JOIN delivery d ON p.payments_no = d.payments_no
-        LEFT JOIN goods g ON d.inven_goods_no = g.GOODS_NO
-        LEFT JOIN member m ON p.user_id = m.member_id
+        where p.seller_id = #{sellerNo}) p
+         JOIN delivery d ON p.payments_no = d.payments_no
+         JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+         JOIN member m ON p.user_id = m.member_id
         <where>
+
             <if test="searchWord != null and searchWord != ''">
                 AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%')
                 OR m.member_id LIKE CONCAT('%', #{searchWord}, '%'))
@@ -42,12 +48,14 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
-    <select id="getListCount" resultType="int" parameterType="string">
+    <select id="getListCount" resultType="int" parameterType="map">
         SELECT COUNT(*)
+        from (select *
         FROM payments p
-        LEFT JOIN delivery d ON p.payments_no = d.payments_no
-        LEFT JOIN goods g ON d.inven_goods_no = g.GOODS_NO
-        LEFT JOIN member m ON p.user_id = m.member_id
+        where p.seller_id = #{sellerNo}) p
+         JOIN delivery d ON p.payments_no = d.payments_no
+         JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+         JOIN member m ON p.user_id = m.member_id
         <where>
             <if test="searchWord != null and searchWord != ''">
                 AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%') OR m.member_id LIKE CONCAT('%', #{searchWord}, '%'))

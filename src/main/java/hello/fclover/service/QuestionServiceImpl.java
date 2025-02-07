@@ -53,10 +53,6 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> getFilteredQuestions(LocalDate startDate, LocalDate endDate,
                                                int currentPage, int limit) {
 
-        if (startDate == null || endDate == null) {
-            return Collections.emptyList(); // 날짜가 없으면 빈 리스트 반환
-        }
-
         int offset = (currentPage - 1) * limit;
         HashMap<String, Object> map = new HashMap<>();
         map.put("startDate", startDate);
@@ -127,9 +123,13 @@ public class QuestionServiceImpl implements QuestionService {
     public int deleteQuestion(int qno) {
         try {
             int result = dao.deleteQuestion(qno);
+            log.info("deleteQuestion 결과: {}", result);
             return result;
         }catch (Exception e){
-            log.error("삭제 실패", qno, e.getMessage());
+            log.error("질문 삭제 중 오류 발생 - qno: {}", qno);
+            log.error("예외 종류: {}", e.getClass().getName());
+            log.error("예외 메시지: {}", e.getMessage());
+            log.error("상세 스택트레이스: ", e);
         }
         return 0;
     }

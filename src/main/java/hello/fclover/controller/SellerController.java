@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -143,10 +145,10 @@ public class SellerController {
     //판매자 일정산 페이지
     @GetMapping("/sellerDaySettlement")
     public String sellerDaySettlement(Principal principal, Model model) {
-
+        System.out.println("principal = " + principal.getName());
         List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
         model.addAttribute("daySettlement", daySettlement);
-        System.out.println("principal = " + principal.getName());
+
         System.out.println("daySettlement = " + daySettlement);
 
         return "seller/sellerDaySettlement";
@@ -195,6 +197,7 @@ public class SellerController {
     //구매자 리스트 조회
     @GetMapping(value = "/buyerList")
     public ModelAndView getBuyerList(
+            Principal principal,
             @RequestParam(value = "n", defaultValue = "1") int page,
             @RequestParam(value = "search_word", required = false) String searchWord,
             @RequestParam(value = "size", defaultValue = "10") int pagesize,
@@ -202,11 +205,20 @@ public class SellerController {
 
         ModelAndView mnv = new ModelAndView();
 
+        System.out.println("principal = " + principal.getName());
+        log.info("principal = " + principal.getName());
+
+        String sellerId = principal.getName();
+        Long sellerNo = sellerService.getselectNo(sellerId);
+
+        System.out.println("sellerno = " +sellerNo);
+        log.info("sellerno=",sellerNo);
+
         // 전체 구매자 주문 목록 개수 가져오기
-        int totalcount = sellerService.getListCount(searchWord);
+        int totalcount = sellerService.getListCount(searchWord,sellerNo);
 
         // 현재 페이지에 해당하는 구매자 리스트 가져오기
-        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize);
+        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize,sellerNo);
 
         // PaginationResult 사용
         PaginationResult result = new PaginationResult(page, pagesize, totalcount);
