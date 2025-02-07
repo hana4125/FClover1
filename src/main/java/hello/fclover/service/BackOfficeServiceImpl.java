@@ -35,12 +35,12 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     }
 
     @Override
-    public void InsertdeliveryReadyList(Long orderId, String userId) {
+    public void InsertdeliveryReadyList(Long paymentsNo, String userId) {
 
-        log.info("==============> 여기는 백오피스컨트롤러 orderId: " + orderId + " userId: " + userId);
+        log.info("==============> 여기는 백오피스컨트롤러 paymentsNo: " + paymentsNo+ " userId: " + userId);
          String status = "배송준비중";
 
-          dao.insertDeliveryReadyList(orderId,userId,status);
+          dao.insertDeliveryReadyList(paymentsNo,userId,status);
     }
 
     @Override

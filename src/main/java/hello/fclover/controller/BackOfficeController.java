@@ -181,9 +181,9 @@ public class BackOfficeController {
     //결제완료페이지에서 [배송준비] 버튼 클릭 시
     @GetMapping("/delivery/readyClick")
     @ResponseBody
-    public  void  ready(@RequestParam Long orderId,@RequestParam String userId,Model model) {
-        log.info("============controller /delivery/ready : orderId = " + orderId + ", userId = " + userId);
-        backOfficeService.InsertdeliveryReadyList(orderId,userId);
+    public  void  ready(@RequestParam Long paymentsNo,@RequestParam String userId,Model model) {
+        log.info("============controller /delivery/ready : paymentsNo = " + paymentsNo + ", userId = " + userId);
+        backOfficeService.InsertdeliveryReadyList(paymentsNo,userId);
 
     }
 
