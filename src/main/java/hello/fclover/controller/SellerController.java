@@ -199,9 +199,9 @@ public class SellerController {
     public ModelAndView getBuyerList(
             Principal principal,
             @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "3") int limit,
             @RequestParam(defaultValue = "") String searchWord,
             @RequestParam(defaultValue = "") String searchField,
-            @RequestParam(value = "size", defaultValue = "3") int limit,
             HttpServletRequest request) {
 
 
@@ -236,6 +236,5 @@ public class SellerController {
 
         return mnv;
     }
-
 }
 
