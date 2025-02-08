@@ -92,19 +92,17 @@ public class InquirycenterController {
     //공지사항 검색
     @GetMapping(value = "/notice/noti_list")
     public ModelAndView noticeList(
+            Principal principal,
+            ModelAndView mv,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
-            ModelAndView mv,
-            @RequestParam(defaultValue = "") String search_word)
+            @RequestParam(defaultValue = "") String search_word,
+            @RequestParam(defaultValue = "전체") String category)
     {
-        System.out.println("페이지: " + page);
-        System.out.println("검색어: " + search_word);
-
         // 검색어가 없을 경우 처리
         String searchQuery = search_word.trim().isEmpty() ? null : search_word;
-
-        int listcount = noticeService.getSearchListCount(searchQuery);
-        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit);
+        int listcount = noticeService.getSearchListCount(searchQuery, category);
+        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit, category);
         PaginationResult result = new PaginationResult(page, limit, listcount);
 
         System.out.println("listcount = " + listcount);
@@ -117,6 +115,7 @@ public class InquirycenterController {
         mv.addObject("endpage", result.getEndpage());
         mv.addObject("noticelist", list);
         mv.addObject("search_word", search_word);
+        mv.addObject("category", category);
         mv.addObject("limit", limit);
         mv.addObject("listcount", listcount);
         return mv;
@@ -144,6 +143,7 @@ public class InquirycenterController {
             return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
     }
+
 
 
 
@@ -306,6 +306,7 @@ public class InquirycenterController {
         }
         return mv;
     }
+
 
     //문의사항 삭제
     @PostMapping(value = "/question/delete")
