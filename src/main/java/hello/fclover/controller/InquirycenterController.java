@@ -92,19 +92,17 @@ public class InquirycenterController {
     //공지사항 검색
     @GetMapping(value = "/notice/noti_list")
     public ModelAndView noticeList(
+            Principal principal,
+            ModelAndView mv,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
-            ModelAndView mv,
-            @RequestParam(defaultValue = "") String search_word)
+            @RequestParam(defaultValue = "") String search_word,
+            @RequestParam(defaultValue = "전체") String category)
     {
-        System.out.println("페이지: " + page);
-        System.out.println("검색어: " + search_word);
-
         // 검색어가 없을 경우 처리
         String searchQuery = search_word.trim().isEmpty() ? null : search_word;
-
-        int listcount = noticeService.getSearchListCount(searchQuery);
-        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit);
+        int listcount = noticeService.getSearchListCount(searchQuery, category);
+        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit, category);
         PaginationResult result = new PaginationResult(page, limit, listcount);
 
         System.out.println("listcount = " + listcount);
@@ -117,6 +115,7 @@ public class InquirycenterController {
         mv.addObject("endpage", result.getEndpage());
         mv.addObject("noticelist", list);
         mv.addObject("search_word", search_word);
+        mv.addObject("category", category);
         mv.addObject("limit", limit);
         mv.addObject("listcount", listcount);
         return mv;
@@ -132,24 +131,19 @@ public class InquirycenterController {
         // 관리자 권한 체크
         if (!principal.getName().equals("admin")) {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
-            return "redirect:/inquiry/notice/detail?num=" + notino;
+            return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
-
-        System.out.println("Delete Request - notino: " + notino);
-        System.out.println("Current User: " + principal.getName());
-
         int result = noticeService.deleteNotice(notino);
-
-        System.out.println("Delete Result: " + result);
-
         if (result > 0) {
             rattr.addFlashAttribute("successMessage", "공지사항이 삭제되었습니다.");
+            log.info("Redirecting to path: /inquiry/notice/noti_list");
             return "redirect:/inquiry/notice/noti_list";
         } else {
             rattr.addFlashAttribute("errorMessage", "삭제 실패");
-            return "redirect:/inquiry/notice/detail?num=" + notino;
+            return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
     }
+
 
 
 
@@ -177,13 +171,17 @@ public class InquirycenterController {
     @GetMapping("/question/filter")
     public String filterQuestions(
             @RequestParam(defaultValue = "1") Integer currentPage,
-            @RequestParam String startDate,
-            @RequestParam String endDate,
+
+            @RequestParam(defaultValue = "") String startDate,
+            @RequestParam(defaultValue = "") String endDate,
             Model m) {
+        LocalDate start =null;
+        LocalDate end=null;
 
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate).plusDays(1);
-
+         if(!(startDate.equals("") && endDate.equals(""))) {
+              start = LocalDate.parse(startDate);
+              end = LocalDate.parse(endDate);
+         }
         int limit = 10;
         int totalcount = questionService.getFilteredCount(start, end);
         List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
@@ -196,6 +194,7 @@ public class InquirycenterController {
         m.addAttribute("totalcount", totalcount);
         m.addAttribute("questionlist", questionlist);
         m.addAttribute("limit", limit);
+
         m.addAttribute("startDate", startDate);
         m.addAttribute("endDate", endDate);
 
@@ -308,6 +307,7 @@ public class InquirycenterController {
         return mv;
     }
 
+
     //문의사항 삭제
     @PostMapping(value = "/question/delete")
     public String deleteQuestion(@RequestBody Map<String, Integer> body,
@@ -320,9 +320,8 @@ public class InquirycenterController {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
             return "redirect:/inquiry/question/detail?qno=" + qno;
         }
-
         int result = questionService.deleteQuestion(qno);
-
+        log.debug("삭제 결과 - qno: {}, result: {}", qno, result);
         if (result > 0) {
             rattr.addFlashAttribute("successMessage", "문의사항이 삭제되었습니다.");
             return "redirect:/inquiry/question";
