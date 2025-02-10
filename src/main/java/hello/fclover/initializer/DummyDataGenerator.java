@@ -130,7 +130,7 @@ public class DummyDataGenerator {
         int maxDiv = MAXIMUM_PRICE / 1000;
         int goodsPrice = faker.number().numberBetween(minDiv, maxDiv + 1) * 1000;
 
-        String goodsWriter = faker.book().author();
+        String goodsWriter = faker.book().author().replaceAll("\\s+", "");
 
         String writerContent = "작가 " + goodsWriter + " 는 " + faker.lorem().sentence().toLowerCase() + " 이다.";
 
