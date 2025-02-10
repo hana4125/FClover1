@@ -20,7 +20,8 @@ select *from stock;
 drop table stock;
 
 insert into stock (goods_no, goods_code, initial_stock, product_stock, isSoldOut)
-values(500013,1245,100, 90,'N');
+values(500021,21,100, 79,'N');
 
+delete from stock;
 
 commit;

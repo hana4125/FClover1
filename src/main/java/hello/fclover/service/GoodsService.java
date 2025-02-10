@@ -19,7 +19,7 @@ public interface GoodsService {
 
     Goods findGoodsByNo(Long goodsNo);
 
-    // 찜 상태를 포함한 상품 목록 조회 메서드 추가
+    // 상품 목록 조회 메서드 추가
     List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size);
 
     List<Goods> getBestGoodsList(int limit);

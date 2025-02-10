@@ -74,7 +74,7 @@
   </select>
 
 
-  <!-- 찜 상태를 포함한 해당 카테고리 상품 조회 -->
+  <!-- 해당 카테고리 상품 조회 -->
   <select id="findCategoryGoodsWishStatus" resultType="hello.fclover.domain.Goods">
     SELECT
     a.goods_no AS goodsNo,
@@ -82,7 +82,6 @@
     a.goods_name AS goodsName,
     a.goods_price AS goodsPrice,
     a.goods_writer AS goodsWriter
-
     FROM goods a
     JOIN stock s ON a.goods_no = s.goods_no
     WHERE
