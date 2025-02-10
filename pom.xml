@@ -223,8 +223,29 @@
       <artifactId>javafaker</artifactId>
       <version>1.0.2</version>
     </dependency>
-  </dependencies>
+           <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-batch</artifactId>
+        <version>3.4.2</version>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>5.2.1</version>
+    </dependency>
+              <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-batch</artifactId>
+        <version>3.4.2</version>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>5.2.1</version>
+    </dependency>
 
+  </dependencies>
+<!-- 
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -249,7 +270,7 @@
     </dependency>
 
   </dependencies>
-  </dependencyManagement>
+  </dependencyManagement> -->
   <build>
     <plugins>
       <plugin>
