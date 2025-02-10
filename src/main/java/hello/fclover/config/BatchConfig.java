@@ -1,7 +1,9 @@
 package hello.fclover.config;
 
 import hello.fclover.domain.Member;
+import hello.fclover.domain.Seller;
 import hello.fclover.mybatis.mapper.MemberMapper;
+import hello.fclover.mybatis.mapper.SellerMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -27,6 +29,12 @@ import java.util.List;
 @EnableBatchProcessing
 public class BatchConfig {
 
+//    private final SellerMapper sellerMapper;
+//
+//    public BatchConfig(SellerMapper sellerMapper) {
+//        this.sellerMapper = sellerMapper;
+//    }
+
 //    private final MemberMapper memberMapper;
 //
 //
@@ -39,9 +47,9 @@ public class BatchConfig {
 //    public TaskExecutor taskExecutor() {
 //        System.out.println("taskExecutor()진입");
 //        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-//        taskExecutor.setCorePoolSize(100);  // 너무 많은 스레드 생성
-//        taskExecutor.setMaxPoolSize(1000);  // 너무 많은 스레드 생성
-//        taskExecutor.setQueueCapacity(2000);
+//        taskExecutor.setCorePoolSize(2);  // 너무 많은 스레드 생성
+//        taskExecutor.setMaxPoolSize(2);  // 너무 많은 스레드 생성
+//        taskExecutor.setQueueCapacity(100);
 //        taskExecutor.setThreadNamePrefix("batch-thread-");
 //        taskExecutor.initialize();
 //        return taskExecutor;
@@ -158,6 +166,64 @@ public class BatchConfig {
 //            }
 //        };
 //    }
+
+
+
+    //===========여기서부터는 Seller 만명 insert하는 batch 코드.
+    // Job 정의
+//    @Bean
+//    public Job importSellerJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+//        return new JobBuilder("importSellerJob", jobRepository)
+//                .start(importSellerStep(jobRepository, transactionManager))
+//                .build();
+//    }
+//
+//    // Step 정의
+//    @Bean
+//    public Step importSellerStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+//        return new StepBuilder("importMemberStep", jobRepository)
+//                .<Seller, Seller>chunk(1000, transactionManager) // 1000건씩 처리
+//                .reader(sellerReader()) // 데이터 읽기
+//                .processor(sellerProcessor()) // 데이터 처리
+//                .writer(sellerWriter()) // 데이터 쓰기
+//                .taskExecutor(taskExecutor()) // TaskExecutor 설정 (멀티스레드 처리 활성화)
+//                .build();
+//    }
+//
+//
+//    // ItemReader: 데이터를 읽는 역할
+//    @Bean
+//    public ItemReader<Seller> sellerReader() {
+//        List<Seller> sellers = new ArrayList<>();
+//        for (int i = 0; i < 10000; i++) {
+//            sellers.add(new Seller(null, "seller" + i, "$2a$10$6vzd1jpjyMnJuhIk2yk3auMmAkQwuw45whQU7XPq9.c/ZjuCcaou2",
+//                    "seller" + i, "seller" + i + "@example.com", "010-1234-5678", "1234"+i, "company"+i, LocalDateTime.now().toString(), LocalDateTime.now(), null, "Approved"));
+//        }
+//        return new ListItemReader<>(sellers);
+//    }
+//
+//    // ItemProcessor: 데이터를 처리하는 역할
+//    @Bean
+//    public ItemProcessor<Seller, Seller> sellerProcessor() {
+//        return seller -> {
+//            seller.setPassword("$2a$10$6vzd1jpjyMnJuhIk2yk3auMmAkQwuw45whQU7XPq9.c/ZjuCcaou2");
+//            return seller;
+//        };
+//    }
+//
+//    // ItemWriter: 데이터를 MySQL DB에 쓰는 역할
+//    @Bean
+//    public ItemWriter<Seller> sellerWriter() {
+//        return items -> {
+//            for (Seller seller : items) {
+//                System.out.println("seller = " + seller);
+//                sellerMapper.insertSeller(seller);
+//            }
+//        };
+//    }
+
+
+
 
 
 
