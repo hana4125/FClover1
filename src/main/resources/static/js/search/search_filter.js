@@ -4,11 +4,6 @@
  */
 
 $(function () {
-
-  $(".show-detail").click(function () {
-    location.href = "/goods/GoodsDetail/{no}";
-  })
-
   // URL에서 쿼리 파라미터 읽기
   const urlParams = new URLSearchParams(window.location.search);
   const currentSort = urlParams.get("sort") || "latest"; // 기본값: 최신순
@@ -296,11 +291,11 @@ $(function () {
     fetchSearchResults();
   });
 
-  // 카테고리 클릭 이벤트 (예: 카테고리 목록의 각 항목에 .category-item 클래스와 data-catno 속성이 있다고 가정)
+  // 카테고리 클릭 이벤트 (예: 카테고리 목록의 각 항목에 .category-item 클래스와 value 속성이 있다고 가정)
   $('.category-item').on('click', function (e) {
     e.preventDefault();
-    const catNo = $(this).data('catno');
-    updateQueryString('category', catNo);
+    const catNo = $(this).val();
+    updateQueryString('cateNo', catNo);
     fetchSearchResults();
   });
 
