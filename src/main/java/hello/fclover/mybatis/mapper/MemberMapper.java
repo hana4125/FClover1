@@ -7,9 +7,11 @@ import hello.fclover.domain.Notice;
 import hello.fclover.domain.Wish;
 import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.WishDTO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,4 +71,12 @@ public interface MemberMapper {
     List<CartDTO> selectCartItems(Long memberNo);
 
     void deleteCartItems(Long cartNo);
+
+    void insertDummyMember(Member member);
+
+    List<Member> findUsersWithUserInMemberId();
+
+    void insertCoupon(String memberId, String couponName, int couponAmount);
+
+
 }
