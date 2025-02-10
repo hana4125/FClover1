@@ -58,7 +58,7 @@
                 AND noti_Title LIKE CONCAT('%', #{search_word}, '%')
             </if>
         </where>
-        ORDER BY noti_Date DESC
+        ORDER BY noti_No DESC
         LIMIT #{start}, #{limit}
     </select>
 
