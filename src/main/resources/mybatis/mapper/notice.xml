@@ -54,11 +54,14 @@
             <if test="category != null and category != '전체'">
                 noti_Title LIKE CONCAT('%', #{category}, '%')
             </if>
-            <if test="search_word != null">
-                AND noti_Title LIKE CONCAT('%', #{search_word}, '%')
+            <if test="search_word != null and search_word != ''">
+                <if test="category != null and category != '전체'">
+                    AND
+                </if>
+                noti_Title LIKE CONCAT('%', #{search_word}, '%')
             </if>
         </where>
-        ORDER BY noti_No DESC
+        ORDER BY noti_Date DESC
         LIMIT #{start}, #{limit}
     </select>
 

@@ -35,14 +35,14 @@
         FROM payments p
         where p.seller_id = #{sellerNo}) p
          JOIN delivery d ON p.payments_no = d.payments_no
-         JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+         JOIN goods g ON d.stock_no = g.goods_no
          JOIN member m ON p.user_id = m.member_id
         <where>
             <if test="searchWord != null and searchWord != ''">
              <foreach collection="searchField" item="data" separator="or ">
                  <choose>
                      <when test='data == "d"'>d.deli_no</when>
-                     <when test='data == "g"'>g.GOODS_NAME</when>
+                     <when test='data == "g"'>g.goods_name</when>
                      <when test='data == "c"'>m.member_id</when>
                  </choose>
              like #{searchWord}
@@ -59,14 +59,14 @@
         FROM payments p
         where p.seller_id = #{sellerNo}) p
          JOIN delivery d ON p.payments_no = d.payments_no
-         JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+         JOIN goods g ON d.stock_no = g.goods_no
          JOIN member m ON p.user_id = m.member_id
         <where>
             <if test="searchWord != null and searchWord != ''">
                 <foreach collection="searchField" item="data" separator="or ">
                     <choose>
                         <when test='data == "d"'> d.deli_no</when>
-                        <when test='data == "g"'> g.GOODS_NAME</when>
+                        <when test='data == "g"'> g.goods_name</when>
                         <when test='data == "c"'> m.member_id</when>
                     </choose>
                     like #{searchWord}
@@ -74,6 +74,5 @@
             </if>
         </where>
     </select>
-
 
 </mapper>
