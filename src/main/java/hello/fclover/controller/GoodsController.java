@@ -76,9 +76,9 @@ public class GoodsController {
         List<Goods> goodsList = goodsService.getCategoryGoodsList(cateNo, sort, page, size);
         model.addAttribute("goodsList", goodsList);
 
-        if (!goodsList.isEmpty()) {
-            Long goodsNo = goodsList.get(0).getGoodsNo();
-            List<Long> wishlist = wishService.getWishlistGoodsNos(goodsNo, memberNo);
+        // 찜 목록(회원이 찜한 상품 번호 목록) 조회
+        if (memberNo != null) {
+            List<Long> wishlist = wishService.getWishlistGoodsNos(memberNo);
             model.addAttribute("wishlist", wishlist);
         }
 

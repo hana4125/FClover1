@@ -26,5 +26,6 @@
         FROM goods_image
         WHERE goods_no = #{goodsNo}
           AND is_main = 'M'
+        LIMIT 1
     </select>
 </mapper>

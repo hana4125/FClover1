@@ -19,7 +19,7 @@ select *from stock;
 drop table stock;
 
 insert into stock (goods_no, goods_code, initial_stock, product_stock, isSoldOut)
-values(500011,1243,100, 93,'N');
+values(500013,1245,100, 90,'N');
 
 
 commit;
