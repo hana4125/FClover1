@@ -18,10 +18,8 @@ select *from stock;
 
 drop table stock;
 
-insert into stock (goods_no, goods_code, initial_stock, product_stock, isSoldOut) values(499863,1234,100, 20,'N');
+insert into stock (goods_no, goods_code, initial_stock, product_stock, isSoldOut)
+values(500013,1245,100, 90,'N');
+
 
 commit;
-
-update stock
-set stock_no = 3
-where stock_no = 4;
