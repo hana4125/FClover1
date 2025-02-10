@@ -9,7 +9,8 @@ CREATE TABLE `stock` (
                                 `product_stock` int DEFAULT NULL,
                                 `isSoldOut` varchar(3),
                                PRIMARY KEY (`stock_no`),
-                               UNIQUE KEY (`goods_code`)
+                               UNIQUE KEY (`goods_code`),
+                               INDEX idx_stock_goods_no (`goods_no`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 
 
