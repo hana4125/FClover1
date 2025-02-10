@@ -81,7 +81,7 @@
               <th:block th:with="pinfo=${#authentication.principal}">
                 <th:block th:if="${notidata.notiname == pinfo.username || pinfo.username=='admin'}">
                   <div class="button-group">
-                    <a th:href="@{'modifyView?num=' + ${notidata.notino}}" class="text-button">수정</a>
+                    <a th:href="@{/inquiry/notice/modifyView(num=${notidata.notino})}" class="text-button">수정</a>
                     <span class="separator">|</span>
                     <a href="#" th:onclick="'deleteNotice(' + ${notidata.notino} + ')'" class="text-button">삭제</a>
                   </div>
