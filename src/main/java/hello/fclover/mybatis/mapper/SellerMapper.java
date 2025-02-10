@@ -18,6 +18,9 @@ public interface SellerMapper {
     String isSellerIdDuplicate(String sellerId);
 
 
+    long findSellerNo(String companyName);
+
+
     List<Map<String, Object>> getListDetail(Map<String, Object> params);
     int getListCount(Map<String, Object> params);
 
@@ -25,5 +28,6 @@ public interface SellerMapper {
     List<Seller> getSearchList(Map<String, Object> map);
 
     long getselectNo(String sellerId);
+
 
 }

@@ -17,6 +17,13 @@
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
 
+
+    <select id="findSellerNo">
+        select seller_no
+        from seller
+        where company_name=#{sellerName}
+    </select>
+
     <select id="getselectNo" resultType="long">
         SELECT seller_no FROM seller WHERE seller_id = #{sellerId}
     </select>
@@ -74,5 +81,6 @@
             </if>
         </where>
     </select>
+
 
 </mapper>

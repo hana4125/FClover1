@@ -13,7 +13,7 @@
   </insert>
 
   <select id="goodsNoselect">
-    select goods_no
+    select MIN(goods_no)
     from goods
     where seller_no = #{sellerNo}
       and goods_name = #{goodsName}
@@ -487,13 +487,15 @@
         from goods g left join category c ON g.cate_no = c.cate_no
         where g.seller_no = #{sellerNo}
         <if test="goodsName != null and goodsName != ''">
-            and g.goods_name = #{goodsName}
+            AND MATCH(g.goods_name)
+            AGAINST (#{goodsName} IN BOOLEAN MODE)
         </if>
         <if test="cateNo != null and cateNo !=''">
             and g.cate_no = #{cateNo}
         </if>
         <if test="goodsWriter != null and goodsWriter !=''">
-            and g.goods_writer = #{goodsWriter}
+            AND MATCH(g.goods_writer)
+            AGAINST (#{goodsWriter} IN BOOLEAN MODE)
         </if>
         <if test="createStartDate != null and createStartDate !=''">
             and g.goods_date >= #{createStartDate}
@@ -501,6 +503,6 @@
         <if test="createEndDate != null and createEndDate != ''">
             and #{createEndDate} >= g.goods_date
         </if>
-        order by g.goods_no desc
+        order by g.goods_name desc
     </select>
 </mapper>
