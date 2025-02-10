@@ -19,21 +19,21 @@ public class KeywordPreprocessor {
         String processedKeyword;
 
         if (koreanCount > 0 && englishCount == 0) {
-            // only korean
+            // 한글만 있는 경우
             language = "ko";
-            processedKeyword = keyword.replaceAll("[^가-힣]", "");
+            processedKeyword = keyword.replaceAll("[^가-힣0-9]", "");
         } else if (englishCount > 0 && koreanCount == 0) {
-            // only english
+            // 영어만 있는 경우
             language = "en";
-            processedKeyword = keyword.replaceAll("[^A-Za-z]", "");
+            processedKeyword = keyword.replaceAll("[^A-Za-z0-9]", "");
         } else if (koreanCount > 0 && englishCount > 0) {
-
+            // 혼합된 경우
             if (koreanCount > englishCount) {
                 language = "ko";
-                processedKeyword = keyword.replaceAll("[^가-힣]", "");
+                processedKeyword = keyword.replaceAll("[^가-힣0-9]", "");
             } else {
                 language = "en";
-                processedKeyword = keyword.replaceAll("[^A-Za-z]", "");
+                processedKeyword = keyword.replaceAll("[^A-Za-z0-9]", "");
             }
         } else {
             language = "unknown";
