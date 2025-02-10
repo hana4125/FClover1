@@ -55,8 +55,20 @@
     });
 
     function filterData() {
-      var selectedValue = document.getElementById('viewcount').value;
-      console.log("선택된 값: " + selectedValue);
+      var category = document.getElementById("viewcount").value;
+      var currentUrl = new URL(window.location.href);
+
+      // 카테고리 변경
+      if (category === "전체") {
+        currentUrl.searchParams.delete("category");
+      } else {
+        currentUrl.searchParams.set("category", category);
+      }
+
+      // 페이지 파라미터 초기화 (1페이지로)
+      currentUrl.searchParams.set("page", "1");
+
+      window.location.href = currentUrl.toString();
     }
 
   </script>
@@ -141,9 +153,9 @@
             <th:block th:if="${listcount > 0}">
               <div class="rows" style="width: 110px;">
                 <select class="form-control" id="viewcount" th:onchange="filterData()">
-                  <option value="전체" selected>전체</option>
-                  <option value="공지사항">공지사항</option>
-                  <option value="이벤트">이벤트</option>
+                  <option value="전체" th:selected="${category == null || category == '전체'}">전체</option>
+                  <option value="공지사항" th:selected="${category == '공지사항'}">공지사항</option>
+                  <option value="이벤트" th:selected="${category == '이벤트'}">이벤트</option>
                 </select>
               </div>
             </th:block>
@@ -188,7 +200,7 @@
 
           <!--pagination-->
           <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice/noti_list', |&search_word=${search_word}|)}"/>
+            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice/noti_list', |&category=${category}|)}"/>
           </div>
 
           <!--admin 글쓰기-->

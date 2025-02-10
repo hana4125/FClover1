@@ -63,9 +63,9 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
+    public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        return goodsMapper.findCategoryGoodsWishStatus(memberNo, cateNo, sort, offset, size);
+        return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
     @Override
@@ -79,7 +79,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-//    @Cacheable(value = "GoodsMapper.findGoodsWishStatus")
     public List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findBestGoodsWishStatus(memberNo, offset, size);

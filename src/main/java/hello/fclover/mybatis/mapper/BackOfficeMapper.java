@@ -12,7 +12,7 @@ public interface BackOfficeMapper {
 
     List<Seller> searchSeller();
 
-    void insertDeliveryReadyList(Long orderId, String userId, String status);
+    void insertDeliveryReadyList(Long paymentsNo, String userId, String status);
 
     List<Delivery> deliveryReadyOrderSearch();
 
@@ -29,4 +29,10 @@ public interface BackOfficeMapper {
     List<Goods> sellerGoodsApprovalSearch();
 
     void goodsConfirmSuccess(Long goodsNo);
+
+    List<Seller> sellerPendingCheck();
+
+    void updateSellerApproved(Long sellerNo);
+
+    void updateSellerRejected(Long sellerNo);
 }

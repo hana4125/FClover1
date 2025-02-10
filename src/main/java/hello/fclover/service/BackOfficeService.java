@@ -11,7 +11,7 @@ public interface BackOfficeService {
 
     List<Seller> searchSeller();
 
-    void InsertdeliveryReadyList(Long orderId, String userId);
+    void InsertdeliveryReadyList(Long paymentsNo, String userId);
 
     List<Delivery> deliveryReadyOrderSearch();
 
@@ -28,4 +28,10 @@ public interface BackOfficeService {
     List<Goods> sellerGoodsApprovalSearch();
 
     void goodsConfirmSuccess(Long goodsNo);
+
+    List<Seller> sellerPendingCheck();
+
+    void updateSellerApproved(Long sellerNo);
+
+    void updateSellerRejected(Long sellerNo);
 }

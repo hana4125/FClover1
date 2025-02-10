@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
@@ -134,7 +135,7 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                    <h1 class="h3 mb-0 text-gray-800" style="text-align: center">BackOffice</h1>
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -210,14 +211,13 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">여기는 BackOffice입니다</h1>
 <!--                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i-->
 <!--                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
                     </div>
 
                     <!-- Content Row -->
 
-                    <div class="row">
+                    <div class="row d-flex justify-content-xl-center" >
 
                         <!-- Area Chart -->
                         <div class="col-xl-8 col-lg-7">
@@ -225,7 +225,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">여기는 뭘넣을깡</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">주간 도서 주문량</h6>
                                     <div class="dropdown no-arrow">
 <!--                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"-->
 <!--                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
@@ -250,48 +250,68 @@
                             </div>
                         </div>
 
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">여기도 뭘넣을깡</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+
+                        <!-- Bar Chart -->
+                        <div class="col-xl-8 col-lg-7" style="justify-content: center">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">일반가입자수 주간 데이터</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-bar">
+                                    <canvas id="myBarChart"></canvas>
                                 </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
-                                </div>
+<!--                                <hr>-->
+<!--                                Styling for the bar chart can be found in the-->
+<!--                                <code>/js/demo/chart-bar-demo.js</code> file.-->
                             </div>
                         </div>
-                    </div>
+                        </div>
+
+
+
+                        <!-- Pie Chart -->
+<!--                        <div class="col-xl-4 col-lg-5">-->
+<!--                            <div class="card shadow mb-4">-->
+                                <!-- Card Header - Dropdown -->
+<!--                                <div-->
+<!--                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">-->
+<!--                                    <h6 class="m-0 font-weight-bold text-primary">여기도 뭘넣을깡</h6>-->
+<!--                                    <div class="dropdown no-arrow">-->
+<!--                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"-->
+<!--                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                                        </a>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in"-->
+<!--                                            aria-labelledby="dropdownMenuLink">-->
+<!--                                            <div class="dropdown-header">Dropdown Header:</div>-->
+<!--                                            <a class="dropdown-item" href="#">Action</a>-->
+<!--                                            <a class="dropdown-item" href="#">Another action</a>-->
+<!--                                            <div class="dropdown-divider"></div>-->
+<!--                                            <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                &lt;!&ndash; Card Body &ndash;&gt;-->
+<!--                                <div class="card-body">-->
+<!--                                    <div class="chart-pie pt-4 pb-2">-->
+<!--                                        <canvas id="myPieChart"></canvas>-->
+<!--                                    </div>-->
+<!--                                    <div class="mt-4 text-center small">-->
+<!--                                        <span class="mr-2">-->
+<!--                                            <i class="fas fa-circle text-primary"></i> Direct-->
+<!--                                        </span>-->
+<!--                                        <span class="mr-2">-->
+<!--                                            <i class="fas fa-circle text-success"></i> Social-->
+<!--                                        </span>-->
+<!--                                        <span class="mr-2">-->
+<!--                                            <i class="fas fa-circle text-info"></i> Referral-->
+<!--                                        </span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                             </div>
 
 
                         </div>
@@ -360,6 +380,7 @@
     <!-- Page level custom scripts -->
     <script src="/js/demo/chart-area-demo.js"></script>
     <script src="/js/demo/chart-pie-demo.js"></script>
+    <script src="/js/demo/chart-bar-demo.js"></script>
 
 </body>
 

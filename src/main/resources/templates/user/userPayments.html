@@ -44,6 +44,7 @@
   </script>
 </head>
 <body>
+<input type="hidden" th:value="${goodsNo}" class="goodsNo">
 <div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="mt-4 border-top">
@@ -52,26 +53,55 @@
       <h3 style="font-weight: bold">주문 / 결제</h3>
       <hr>
       <div style="height: 300px;" class="text-left">
-        <div style="font-weight: bold" class="mt-2">배송지 정보 : none</div>
-        <div style="font-weight: bold" class="mt-2">배송 요청사항 : none</div>
-        <div style="font-weight: bold" class="mt-2">공동현관 출입방법 : none</div>
-        <hr>
-        <div style="font-weight: bold" class="mt-2">총 주문상품 :
-           <span th:text="${quantity}"></span>
+          <br>
+          <br>
+          <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
+        <div class="mt-2">배송지 정보 : </div>
+        <div class="mt-2">배송 요청사항 : </div>
+        <div  class="mt-2">공동현관 출입방법 : </div>
+          <div  class="mt-2">* 기본배송정보로 설정된 내용이 배송정보로 자동입력됩니다.</div>
+          </div>
+          <br>
+          <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
+        <div  class="mt-2">총 주문상품 :
+           <span class="quantity" th:text="${quantity}"></span>
             개</div>
-        <div style="font-weight: bold" class="mt-2">
-            주문상품 이름 :
-            <span class="goodsName" th:text="${goodsName}"></span> &nbsp;&nbsp;
-            수량 : <span th:text="${quantity}"></span> &nbsp;&nbsp;
-            금액 : <span th:text="${goodsPrice}"></span> 원 </div>
-        <hr>
-        <div style="font-weight: bold" class="mt-2">할인쿠폰 : </div>
-        <div style="font-weight: bold" class="mt-2">사용가능한 쿠폰이 없습니다.</div>
+              <br>
+<!--        <div  class="mt-2">-->
+<!--            <img src="	https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/9791188331796.jpg" alt="책이미지">-->
+<!--            <div class="mt-2">-->
+<!--            주문상품 이름 :<span class="goodsName" th:text="${goodsName}"></span> </div>-->
+<!--            <div class="mt-2">수량 : <span th:text="${quantity}"></span> </div>-->
+<!--            <div class="mt-2">금액 : <span th:text="${goodsPrice}"></span> 원 </div>-->
+<!--        </div>-->
+          <div class="order-container" style="display: flex; align-items: center;">
+              <!-- 책 이미지 (왼쪽) -->
+              <img src="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/9791188331796.jpg" alt="책이미지" style="width: 150px; height: auto; margin-right: 20px;">
+              <img th:src="${mainImage != null ? mainImage.goodsUrl + '/' + mainImage.goodsImageName : '/images/user/book/item1.png'}" width="130px" height="180px" alt="상품이미지"/>
+              <!-- 텍스트 내용 (오른쪽) -->
+              <div>
+                  <div class="mt-2">
+                      주문상품 이름 : <span class="goodsName" th:text="${goodsName}"></span>
+                  </div>
+                  <div class="mt-2">
+                      수량 : <span th:text="${quantity}"></span>
+                  </div>
+                  <div class="mt-2">
+                      금액 : <span th:text="${goodsPrice}"></span> 원
+                  </div>
+              </div>
+          </div>
+          </div>
+          <br>
+          <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
+        <div  class="mt-2">할인쿠폰 : </div>
+        <div  class="mt-2">사용가능한 쿠폰이 없습니다.</div>
+      </div>
       </div>
 
     </div>
     <div style="width: 25%; height: 300vh">
-      <div class="mt-6 ms-3 p-4 border rounded-3 sticky-top">
+      <div class="mt-6 ms-3 p-4 border rounded-3 sticky-top" style="border-width: 2px 2px 2px 2px !important;">
         <div class="d-flex justify-content-between">
 <!--          <p>상품명: <span th:text="${goods.goodsName}"></span></p>-->
           <p>상품 금액</p>
@@ -79,7 +109,7 @@
         </div>
         <div class="d-flex justify-content-between">
           <p>배송비</p>
-          <span>0원</span>
+          <span>3000원</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>쿠폰할인</p>
@@ -88,13 +118,13 @@
         <hr>
         <div class="d-flex justify-content-between">
           <p>최종 결제 금액</p>
-          <span><span class="totalPrice" th:text="${goodsPrice}"></span> 원</span>
+          <span><span class="totalPrice" th:text="${goodsPrice}+3000"></span> 원</span>
         </div>
         <button class="btn btn-primary form-control mt-3" id="payment-button">결제하기</button>
         <script type="text/javascript" th:src="@{/js/payment.js}"></script>
       </div>
 
-      <div class="d-flex justify-content-between">
+      <div class="ms-3 d-flex justify-content-between">
         <p>위 주문내용을 확인하였으며, 결제에 동의합니다.</p>
       </div>
     </div>

@@ -212,8 +212,79 @@
       <artifactId>sax</artifactId>
       <version>2.0.1</version>
     </dependency>
-  </dependencies>
 
+    <!-- redis -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-cache</artifactId>
+    </dependency>
+
+<!--     Spring Boot Starter Data Redis -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+<!--     Spring Data Redis -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-redis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+           <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-batch</artifactId>
+        <version>3.4.2</version>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>5.2.1</version>
+    </dependency>
+              <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-batch</artifactId>
+        <version>3.4.2</version>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>5.2.1</version>
+    </dependency>
+
+
+  </dependencies>
+<!-- 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-batch</artifactId>
+        <version>3.4.2</version>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>5.2.1</version>
+    </dependency>
+              <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-batch</artifactId>
+        <version>3.4.2</version>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-core</artifactId>
+      <version>5.2.1</version>
+    </dependency>
+
+  </dependencies>
+  </dependencyManagement> -->
   <build>
     <plugins>
       <plugin>

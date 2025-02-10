@@ -11,6 +11,7 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
+    <link rel="stylesheet" href="/css/user/category.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -26,15 +27,19 @@
             })
 
             $(".category-item").click(function () {
-                location.href = "/member/category/{no}";
+                location.href = "/goods/category/{no}";
             })
 
             $(".best").click(function () {
-                location.href = "/member/bestSeller";
+                location.href = "/goods/bestSeller";
+            })
+
+            $(".steady").click(function () {
+                location.href = "/goods/steadySeller";
             })
 
             $(".new").click(function () {
-                location.href = "/member/newItems";
+                location.href = "/goods/newItems";
             })
 
             $(".show-detail").click(function () {
@@ -207,10 +212,23 @@
 
         $(function () {
             $(".buy-now-btn").click(function () {
-                const goodsNo = $(this).data("id");
+        //         const goodsNo = $(this).data("id");
+        //
+        //         // 바로구매 페이지로 이동
+        //         location.href = `/payments?goodsNo=${goodsNo}`;
+        var goodsNo = document.querySelector(".goodsNo").value;
+        var goodsName = document.querySelector(".goodsName").value;
+        var goodsPrice = document.querySelector(".goodsPrice").value;
+        var goodsWriter = document.querySelector(".goodsWriter").value;
+        var quantity = 1;  // 수량 가져오기
 
-                // 바로구매 페이지로 이동
-                location.href = `/payments?goodsNo=${goodsNo}`;
+
+        // URL에 값 붙여서 이동
+        location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+            "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+            "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+            "&quantity=" + encodeURIComponent(quantity) +
+            "&goodsNo=" +   encodeURIComponent(goodsNo) ;
             })
         })
     </script>
@@ -228,24 +246,23 @@
         </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-            <a href="#" class="best ps-5 pe-5">베스트</a>
-            <a href="#" class="new ps-5 pe-5">신상품</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Noto Sans KR;margin-right:40px;font-size:18px; color: #ffffff;font-family:Roboto;">전체도서</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
+            <a href="#" class="steady ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
+            <a href="#" class="new ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
         </div>
     </div>
 </div>
 <div id="categoryView">
-    <h4 class="text-center">카테고리</h4><br>
-    <div class="category-list">
-        <ul class="list-unstyled">
-            <!-- categoryList의 각 요소를 반복하여 출력 -->
-            <li th:each="category : ${categoryList}">
-                <!-- 카테고리 이름 출력 -->
-                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
-                   th:text="${category.cateName}"
-                   class="category-item"></a>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="~{fragment/category :: category}"></div>
 </div>
 
 <div class="container w-75 mt-5">
@@ -258,7 +275,7 @@
                         <!-- categoryList의 각 요소를 반복하여 출력 -->
                         <li th:each="category : ${categoryList}">
                             <!-- 카테고리 이름 출력 -->
-                            <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
+                            <a th:href="@{/goods/category/{no}(no=${category.cateNo})}"
                                th:text="${category.cateName}"
                                class="category-item"></a>
                         </li>
@@ -317,25 +334,37 @@
                                     <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
                                     <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                        class="show-detail">
+                                        <input type="hidden" class="goodsNo" th:value="${goods.goodsNo}">
+                                        <input type="hidden" class="goodsWriter" th:value="${goods.goodsWriter}">
+                                        <input type="hidden" class="goodsName" th:value="${goods.goodsName}">
+                                        <input type="hidden" class="goodsPrice" th:value="${goods.goodsPrice}">
+                                        <input type="hidden" class="quantity" th:value="1">
+
+
                                         <span class="item-name" th:text="${goods.goodsName}"></span>
                                     </a>
                                     <br>
                                     <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                                    <div class="prod_price">
+                                        <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
+                                        <span class="unit">원&nbsp;</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="icon ms-auto mb-4">
                                 <!-- 찜 상태에 따른 하트 아이콘 -->
-                                <img th:src="${goods.wishStatus == 'Y'} ? '/images/user/redHeart.png' : '/images/user/heart.png'"
+                                <img th:src="${(wishlist != null and #lists.contains(wishlist, goods.goodsNo))
+                                    ? '/images/user/redHeart.png'
+                                    : '/images/user/heart.png'}"
                                      class="heart me-2"
                                      th:data-id="${goods.goodsNo}"
-                                     width="36"
-                                     height="36"
+                                     width="36" height="36"
                                      alt="찜">
                                 <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
                                      width="36" height="36" alt="장바구니">
                             </div>
                             <!-- 바로구매 버튼 -->
-                            <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
+                            <button id="buy" class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
                             </button>
                         </div>
                     </li>

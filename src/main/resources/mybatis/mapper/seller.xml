@@ -17,9 +17,70 @@
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
 
+
     <select id="findSellerNo">
         select seller_no
         from seller
         where company_name=#{sellerName}
     </select>
+
+    <select id="getselectNo" resultType="long">
+        SELECT seller_no FROM seller WHERE seller_id = #{sellerId}
+    </select>
+
+    <select id="getListDetail" resultType="Map" parameterType="map">
+        SELECT
+        ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+        d.deli_no AS deliNo,
+        p.payment_date AS orderDate,
+        d.deli_status AS deliStatus,
+        g.GOODS_NAME AS goodsName,
+        d.deli_quan AS quantity,
+        m.member_id AS customerName,
+        d.deli_date AS deliveryDate
+        from (select *
+        FROM payments p
+        where p.seller_id = #{sellerNo}) p
+         JOIN delivery d ON p.payments_no = d.payments_no
+         JOIN goods g ON d.stock_no = g.goods_no
+         JOIN member m ON p.user_id = m.member_id
+        <where>
+            <if test="searchWord != null and searchWord != ''">
+             <foreach collection="searchField" item="data" separator="or ">
+                 <choose>
+                     <when test='data == "d"'>d.deli_no</when>
+                     <when test='data == "g"'>g.goods_name</when>
+                     <when test='data == "c"'>m.member_id</when>
+                 </choose>
+             like #{searchWord}
+             </foreach>
+            </if>
+        </where>
+        ORDER BY p.payment_date DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="getListCount" resultType="int" parameterType="map">
+        SELECT COUNT(*)
+        from (select *
+        FROM payments p
+        where p.seller_id = #{sellerNo}) p
+         JOIN delivery d ON p.payments_no = d.payments_no
+         JOIN goods g ON d.stock_no = g.goods_no
+         JOIN member m ON p.user_id = m.member_id
+        <where>
+            <if test="searchWord != null and searchWord != ''">
+                <foreach collection="searchField" item="data" separator="or ">
+                    <choose>
+                        <when test='data == "d"'> d.deli_no</when>
+                        <when test='data == "g"'> g.goods_name</when>
+                        <when test='data == "c"'> m.member_id</when>
+                    </choose>
+                    like #{searchWord}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

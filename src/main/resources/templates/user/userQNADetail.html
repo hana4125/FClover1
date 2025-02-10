@@ -6,12 +6,13 @@
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="/js/jquery-3.7.1.js"></script>
+  <script src="/js/qna_btn.js"></script>
   <script src="/js/qna_reply.js"></script>
-  <link rel="stylesheet" href="/css/user/home.css">
-  <link rel="stylesheet" href="/css/user/searchBox.css">
-  <link rel="stylesheet" href="/css/user/notice.css">
-  <link rel="stylesheet" href="/css/user/noticedetail.css">
-  <link rel="stylesheet" href="/css/user/qnadetail.css">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/user/home.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/user/searchBox.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/user/notice.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/user/noticedetail.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/user/qnadetail.css}">
   <link rel="icon" th:href="@{/images/user/favicon.png}">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -76,9 +77,24 @@
         <div>
         <span class="qna_kind" th:text="${qValue}"></span>
         </div>
+
         <div>
-        <p class="title_heading" th:text="${questiondata.qtitle}"></p>
+          <div class="d-flex align-items-center">
+            <p class="title_heading flex-grow-1 m-0" th:text="${questiondata.qtitle}"></p>
+            <th:block sec:authorize-expr="isAuthenticated()">
+              <th:block th:with="pinfo=${#authentication.principal}">
+                <th:block th:if="${questiondata.qname == pinfo.username || pinfo.username=='admin'}">
+                  <div class="button-group">
+                    <a th:href="@{'modifyView?num=' + ${questiondata.qno}}" class="text-button me-2">수정</a>
+                    <span class="separator">|</span>
+                    <a href="#" th:onclick="'deleteQuestion(' + ${questiondata.qno} + ')'" class="text-button">삭제</a>
+                  </div>
+                </th:block>
+              </th:block>
+            </th:block>
+          </div>
         </div>
+
         <div class="info_case">
           ID : <span class="desc" th:text="${questiondata.qname}"></span>
           <span class="gap">|</span>
@@ -88,29 +104,48 @@
         <div class="content-area mb-4">
           <div th:text="${questiondata.qcontent}" class="mb-3"></div>
           <div th:if="${questiondata.qfile != null}" class="mt-2">
-            <img th:src="|/upload${questiondata.qfile}|" style="width:100px;">
-<!--<img th:src="@{'/display/image?filename=' + ${questiondata.qfile}}" class="question-image">-->
+            <img th:src="${questiondata.qfile}" style="max-width:100%; width:auto; height:auto;">
           </div>
         </div>
 
-      <!--QnA 댓글 -->
+        <!--QnA 댓글 -->
         <div id="comment">
           <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-          <button id="write" class="btn btn-primary float-right">등록</button>
-          <textarea rows="3" class="form-control" id="content" maxlength="300"></textarea>
+            <button id="write" class="btn btn-primary float-right">등록</button>
+            <textarea rows="3" class="form-control" id="content" maxlength="300"></textarea>
             <input type="hidden" id="loginid" th:value="${#authentication.principal.username}">
           </th:block>
-          <table class="table">
-            <tbody>
-            </tbody>
-          </table>
+
+          <div id="comment-list">
+            <th:block th:each="comment : ${commentList}">
+              <div class="comment-container">
+                <!-- 댓글 내용 -->
+                <div class="comment-main">
+                  <span class="comment-author" th:text="${comment.memberid}"></span>
+                  <span class="comment-content" th:text="${comment.ccontent}"></span>
+                  <span class="comment-date" th:text="${comment.cresponseat}"></span>
+                </div>
+
+                <!-- 수정/삭제 버튼 -->
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                  <div class="comment-actions">
+                    <a href="#" class="text-button edit">수정</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="text-button remove" data-toggle="modal" data-target="#myModal">삭제</a>
+                    <input type='hidden' th:value='${comment.cno}'>
+                  </div>
+                </th:block>
+
+              </div>
+            </th:block>
+          </div>
+
           <div id="message"></div>
           <input type="hidden" name="board_num" th:value="${questiondata.qno}" id="board_num">
-        </div>
 
 
 
-      <!-- 공지사항 버튼-->
+        <!-- 공지사항 버튼-->
   <div class="d-flex justify-content-center mt-4">
     <a th:href="@{/inquiry/question}">
       <button type="button" class="btn" style="border:1px solid #226b24;

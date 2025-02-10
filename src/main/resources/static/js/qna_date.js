@@ -21,14 +21,20 @@ $(function () {
 		const today = new Date();
 		let startDate = new Date();
 
-		if (period === "0") {
+		console.log(period);
+
+		if (period === "0" || period ==="all") {
 			// 직접 입력 모드
-			startDateInput.show().prop('disabled', false);
-			endDateInput.show().prop('disabled', false);
-			startDateDisplay.text('');
-			endDateDisplay.text('');
+			startDateInput.val('');
+			endDateInput.val('');
+
+			if(period ==="all") {
+				filterByDate();
+			}
+
 			return;
 		}
+
 
 		// 선택된 기간에 따라 시작일 계산
 		startDate.setMonth(today.getMonth() - parseInt(period));
@@ -69,9 +75,16 @@ $(function () {
 		// 현재 URL에서 currentPage 파라미터 가져오기
 		const urlParams = new URLSearchParams(window.location.search);
 		const currentPage = urlParams.get('currentPage') || 1;
-
+		const term = periodSelect.val()
 		// URL 생성 - 전체 경로 포함
-		const filterUrl = `/inquiry/question/filter?currentPage=${currentPage}&startDate=${startDate}&endDate=${endDate}`;
+		let filterUrl = `/inquiry/question/filter?currentPage=${currentPage}&startDate=${startDate}&endDate=${endDate}&term=${term}`;
+
+		if($("#period-select").val() == 'all')
+		{
+			filterUrl = `/inquiry/question/filter?currentPage=${currentPage}&term=${term}`;
+		}
+		console.log($("#period-select").val());
+		console.log(filterUrl);
 
 		// 페이지 이동
 		window.location.href = filterUrl;
@@ -90,6 +103,11 @@ $(function () {
 		const urlParams = new URLSearchParams(window.location.search);
 		const startDate = urlParams.get('startDate');
 		const endDate = urlParams.get('endDate');
+		const term = urlParams.get('term');
+
+		if(term){
+				$("#period-select").val(term);
+			}
 
 		if (startDate) {
 			startDateInput.val(startDate);

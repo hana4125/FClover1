@@ -1,15 +1,16 @@
 package hello.fclover.controller;
 
 
-import hello.fclover.domain.Category;
-import hello.fclover.domain.Goods;
-import hello.fclover.domain.Seller;
+import hello.fclover.domain.*;
 import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.math.BigInteger;
 import java.security.Principal;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,6 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-
 @RequiredArgsConstructor
 @RequestMapping(value = "/seller")
 public class SellerController {
@@ -59,7 +58,6 @@ public class SellerController {
         model.addAttribute("categoryList", categoryList);
         return "seller/sellerAddSingleProduct";
     }
-
 
     //단일 상품등록 프로세스
     @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -91,7 +89,6 @@ public class SellerController {
         return "seller/sellerProductDetail";
     }
 
-
     @GetMapping("/main")
     public String signup(Principal principal) {
 
@@ -101,6 +98,8 @@ public class SellerController {
 
         return "seller/sellerMain";
     }
+
+
 
     @GetMapping("/signup")
     public String sellerSignupForm() {
@@ -145,7 +144,13 @@ public class SellerController {
 
     //판매자 일정산 페이지
     @GetMapping("/sellerDaySettlement")
-    public String sellerDaySettlement() {
+    public String sellerDaySettlement(Principal principal, Model model) {
+        System.out.println("principal = " + principal.getName());
+        List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
+        model.addAttribute("daySettlement", daySettlement);
+
+        System.out.println("daySettlement = " + daySettlement);
+
         return "seller/sellerDaySettlement";
     }
 
@@ -155,10 +160,32 @@ public class SellerController {
         return "seller/sellerMonthSettlement";
     }
 
+    @ResponseBody
+    @PostMapping("/pendingCheck")
+    public Seller pendingCheck(@RequestBody Map<String, String> data) {
+        String sellerId = data.get("sellerId");
+        String password = data.get("password");
+
+        Seller seller = sellerService.findSellerById(sellerId);
+
+        if (seller == null) {
+            return null;
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (!passwordEncoder.matches(password, seller.getPassword())) {
+            return null;
+        }
+
+        log.info(seller.toString());
+        return seller;
+    }
+
     @PostMapping("/SearchGoodsProcess")
     @ResponseBody
     public ResponseEntity<?> searchGoodsProcess(@RequestParam Map<String, String> params,
-                                              Principal principal) {
+                                                Principal principal) {
         System.out.println("params = " + params);
 
         params.get("cateNo");
@@ -167,9 +194,52 @@ public class SellerController {
         return ResponseEntity.ok(goodsList);
     }
 
+
     @GetMapping("/sellerAddMassProduct")
     public String addMassProduct(Model model, Principal principal) {
         return "seller/sellerAddMassProduct";
+
+    //구매자 리스트 조회
+    @GetMapping(value = "/buyerList")
+    public ModelAndView getBuyerList(
+            Principal principal,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "3") int limit,
+            @RequestParam(defaultValue = "") String searchWord,
+            @RequestParam(defaultValue = "") String searchField,
+            HttpServletRequest request) {
+
+
+        ModelAndView mnv = new ModelAndView();
+        String sellerId = principal.getName();
+        Long sellerNo = sellerService.getselectNo(sellerId);
+
+
+        // 전체 구매자 주문 목록 개수 가져오기
+        int totalcount = sellerService.getListCount(searchWord,sellerNo,searchField);
+        // 현재 페이지에 해당하는 구매자 리스트 가져오기
+        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, limit,sellerNo,searchField);
+
+        PaginationResult result = new PaginationResult(page, limit, totalcount);
+
+        if(orderList.isEmpty()) {
+            mnv.addObject("message", "구매자 주문 정보가 없습니다.");
+        }
+
+        mnv.setViewName("seller/sellerBuyerList");
+        mnv.addObject("orderList", orderList);
+        mnv.addObject("searchWord", searchWord);
+        mnv.addObject("searchField", searchField);
+        mnv.addObject("searchlistcount", totalcount);
+        mnv.addObject("startpage", result.getStartpage());
+        mnv.addObject("endpage", result.getEndpage());
+        mnv.addObject("maxpage", result.getMaxpage());
+        mnv.addObject("totalcount", totalcount);
+        mnv.addObject("limit", limit);
+        mnv.addObject("page", page);
+
+
+        return mnv;
     }
 }
 

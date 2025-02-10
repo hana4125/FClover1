@@ -9,20 +9,15 @@ import java.io.IOException;
 import java.util.List;
 
 public interface NoticeService {
-
     public int getListCount();
-
     List<Notice> getBoardList(int page, int limit);
-
     void insertNotice(Notice notice);
-
     void setReadCountUpdate(int num);
-
     Notice getDetail(int num);
-
-    int getSearchListCount( String searchWord);
-
-    List<Notice> getSearchList( String searchWord, int page, int limit);
-
+    int getSearchListCount(String searchWord, String category);
+    List<Notice> getSearchList(String searchWord, int page, int limit, String category);
     int deleteNotice(int notino);
+
+    Notice getNoticeById(int notino);
+    void modifyNotice(Notice notice);
 }
