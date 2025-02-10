@@ -7,9 +7,9 @@
   <insert id="goodsInsertText">
     insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
-     goods_date, goods_pageCount, goods_bookSize, writer_content, permission)
+     goods_date, goods_pageCount, goods_bookSize, company_name, writer_content, permission)
     values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
-            current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent}, '승인대기중')
+            current_date, #{goodsPageCount}, #{goodsBookSize}, #{companyName}, #{writerContent}, '승인대기중')
   </insert>
 
   <select id="goodsNoselect">
