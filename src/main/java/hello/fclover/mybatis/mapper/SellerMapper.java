@@ -11,4 +11,6 @@ public interface SellerMapper {
     Seller selectSellerById(String sellerId);
 
     String isSellerIdDuplicate(String sellerId);
+
+    long findSellerNo(String companyName);
 }

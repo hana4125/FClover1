@@ -166,5 +166,10 @@ public class SellerController {
         System.out.println("goodsList = " + goodsList);
         return ResponseEntity.ok(goodsList);
     }
+
+    @GetMapping("/sellerAddMassProduct")
+    public String addMassProduct(Model model, Principal principal) {
+        return "seller/sellerAddMassProduct";
+    }
 }
 

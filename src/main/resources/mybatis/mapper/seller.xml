@@ -17,4 +17,9 @@
         SELECT seller_id FROM seller WHERE seller_id = #{sellerId}
     </select>
 
+    <select id="findSellerNo">
+        select seller_no
+        from seller
+        where company_name=#{sellerName}
+    </select>
 </mapper>

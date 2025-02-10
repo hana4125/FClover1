@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
+import hello.fclover.domain.MessGoods;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,5 +40,8 @@ public interface GoodsService {
 
     List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword);
 
+//    public void saveProduct(InputStream inputStream);
+
+ Map<String, Object> saveMessproduct(List<MessGoods> messGoods);
 }
 
