@@ -86,16 +86,37 @@
         insert into notice
         (noti_no, noti_title, noti_name, noti_content, noti_date)
         values
-        (#{notino}, #{notititle}, #{notiname}, #{noticontent}, now())
+        (#{notino}, #{notititle}, #{notiname}, #{noticontent}, #{notidate})
     </insert>
 
+    <select id="findById" parameterType="Long" resultType="Notice">
+        SELECT
+            noti_no,
+            noti_title,
+            noti_content,
+            noti_name,
+            noti_date
+        FROM
+            notice
+        WHERE
+            noti_no = #{notino}
+    </select>
 
+    <!-- 공지사항 수정 -->
+    <update id="modifyNotice" parameterType="Notice">
+        UPDATE notice
+        SET
+            noti_title = #{notititle},
+            noti_content = #{noticontent},
+            noti_Date = CURRENT_TIMESTAMP
+        WHERE
+            noti_no = #{notino}
+    </update>
 
     <delete id="deleteNotice" parameterType="int">
         <if test="_parameter != null">
             DELETE FROM notice WHERE noti_no = #{notino}
         </if>
     </delete>
-
 
 </mapper>
