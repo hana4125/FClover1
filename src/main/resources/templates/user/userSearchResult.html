@@ -75,16 +75,16 @@
             <div class="filter_integrate_box" id="category_filter_box">
               <ul class="filter_list">
                 <!-- 카테고리 필터 -->
-                <li class="menu_item item_depth1 active" id="category_filter_li">
-                  <button type="button" class="btn_filter_depth1 active" id="category_filter_button">
+                <li class="menu_item item_depth1" id="category_filter_li">
+                  <button type="button" class="btn_filter_depth1" id="category_filter_button">
                     <span class="text">카테고리</span>
                   </button>
-                  <div class="filter_cont_box">
-                    <ul class="filter_list depth2 active">
+                  <div class="filter_cont_box" style="display: none;">
+                    <ul class="filter_list depth2">
                       <!-- 각 카테고리는 ajax에서 받아온 카테고리 목록을 바탕으로 생성하기 -->
                       <!-- 예시 -->
                       <li class="menu_item item_depth2" th:each="category : ${searchResult.categoryList}">
-                        <button type="button" class="btn_category" th:value="${category.getKey().cateNo}"
+                        <button type="button" class="btn_category category-item" th:value="${category.getKey().cateNo}"
                                 th:text="${category.getKey().cateName + ' (' + category.getValue() + ')'}">
                         </button>
                       </li>
