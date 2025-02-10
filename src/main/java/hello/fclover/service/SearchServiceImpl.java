@@ -5,12 +5,14 @@ import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
 import hello.fclover.domain.Member;
 import hello.fclover.dto.SearchDetailParamDTO;
+import hello.fclover.dto.SearchKeywordDTO;
 import hello.fclover.dto.SearchLogDTO;
 import hello.fclover.dto.SearchParamDTO;
 import hello.fclover.dto.SearchResponseDTO;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import hello.fclover.mybatis.mapper.SearchLogMapper;
+import hello.fclover.util.KeywordPreprocessor;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,7 +52,16 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public SearchResponseDTO searchByKeyword(String keyword, String sessionId, Member member) {
 
+        // 검색 로그 기록
         insertSearchLog(keyword, sessionId, member);
+
+        // 1. 검색어 전처리 : 키워드와 언어 프로퍼티
+        SearchKeywordDTO preprocessed = KeywordPreprocessor.preprocess(keyword);
+        String processedKeyword = preprocessed.getKeyword();
+        String language = preprocessed.getLanguage();
+
+        // 로그로 확인
+        log.info("전처리 결과 - keyword: {}, language: {}", processedKeyword, language);
 
         SearchResponseDTO result = new SearchResponseDTO();
 
@@ -60,7 +71,8 @@ public class SearchServiceImpl implements SearchService {
         int offset = 0;
 
         Map<String, Object> params = new HashMap<>();
-        params.put("keyword", keyword);
+        params.put("keyword", processedKeyword);
+        params.put("language", language);
         params.put("sort", sort);
         params.put("offset", offset);
         params.put("size", size);
@@ -68,16 +80,16 @@ public class SearchServiceImpl implements SearchService {
         // 전체 소요 시간 측정을 위한 시작 시간 기록
         long overallStartTime = System.currentTimeMillis();
 
-        // 1. countByKeyword 비동기 작업
+        // 2. countByKeyword 비동기 작업
         CompletableFuture<Integer> countFuture = CompletableFuture.supplyAsync(() -> {
             long countStart = System.currentTimeMillis();
-            int countResult = countService.countByKeyword(keyword);
+            int countResult = countService.countByKeyword(preprocessed);
             long countTime = System.currentTimeMillis() - countStart;
             log.info("[{}] countByKeyword 실행 시간: {} ms", Thread.currentThread().getName(), countTime);
             return countResult;
         }, asyncExecutor);
 
-        // 2. 상품 검색 및 대표 이미지 가져오기 (비동기로 실행)
+        // 3. 상품 검색 및 대표 이미지 가져오기 (비동기로 실행)
         CompletableFuture<List<Goods>> searchFuture = CompletableFuture
                 .supplyAsync(() -> {
                     long searchStart = System.currentTimeMillis();
@@ -97,8 +109,8 @@ public class SearchServiceImpl implements SearchService {
                     return searchResults;
                 });
 
-        // 3. 카테고리별 갯수 세는 로직을 비동기로 처리 (캐시 적용된 메서드 호출)
-        CompletableFuture<Map<Category, Integer>> categoryFuture = CompletableFuture.supplyAsync(() -> countService.getCategoryCount(keyword), asyncExecutor);
+        // 4. 카테고리별 갯수 세는 로직을 비동기로 처리 (캐시 적용된 메서드 호출)
+        CompletableFuture<Map<Category, Integer>> categoryFuture = CompletableFuture.supplyAsync(() -> countService.getCategoryCount(preprocessed), asyncExecutor);
 
         // 모든 비동기 작업이 완료될 때까지 대기
         int totalCount = countFuture.join();
@@ -218,12 +230,12 @@ public class SearchServiceImpl implements SearchService {
         }
 
         int size = searchParamDTO.getSize();
-        int totalCount = goodsList.size();
+        int totalCount = goodsMapper.countSearchByParam(searchParamDTO);
         Map<String, Integer> pagination = calculatePagination(totalCount, page, size);
 
         SearchResponseDTO result = new SearchResponseDTO();
 
-        // 카테고리별 갯수 세는 로직
+        // TODO : 카테고리별 갯수 세는 로직 -> 비동기로 수정해야 함
         Map<Category, Integer> categoryList = new HashMap<>();
         for(Goods goods : goodsList) {
             int cateNo = goods.getCateNo();
@@ -249,7 +261,7 @@ public class SearchServiceImpl implements SearchService {
         result.setSearchResults(goodsList);
         result.setTotalCount(totalCount);
         result.setCurrentPage(page);
-        result.setTotalPages(pagination.get("totalCount"));
+        result.setTotalPages(pagination.get("totalPages"));
         result.setStartPage(pagination.get("startPage"));
         result.setEndPage(pagination.get("endPage"));
         result.setSort(searchParamDTO.getSort());
@@ -343,5 +355,6 @@ public class SearchServiceImpl implements SearchService {
         pageInfo.put("endPage", endPage);
         return pageInfo;
     }
+
 
 }

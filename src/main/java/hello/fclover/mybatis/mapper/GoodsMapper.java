@@ -2,6 +2,7 @@ package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Goods;
 import hello.fclover.dto.CategoryCountDTO;
+import hello.fclover.dto.SearchKeywordDTO;
 import hello.fclover.dto.SearchParamDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,9 +22,9 @@ public interface GoodsMapper {
 
     Goods findGoodsById(long goodsNo);
 
-    int countGoodsByKeyword(String keyword);
+    int countGoodsByKeyword(SearchKeywordDTO processedKeyword);
 
-    List<CategoryCountDTO> countCategoryByKeyword(@Param("keyword") String keyword);
+    List<CategoryCountDTO> countCategoryByKeyword(SearchKeywordDTO processedKeyword);
 
     // 찜 상태를 포함한 상품 조회 메서드 추가
     List<Goods> findCategoryGoodsWishStatus(
@@ -87,6 +88,10 @@ public interface GoodsMapper {
                       @Param("week") String week);
 
     List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword);
+
+    int countSearchByParam(SearchParamDTO searchParamDTO);
+
+    List<CategoryCountDTO> countCategoryByParam(SearchParamDTO searchParamDTO);
 
     List<Goods> searchByParam(SearchParamDTO searchParamDTO);
 
