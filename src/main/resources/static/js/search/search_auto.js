@@ -531,7 +531,7 @@ function riseCall(age,gender) {
       addHtml  +="                        <div class='item_group'>";
       addHtml  +="                            <!-- form_sel -->";
       addHtml  +="                            <div class='form_sel type_arw' data-class='type_arw'>";
-      addHtml  +="                                <select title='연령기준 정렬' id='ageSel'>";
+      addHtml  +="                                <select title='연령기준 정렬' id='ageSel' class='ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget'>";
       addHtml  +="                                    <option value='ALL'>전연령</option>";
       const ageRange = ['10대', '20대', '30대', '40대']
       for(let range of ageRange){

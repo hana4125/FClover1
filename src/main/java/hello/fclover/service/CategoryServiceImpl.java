@@ -4,7 +4,6 @@ import hello.fclover.domain.Category;
 import hello.fclover.mybatis.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    @Cacheable(value = "CategoryMapper.findAll")
     public List<Category> getCategoryList() {
         // 모든 카테고리 가져오기
         long countStartTime = System.currentTimeMillis();
@@ -29,7 +27,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = "CategoryMapper.findTitle")
     public Category getCategoryByNo(int cateNo) {
         return categoryMapper.findTitle(cateNo);
     }

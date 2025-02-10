@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>home</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+  <link rel="icon" th:href="@{/images/user/favicon.png}">
+  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery-3.7.1.js"></script>
+  <link rel="stylesheet" href="/css/user/home.css">
+  <link rel="stylesheet" href="/css/user/searchBox.css">
+  <link rel="stylesheet" href="/css/user/notice.css">
+  <link rel="icon" th:href="@{/images/user/favicon.png}">
+  <script th:inline="javascript">
+    $(function () {
+      $("#logo").click(function () {
+        location.href = "/";
+      })
+
+      $("#cart").click(function() {
+        location.href="/cart";
+      })
+
+      $("#myPage").click(function() {
+        location.href="/myPage";
+      })
+    })
+  </script>
+  <style>
+    .btn{
+      border-color:#226b24;
+      border-radius: 5px;
+      color:#226b24;
+      padding: 10px 20px;
+      margin-left: 10px;
+      hover: none;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+
+<!-- aside -->
+<div class="mt-4 border-top">
+  <div class="container w-75 pt-51">
+
+    <!--div headwrap-->
+    <section class="header-menu mt-4">
+      <a href="#" class="home_link">home</a>
+      <a href="#" class="btn_sub_depth">고객센터</a>
+    </section>
+
+    <!--div container-->
+    <div class="d-flex">
+      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+        <div class="aside_wrap">
+          <div class="aside_header">
+            <p class="side_heading">고객센터</p>
+          </div>
+
+          <!-- cscenter -->
+          <div class="aside_body">
+            <div class="sd_wrap" style="width: 170px;">
+              <ul class="list_category">
+                <li class="side_item">
+                  <a href="/" class="sd_link">메인</a>
+                </li>
+                <li class="side_item">
+                  <a href="/inquiry/notice/noti_list" class="sd_link">공지사항</a>
+                </li>
+                <li class="side_item">
+                  <a href="/inquiry/question" class="sd_link">문의하기</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- main -->
+      <div class="container">
+        <div class="title_wrap title_size">
+          <h1 class="title_heading">공지사항 수정</h1>
+          <div class="right_area"></div>
+        </div>
+        <form th:action="@{/inquiry/notice/modify}" method="post" name="boardform">
+          <input type="hidden" name="notino" th:value="${notidata?.notino}"/>
+
+          <div class="form-group">
+            <input name="notiname" id="noti_name" readOnly
+                   type="text" class="form-control"
+                   placeholder="notice_writer"  th:value="${#authentication.name}" />
+          </div>
+
+          <div class="form-group mt-2">
+            <input name="notititle" id="noti_title" type="text" maxlength="300" class="form-control"
+                   th:value="${notidata?.notititle}">
+          </div>
+
+          <div class="form-group mt-3">
+        <textarea name="noticontent" id="noti_content" rows="10" maxlength="4000" class="form-control"
+                  th:text="${notidata?.noticontent}"></textarea>
+          </div>
+
+          <div class="form-group mt-3 d-flex justify-content-end">
+            <button type="submit" class="btn"
+                    style="background-color:#226b24; border-radius: 5px; color:white; width: 74px; text-align: center;">
+              수정
+            </button>
+            <button type="button" class="btn" onclick="history.back()">취소</button>
+          </div>
+        </form>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="~{fragment/footer :: footer}"></div>
+</body>
+</html>

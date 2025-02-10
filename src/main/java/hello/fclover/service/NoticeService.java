@@ -17,4 +17,7 @@ public interface NoticeService {
     int getSearchListCount(String searchWord, String category);
     List<Notice> getSearchList(String searchWord, int page, int limit, String category);
     int deleteNotice(int notino);
+
+    Notice getNoticeById(int notino);
+    void modifyNotice(Notice notice);
 }
