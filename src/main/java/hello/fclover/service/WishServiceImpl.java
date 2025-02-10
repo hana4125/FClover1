@@ -34,8 +34,7 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
-    public List<Long> getWishlistGoodsNos(Long goodsNo, Long memberNo) {
-//        return wishMapper.findWishlistGoodsNosByMemberNo(memberNo);
+    public List<Long> getWishlistGoodsNos(Long memberNo) {
         String key = "member:" + memberNo + ":wish";
         try {
             Set<String> wishSet = redisTemplate.opsForSet().members(key);
@@ -45,10 +44,10 @@ public class WishServiceImpl implements WishService {
                         .collect(Collectors.toList());
             }
         } catch (Exception e) {
-            // Redis 조회 중 예외 발생 시 로깅 후 RDB에서 데이터 조회
             System.err.println("Redis 조회 오류: " + e.getMessage());
         }
+
         // Redis에 데이터가 없거나 오류 발생 시 RDB에서 조회
-        return wishMapper.findWishlistGoodsNosByMemberNo(goodsNo, memberNo);
+        return wishMapper.findWishlistGoodsNosByMemberNo(memberNo);
     }
 }

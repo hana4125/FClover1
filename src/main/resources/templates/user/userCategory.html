@@ -353,11 +353,12 @@
                             </div>
                             <div class="icon ms-auto mb-4">
                                 <!-- 찜 상태에 따른 하트 아이콘 -->
-                                <img th:src="${goods.wishStatus == 'Y'} ? '/images/user/redHeart.png' : '/images/user/heart.png'"
+                                <img th:src="${(wishlist != null and #lists.contains(wishlist, goods.goodsNo))
+                                    ? '/images/user/redHeart.png'
+                                    : '/images/user/heart.png'}"
                                      class="heart me-2"
                                      th:data-id="${goods.goodsNo}"
-                                     width="36"
-                                     height="36"
+                                     width="36" height="36"
                                      alt="찜">
                                 <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
                                      width="36" height="36" alt="장바구니">
