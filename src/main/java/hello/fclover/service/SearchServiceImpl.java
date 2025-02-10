@@ -4,7 +4,6 @@ import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
 import hello.fclover.domain.Member;
-import hello.fclover.dto.CategoryCountDTO;
 import hello.fclover.dto.SearchDetailParamDTO;
 import hello.fclover.dto.SearchLogDTO;
 import hello.fclover.dto.SearchParamDTO;
@@ -17,15 +16,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -39,13 +40,12 @@ public class SearchServiceImpl implements SearchService {
     // TODO : 시간 측정 로그 AOP 로 적용하도록 수정하기
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
+    private final CountService countService;
     private final CategoryMapper categoryMapper;
     private final SearchLogMapper searchLogMapper;
 
-    @Override
-    public int countByKeyword(String keyword) {
-        return goodsMapper.countGoodsByKeyword(keyword);
-    }
+    @Qualifier("asyncExecutor")
+    private final Executor asyncExecutor;
 
     @Override
     public SearchResponseDTO searchByKeyword(String keyword, String sessionId, Member member) {
@@ -59,111 +59,79 @@ public class SearchServiceImpl implements SearchService {
         int size = 20;
         int offset = 0;
 
-
         Map<String, Object> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("sort", sort);
         params.put("offset", offset);
         params.put("size", size);
 
-        long countStartTime = System.currentTimeMillis();
+        // 전체 소요 시간 측정을 위한 시작 시간 기록
+        long overallStartTime = System.currentTimeMillis();
 
-        // TODO : 페이지네이션 할 때는 DB 조회 안하도록 수정하기 -> 캐시처리?
-        int totalCount = countByKeyword(keyword);
+        // 1. countByKeyword 비동기 작업
+        CompletableFuture<Integer> countFuture = CompletableFuture.supplyAsync(() -> {
+            long countStart = System.currentTimeMillis();
+            int countResult = countService.countByKeyword(keyword);
+            long countTime = System.currentTimeMillis() - countStart;
+            log.info("[{}] countByKeyword 실행 시간: {} ms", Thread.currentThread().getName(), countTime);
+            return countResult;
+        }, asyncExecutor);
 
-        long countEndTime = System.currentTimeMillis();
-        long totalCountTime = countEndTime - countStartTime;
-        log.info("검색어: '{}' count 완료 소요 시간: {} ms", keyword, totalCountTime);
+        // 2. 상품 검색 및 대표 이미지 가져오기 (비동기로 실행)
+        CompletableFuture<List<Goods>> searchFuture = CompletableFuture
+                .supplyAsync(() -> {
+                    long searchStart = System.currentTimeMillis();
+                    List<Goods> goodsResult = goodsMapper.findGoodsByKeyword(params);
+                    long searchTime = System.currentTimeMillis() - searchStart;
+                    log.info("[{}] findGoodsByKeyword 실행 시간: {} ms", Thread.currentThread().getName(), searchTime);
+                    return goodsResult;
+                }, asyncExecutor)
+                .thenApply(searchResults -> {
+                    long imageStart = System.currentTimeMillis();
+                    for (Goods goods : searchResults) {
+                        GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
+                        goods.setMainImage(mainImage);
+                    }
+                    long imageTime = System.currentTimeMillis() - imageStart;
+                    log.info("[{}] 대표 이미지 가져오기 실행 시간: {} ms", Thread.currentThread().getName(), imageTime);
+                    return searchResults;
+                });
 
-        long searchStartTime = System.currentTimeMillis();
+        // 3. 카테고리별 갯수 세는 로직을 비동기로 처리 (캐시 적용된 메서드 호출)
+        CompletableFuture<Map<Category, Integer>> categoryFuture = CompletableFuture.supplyAsync(() -> countService.getCategoryCount(keyword), asyncExecutor);
 
-        List<Goods> searchResults = goodsMapper.findGoodsByKeyword(params);
+        // 모든 비동기 작업이 완료될 때까지 대기
+        int totalCount = countFuture.join();
+        List<Goods> searchResults = searchFuture.join();
+        Map<Category, Integer> sortedCategoryMap = categoryFuture.join();
 
-        long searchEndTime = System.currentTimeMillis();
-        long totalSearchTime = searchEndTime - searchStartTime;
-        log.info("검색어: '{}' 검색 소요 시간 : {} ms", keyword, totalSearchTime);
+        long overallTime = System.currentTimeMillis() - overallStartTime;
+        log.info("전체 검색 소요 시간: {} ms", overallTime);
 
-        long totalTime = totalCountTime + totalSearchTime;
-        log.info("검색어: '{}' 검색에 들어간 총 소요 시간: {} ms", keyword, totalTime);
-
-        int totalPages = (int) Math.ceil((double) totalCount / size);
-
-        // TODO : 찜 상태는 완성되면 추가
-
-        // TODO : 중복되는 코드 메소드화 하거나 유틸 클래스로 빼기
-        int maxPageNumbersToShow = 10;
-        int startPage;
-        int endPage;
-
-        if (totalPages <= maxPageNumbersToShow) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (page <= 6) {
-                startPage = 1;
-                endPage = 10;
-            } else if (page + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = page - 5;
-                endPage = page + 4;
-            }
-        }
-
-        // 대표 이미지 가져오기
-        for (Goods goods : searchResults) {
-            GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
-            goods.setMainImage(mainImage);
-        }
-
-        // 카테고리별 갯수 세는 로직
-        List<CategoryCountDTO> countCategories = goodsMapper.countCategoryByKeyword(keyword);
-        Map<Category, Integer> categoryList = new HashMap<>();
-        for(CategoryCountDTO countCategory : countCategories) {
-            int cateNo = countCategory.getCateNo();
-            Category category = categoryMapper.findTitle(cateNo);
-            categoryList.put(category, countCategory.getCount());
-        }
-
-        Map<Category, Integer> sortedCategoryMap = categoryList.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,       // 중복 key 발생 시 기존 값을 유지
-                        LinkedHashMap::new    // 순서를 유지하기 위해 LinkedHashMap 사용
-                ));
-
-        // goodsPrice 필드를 int 매핑하여 최댓값과 최솟값을 구함
+        // goodsPrice 최댓값과 최솟값 계산
         OptionalInt maxPriceOpt = searchResults.stream()
                 .mapToInt(Goods::getGoodsPrice)
                 .max();
-
         OptionalInt minPriceOpt = searchResults.stream()
                 .mapToInt(Goods::getGoodsPrice)
                 .min();
 
-
-        // OptionalInt 값이 존재하는 경우에만 값을 가져옴
         if (maxPriceOpt.isPresent()) {
-            int maxPrice = maxPriceOpt.getAsInt();
-            int minPrice = minPriceOpt.getAsInt();
-            result.setMaxPrice(maxPrice);
-            result.setMinPrice(minPrice);
+            result.setMaxPrice(maxPriceOpt.getAsInt());
+            result.setMinPrice(minPriceOpt.getAsInt());
         }
+
+        Map<String, Integer> pagination = calculatePagination(totalCount, page, size);
 
         result.setSearchResults(searchResults);
         result.setKeyword(keyword);
         result.setTotalCount(totalCount);
         result.setCategoryList(sortedCategoryMap);
-
         result.setSort(sort);
         result.setCurrentPage(page);
-        result.setTotalPages(totalPages);
-        result.setStartPage(startPage);
-        result.setEndPage(endPage);
+        result.setTotalPages(pagination.get("totalPages"));
+        result.setStartPage(pagination.get("startPage"));
+        result.setEndPage(pagination.get("endPage"));
         result.setSize(size);
 
         return result;
@@ -220,36 +188,16 @@ public class SearchServiceImpl implements SearchService {
         long totalTime = totalCountTime + totalSearchTime;
         log.info("상세 검색어: '{}' 상세 검색에 들어간 총 소요 시간: {} ms", searchDetailParamDTO.getRepKeyword(), totalTime);
 
-        int totalPages = (int) Math.ceil((double) totalCount / size);
-
-        int maxPageNumbersToShow = 10;
-        int startPage;
-        int endPage;
-
-        if (totalPages <= maxPageNumbersToShow) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (page <= 6) {
-                startPage = 1;
-                endPage = 10;
-            } else if (page + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = page - 5;
-                endPage = page + 4;
-            }
-        }
+        Map<String, Integer> pagination = calculatePagination(totalCount, page, size);
 
         result.setSearchResults(searchResults);
-        result.setKeyword(result.getKeyword());
+        result.setKeyword(searchDetailParamDTO.getRepKeyword());
         result.setSort(sort);
         result.setCurrentPage(page);
-        result.setTotalPages(totalPages);
+        result.setTotalPages(pagination.get("totalPages"));
         result.setSize(size);
-        result.setStartPage(startPage);
-        result.setEndPage(endPage);
+        result.setStartPage(pagination.get("startPage"));
+        result.setEndPage(pagination.get("endPage"));
         result.setTotalCount(totalCount);
 
         return result;
@@ -269,30 +217,9 @@ public class SearchServiceImpl implements SearchService {
             goods.setMainImage(mainImage);
         }
 
+        int size = searchParamDTO.getSize();
         int totalCount = goodsList.size();
-
-        int totalPages = (int)Math.ceil((double)totalCount / searchParamDTO.getSize());
-
-
-        int maxPageNumbersToShow = 10;
-        int startPage;
-        int endPage;
-
-        if (totalPages <= maxPageNumbersToShow) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (page <= 6) {
-                startPage = 1;
-                endPage = 10;
-            } else if (page + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = page - 5;
-                endPage = page + 4;
-            }
-        }
+        Map<String, Integer> pagination = calculatePagination(totalCount, page, size);
 
         SearchResponseDTO result = new SearchResponseDTO();
 
@@ -304,7 +231,7 @@ public class SearchServiceImpl implements SearchService {
             categoryList.merge(category, 1, Integer::sum);
         }
 
-        // 재검색 키워드가 존재할 경우 검색 결과를 2차 필터랑 하는 로직
+        // 재검색 키워드가 존재할 경우 검색 결과를 2차 필터링 하는 로직
         if (searchParamDTO.getReKeyword() != null) {
             String reKeyword = searchParamDTO.getReKeyword();
             goodsList = goodsList.stream()
@@ -317,15 +244,14 @@ public class SearchServiceImpl implements SearchService {
                     .collect(Collectors.toList());
         }
 
-        // 해당 검색 결과의 최대 가격, 최소 가격 구하는 로직
-
+        // 해당 검색 결과의 최대 가격, 최소 가격 구하는 로직 만들기
 
         result.setSearchResults(goodsList);
         result.setTotalCount(totalCount);
         result.setCurrentPage(page);
-        result.setTotalPages(totalPages);
-        result.setStartPage(startPage);
-        result.setEndPage(endPage);
+        result.setTotalPages(pagination.get("totalCount"));
+        result.setStartPage(pagination.get("startPage"));
+        result.setEndPage(pagination.get("endPage"));
         result.setSort(searchParamDTO.getSort());
         result.setSize(searchParamDTO.getSize());
         result.setCategoryList(categoryList);
@@ -334,7 +260,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     // 검색 로그 삽입 로직
-    private void insertSearchLog(String keyword, String sessionId, Member member) {
+    @Async
+    public void insertSearchLog(String keyword, String sessionId, Member member) {
 
         // 동일 세션에서 같은 검색어를 연속해서 검색시 로그 삽입하지 않음 (로그 오염 방지)
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -387,6 +314,34 @@ public class SearchServiceImpl implements SearchService {
         searchLogDTO.setSearchDatetime(LocalDateTime.now());
 
         searchLogMapper.insertSearchLog(searchLogDTO);
+    }
+
+    private Map<String, Integer> calculatePagination(int totalCount, int currentPage, int pageSize) {
+        int totalPages = (int)Math.ceil((double)totalCount / pageSize);
+        int maxPageNumbersToShow = 10;
+        int startPage, endPage;
+
+        if (totalPages <= maxPageNumbersToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            if (currentPage <= 6) {
+                startPage = 1;
+                endPage = 10;
+            } else if (currentPage + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = currentPage - 5;
+                endPage = currentPage + 4;
+            }
+        }
+
+        Map<String , Integer> pageInfo = new HashMap<>();
+        pageInfo.put("totalPages", totalPages);
+        pageInfo.put("startPage", startPage);
+        pageInfo.put("endPage", endPage);
+        return pageInfo;
     }
 
 }
