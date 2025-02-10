@@ -1,39 +1,26 @@
 package hello.fclover.controller;
 
 
-import hello.fclover.domain.Category;
-import hello.fclover.domain.Goods;
-
-import hello.fclover.domain.MessGoods;
+import hello.fclover.domain.*;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import hello.fclover.mybatis.mapper.MessGoodsMapper;
-import hello.fclover.service.ExcelSheetHandler;
-
-import hello.fclover.domain.GoodsImage;
-import hello.fclover.domain.Member;
-import hello.fclover.service.CategoryService;
-
-import hello.fclover.service.GoodsService;
-import hello.fclover.service.MemberService;
-import hello.fclover.service.WishService;
+import hello.fclover.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -95,8 +82,9 @@ public class GoodsController {
             memberNo = member.getMemberNo();
         }
 
-        // 찜 상태가 포함된 상품 목록 조회
+        //상품 목록 조회
         List<Goods> goodsList = goodsService.getCategoryGoodsList(cateNo, sort, page, size);
+        System.out.println("조회된 상품 수 : " + goodsList.size());
         model.addAttribute("goodsList", goodsList);
 
         // 찜 목록(회원이 찜한 상품 번호 목록) 조회
@@ -107,6 +95,7 @@ public class GoodsController {
 
         // 대표 이미지 가져오기
         for (Goods goods : goodsList) {
+            System.out.println("상품 번호 : " + goods.getGoodsNo());
             GoodsImage mainImage = goodsService.getMainImageByGoodsNo(goods.getGoodsNo());
             goods.setMainImage(mainImage);
         }

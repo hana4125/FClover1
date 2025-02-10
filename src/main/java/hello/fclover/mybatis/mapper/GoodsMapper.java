@@ -25,7 +25,7 @@ public interface GoodsMapper {
 
     List<CategoryCountDTO> countCategoryByKeyword(@Param("keyword") String keyword);
 
-    // 찜 상태를 포함한 상품 조회 메서드 추가
+    // 상품 조회 메서드 추가
     List<Goods> findCategoryGoodsWishStatus(
 //            @Param("memberNo") Long memberNo,
             @Param("cateNo") Integer cateNo,

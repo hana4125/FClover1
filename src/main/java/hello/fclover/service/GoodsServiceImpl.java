@@ -65,6 +65,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
+        System.out.println("cateNo=" + cateNo + ", page=" + page + ", size=" + size + ", offset=" + offset);
         return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
