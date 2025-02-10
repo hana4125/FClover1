@@ -81,16 +81,10 @@
     a.cate_no AS cateNo,
     a.goods_name AS goodsName,
     a.goods_price AS goodsPrice,
-    a.goods_writer AS goodsWriter,
-    CASE WHEN b.wish_no IS NULL THEN 'N' ELSE 'Y' END AS wishStatus
+    a.goods_writer AS goodsWriter
+
     FROM goods a
     JOIN stock s ON a.goods_no = s.goods_no
-    LEFT OUTER JOIN (
-    SELECT *
-    FROM wish
-    WHERE member_no = #{memberNo}
-    ) b
-    ON a.goods_no = b.goods_no
     WHERE
     a.cate_no = #{cateNo}
     ORDER BY

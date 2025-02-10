@@ -9,7 +9,6 @@ import hello.fclover.mybatis.mapper.GoodsImageMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -64,10 +63,9 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findCategoryGoodsWishStatus")
-    public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
+    public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        return goodsMapper.findCategoryGoodsWishStatus(memberNo, cateNo, sort, offset, size);
+        return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
     @Override
@@ -81,14 +79,12 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findBestGoodsWishStatus")
     public List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findBestGoodsWishStatus(memberNo, offset, size);
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findSteadyGoodsWishStatus")
     public List<Goods> getSteadyGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findSteadyGoodsWishStatus(memberNo, offset, size);
@@ -106,7 +102,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.selectNewItems")
     public List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size) {
         int offset = (page - 1) * size;
         // 최대 100개까지만 조회되도록 offset과 size를 조정
