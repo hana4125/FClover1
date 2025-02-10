@@ -8,18 +8,14 @@ import hello.fclover.domain.Member;
 import hello.fclover.service.CategoryService;
 import hello.fclover.service.GoodsService;
 import hello.fclover.service.MemberService;
+import hello.fclover.service.WishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -29,6 +25,7 @@ public class GoodsController {
     private final GoodsService goodsService;
     private final CategoryService categoryService;
     private final MemberService memberService;
+    private final WishService wishService;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -76,8 +73,14 @@ public class GoodsController {
         }
 
         // 찜 상태가 포함된 상품 목록 조회
-        List<Goods> goodsList = goodsService.getGoodsWithWishStatusList(memberNo, cateNo, sort, page, size);
+        List<Goods> goodsList = goodsService.getCategoryGoodsList(cateNo, sort, page, size);
         model.addAttribute("goodsList", goodsList);
+
+        if (!goodsList.isEmpty()) {
+            Long goodsNo = goodsList.get(0).getGoodsNo();
+            List<Long> wishlist = wishService.getWishlistGoodsNos(goodsNo, memberNo);
+            model.addAttribute("wishlist", wishlist);
+        }
 
         // 대표 이미지 가져오기
         for (Goods goods : goodsList) {
