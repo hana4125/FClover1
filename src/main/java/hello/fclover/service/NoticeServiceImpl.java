@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.keyvalue.core.KeyValueOperations;
 import org.springframework.data.keyvalue.repository.support.SimpleKeyValueRepository;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
@@ -110,5 +111,16 @@ public class NoticeServiceImpl implements NoticeService {
             return 0;
         }
     }
+
+    @Override
+    public Notice getNoticeById(int notino) {
+        return dao.findById((long) notino)
+                .orElseThrow(() -> new RuntimeException("Notice not found"));
+    }
+    @Override
+    public void modifyNotice(Notice notice) {
+            dao.modifyNotice(notice);
+    }
+
 
 }

@@ -200,7 +200,7 @@
 
           <!--pagination-->
           <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice/noti_list', |&search_word=${search_word}|)}"/>
+            <th:block th:replace="~{fragment/paging :: paging('/inquiry/notice/noti_list', |&category=${category}|)}"/>
           </div>
 
           <!--admin 글쓰기-->

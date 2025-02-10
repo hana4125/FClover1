@@ -5,11 +5,10 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
-import hello.fclover.mybatis.mapper.GoodsImageMapper;
-import hello.fclover.mybatis.mapper.GoodsMapper;
+import hello.fclover.domain.MessGoods;
+import hello.fclover.mybatis.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -19,10 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +26,14 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageMapper;
-
+    private final ExcelReaderService excelReaderService;
+    private final MessGoodsMapper messGoodsMapper;
+    private final CategoryMapper categoryMapper;
+    private final SellerMapper sellerMapper;
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     String bucket;
-
     GoodsImage goodsImage = new GoodsImage();
 
     @Override
@@ -65,10 +63,10 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findCategoryGoodsWishStatus")
-    public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
+    public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        return goodsMapper.findCategoryGoodsWishStatus(memberNo, cateNo, sort, offset, size);
+        System.out.println("cateNo=" + cateNo + ", page=" + page + ", size=" + size + ", offset=" + offset);
+        return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
     @Override
@@ -82,27 +80,21 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findBestGoodsWishStatus")
     public List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findBestGoodsWishStatus(memberNo, offset, size);
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findSteadyGoodsWishStatus")
     public List<Goods> getSteadyGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findSteadyGoodsWishStatus(memberNo, offset, size);
     }
 
     public void getGoodsDetail(Long goodsNo, Model model) {
-
-        Goods goods = goodsMapper.findGoodsById(goodsNo);
-        model.addAttribute("goods", goods);
-
-        List<String> imageList = getGoodsImages(goodsNo);
+        model.addAttribute("goods", goodsMapper.findGoodsById(goodsNo));
+        List<String> imageList = getGoodsImages(goodsNo, goodsImage);
         model.addAttribute("imageList", imageList);
-
     }
 
     @Override
@@ -111,7 +103,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.selectNewItems")
     public List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size) {
         int offset = (page - 1) * size;
         // 최대 100개까지만 조회되도록 offset과 size를 조정
@@ -135,19 +126,16 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.sellerGoodsSearch(searchKeyword);
     }
 
-    private List<String> getGoodsImages(Long goodsNo) {
+    private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);
-
-        System.out.println("imageNames = " + imageNames);
         //이미지 파일 담을 List
         List<String> images = new ArrayList<>();
         String result = null;
         for (Map<String, String> imageName : imageNames) {
-                //이미지 경로
-                String name = imageName.get("goods_image_name");
-                String imageUrl = imageName.get("goods_url") + File.separator + name;
-
+            //이미지 경로
+            String name = imageName.get("goods_image_name");
+            String imageUrl = imageName.get("goods_url") + File.separator + name;
 
                 images.add(imageUrl);
 

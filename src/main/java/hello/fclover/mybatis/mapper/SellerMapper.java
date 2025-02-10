@@ -2,7 +2,7 @@ package hello.fclover.mybatis.mapper;
 
 
 import hello.fclover.domain.Seller;
-import hello.fclover.domain.Settlement;
+import hello.fclover.dto.SellerCompanyDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,6 +18,9 @@ public interface SellerMapper {
     String isSellerIdDuplicate(String sellerId);
 
 
+    long findSellerNo(String companyName);
+
+
     List<Map<String, Object>> getListDetail(Map<String, Object> params);
     int getListCount(Map<String, Object> params);
 
@@ -26,4 +29,9 @@ public interface SellerMapper {
 
     long getselectNo(String sellerId);
 
+    int countAllSeller();
+
+    void insertSellers(@Param("sellers") List<Seller> sellers);
+
+    List<SellerCompanyDTO> getSellerCompanyName();
 }

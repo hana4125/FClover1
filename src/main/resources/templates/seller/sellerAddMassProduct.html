@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>엑셀 파일 업로드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <style>
+        th, td {
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 10em; /* 기본 최대 길이: 10자 */
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            position: relative; /* resizer 위치를 위해 필요 */
+            min-width: 50px; /* 최소 너비 설정 */
+        }
+
+        /* 테이블을 감싸는 div에 스크롤바 추가 */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto; /* 가로 스크롤 활성화 */
+            -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
+        }
+
+        table {
+            table-layout: auto;
+            width: max-content; /* 내용에 맞게 테이블 크기 설정 */
+            border-collapse: collapse;
+        }
+
+        .fileBox {
+            float: right;
+        }
+
+        .resizer {
+            cursor: col-resize;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            z-index: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-light mb-3">
+    <div class="container w-75">
+        <div class="top-menu d-flex justify-content-end">
+            <th:block th:if="${seller == null}">
+                <a class="pe-2" href="/member/login">로그인</a>
+                <a class="pe-2" href="/member/signup">회원가입</a>
+                <a class="pe-2" href="#">고객센터</a>
+                <a class="pe-2" href="/seller/login">판매자 로그인</a>
+                <a class="pe-2" href="/seller/signup">판매자 가입</a>
+            </th:block>
+            <th:block th:if="${seller != null}">
+                <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+                <form th:action="@{/seller/logout}" method="post">
+                    <button type="submit" class="pe-2">로그아웃</button>
+                </form>
+            </th:block>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">엑셀 파일 업로드</h2>
+
+    <div class="container">
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="fileBox">
+                <input type="file" id="file" name="file" accept=".xlsx" required/>
+                <button type="submit">업로드</button>
+            </div>
+        </form>
+    </div>
+    <div class="table-wrapper">
+        <h3>업로드 결과</h3>
+        <span class="uploadResult"></span>
+        <table class="table table-bordered resizable-table">
+            <thead id="table-header">
+            <tr>
+                <th>수정</th>
+                <th>삭제</th>
+                <th>카테고리</th>
+                <th>상품명</th>
+                <th>상품 설명</th>
+                <th>상품 가격</th>
+                <th>저자</th>
+                <th>저자 설명</th>
+                <th>상품 발행일</th>
+                <th>상품 페이지수</th>
+                <th>상품 크기</th>
+                <th>출판사</th>
+                <th>대표 이미지 URL</th>
+                <th>1번째 추가 이미지 URL</th>
+                <th>2번째 추가 이미지 URL</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            <tr>
+                <td colspan="15" class="text-center default">검색 결과가 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('th').forEach((th) => {
+        const resizer = document.createElement('span');
+        resizer.classList.add('resizer');
+        th.style.position = 'relative'; // 부모 요소 상대 위치
+        th.appendChild(resizer);
+
+        let startX, startWidth;
+
+        resizer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            startX = e.clientX;
+            startWidth = th.offsetWidth;
+
+            const onMouseMove = (moveEvent) => {
+                const newWidth = startWidth + (moveEvent.clientX - startX);
+                if (newWidth > 50) { // 최소 너비 제한
+                    th.style.width = `${newWidth}px`;
+
+                    // 해당 열의 모든 셀 크기 동기화
+                    const table = th.closest('table');
+                    const colIndex = Array.from(th.parentNode.children).indexOf(th);
+
+                    table.querySelectorAll('tbody tr').forEach((row) => {
+                        const cell = row.children[colIndex];
+                        if (cell) {
+                            cell.style.width = `${newWidth}px`;
+                            cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
+                            cell.style.overflow = 'hidden';
+                            cell.style.textOverflow = 'ellipsis';
+                            cell.style.whiteSpace = 'nowrap';
+                        }
+                    });
+
+                    // 테이블의 전체 폭 강제 갱신
+                    const tableWrapper = table.closest('.table-wrapper');
+                    tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
+                }
+            };
+
+            const onMouseUp = () => {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+    });
+    $(document).ready(function () {
+        $("#uploadForm").submit(function (event) {
+            event.preventDefault();
+
+            let formData = new FormData();
+            let fileInput = $("#file")[0].files[0];
+
+
+            if (!fileInput) {
+                alert("파일을 선택하세요.");
+                return;
+            }
+
+            formData.append("file", fileInput);
+
+            // CSRF 토큰 처리
+            const csrfToken = $('meta[name="_csrf"]').attr("content");
+            const csrfHeader = $('meta[name="_csrf_header"]').attr("content");
+
+            $.ajax({
+                //url: "/upload-excel",
+                url: "/goods/addMassProductProcess",
+                type: "POST",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    // 각 배열의 건수를 계산
+                    var successCount = data.goodsInsertSuccess ? data.goodsInsertSuccess.length : 0;
+                    var failCount = data.goodsInsertFail ? data.goodsInsertFail.length : 0;
+
+                    alert("성공 : " + successCount + ", 실패 : " + failCount )
+                    // 결과 건수를 uploadResult 영역에 표시
+                    $("#uploadResult").html(
+                        "<p>상품 삽입 성공 건수: " + successCount + "</p>" +
+                        "<p>상품 삽입 실패 건수: " + failCount + "</p>"
+                    );
+
+                    // messGoods 데이터를 테이블에 렌더링
+                    renderTable(data.messGoods);
+                },
+                error: function () {
+                    alert("파일 업로드 실패");
+                }
+            });
+        });
+
+        function renderTable(data) {
+            $("#table-body").empty();
+
+            if (data.length === 0) {
+                $("#table-body").append("<tr><td colspan='100%'>데이터 없음</td></tr>");
+                return;
+            }
+
+            // // 헤더 생성
+            // let headerRow = $("<tr>");
+            // data[0].forEach(function (column) {
+            //   headerRow.append($("<th>").text(column));
+            // });
+            // $("#table-header").append(headerRow);
+
+            // 바디 생성
+            data.forEach(function (row) {
+
+
+                let rowData = $("<tr>");
+
+                // 수정 버튼을 담은 <td> 생성
+                let editButton = $("<button>")
+                    .addClass("btn btn-warning")
+                    .text("수정");
+                // 삭제 버튼을 담은 <td> 생성
+                let deleteButton = $("<button>")
+                    .addClass("btn btn-danger")
+                    .text("삭제");
+
+                // 각 버튼을 별도의 <td>에 추가하고 행 앞에 추가합니다.
+                rowData.append($("<td>").append(editButton));
+                rowData.append($("<td>").append(deleteButton));
+
+                // 아래의 필드명은 MessGoods 객체의 속성명과 일치해야 합니다.
+                rowData.append($("<td>").text(item.cateName));          // 카테고리
+                rowData.append($("<td>").text(item.goodsName));           // 상품명
+                rowData.append($("<td>").text(item.goodsContent));        // 상품 설명
+                rowData.append($("<td>").text(item.goodsPrice));          // 상품 가격
+                rowData.append($("<td>").text(item.goodsWriter));         // 저자
+                rowData.append($("<td>").text(item.writerContent));       // 저자 설명
+                rowData.append($("<td>").text(item.goodsCreateAt));       // 상품 발행일
+                rowData.append($("<td>").text(item.goodsPageCount));      // 상품 페이지수
+                rowData.append($("<td>").text(item.goodsBookSize));       // 상품 크기
+                rowData.append($("<td>").text(item.sellerName));          // 출판사(또는 판매자)
+                rowData.append($("<td>").text(item.mainImage));           // 대표 이미지 URL
+                rowData.append($("<td>").text(item.subImage1));           // 1번째 추가 이미지 URL
+                rowData.append($("<td>").text(item.subImage2));           // 2번째 추가 이미지 URL
+
+                $("#table-body").append(rowData);
+            });
+        }
+
+        // 이벤트 위임을 사용하여 삭제 버튼 클릭 시 행 삭제
+        $("#table-body").on("click", ".btn-danger", function () {
+            // 클릭된 버튼의 가장 가까운 <tr>을 찾아서 제거
+            $(this).closest("tr").remove();
+        });
+
+// 수정 버튼 클릭 이벤트 처리 (예시로 alert를 띄움)
+// 필요에 따라 수정 로직(예: 모달창 열기, 폼에 데이터 채우기 등)으로 대체하세요.
+        $("#table-body").on("click", ".btn-warning", function () {
+            alert("수정 버튼 클릭됨");
+        });
+    });
+</script>
+</body>
+</html>

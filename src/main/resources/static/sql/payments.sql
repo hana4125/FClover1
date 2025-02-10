@@ -38,6 +38,5 @@ commit;
 
 select* from payments;
 
-update payments
-set payment_quantity=80, goods_no=499863
-where payments_no = 1;
+insert into payments (payments_no, seller_id, user_id, order_id, payment_quantity, goods_no, payment_amount, payment_date, imp_uid, payment_method, merchant_uid, pg_provider, pg_type, pg_tid, status, card_name, card_number, created_at, updated_at)
+values(21, 1, 'test21', 21, 21, 500021, 252000,current_date, 'imp_21', 'card', 'IMP21', 'nice', 'payment', 'iamport00m21', 'paid', '우리카드', '****', null, null);

@@ -9,7 +9,8 @@ CREATE TABLE `stock` (
                                 `product_stock` int DEFAULT NULL,
                                 `isSoldOut` varchar(3),
                                PRIMARY KEY (`stock_no`),
-                               UNIQUE KEY (`goods_code`)
+                               UNIQUE KEY (`goods_code`),
+                               INDEX idx_stock_goods_no (`goods_no`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 
 
@@ -18,10 +19,9 @@ select *from stock;
 
 drop table stock;
 
-insert into stock (goods_no, goods_code, initial_stock, product_stock, isSoldOut) values(499863,1234,100, 20,'N');
+insert into stock (goods_no, goods_code, initial_stock, product_stock, isSoldOut)
+values(500021,21,100, 79,'N');
+
+delete from stock;
 
 commit;
-
-update stock
-set stock_no = 3
-where stock_no = 4;
