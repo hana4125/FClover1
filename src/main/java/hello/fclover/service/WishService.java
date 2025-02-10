@@ -10,6 +10,6 @@ public interface WishService {
 
     void removeWishlist(Long goodsNo, Long memberNo);
 
-    List<Long> getWishlistGoodsNos(Long goodsNo, Long memberNo);
+    List<Long> getWishlistGoodsNos(Long memberNo);
 }
 
