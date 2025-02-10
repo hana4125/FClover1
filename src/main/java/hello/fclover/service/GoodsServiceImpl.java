@@ -97,7 +97,7 @@ public class GoodsServiceImpl implements GoodsService {
         Goods goods = goodsMapper.findGoodsById(goodsNo);
         model.addAttribute("goods", goods);
 
-        List<String> imageList = getGoodsImages(goodsNo);
+        List<String> imageList = getGoodsImages(goodsNo,goodsImage);
         model.addAttribute("imageList", imageList);
 
     }
@@ -131,7 +131,78 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.sellerGoodsSearch(searchKeyword);
     }
 
-    private List<String> getGoodsImages(Long goodsNo) {
+    @Override
+    public Map<String, Object> saveMessproduct(List<MessGoods> messGoods) {
+        List<MessGoods> goodsInsertSuccess = new ArrayList<>();
+        List<MessGoods> goodsInsertFail = new ArrayList<>();
+        for (MessGoods messGood : messGoods) {
+            Goods goods = new Goods();
+            GoodsImage goodsImage = new GoodsImage();
+//            try {
+            goods.setCateNo(categoryMapper.findCateNo(messGood.getCateName()));
+            goods.setGoodsName(messGood.getGoodsName());
+            goods.setGoodsContent(messGood.getGoodsContent());
+            goods.setGoodsPrice(messGood.getGoodsPrice());
+            goods.setGoodsWriter(messGood.getGoodsWriter());
+            goods.setWriterContent(String.valueOf(messGood.getWriterContent()));
+            goods.setCompanyName(messGood.getSellerName());
+            // 입력 형식에 맞는 DateTimeFormatter 생성
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+            // 문자열을 LocalDate로 파싱
+            goods.setGoodsCreateAt(LocalDate.parse(messGood.getGoodsCreateAt(), formatter));
+
+            goods.setGoodsPageCount(messGood.getGoodsPageCount());
+            goods.setGoodsBookSize(messGood.getGoodsBookSize());
+            goods.setSellerNo(sellerMapper.findSellerNo(messGood.getSellerName()));
+            messGoodsMapper.saveProduct(goods);
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//                continue;
+//            }
+
+            goodsImage.setGoodsNo(goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName()));
+            String mainImage = messGood.getMainImage();
+//            String imageUrl = getExcelUrl(mainImage);
+//            try {
+            if (messGood.getMainImage() != null) {
+//                goodsImage.setGoodsImageName(getExcelImageName(messGood.getMainImage()));
+//                goodsImage.setGoodsUrl(imageUrl);
+                goodsImage.setIsMain("M");
+                messGoodsMapper.saveProductImage(goodsImage);
+            }
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//                continue;
+//            }
+//            try {
+            if (messGood.getSubImage1() != null) {
+//                goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage1()));
+                goodsImage.setIsMain("S");
+                messGoodsMapper.saveProductImage(goodsImage);
+            }
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//                continue;
+//            }
+//            try{
+            if(messGood.getSubImage2() != null) {
+//                goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage2()));
+                goodsImage.setIsMain("S");
+                messGoodsMapper.saveProductImage(goodsImage);
+            }
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//            }
+            goodsInsertSuccess.add(messGood);
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("goodsInsertSuccess", goodsInsertSuccess);
+        resultMap.put("goodsInsertFail", goodsInsertFail);
+
+        return resultMap;
+    }
+
+    private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);
 
