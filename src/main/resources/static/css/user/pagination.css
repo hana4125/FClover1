@@ -24,8 +24,8 @@
 }
 
 .pagination .page-item.active .page-link {
-    background-color: white;
-    color: #226b24;
+    background-color: #226b24;
+    color: white;
     border-color: #226b24;
 }
 
