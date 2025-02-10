@@ -35,6 +35,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Value("${cloud.aws.s3.bucket}")
     String bucket;
+
     GoodsImage goodsImage = new GoodsImage();
 
     @Override
@@ -95,9 +96,13 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     public void getGoodsDetail(Long goodsNo, Model model) {
-        model.addAttribute("goods", goodsMapper.findGoodsById(goodsNo));
-        List<String> imageList = getGoodsImages(goodsNo, goodsImage);
+
+        Goods goods = goodsMapper.findGoodsById(goodsNo);
+        model.addAttribute("goods", goods);
+
+        List<String> imageList = getGoodsImages(goodsNo);
         model.addAttribute("imageList", imageList);
+
     }
 
     @Override
@@ -130,9 +135,11 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.sellerGoodsSearch(searchKeyword);
     }
 
-    private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
+    private List<String> getGoodsImages(Long goodsNo) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);
+
+        System.out.println("imageNames = " + imageNames);
         //이미지 파일 담을 List
         List<String> images = new ArrayList<>();
         String result = null;
@@ -140,6 +147,7 @@ public class GoodsServiceImpl implements GoodsService {
                 //이미지 경로
                 String name = imageName.get("goods_image_name");
                 String imageUrl = imageName.get("goods_url") + File.separator + name;
+
 
                 images.add(imageUrl);
 
