@@ -47,13 +47,13 @@ public class BatchConfig {
         return taskExecutor;
     }
 
-    // Job 정의
-    @Bean
-    public Job issueCouponsJob(JobRepository jobRepository, PlatformTransactionManager transactionManager, TaskExecutor taskExecutor) {
-        return new JobBuilder("issueCouponsJob", jobRepository)
-                .start(issueCouponsStep(jobRepository, transactionManager, taskExecutor))
-                .build();
-    }
+//    // Job 정의
+//    @Bean
+//    public Job issueCouponsJob(JobRepository jobRepository, PlatformTransactionManager transactionManager, TaskExecutor taskExecutor) {
+//        return new JobBuilder("issueCouponsJob", jobRepository)
+//                .start(issueCouponsStep(jobRepository, transactionManager, taskExecutor))
+//                .build();
+//    }
 
     // Step 정의
     @Bean
