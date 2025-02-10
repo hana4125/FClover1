@@ -9,7 +9,7 @@
     </insert>
     <insert id="savePayment">
         INSERT INTO payments (seller_id, user_id, order_id, payment_amount, payment_quantity,goods_no,payment_date, imp_uid, payment_method, merchant_uid, pg_provider, pg_type, pg_tid, status, card_name, card_number, created_at, updated_at)
-        VALUES (#{sellerId}, #{userId}, #{orderId}, #{paymentAmount}, #{quantity}, #{goodsNo},#{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
+        VALUES (#{sellerNo}, #{userId}, #{orderId}, #{paymentAmount}, #{quantity}, #{goodsNo},#{paymentDate}, #{impUid},#{paymentMethod}, #{merchantUid}, #{pgProvider}, #{pgType}, #{pgTid}, #{status}, #{cardName},#{cardNumber}, #{createdAt}, #{updatedAt});
     </insert>
 
 

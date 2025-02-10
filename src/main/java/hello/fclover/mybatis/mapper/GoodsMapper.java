@@ -27,7 +27,7 @@ public interface GoodsMapper {
 
     // 찜 상태를 포함한 상품 조회 메서드 추가
     List<Goods> findCategoryGoodsWishStatus(
-            @Param("memberNo") Long memberNo,
+//            @Param("memberNo") Long memberNo,
             @Param("cateNo") Integer cateNo,
             @Param("sort") String sort,
             @Param("offset") Integer offset,

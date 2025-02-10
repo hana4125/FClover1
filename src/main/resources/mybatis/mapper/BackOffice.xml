@@ -17,7 +17,7 @@
     </select>
 
     <insert id="insertDeliveryReadyList">
-        insert into delivery(payments_no,deli_status,deli_date) values(#{orderId},#{status},current_timestamp)
+        insert into delivery(payments_no,deli_status,deli_date) values(#{paymentsNo},#{status},current_timestamp)
     </insert>
 
     <select id="deliveryReadyOrderSearch">
@@ -28,7 +28,7 @@
         d.deli_no,
         d.deli_status,
         d.deli_date
-    FROM payments p right outer JOIN delivery d ON p.order_id = d.payments_no
+    FROM payments p right outer JOIN delivery d ON p.payments_no = d.payments_no
     WHERE d.deli_status='배송준비중'
 
 

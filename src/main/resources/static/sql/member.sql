@@ -27,26 +27,62 @@ where member_id = 'admin';
 
 delete from member where member_id = 'userid';
 
-SELECT *
-FROM (
-         SELECT
-             ROW_NUMBER() OVER (ORDER BY d.deli_date DESC) AS no,
-        d.deli_no AS deliNo,
-        -- 주문일시는 현재 날짜/시간을 반환하도록 변경
-        NOW() AS orderDate,
-        d.deli_status AS deliStatus,
-        g.GOODS_NAME AS goodsName,
-        d.deli_quan AS quantity,
-        d.deli_date AS deliveryDate
-         FROM GOODS g
-             LEFT JOIN delivery d ON g.GOODS_NO = d.inven_goods_no
 
-         WHERE 1=1
 
-     ) AS temp
-ORDER BY temp.orderDate DESC
-    LIMIT 10 OFFSET 0;
+SELECT
+    ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+    p.payments_no AS orderNo,
+    p.payment_date AS orderDate,
+    d.deli_status AS deliStatus,
+    g.GOODS_NAME AS goodsName,
+    d.deli_quan AS quantity,
+    m.member_id AS customerName,
+    d.deli_date AS deliveryDate
+FROM payments p
+         LEFT JOIN delivery d ON p.payments_no = d.payments_no
+         LEFT JOIN goods g ON d.stock_no = g.GOODS_NO
+         LEFT JOIN member m ON p.user_id = m.member_id
+    ORDER BY p.payment_date DESC;
 
-select *
-from goods g join delivery
-on g.goods_no = delivery.inven_goods_no
+-- 1. payments(기준) & delivery
+SELECT
+    ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+    p.payments_no AS orderNo,
+    p.payment_date AS orderDate,
+    d.deli_status AS deliStatus,
+    d.deli_quan AS quantity,
+    d.deli_date AS deliveryDate
+FROM payments p
+          JOIN delivery d ON p.payments_no = d.payments_no
+ORDER BY p.payment_date DESC;
+
+-- 2. 1번 결과에 goods 추가
+SELECT
+    ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+    p.payments_no AS orderNo,
+    p.payment_date AS orderDate,
+    g.GOODS_NAME AS goodsName,
+    d.deli_status AS deliStatus,
+    d.deli_quan AS quantity,
+    d.deli_date AS deliveryDate
+FROM payments p
+         JOIN delivery d ON p.payments_no = d.payments_no
+         JOIN goods g ON d.stock_no = g.GOODS_NO
+ORDER BY p.payment_date DESC;
+
+-- 3. 2번 결과에 member 추가
+SELECT
+    ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
+    p.payments_no AS orderNo,
+    p.payment_date AS orderDate,
+
+    d.deli_status AS deliStatus,
+    d.deli_quan AS quantity,
+
+    d.deli_date AS deliveryDate
+from (select *
+FROM payments p
+where p.seller_id = '16') p # p.seller_id 값은 seller 테이블의 seller_no 값이 들어가야 함!!
+         JOIN delivery d ON p.payments_no = d.payments_no
+
+ORDER BY p.payment_date DESC

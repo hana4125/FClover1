@@ -22,4 +22,9 @@
         SELECT COUNT(*) FROM category
     </select>
 
+    <select id="findCateNo">
+        Select cate_no
+        from category
+        where cate_name= #{cateName}
+    </select>
 </mapper>

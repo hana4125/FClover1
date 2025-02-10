@@ -22,7 +22,7 @@
     </select>
 
     <!-- 특정 회원의 찜 목록에 있는 goodsNo 목록 가져오기 -->
-    <select id="findWishlistGoodsNosByMemberNo" resultType="java.math.BigInteger">
+    <select id="findWishlistGoodsNosByMemberNo" resultType="long">
         SELECT goods_no
         FROM wish
         WHERE member_no = #{memberNo}

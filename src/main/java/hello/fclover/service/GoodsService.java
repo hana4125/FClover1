@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
+import hello.fclover.domain.MessGoods;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,7 @@ public interface GoodsService {
     Goods findGoodsByNo(Long goodsNo);
 
     // 찜 상태를 포함한 상품 목록 조회 메서드 추가
-    List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size);
+    List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size);
 
     List<Goods> getBestGoodsList(int limit);
 
@@ -39,5 +40,8 @@ public interface GoodsService {
 
     List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword);
 
+//    public void saveProduct(InputStream inputStream);
+
+ Map<String, Object> saveMessproduct(List<MessGoods> messGoods);
 }
 

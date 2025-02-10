@@ -5,8 +5,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
-import hello.fclover.mybatis.mapper.GoodsImageMapper;
-import hello.fclover.mybatis.mapper.GoodsMapper;
+import hello.fclover.domain.MessGoods;
+import hello.fclover.mybatis.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +26,10 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsMapper goodsMapper;
     private final GoodsImageMapper imageMapper;
-
+    private final ExcelReaderService excelReaderService;
+    private final MessGoodsMapper messGoodsMapper;
+    private final CategoryMapper categoryMapper;
+    private final SellerMapper sellerMapper;
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -63,9 +63,9 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
+    public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        return goodsMapper.findCategoryGoodsWishStatus(memberNo, cateNo, sort, offset, size);
+        return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
     @Override
@@ -79,7 +79,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-//    @Cacheable(value = "GoodsMapper.findGoodsWishStatus")
     public List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findBestGoodsWishStatus(memberNo, offset, size);
@@ -126,6 +125,102 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.sellerGoodsSearch(searchKeyword);
     }
 
+
+//    @Transactional
+//    public void saveProduct(InputStream inputStream){
+//        List<MessGoods> data = excelReaderService.readExcelWithXSSF(inputStream);
+    // 1방식 순차처리
+//        data.forEach(messGoodsMapper::saveProduct);
+
+    // 2방식 병렬처리
+//        data.parallelStream().forEach(messGoodsMapper::saveProduct);
+
+
+    //bulkInsertBooks(data);
+    // 병렬 스트림을 사용하여 데이터 삽입
+//    }
+
+    @Override
+    public Map<String, Object> saveMessproduct(List<MessGoods> messGoods) {
+        List<MessGoods> goodsInsertSuccess = new ArrayList<>();
+        List<MessGoods> goodsInsertFail = new ArrayList<>();
+        for (MessGoods messGood : messGoods) {
+            Goods goods = new Goods();
+            GoodsImage goodsImage = new GoodsImage();
+//            try {
+                goods.setCateNo(categoryMapper.findCateNo(messGood.getCateName()));
+                goods.setGoodsName(messGood.getGoodsName());
+                goods.setGoodsContent(messGood.getGoodsContent());
+                goods.setGoodsPrice(messGood.getGoodsPrice());
+                goods.setGoodsWriter(messGood.getGoodsWriter());
+                goods.setWriterContent(String.valueOf(messGood.getWriterContent()));
+                goods.setCompanyName(messGood.getSellerName());
+                // 입력 형식에 맞는 DateTimeFormatter 생성
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                // 문자열을 LocalDate로 파싱
+                goods.setGoodsCreateAt(LocalDate.parse(messGood.getGoodsCreateAt(), formatter));
+
+                goods.setGoodsPageCount(messGood.getGoodsPageCount());
+                goods.setGoodsBookSize(messGood.getGoodsBookSize());
+                goods.setSellerNo(sellerMapper.findSellerNo(messGood.getSellerName()));
+                messGoodsMapper.saveProduct(goods);
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//                continue;
+//            }
+
+            goodsImage.setGoodsNo(goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName()));
+            String mainImage = messGood.getMainImage();
+            String imageUrl = getExcelUrl(mainImage);
+//            try {
+                if (messGood.getMainImage() != null) {
+                    goodsImage.setGoodsImageName(getExcelImageName(messGood.getMainImage()));
+                    goodsImage.setGoodsUrl(imageUrl);
+                    goodsImage.setIsMain("M");
+                    messGoodsMapper.saveProductImage(goodsImage);
+                }
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//                continue;
+//            }
+//            try {
+                if (messGood.getSubImage1() != null) {
+                    goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage1()));
+                    goodsImage.setIsMain("S");
+                    messGoodsMapper.saveProductImage(goodsImage);
+                }
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//                continue;
+//            }
+//            try{
+            if(messGood.getSubImage2() != null) {
+                goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage2()));
+                goodsImage.setIsMain("S");
+                messGoodsMapper.saveProductImage(goodsImage);
+            }
+//            }catch (Exception e) {
+//                goodsInsertFail.add(messGood);
+//            }
+            goodsInsertSuccess.add(messGood);
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("goodsInsertSuccess", goodsInsertSuccess);
+        resultMap.put("goodsInsertFail", goodsInsertFail);
+
+        return resultMap;
+    }
+
+    private String getExcelUrl(String mainImage) {
+        int lastIndexOf = mainImage.lastIndexOf("/");
+        return mainImage.substring(0, lastIndexOf + 1);
+    }
+
+    private String getExcelImageName(String mainImage) {
+        int lastIndexOf = mainImage.lastIndexOf("/");
+        return mainImage.substring(lastIndexOf + 1);
+    }
+
     private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);
@@ -133,11 +228,11 @@ public class GoodsServiceImpl implements GoodsService {
         List<String> images = new ArrayList<>();
         String result = null;
         for (Map<String, String> imageName : imageNames) {
-                //이미지 경로
-                String name = imageName.get("goods_image_name");
-                String imageUrl = imageName.get("goods_url") + File.separator + name;
+            //이미지 경로
+            String name = imageName.get("goods_image_name");
+            String imageUrl = imageName.get("goods_url") + File.separator + name;
 
-                images.add(imageUrl);
+            images.add(imageUrl);
 
         }
         return images;

@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Mapper
 public interface NoticeMapper {
@@ -26,4 +27,12 @@ public interface NoticeMapper {
     List<Notice> getSearchList(Map<String, Object> map);
 
     int deleteNotice(int notino);
+
+    void deleteAll();
+
+    void save(Notice notice);
+
+    Optional<Notice> findById(Long notino);
+
+    void modifyNotice(Notice notice);
 }

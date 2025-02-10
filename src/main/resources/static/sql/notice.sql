@@ -19,6 +19,8 @@ ALTER TABLE notice
 
 DELETE FROM notice WHERE noti_no = 1;
 
+SELECT * FROM notice ORDER BY noti_Date DESC;
+
 
 
 

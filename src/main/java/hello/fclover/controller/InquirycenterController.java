@@ -62,7 +62,7 @@ public class InquirycenterController {
     }
 
     //공지사항 등록
-    @PostMapping(value ="/notice/add")
+    @PostMapping(value = "/notice/add")
     public String noticeAdd(Notice notice, Principal principal) {
         notice.setNotiname(principal.getName());
         noticeService.insertNotice(notice);
@@ -80,9 +80,9 @@ public class InquirycenterController {
 
         if (notice == null) {
             mv.setViewName("error/error");
-            mv.addObject("url",request.getRequestURL());
-            mv.addObject("message","상세보기 실패입니다.");
-        }else {
+            mv.addObject("url", request.getRequestURL());
+            mv.addObject("message", "상세보기 실패입니다.");
+        } else {
             mv.setViewName("user/userNoticeDetail");
             mv.addObject("notidata", notice);
         }
@@ -92,19 +92,16 @@ public class InquirycenterController {
     //공지사항 검색
     @GetMapping(value = "/notice/noti_list")
     public ModelAndView noticeList(
+            Principal principal,
+            ModelAndView mv,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
-            ModelAndView mv,
-            @RequestParam(defaultValue = "") String search_word)
-    {
-        System.out.println("페이지: " + page);
-        System.out.println("검색어: " + search_word);
-
+            @RequestParam(defaultValue = "") String search_word,
+            @RequestParam(defaultValue = "전체") String category) {
         // 검색어가 없을 경우 처리
         String searchQuery = search_word.trim().isEmpty() ? null : search_word;
-
-        int listcount = noticeService.getSearchListCount(searchQuery);
-        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit);
+        int listcount = noticeService.getSearchListCount(searchQuery, category);
+        List<Notice> list = noticeService.getSearchList(searchQuery, page, limit, category);
         PaginationResult result = new PaginationResult(page, limit, listcount);
 
         System.out.println("listcount = " + listcount);
@@ -117,10 +114,26 @@ public class InquirycenterController {
         mv.addObject("endpage", result.getEndpage());
         mv.addObject("noticelist", list);
         mv.addObject("search_word", search_word);
+        mv.addObject("category", category);
         mv.addObject("limit", limit);
         mv.addObject("listcount", listcount);
         return mv;
     }
+
+    //공지사항 수정
+    @GetMapping("/notice/modifyView")
+    public String modifyView(@RequestParam("num") int notino, Model model) {
+        Notice notice = noticeService.getNoticeById(notino);
+        model.addAttribute("notidata", notice);
+        return "user/userNoticeModify";
+    }
+
+    @PostMapping("/notice/modify")
+    public String updateNotice(@ModelAttribute Notice notice) {
+        noticeService.modifyNotice(notice);
+        return "redirect:/inquiry/notice/detail?num=" + notice.getNotino();
+    }
+
 
     //공지사항 삭제
     @PostMapping(value = "/notice/delete")
@@ -132,25 +145,18 @@ public class InquirycenterController {
         // 관리자 권한 체크
         if (!principal.getName().equals("admin")) {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
-            return "redirect:/inquiry/notice/detail?num=" + notino;
+            return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
-
-        System.out.println("Delete Request - notino: " + notino);
-        System.out.println("Current User: " + principal.getName());
-
         int result = noticeService.deleteNotice(notino);
-
-        System.out.println("Delete Result: " + result);
-
         if (result > 0) {
             rattr.addFlashAttribute("successMessage", "공지사항이 삭제되었습니다.");
+
             return "redirect:/inquiry/notice/noti_list";
         } else {
             rattr.addFlashAttribute("errorMessage", "삭제 실패");
-            return "redirect:/inquiry/notice/detail?num=" + notino;
+            return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
     }
-
 
 
     //문의사항
@@ -177,13 +183,17 @@ public class InquirycenterController {
     @GetMapping("/question/filter")
     public String filterQuestions(
             @RequestParam(defaultValue = "1") Integer currentPage,
-            @RequestParam String startDate,
-            @RequestParam String endDate,
+
+            @RequestParam(defaultValue = "") String startDate,
+            @RequestParam(defaultValue = "") String endDate,
             Model m) {
+        LocalDate start = null;
+        LocalDate end = null;
 
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate).plusDays(1);
-
+        if (!(startDate.equals("") && endDate.equals(""))) {
+            start = LocalDate.parse(startDate);
+            end = LocalDate.parse(endDate);
+        }
         int limit = 10;
         int totalcount = questionService.getFilteredCount(start, end);
         List<Question> questionlist = questionService.getFilteredQuestions(start, end, currentPage, limit);
@@ -196,6 +206,7 @@ public class InquirycenterController {
         m.addAttribute("totalcount", totalcount);
         m.addAttribute("questionlist", questionlist);
         m.addAttribute("limit", limit);
+
         m.addAttribute("startDate", startDate);
         m.addAttribute("endDate", endDate);
 
@@ -231,6 +242,7 @@ public class InquirycenterController {
         questionService.insertQuestion(question);
         return "redirect:/inquiry/question/detail?qno=" + question.getQno();
     }
+
     /*댓글 달리면 이메일 발송*/
     @PostMapping(value = "/commentAdd")
     @ResponseBody
@@ -245,7 +257,7 @@ public class InquirycenterController {
             log.info("문의글 정보: {}", question);
 
             // 알림 요청이 있고 이메일이 있는 경우에만 발송
-            if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null){
+            if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
                 log.info("이메일 발송 시작: {}", question.getResponseemail());
 
                 EmailMessage emailMessage = EmailMessage.builder()
@@ -254,7 +266,7 @@ public class InquirycenterController {
                         .message(createEmailContent(question, ccontent))
                         .build();
                 emailService.asyncSendMail(emailMessage);
-            }  else {
+            } else {
                 log.info("이메일 발송 조건 불충족: qalert={}, responseemail={}",
                         question.getQalert(), question.getResponseemail());
             }
@@ -264,20 +276,20 @@ public class InquirycenterController {
 
     private String createEmailContent(Question question, String ccontent) {
         return String.format("""
-        안녕하세요, 네잎클로버입니다.
-        
-        문의하신 글에 답변이 등록되었습니다.
-        
-        %s
-        
-        %s
-        
-        자세한 내용은 아래 링크에서 확인하실 수 있습니다.
-        http://localhost:8080/inquiry/question/detail?qno=%d
-        
-        감사합니다.
-        네잎클로버 드림
-        """,
+                        안녕하세요, 네잎클로버입니다.
+                        
+                        문의하신 글에 답변이 등록되었습니다.
+                        
+                        %s
+                        
+                        %s
+                        
+                        자세한 내용은 아래 링크에서 확인하실 수 있습니다.
+                        http://localhost:8080/inquiry/question/detail?qno=%d
+                        
+                        감사합니다.
+                        네잎클로버 드림
+                        """,
                 question.getQtitle(),
                 ccontent,
                 question.getQno()
@@ -308,6 +320,7 @@ public class InquirycenterController {
         return mv;
     }
 
+
     //문의사항 삭제
     @PostMapping(value = "/question/delete")
     public String deleteQuestion(@RequestBody Map<String, Integer> body,
@@ -320,9 +333,8 @@ public class InquirycenterController {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
             return "redirect:/inquiry/question/detail?qno=" + qno;
         }
-
         int result = questionService.deleteQuestion(qno);
-
+        log.debug("삭제 결과 - qno: {}, result: {}", qno, result);
         if (result > 0) {
             rattr.addFlashAttribute("successMessage", "문의사항이 삭제되었습니다.");
             return "redirect:/inquiry/question";
@@ -356,6 +368,7 @@ public class InquirycenterController {
 
         return response;
     }
+
     //문의사항 댓글 수정
     @PostMapping(value = "/update")
     @ResponseBody
@@ -403,7 +416,8 @@ public class InquirycenterController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
         }
     }
-
 }
+
+
 
 
