@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/user/home.css}">
     <link rel="stylesheet"  th:href="@{/css/user/searchBox.css}">
     <link rel="stylesheet"  th:href="@{/css/seller.css}">
+    <link rel="stylesheet" href="/css/sellerpagination.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -48,7 +49,7 @@
     <div class="container w-75 ms-auto">
         <div class="top-menu">
             <th:block th:if="${seller != null}">
-                <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+                <a href="/seller/main" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
                 <form th:action="@{/seller/logout}" method="post">
                     <button type="submit" class="pe-2">로그아웃</button>
                 </form>
@@ -59,30 +60,28 @@
 
 <div class="container">
     <div class="order-header">구매자 주문 목록</div>
+
     <div class="search-container">
         <form method="get" action="/seller/buyerList">
-            <input type="text" name="search_word" placeholder="검색어 입력">
+        <div class="pagination-controls">
+            <select id="itemsPerPage" name="searchField">
+                <option th:value="dgc">전체</option>
+                <option th:value="d">주문번호</option>
+                <option th:value="g">도서명</option>
+                <option th:value="c">구매자ID</option>
+            </select>
+        </div>
+
+            <input type="text" name="searchWord" placeholder="검색어 입력하세요">
             <button type="submit">검색</button>
         </form>
     </div>
 
     <div class="summary-container">
         <p class="order-count">
-            구매자<span class="to_green"> [[${searchlistcount}]]</span>건
+            구매<span class="to_green"> [[${searchlistcount}]]</span>건
         </p>
-
-        <div class="pagination-controls">
-            <select id="itemsPerPage" th:onchange="|window.location.href='/seller/buyerList?search_word='
-                    + encodeURIComponent('[[${search_word}]]') + '&n=[[${n}]]&size=' + this.value|">
-
-            <option th:value="0" th:text="'전체'" th:selected="${size == 0}"></option>
-                <option th:value="5" th:text="'5'" th:selected="${size == 5}"></option>
-                <option th:value="10" th:text="'10'" th:selected="${size == 10}"></option>
-                <option th:value="20" th:text="'20'" th:selected="${size == 20}"></option>
-            </select>
-        </div>
     </div>
-
 
     <!-- 주문 목록 테이블 -->
     <div class="table-container">
@@ -100,23 +99,25 @@
         </tr>
         </thead>
             <tbody>
-            <tr th:each="order : ${orderList}">
-                <td th:text="${order.no}"></td>
+            <tr th:if="${orderList.isEmpty()}">
+                <td colspan="8" class="text-center" th:text="${message}">구매자 주문 정보가 없습니다.</td>
+            </tr>
+            <tr th:each="order : ${orderList}" th:unless="${orderList.isEmpty()}">
+                <td th:text="${orderStat.count}"></td>
                 <td th:text="${order.deliNo}"></td>
-                <td th:text="${order.orderDate}"></td>
+                <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${order.deliStatus}"></td>
                 <td th:text="${order.goodsName}"></td>
                 <td th:text="${order.quantity}"></td>
                 <td th:text="${order.customerName}"></td>
-                <td th:text="${order.deliveryDate}"></td>
+                <td th:text="${order.deliveryDate != null ? #temporals.format(order.deliveryDate, 'yyyy-MM-dd') : '-'}"></td>
             </tr>
             </tbody>
-
         </table>
     </div>
     <!-- 페이지네이션 -->
     <div style="text-align: center;">
-        <th:block th:replace="~{fragment/paging :: paging('/seller/buyerList', 'page=' + ${page} + '&search_word=' + (${search_word} ?: ''))}"/>
+        <th:block th:replace="~{fragment/paging :: paging('/seller/buyerList', '&search_word=' + (${searchWord} ?: ''))}"/>
     </div>
 </div>
 </body>

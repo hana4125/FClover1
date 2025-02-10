@@ -26,4 +26,8 @@ public interface NoticeMapper {
     List<Notice> getSearchList(Map<String, Object> map);
 
     int deleteNotice(int notino);
+
+    void deleteAll();
+
+    void save(Notice notice);
 }

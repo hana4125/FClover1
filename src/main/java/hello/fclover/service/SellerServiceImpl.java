@@ -50,35 +50,25 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public List<Map<String, Object>> getListDetail(int page, String searchWord, int pageSize) {
+    public List<Map<String, Object>> getListDetail(int page, String searchWord, int pageSize ,long sellerNo,String searchField) {
         Map<String, Object> params = new HashMap<>();
+        params.put("searchField", searchField.split(""));
         params.put("searchWord", searchWord);
+        params.put("sellerNo", sellerNo);
         params.put("pageSize", pageSize);  // 페이지 크기 반영
         params.put("offset", (page - 1) * pageSize);  // 페이지네이션 적용
-
         return dao.getListDetail(params);
     }
 
     @Override
-    public int getListCount(String searchWord) {
-        return dao.getListCount(searchWord);
+    public int getListCount(String searchWord, long sellerNo, String searchField) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("searchField", searchField.split(""));
+        params.put("searchWord", searchWord);
+        params.put("sellerNo", sellerNo);
+        return dao.getListCount(params);
     }
 
-    @Override
-    public int getSearchListCount(String search) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("search", "%"+search+"%");
-        return dao.getSearchListCount(map);
-    }
-
-    @Override
-    public List<Seller> getSearchList(String search, int page, int limit) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("search", "%"+search+"%");
-        map.put("start",(page-1) * limit);
-        map.put("size",limit);
-        return dao.getSearchList(map);
-    }
 
     @Override
     public List<Settlement> searchDaySettlement(Long partnerId) {
@@ -88,7 +78,10 @@ public class SellerServiceImpl implements SellerService {
         return settlements;
     }
 
-
+    @Override
+    public long getselectNo(String sellerId) {
+        return dao.getselectNo(sellerId);
+    }
 
 
 }
