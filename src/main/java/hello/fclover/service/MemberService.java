@@ -65,4 +65,5 @@ public interface MemberService {
     void removeCartItems(Long cartNo);
 
     List<Coupon> getActiveCouponsForUser(String memberId);
+
 }

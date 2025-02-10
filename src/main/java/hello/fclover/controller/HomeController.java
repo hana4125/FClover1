@@ -7,6 +7,10 @@ import hello.fclover.service.MemberService;
 import hello.fclover.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +51,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String mainHome(Model model) {
+
+
+
+
+
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
 
@@ -70,6 +79,17 @@ public class HomeController {
             goods.setMainImage(mainImage);
         }
 
+//        System.out.println("여기 runBatch" );
+//        try {
+//            System.out.println("여기 runbatch try문 내부");
+//
+//            jobLauncher.run(importMemberJob, new JobParameters());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+
         return "user/userHome";
     }
 
@@ -77,4 +97,25 @@ public class HomeController {
     public String error_403() {
         return "error/403";
     }
+
+
+//    @Autowired
+//    private JobLauncher jobLauncher;
+//
+//    @Autowired
+//    private Job importMemberJob;
+
+//    @GetMapping("/runBatch")
+//    public String runBatch() {
+//        System.out.println("여기 runBatch" );
+//        try {
+//            System.out.println("여기 runbatch try문 내부");
+//
+//            jobLauncher.run(importMemberJob, new JobParameters());
+//            return "Batch job started successfully!";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "Failed to start batch job!";
+//        }
+//    }
 }
