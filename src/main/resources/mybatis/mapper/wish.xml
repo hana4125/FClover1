@@ -22,9 +22,11 @@
     </select>
 
     <!-- 특정 회원의 찜 목록에 있는 goodsNo 목록 가져오기 -->
-    <select id="findWishlistGoodsNosByMemberNo" resultType="java.math.BigInteger">
-        SELECT goods_no
+    <select id="findWishlistGoodsNosByMemberNo" resultType="string">
+        SELECT
+            CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END AS wishStatus
         FROM wish
         WHERE member_no = #{memberNo}
+          AND goods_no = #{goodsNo}
     </select>
 </mapper>

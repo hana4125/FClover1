@@ -122,4 +122,16 @@
     <select id="getActiveCouponsForUser">
         select * from coupon where member_id=#{memberId}
     </select>
+    <insert id="insertDummyMember">
+#         @Insert("INSERT INTO member (member_id, password, name, email, birthdate, phone_number, gender, auth, profile_picture) " +
+#             "VALUES (#{memberId}, #{password}, #{name}, #{email}, #{birthdate}, #{phoneNumber}, #{gender}, #{auth}, #{profilePicture})")
+        insert into member (member_id, password, name, email, birthdate, phone_number, gender, auth, profile_picture)
+        VALUES (#{memberId}, #{password}, #{name}, #{email}, #{birthdate}, #{phoneNumber}, #{gender}, #{auth}, #{profilePicture})
+    </insert>
+    <select id="findUsersWithUserInMemberId">
+        SELECT * FROM member WHERE member_id LIKE '%user%'
+    </select>
+    <insert id="insertCoupon">
+        INSERT INTO coupon (member_id, coupon_name, coupon_amount,coupon_created_at,coupon_expire) VALUES (#{memberId}, #{couponName}, #{couponAmount},now(),DATE_ADD(NOW(), INTERVAL 30 DAY));
+    </insert>
 </mapper>
