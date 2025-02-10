@@ -1,3 +1,4 @@
+
 package hello.fclover.initializer;
 
 import hello.fclover.domain.Goods;
@@ -151,3 +152,4 @@ public class BatchDataInserter {
         log.info("삽입된 데이터의 개수: {}개, 소요 시간: {} ms", totalCount, totalTime);
     }
 }
+
