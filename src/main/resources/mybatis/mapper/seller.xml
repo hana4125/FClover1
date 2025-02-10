@@ -24,7 +24,7 @@
     <select id="getListDetail" resultType="Map" parameterType="map">
         SELECT
         ROW_NUMBER() OVER (ORDER BY p.payment_date DESC) as no,
-        p.payments_no AS deliNo,
+        d.deli_no AS deliNo,
         p.payment_date AS orderDate,
         d.deli_status AS deliStatus,
         g.GOODS_NAME AS goodsName,
@@ -38,10 +38,15 @@
          JOIN goods g ON d.inven_goods_no = g.GOODS_NO
          JOIN member m ON p.user_id = m.member_id
         <where>
-
             <if test="searchWord != null and searchWord != ''">
-                AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%')
-                OR m.member_id LIKE CONCAT('%', #{searchWord}, '%'))
+             <foreach collection="searchField" item="data" separator="or ">
+                 <choose>
+                     <when test='data == "d"'>d.deli_no</when>
+                     <when test='data == "g"'>g.GOODS_NAME</when>
+                     <when test='data == "c"'>m.member_id</when>
+                 </choose>
+             like #{searchWord}
+             </foreach>
             </if>
         </where>
         ORDER BY p.payment_date DESC
@@ -58,19 +63,17 @@
          JOIN member m ON p.user_id = m.member_id
         <where>
             <if test="searchWord != null and searchWord != ''">
-                AND (g.GOODS_NAME LIKE CONCAT('%', #{searchWord}, '%') OR m.member_id LIKE CONCAT('%', #{searchWord}, '%'))
+                <foreach collection="searchField" item="data" separator="or ">
+                    <choose>
+                        <when test='data == "d"'> d.deli_no</when>
+                        <when test='data == "g"'> g.GOODS_NAME</when>
+                        <when test='data == "c"'> m.member_id</when>
+                    </choose>
+                    like #{searchWord}
+                </foreach>
             </if>
         </where>
     </select>
-
-
-
-
-    <select id="getSearchList" parameterType="map">
-
-    </select>
-
-
 
 
 </mapper>

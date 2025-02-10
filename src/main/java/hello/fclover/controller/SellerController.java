@@ -198,30 +198,24 @@ public class SellerController {
     @GetMapping(value = "/buyerList")
     public ModelAndView getBuyerList(
             Principal principal,
-            @RequestParam(value = "n", defaultValue = "1") int page,
-            @RequestParam(value = "search_word", required = false) String searchWord,
-            @RequestParam(value = "size", defaultValue = "10") int pagesize,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "3") int limit,
+            @RequestParam(defaultValue = "") String searchWord,
+            @RequestParam(defaultValue = "") String searchField,
             HttpServletRequest request) {
 
+
         ModelAndView mnv = new ModelAndView();
-
-        System.out.println("principal = " + principal.getName());
-        log.info("principal = " + principal.getName());
-
         String sellerId = principal.getName();
         Long sellerNo = sellerService.getselectNo(sellerId);
 
-        System.out.println("sellerno = " +sellerNo);
-        log.info("sellerno=",sellerNo);
 
         // 전체 구매자 주문 목록 개수 가져오기
-        int totalcount = sellerService.getListCount(searchWord,sellerNo);
-
+        int totalcount = sellerService.getListCount(searchWord,sellerNo,searchField);
         // 현재 페이지에 해당하는 구매자 리스트 가져오기
-        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize,sellerNo);
+        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, limit,sellerNo,searchField);
 
-        // PaginationResult 사용
-        PaginationResult result = new PaginationResult(page, pagesize, totalcount);
+        PaginationResult result = new PaginationResult(page, limit, totalcount);
 
         if(orderList.isEmpty()) {
             mnv.addObject("message", "구매자 주문 정보가 없습니다.");
@@ -229,21 +223,18 @@ public class SellerController {
 
         mnv.setViewName("seller/sellerBuyerList");
         mnv.addObject("orderList", orderList);
-        mnv.addObject("search_word", searchWord);
+        mnv.addObject("searchWord", searchWord);
+        mnv.addObject("searchField", searchField);
         mnv.addObject("searchlistcount", totalcount);
-        mnv.addObject("size", pagesize);
-
-        // 페이지네이션 데이터 추가
         mnv.addObject("startpage", result.getStartpage());
         mnv.addObject("endpage", result.getEndpage());
         mnv.addObject("maxpage", result.getMaxpage());
         mnv.addObject("totalcount", totalcount);
-        mnv.addObject("pagesize", pagesize);
+        mnv.addObject("limit", limit);
         mnv.addObject("page", page);
-        mnv.addObject("n", page);  // 템플릿에서 사용하는 변수명 맞추기
+
 
         return mnv;
     }
-
 }
 
