@@ -139,34 +139,16 @@
   <!-- 키워드 검색 총 개수 조회-->
   <select id="countGoodsByKeyword" resultType="int">
     SELECT COUNT(*)
-    FROM (SELECT g.goods_no
-          FROM goods g
-          WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-                      AGAINST(#{keyword} IN BOOLEAN MODE)
-
-          UNION
-
-          SELECT g.goods_no
-          FROM goods g
-          LEFT JOIN seller s ON g.seller_no = s.seller_no
-          WHERE MATCH(s.company_name)
-                      AGAINST(#{keyword} IN BOOLEAN MODE)) result
+    FROM goods
+    WHERE MATCH(goods_name, goods_writer, company_name, goods_content)
+                AGAINST(#{keyword} IN BOOLEAN MODE)
   </select>
 
   <select id="countCategoryByKeyword" resultType="hello.fclover.dto.CategoryCountDTO">
     SELECT cate_no AS cateNo, COUNT(*) AS count
-    FROM (
-           SELECT g.goods_no, g.cate_no
-           FROM goods g
-           WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-                       AGAINST(#{keyword} IN BOOLEAN MODE)
-           UNION
-           SELECT g.goods_no, g.cate_no
-           FROM goods g
-                  LEFT JOIN seller s ON g.seller_no = s.seller_no
-           WHERE MATCH(s.company_name)
-                       AGAINST(#{keyword} IN BOOLEAN MODE)
-         ) result
+    FROM goods
+    WHERE MATCH(goods_name, goods_writer, company_name, goods_content)
+                AGAINST(#{keyword} IN BOOLEAN MODE)
     GROUP BY cate_no
   </select>
 
@@ -180,29 +162,13 @@
     g.goods_content AS goodsContent,
     g.goods_price AS goodsPrice,
     g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
+    g.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
     (st.initial_stock - st.product_stock) AS goodsCount
-    FROM (
-    SELECT *
-    FROM (
-    SELECT g.*
     FROM goods g
-    WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-
-    UNION ALL
-
-    SELECT g.*
-    FROM goods g
-    JOIN seller s ON g.seller_no = s.seller_no
-    WHERE MATCH(s.company_name)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-    ) AS union_result
-    ) g
     LEFT JOIN stock st ON g.goods_no = st.goods_no
-    LEFT JOIN seller s ON g.seller_no = s.seller_no
-
+    WHERE MATCH(g.goods_name, g.goods_writer, g.company_name, g.goods_content)
+    AGAINST (#{keyword} IN BOOLEAN MODE)
     ORDER BY
     <choose>
       <when test="sort == 'latest'">g.goods_create_at DESC</when>
@@ -223,7 +189,7 @@
         AND MATCH(g.goods_writer) AGAINST (#{writer} IN BOOLEAN MODE)
       </if>
       <if test="companyName != null and companyName != ''">
-        AND MATCH(s.company_name) AGAINST (#{companyName} IN BOOLEAN MODE)
+        AND MATCH(g.company_name) AGAINST (#{companyName} IN BOOLEAN MODE)
       </if>
       <if test="cate != null and cate != 0">
         AND g.cate_no = #{cate}
@@ -240,6 +206,7 @@
   <!-- 상세 검색 개수 쿼리 -->
   <select id="countGoodsByParam" parameterType="map" resultType="int">
     SELECT COUNT(*)
+    FROM goods g
     <include refid="goodsWhereClause"/>
   </select>
 
@@ -253,12 +220,11 @@
     g.goods_content AS goodsContent,
     g.goods_price AS goodsPrice,
     g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
+    g.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
     (st.initial_stock - st.product_stock) AS goodsCount
     FROM goods g
     LEFT JOIN stock st ON g.goods_no = st.goods_no
-    LEFT JOIN seller s ON g.seller_no = s.seller_no
     <include refid="goodsWhereClause"/>
 
     <!-- 정렬 조건 분기 처리 -->
@@ -283,11 +249,11 @@
   <!-- 데이터 Batch 삽입 -->
   <insert id="insertGoods">
     INSERT INTO goods (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, writer_content,
-    goods_create_at, goods_pagecount, goods_booksize)
+    goods_create_at, goods_pagecount, goods_booksize, company_name)
     VALUES
     <foreach collection="goods" item="g" separator=",">
       (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
-      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
+      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize}, #{g.companyName})
     </foreach>
   </insert>
 
@@ -347,6 +313,7 @@
     </if>
   </select>
 
+  <!-- 파라미터 기반 검색(필터, 정렬, 재검색) -->
   <select id="searchByParam" parameterType="hello.fclover.dto.SearchParamDTO" resultType="hello.fclover.domain.Goods">
     <choose>
       <!-- 조건: cname, chrc, pbcm 값이 모두 없을 경우 -->
@@ -359,28 +326,11 @@
         g.goods_content AS goodsContent,
         g.goods_price AS goodsPrice,
         g.goods_writer AS goodsWriter,
-        s.company_name AS companyName,
+        g.company_name AS companyName,
         g.goods_create_at AS goodsCreateAt,
         (st.initial_stock - st.product_stock) AS goodsCount
-        FROM (
-        SELECT *
-        FROM (
-        SELECT g.*
         FROM goods g
-        WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-        AGAINST (#{keyword} IN BOOLEAN MODE)
-
-        UNION ALL
-
-        SELECT g.*
-        FROM goods g
-        JOIN seller s ON g.seller_no = s.seller_no
-        WHERE MATCH(s.company_name)
-        AGAINST (#{keyword} IN BOOLEAN MODE)
-        ) AS union_result
-        ) g
         LEFT JOIN stock st ON g.goods_no = st.goods_no
-        LEFT JOIN seller s ON g.seller_no = s.seller_no
         <where>
           <!-- 추가 조건 -->
           <if test="cateNo != null and cateNo != 0">
@@ -428,12 +378,11 @@
         g.goods_content AS goodsContent,
         g.goods_price AS goodsPrice,
         g.goods_writer AS goodsWriter,
-        s.company_name AS companyName,
+        g.company_name AS companyName,
         g.goods_create_at AS goodsCreateAt,
         (st.initial_stock - st.product_stock) AS goodsCount
         FROM goods g
         LEFT JOIN stock st ON g.goods_no = st.goods_no
-        LEFT JOIN seller s ON g.seller_no = s.seller_no
         <where>
           <if test="cname != null and cname != ''">
             AND MATCH(g.goods_name) AGAINST (#{cname} IN BOOLEAN MODE)
@@ -442,7 +391,7 @@
             AND MATCH(g.goods_writer) AGAINST (#{chrc} IN BOOLEAN MODE)
           </if>
           <if test="pbcm != null and pbcm != ''">
-            AND MATCH(s.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
+            AND MATCH(g.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
           </if>
           <if test="cateNo != null and cateNo != 0">
             AND g.cate_no = #{cateNo}
