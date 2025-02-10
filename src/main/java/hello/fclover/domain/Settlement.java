@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Settlement {
-    private Long settlementsNo;
-    private Long sellerId;
+    private Long id;
+    private Long partnerId;
     private BigDecimal totalAmount;
     private String status="Pending";
     private LocalDate paymentDate;
@@ -24,7 +24,7 @@ public class Settlement {
 
     public static Settlement create(Long partnerId, BigDecimal totalAmount, LocalDate paymentDate) {
         Settlement settlement = new Settlement();
-        settlement.setSellerId(partnerId);
+        settlement.setPartnerId(partnerId);
         settlement.setTotalAmount(totalAmount);
         settlement.setStatus("completed");
         settlement.setPaymentDate(paymentDate);

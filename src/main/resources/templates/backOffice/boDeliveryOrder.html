@@ -55,7 +55,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-      <a class="nav-link" href="/bo/main">
+      <a class="nav-link" href="boMain.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>
@@ -220,7 +220,7 @@
         <table id="paymentTable" class="display" style="width:100%">
           <thead>
           <tr>
-<!--            <th>선택</th>-->
+            <th>선택</th>
             <th>ID</th>
             <th>PARTNER ID</th>
             <th>USER ID</th>
@@ -278,11 +278,11 @@
                 "dataSrc": "" // 응답 데이터의 경로 (JSON 배열을 직접 받을 경우 "")
               },
               "columns": [
-                // { "data" : null,
-                //   "render": function(data, type, row) {
-                //     return `<input type="checkbox" name="checkOrder" id="checkOrder">`;
-                //   }
-                // },
+                { "data" : null,
+                  "render": function(data, type, row) {
+                    return `<input type="checkbox" name="checkOrder" id="checkOrder">`;
+                  }
+                },
                 { "data": "paymentsNo" },
                 { "data": "partnerId" },
                 { "data": "userId" },
@@ -309,7 +309,7 @@
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="delivery-btn" data-payments-no="${row.paymentsNo}" data-user-id="${row.userId}">배송 준비</button>`;
+                    return `<button class="delivery-btn" data-order-id="${row.orderId}" data-user-id="${row.userId}">배송 준비</button>`;
                   }
                 }
               ],
@@ -357,11 +357,11 @@
 
           // 배송준비 버튼 클릭 이벤트
           $(document).on('click', '.delivery-btn', async function() {
-
-            const paymentsNo = $(this).data('payments-no');
+            // const impUid = $(this).data('imp-uid');
+            const orderId = $(this).data('order-id');
             const userId = $(this).data('user-id');
-            console.log(paymentsNo);
-            const response = await fetch(`/bo/delivery/readyClick?paymentsNo=${paymentsNo}&userId=${userId}`, {
+
+            const response = await fetch(`/bo/delivery/readyClick?orderId=${orderId}&userId=${userId}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json'
@@ -418,7 +418,7 @@
       <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" href="/bo/logout">Logout</a>
+        <a class="btn btn-primary" href="login.html">Logout</a>
       </div>
     </div>
   </div>

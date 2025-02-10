@@ -11,4 +11,4 @@ ON DELETE CASCADE
 select * from comments;
 
 
-truncate table comments;
+drop table comments;

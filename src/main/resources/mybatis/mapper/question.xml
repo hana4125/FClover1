@@ -83,48 +83,23 @@
     </select>
 
 <!-- 기간 조회 -->
-
     <!-- 기간 조회를 위한 쿼리 -->
-    <select id="findByDateBetween" resultType="hello.fclover.domain.Question">
+    <select id="getFilteredQuestions" resultType="Question">
         SELECT *
-        FROM qna
-        <where>
-            <if test='startDate != null  and endDate != null'>
-                q_create_at BETWEEN #{startDate} AND #{endDate}
-            </if>
-        </where>
-        ORDER BY q_no DESC
-            LIMIT #{offset}, #{limit}
+        FROM question
+        WHERE qcreateat BETWEEN #{startDate} AND #{endDate}
+        ORDER BY qno DESC
+            LIMIT #{start}, #{limit}
     </select>
 
     <!-- 기간 조회된 총 개수를 반환하는 쿼리 -->
-    <select id="countByDateBetween" resultType="int">
+    <select id="getFilteredCount" resultType="int">
         SELECT COUNT(*)
-        FROM qna
-        <where>
-            <if test='startDate != null  and endDate != null'>
-                q_create_at BETWEEN #{startDate} AND #{endDate}
-            </if>
-        </where>
+        FROM question
+        WHERE qcreateat BETWEEN #{startDate} AND #{endDate}
     </select>
 
-    <select id="findAll" parameterType="map" resultType="Question">
-        SELECT * FROM questions
-        ORDER BY created_at DESC
-            LIMIT #{limit} OFFSET #{offset}
-    </select>
-
-    <select id="countAll" resultType="int">
-        SELECT COUNT(*) FROM questions
-    </select>
-
-    <!-- 문의글 삭제-->
-    <delete id="deleteQuestion" parameterType="int">
-        DELETE FROM qna
-        WHERE q_no = #{qno}
-    </delete>
-
-    <!-- 댓글 기능   -->
+<!-- 댓글 기능   -->
     <select id="getCommentList" resultType="hello.fclover.domain.Question">
         SELECT *
         FROM (
@@ -155,7 +130,5 @@
         DELETE FROM comments
         WHERE c_no = #{cno}
     </delete>
-
-
 
 </mapper>

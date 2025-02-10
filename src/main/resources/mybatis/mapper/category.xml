@@ -12,7 +12,7 @@
     </select>
 
     <select id="findTitle" resultType="hello.fclover.domain.Category">
-        SELECT cate_no, cate_name
+        SELECT cate_name
         FROM category
         WHERE cate_no = #{cateNo}
     </select>

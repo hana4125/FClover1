@@ -34,9 +34,9 @@ public class DatabaseInitializer {
           int totalCount = 500_000;
 
           // rds 사양에 따라서 유동적으로 조절
-          // 청크 사이즈 (500 ~ 2000)
-          int chunkSize = 1000;
-          // 스레드 갯수 (4 ~ 20)
+          // 청크 사이즈
+          int chunkSize = 500;
+          // 스레드 갯수
           int threadCount = 4;
           batchDataInserter.insertLargeDataParallel(totalCount, chunkSize, threadCount);
 

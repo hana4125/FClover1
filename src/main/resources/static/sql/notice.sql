@@ -2,9 +2,9 @@
 CREATE TABLE notice (
 noti_no INT,
 noti_title VARCHAR(300),
-noti_Name VARCHAR(30),
+noti_name VARCHAR(30),
 noti_content VARCHAR(4000),
-noti_Date DATETIME,
+noti_date DATETIME,
 PRIMARY KEY (noti_no)
 );
 
@@ -16,9 +16,6 @@ commit;
 
 ALTER TABLE notice
     ADD FULLTEXT (noti_title);
-
-DELETE FROM notice WHERE noti_no = 1;
-
 
 
 

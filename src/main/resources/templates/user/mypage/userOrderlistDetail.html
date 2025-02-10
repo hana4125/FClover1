@@ -51,7 +51,7 @@
                 <div class="order_summary_box">
                     <div class="box_header">
                         <div class="label">
-                            <span class="order_date" data-order-date="" th:text="${list.paymentDate}"></span>
+                            <span class="order_date" data-order-date="">2024.04.14</span>
                             <span class="gap">|</span>
                             <span class="order_num">주문번호 <span class="num" data-order-id="" th:text="${orderId}"></span></span>
                         </div>
@@ -118,7 +118,9 @@
 
 
                                                 <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_info" data-order-commoditylink="">
-                                                    <span class="prod_name" th:text="${list.goodsName}"></span>
+                                                    <span class="prod_name">
+                                        [교보문고굿즈]The Scent of PAGE : 디퓨저 100ml
+                                    </span>
 
                                                 </a>
 
@@ -138,7 +140,7 @@
                                     <td>
                         <span class="price">
 
-                            <span class="val" th:text="${#numbers.formatInteger(list.paymentAmount, 0)}"></span>
+                            <span class="val" >1000</span>
                             <span class="unit">원</span>
 
 
@@ -162,7 +164,7 @@
                                             </p>-->
 
                                             <p class="delivery_desc">
-                                                <span th:text="${list.paymentDate}">2024.01.07 </span><span> 주문완료</span>
+                                                <span>2024.01.07 주문완료</span>
                                             </p>
 
 
@@ -190,7 +192,7 @@
                     <!-- 배송정보 -->
                     <div class="title_wrap title_size_md" style="" data-delivery-point-zone="">
                         <h2 class="title_heading">배송정보</h2><!-- 수정 220425 SEO H태그 적용 -->
-<!--                        <button type="button" class="btn_info_popup size_lg" data-role="btn-dialog" data-target="#popDeliveryGuide" data-delivery-point-guide-button=""><span class="ico_question"></span><span class="hidden">팝업 열기</span></button>-->
+                        <button type="button" class="btn_info_popup size_lg" data-role="btn-dialog" data-target="#popDeliveryGuide" data-delivery-point-guide-button=""><span class="ico_question"></span><span class="hidden">팝업 열기</span></button>
                     </div>
                     <div class="tbl_row_wrap" style="" data-delivery-point-zone="">
                         <table class="tbl_row">
@@ -321,46 +323,46 @@
                 <!--결제정보영역 시작-->
                 <div class="title_wrap title_size_md" id="settlementInfoTitle">
                     <h2 class="title_heading">결제정보</h2><!-- 수정 220425 SEO H태그 적용 -->
-<!--                    <button type="button" class="btn_info_popup size_lg" data-role="btn-dialog" data-target="#popPaymentGuide" data-settlement-information-guidance-button=""><span class="ico_question"></span><span class="hidden">팝업 열기</span></button>-->
+                    <button type="button" class="btn_info_popup size_lg" data-role="btn-dialog" data-target="#popPaymentGuide" data-settlement-information-guidance-button=""><span class="ico_question"></span><span class="hidden">팝업 열기</span></button>
                 </div>
                 <div class="payment_info_wrap" id="settlementInfoContents" data-settlement-information="">
                     <!-- payment_info_area -->
                     <div class="payment_info_area">
                         <div class="payment_total_item">
                             <div class="payment_info_box">
-                                <p class="label">상품금액</p>
+                                <p class="label">주문금액</p>
                                 <div class="right_box">
                     <span class="price">
-                        <span class="val" th:text="${#numbers.formatInteger(list.paymentAmount, 0)}">29,800</span>
+                        <span class="val">29,800</span>
                         <span class="unit">원</span>
                     </span>
                                 </div>
                             </div>
                         </div>
-<!--                        <ul class="payment_info_list">-->
-<!--                            <li class="payment_info_item">-->
-<!--                                <div class="payment_info_box">-->
-<!--                                    <p class="label">상품 금액</p>-->
-<!--                                    <div class="right_box">-->
-<!--                        <span class="price">-->
-<!--                            <span class="val" th:text="${list.paymentAmount}">29,800</span>-->
-<!--                            <span class="unit">원</span>-->
-<!--                        </span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                        </ul>-->
+                        <ul class="payment_info_list">
+                            <li class="payment_info_item">
+                                <div class="payment_info_box">
+                                    <p class="label">상품 금액</p>
+                                    <div class="right_box">
+                        <span class="price">
+                            <span class="val">29,800</span>
+                            <span class="unit">원</span>
+                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                     <!-- //payment_info_area -->
                     <!-- payment_info_area -->
                     <div class="payment_info_area">
                         <div class="payment_total_item">
                             <div class="payment_info_box">
-                                <p class="label">할인 금액</p>
+                                <p class="label">할인/포인트 금액</p>
                                 <div class="right_box">
                     <span class="price">
                         <!-- 221111 할인/포인트 금액 콤마 표시 -->
-                        <span class="val">-0</span>
+                        <span class="val">-970</span>
                         <span class="unit">원</span>
                     </span>
                                 </div>
@@ -369,17 +371,17 @@
                         <ul class="payment_info_list">
                             <!-- 수정 220929 모든 할인/포인트 리스트로 적용 되도록 수정 -->
 
-<!--                            <li class="payment_info_item">-->
-<!--                                <div class="payment_info_box">-->
-<!--                                    <p class="label">통합포인트</p>-->
-<!--                                    <div class="right_box">-->
-<!--                        <span class="price">-->
-<!--                            <span class="val">-970</span>-->
-<!--                            <span class="unit">p</span>-->
-<!--                        </span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </li>-->
+                            <li class="payment_info_item">
+                                <div class="payment_info_box">
+                                    <p class="label">통합포인트</p>
+                                    <div class="right_box">
+                        <span class="price">
+                            <span class="val">-970</span>
+                            <span class="unit">p</span>
+                        </span>
+                                    </div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                     <!-- //payment_info_area -->
@@ -390,36 +392,36 @@
                                 <p class="label">결제금액</p>
                                 <div class="right_box">
                     <span class="price">
-                        <span class="val" th:text="${#numbers.formatInteger(list.paymentAmount, 0)}">28,830</span>
+                        <span class="val">28,830</span>
                         <span class="unit">원</span>
                     </span>
                                 </div>
                             </div>
                         </div>
 
-<!--                        <ul class="payment_info_list">-->
-<!--                            <li class="payment_info_item">-->
-<!--                                <div class="payment_info_box">-->
-<!--                                    <p class="label"><span class="fc_black">카카오페이</span></p>-->
-<!--                                    <div class="right_box">-->
-<!--                        <span class="price">-->
+                        <ul class="payment_info_list">
+                            <li class="payment_info_item">
+                                <div class="payment_info_box">
+                                    <p class="label"><span class="fc_black">카카오페이</span></p>
+                                    <div class="right_box">
+                        <span class="price">
 
-<!--                        <span class="val">28,830</span>-->
-<!--                        <span class="unit">원</span>-->
+                        <span class="val">28,830</span>
+                        <span class="unit">원</span>
 
-<!--                        </span>-->
-<!--                                        <span class="payment_method"></span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                        </ul>-->
+                        </span>
+                                        <span class="payment_method"></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
 
 
-<!--                        <div class="payment_util_box">-->
-<!--                            <button type="button" class="btn_xxs btn_line_gray" data-settlement-information-receipt-button=""><span class="text">영수증</span><span class="ico_arw"></span></button>-->
-<!--                            <button type="button" class="btn_xxs btn_line_gray" data-settlement-information-credit-card-sales-statement-button="" style="display: none;"><span class="text">신용카드매출전표</span><span class="ico_arw"></span></button>-->
-<!--                            <button type="button" class="btn_xxs btn_line_gray" data-settlement-information-cash-receipt-button=""><span class="text">현금영수증</span><span class="ico_arw"></span></button>-->
-<!--                        </div>-->
+                        <div class="payment_util_box">
+                            <button type="button" class="btn_xxs btn_line_gray" data-settlement-information-receipt-button=""><span class="text">영수증</span><span class="ico_arw"></span></button>
+                            <button type="button" class="btn_xxs btn_line_gray" data-settlement-information-credit-card-sales-statement-button="" style="display: none;"><span class="text">신용카드매출전표</span><span class="ico_arw"></span></button>
+                            <button type="button" class="btn_xxs btn_line_gray" data-settlement-information-cash-receipt-button=""><span class="text">현금영수증</span><span class="ico_arw"></span></button>
+                        </div>
                     </div>
                     <!-- //payment_info_area -->
                 </div>

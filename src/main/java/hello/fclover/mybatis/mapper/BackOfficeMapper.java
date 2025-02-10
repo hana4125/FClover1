@@ -1,6 +1,9 @@
 package hello.fclover.mybatis.mapper;
 
-import hello.fclover.domain.*;
+import hello.fclover.domain.Delivery;
+import hello.fclover.domain.Payment;
+import hello.fclover.domain.Seller;
+import hello.fclover.domain.Settlement;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,7 +15,7 @@ public interface BackOfficeMapper {
 
     List<Seller> searchSeller();
 
-    void insertDeliveryReadyList(Long paymentsNo, String userId, String status);
+    void insertDeliveryReadyList(Long orderId, String userId, String status);
 
     List<Delivery> deliveryReadyOrderSearch();
 
@@ -25,14 +28,4 @@ public interface BackOfficeMapper {
     void changeDeliveryDoneStatus(int deliNo, String deliStatus);
 
     List<Settlement> sellerSettlementSearch();
-
-    List<Goods> sellerGoodsApprovalSearch();
-
-    void goodsConfirmSuccess(Long goodsNo);
-
-    List<Seller> sellerPendingCheck();
-
-    void updateSellerApproved(Long sellerNo);
-
-    void updateSellerRejected(Long sellerNo);
 }

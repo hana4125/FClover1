@@ -37,6 +37,10 @@ const SCF = {
   },
   "isSearchKeywordEmpty" : function(){
     return SCF.getSearchKeyword() == "";
+  },
+  "getUserId" : function(){
+    // 유저 정보 가져와서 반환 필요
+    return null; // user != null && user.model != null ? user.model.sub : "";
   }
 };
 
@@ -46,13 +50,36 @@ let prevSearchKeyword = SCF.getSearchKeyword();
 
 $(function() {
 
-  isRcntShow = getAutoCompleteCookie("rcntShow")=="off" ? false : true;
-  splitTempAll = new Array(0);
+  isRcntShow = getAutoCompleteCookie("rcntShow") != "off";
 
-  // 최근검색어 남기기-pc
-  if($("#searchKeyword").val() !=null && $("#searchKeyword").val() !=''){
-    addRcentSchList($("#searchKeyword").val());
-  }
+  //최근검색어 남기기-pc
+  // if($("#searchKeyword").val() !=null && $("#searchKeyword").val() !=''){
+  //   addRcentSchList($("#searchKeyword").val());
+  // }
+
+
+  $('#searchKeyword').on('input', function() {
+    let inputVal = $(this).val().trim(); // 입력값 공백 제거
+
+    // 입력값 유무에 따라 보여지는 요소 변경
+    if (inputVal !== '') {
+      $('.inKeyword').show();
+      $('.noKeyword').hide();
+
+      // 추천 검색어 삽입
+      // let recommendKeywords = getRecomKeyword();
+      // $('#recommendKeywordBox').append(recommendKeywords);
+
+
+    } else {
+      $('.inKeyword').hide();
+      $('.noKeyword').show();
+
+
+    }
+
+
+  });
 
   // 검색버튼 클릭시 이벤트
   $(".search-btn").click(function(e){
@@ -88,7 +115,7 @@ $(function() {
             let _caller = setTimeout(function(e){
               //console.log("SendAutoKeyword : " + _keyword);
               prevSearchKeyword = _keyword;
-              sendAutoKeyword(); // 나중에 구현
+              //sendAutoKeyword(_keyword); // 나중에 구현
             }, gapTime);
             autoKeywordCaller.push(_caller);
           }
@@ -101,7 +128,7 @@ $(function() {
       if(!$("#hFrame").hasClass("active")) {
         let keyword = $("#searchKeyword").val();
         if(keyword != ""){
-          sendAutoKeyword();
+          sendAutoKeyword(keyword);
         }else{
           if(!$("#hFrame").hasClass("active")){
             $("#hFrame").addClass('active');
@@ -115,27 +142,43 @@ $(function() {
 
   });
 
-  $("#ageSel").on('selectmenuchange', function() {
-    ageChange(this.value);
-  });
 
-  $("#genderSel").on('selectmenuchange', function() {
-    genderChange(this.value);
-  });
 
-  // 자동완성 활성 영역이 아닌 곳 클릭 시 자동완성 창 닫기
-  $(document).on('click', function(e) {
-    if(e.target.id != "searchKeyword" && !$(e.target).hasClass("auto_complete_maintain") && $(e.target).parents('.auto_complete_maintain').length <= 0) {
-      $("#hFrame").removeClass('active');
+});
+
+// 추천 검색어 가져오기
+/*
+function getRecomKeyword() {
+  let result = '';
+
+  // TODO : 로직 구현하기
+
+  // 나이, 성별 기본값
+  let age = 0;
+  let gender = "0";
+
+  // User 성별, 나이 정보 불러와서 지정
+
+  $.ajax({
+    url: '/getRecommendKeyword',
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      gender: gender,
+      age: age
+    },
+    success: function(rst) {
+      let $temp = rst.data.resultDocuments;
+      let addHtml = "";
+      if ( $temp != "" && $temp != null) {
+
+      }
     }
   });
 
-  //닫기
-  $(document).on('click', '#close_search_auto', function() {
-    $("#hFrame").removeClass('active');
-  });
-
-});
+  return result;
+}
+*/
 
 function autoClearTimeout(){
   if(autoKeywordCaller.length > 0){
@@ -185,18 +228,9 @@ function delAutoCompleteCookie(name) {
   document.cookie = name + "=; path=/; expires=" + expire_date.toUTCString() + "; domain=" + domain + ";";
 }
 
-/**
- * 자동완성 호출
- * @param value 키워드
- * @returns
- */
-function sendAutoKeyword(){
-  autoClearTimeout();
-  $(".noKeyword").hide();
-  $(".inKeyword").show();
-}
 
-// 검색 시작 및 페이지 이동
+
+
 function goSearchKeywordPage(keyvalue){
   let inkeyword = keyvalue.trim();
   if(inkeyword == ""){
@@ -217,63 +251,10 @@ function submitSearchKeywordPage() {
   goSearchKeywordPage(keyword);
 }
 
-
-//검색어저장 꺼짐
-function getRcntKeywordNoShow() {
-
-  $(".recent_keyword_box").empty();
-
-  let addHtml  ="";
-  addHtml  += "                              <div class='title_wrap title_size_def'>";
-  addHtml  += "                                  <p class='title_heading'>최근 검색어</p>";
-  addHtml  += "                              </div>";
-  addHtml  += "                              <div class='recent_keyword_list_wrap'>";
-  addHtml  += "                                    <div class='no_data size_sm'>";
-  addHtml  += "                                         <div class='no_data_desc'>검색어저장이 꺼져 있습니다.<br />검색어저장 켜기를 클릭해 주세요.</div>";
-  addHtml  += "                                    </div>";
-  addHtml  += "                                    <div class='recent_keyword_bottom auto_complete_maintain'>";
-  addHtml  += "                                        <div class='btn_wrap'>";
-  addHtml  += "                                            <button type='button' class='btn_save_keyword'><span class='text'>검색어저장 <span class='val' onclick='keywordShowOn(); '>켜기</span></span></button>";
-  addHtml  += "                                        </div>";
-  addHtml  += "                                    </div>";
-  addHtml  += "                               </div>";
-
-  $(".recent_keyword_box").append(addHtml);
-}
-
-
-//기본틀
-function showAutoKeyword() {
-
-  $("#hFrame").empty();
-  $(".search_content_wrap").remove();
-  let addHtml;
-  addHtml  ="";
-  addHtml  += "                   <div class=\"search_content_wrap\">";
-  addHtml  += "                       <div class=\"scroll_wrap\">";
-  addHtml  += "                           <div class=\"keyword_contents_area\">";
-  addHtml  += "                              <div class=\"recent_keyword_box\">";
-  addHtml  += "                              </div>";
-  addHtml  +="                                <div class=\"hot_keyword_box\" id=\"hotKeywordBox\">";
-  addHtml  +="                                </div>";
-  addHtml  +="                            </div>";
-  addHtml  +="                            <div class=\"util_area\">";
-  addHtml  +="                                <div class=\"util_button_area\">";
-  addHtml  +="                                    <a href=\"/inquiry/notice/noti_list\" class=\"btn_xs\"><span class=\"ico_link\"></span><span class=\"text\">도움말</span></a>";
-  addHtml  +="                                    <a href=\"/search/searchDetail\" class=\"btn_xs\"><span class=\"ico_search\"></span><span class=\"text\">상세검색</span></a>";
-  addHtml  +="                                </div>";
-  addHtml  += "                               <button type=\"button\" class=\"button_layer_close\" id=\"close_search_auto\"><span class=\"text\"> 닫기</span></button>";
-  addHtml  +="                            </div>";
-  addHtml  +="                        </div>";
-  addHtml  +="                    </div>";
-
-  $("#hFrame").html(addHtml);
-}
-
 //자동검색어
 function rcntKeywordShow() {
   //기본틀
-  showAutoKeyword();
+  //showAutoKeyword();
   //최근 검색어
   if(isRcntShow == false) {
     getRcntKeywordNoShow();
@@ -285,6 +266,8 @@ function rcntKeywordShow() {
       getRcntKeywordNoList();
     }
   }
+  //추천 검색어
+  //trendsCall();
   //실시간 급등 검색어
   riseCall();
 }
@@ -437,6 +420,28 @@ function suggest_cutString( str , limitByte){
   return msg;
 }
 
+//검색어저장 꺼짐
+function getRcntKeywordNoShow() {
+
+  $(".recent_keyword_box").empty();
+
+  let addHtml  ="";
+  addHtml  += "                              <div class='title_wrap title_size_def'>";
+  addHtml  += "                                  <p class='title_heading'>최근 검색어</p>";
+  addHtml  += "                              </div>";
+  addHtml  += "                              <div class='recent_keyword_list_wrap'>";
+  addHtml  += "                                    <div class='no_data size_sm'>";
+  addHtml  += "                                         <div class='no_data_desc'>검색어저장이 꺼져 있습니다.<br />검색어저장 켜기를 클릭해 주세요.</div>";
+  addHtml  += "                                    </div>";
+  addHtml  += "                                    <div class='recent_keyword_bottom auto_complete_maintain'>";
+  addHtml  += "                                        <div class='btn_wrap'>";
+  addHtml  += "                                            <button type='button' class='btn_save_keyword'><span class='text'>검색어저장 <span class='val' onclick='keywordShowOn(); '>켜기</span></span></button>";
+  addHtml  += "                                        </div>";
+  addHtml  += "                                    </div>";
+  addHtml  += "                               </div>";
+
+  $(".recent_keyword_box").append(addHtml);
+}
 
 //최근검색어
 function getRcntKeywordList(recentSch) {
@@ -483,12 +488,6 @@ function getRcntKeywordList(recentSch) {
   $(".recent_keyword_box").append(addHtml);
 }
 
-// avoid quot conflict
-function avoidQuotes(str){
-  return "decodeURIComponent(&quot;"+encodeURIComponent(str)+"&quot;)";
-}
-
-
 //최근검색어 없음
 function getRcntKeywordNoList() {
 
@@ -512,18 +511,80 @@ function getRcntKeywordNoList() {
   $(".recent_keyword_box").append(addHtml);
 }
 
+//추천 검색어
+// async function trendsCall() {
+//   await temp.auth.authorize();
+//
+//   let age = 0;
+//   let gender = "0";
+//
+//   if (temp.auth.authorized) {
+//
+//     age = temp.user.model.age
+//
+//     if(age >= 10 && age < 20) {
+//       age = "10";
+//     }else if(age >= 20 && age < 30) {
+//       age = "20";
+//     }else if(age >= 30 && age < 40) {
+//       age = "30";
+//     }else {
+//       age = "40";
+//     }
+//
+//     gender = temp.user.model.data.gndrCodeName;
+//
+//     if(gender == "남"){
+//       gender = "1";
+//     }else if(gender == "여"){
+//       gender = "2";
+//     }
+//   }
+//
+//   $.ajax({
+//     type: "GET",
+//     dataType : "jsonp",
+//     jsonpCallback: "searchAutoTrends",
+//     url : autoCompleteDomain + "srp/api/v1/search/autocomplete/trends",
+//     data: {
+//       "sex": gender,
+//       "age" : age,
+//       "gubun" : "P"
+//     },
+//     success: function(rst) {
+//       let $temp = rst.data.resultDocuments;
+//       let addHtml ="";
+//       if($temp !="" && $temp !=null){// 조회된 건수가 있다면  true
+//         $.each($temp, function(index){
+//           let item = $temp[index];
+//           let keywords = checkKeyword(item.keywords);
+//           let enKeywords = encodeURIComponent(keywords);
+//           addHtml  += "        <a href=\"javascript:goSearchKeywordPage(decodeURIComponent('"+enKeywords+"'), 'LAG')\" class=\"tag\"><span class=\"text\">"+keywords+"</span></a>";
+//         });
+//       }else if(age =="" || age=="0"|| age==0 || age== null){// 조회된 건수가 없다면  true
+//         "<div class=\"text_none\">검색어가 없습니다.</div>";
+//       }else {// 조회된 건수가 없다면  true
+//         addHtml += "<div class=\"text_none\">검색어가 없습니다.</div>";
+//       }
+//       $("#recommendKeywordBox").html(addHtml);
+//     }
+//   });
+// }
+
 //실시간 급등 검색어
+/*
 function riseCall(age,gender) {
   $.ajax({
-    method: "GET",
-    dataType : "json",
-    url : "/search/api/popular-keywords",
+    type: "GET",
+    dataType : "jsonp",
+    jsonpCallback: "searchAutoRise",
+    url : "#",
     data: {
-      "gender": gender,
-      "ageRange" : age,
-      "limit" : 10
+      "sex": gender,
+      "age" : age,
+      "gubun" : "P"
     },
-    success: function(response) {
+    success: function(rst) {
       let addHtml = "";
       addHtml  +="                <div class='title_wrap title_size_def'>";
       addHtml  +="                    <p class='title_heading'>실시간 인기 검색어</p>";
@@ -532,30 +593,29 @@ function riseCall(age,gender) {
       addHtml  +="                            <!-- form_sel -->";
       addHtml  +="                            <div class='form_sel type_arw' data-class='type_arw'>";
       addHtml  +="                                <select title='연령기준 정렬' id='ageSel'>";
-      addHtml  +="                                    <option value='ALL'>전연령</option>";
-      const ageRange = ['10대', '20대', '30대', '40대']
-      for(let range of ageRange){
+      addHtml  +="                                    <option value=''>전연령</option>";
+      for(let i = 10; i<=40; i+=10){
         let selected = "";
         let upperChr = "";
-        if (range == age) selected = "selected";
-        if (range == '40대') upperChr ="↑"
-        addHtml  +="                                <option value='"+range+"' "+selected+">"+range+upperChr+"</option>";
+        if (i==age) selected = "selected";
+        if (i==40) upperChr ="↑"
+        addHtml  +="                                <option value='"+i+"' "+selected+">"+i+"대"+upperChr+"</option>";
       }
       addHtml  +="                                </select>";
       addHtml  +="                            </div>";
       addHtml  +="                            <!-- //form_sel -->"
       addHtml  +="                            <div class='form_sel type_arw' data-class='type_arw'>";
       addHtml  +="                                <select title='성별기준 정렬' id='genderSel'>";
-      addHtml  +="                                    <option value='ALL'>전성별</option>";
-      if(gender=='M'){
-        addHtml  +="                                 <option value='M' selected>남성</option>";
-        addHtml  +="                                 <option value='F'>여성</option>";
-      }else if(gender=='F'){
-        addHtml  +="                                 <option value='M'>남성</option>";
-        addHtml  +="                                 <option value='F' selected>여성</option>";
+      addHtml  +="                                    <option value=''>전성별</option>";
+      if(gender==1){
+        addHtml  +="                                 <option value='1' selected>남성</option>";
+        addHtml  +="                                 <option value='2'>여성</option>";
+      }else if(gender==2){
+        addHtml  +="                                 <option value='1'>남성</option>";
+        addHtml  +="                                 <option value='2' selected>여성</option>";
       }else{
-        addHtml  +="                                 <option value='M'>남성</option>";
-        addHtml  +="                                 <option value='F'>여성</option>";
+        addHtml  +="                                 <option value='1'>남성</option>";
+        addHtml  +="                                 <option value='2'>여성</option>";
       }
       addHtml  +="                                </select>";
       addHtml  +="                            </div>";
@@ -566,39 +626,54 @@ function riseCall(age,gender) {
       addHtml  +="                <div class='hot_keyword_list_wrap'>";
       addHtml  +="                    <ul class='hot_keyword_list'>";
 
-      if(response.keywords && response.keywords.length > 0) {
-        response.keywords.forEach(function(keyword, index) {
-          let rankClass = (index < 3) ? "hot_keyword_item top" : "hot_keyword_item";
-          let rankDisplay = (index < 9) ? "0" + (index + 1) : (index + 1);
-          addHtml += "<li class='" + rankClass + "'>";
-          addHtml += "  <div class='left_area'>";
-          addHtml += "    <a href='javascript:goSearchKeywordPage(\"" + encodeURIComponent(keyword) + "\")' class='hot_keyword_link'>";
-          addHtml += "      <span class='rank'>" + rankDisplay + "</span>";
-          addHtml += "      <span class='keyword'>" + keyword + "</span>";
-          addHtml += "    </a>";
-          addHtml += "  </div>";
-          addHtml += "</li>";
+      if(rst.data.realSize > 0 && rst.resultCode == 200) {
+        let $obj = rst.data.resultDocuments;
+        let zeroNum = "0";
+        $.each($obj, function(i){
+          if(i==9)zeroNum = "";
+          let item = $obj[i];
+          let keywords = checkKeyword(item.keywords);
+          let enKeywords = encodeURIComponent(keywords);
+
+          if(i<3){
+            addHtml +="             <li class='hot_keyword_item top'>";
+          }else{
+            addHtml +="             <li class='hot_keyword_item'>";
+          }
+          addHtml +="                     <div class='left_area'>";
+          addHtml +="                         <a href='javascript:goSearchKeywordPage(decodeURIComponent('" + enKeywords + "'), 'LAG')' class='hot_keyword_link'>";
+          addHtml +="                             <span class='rank'>" + zeroNum+(i+1) + "</span>";
+          addHtml +="                             <span class='keyword'>" + keywords + "</span>";
+          addHtml +="                         </a>";
+          addHtml +="                     </div>";
+          addHtml +="                     <div class='right_area'>";
+          if(item.diff == 0){ // 현상유지
+            addHtml +="                     <div class='rank_status'><span class='hidden'>변동 없음</span></div>";
+          }else if (item.diff > 0 && item.diff !=9999){//상승
+            addHtml +="                     <div class='rank_status up'><span class='hidden'>순위 상승</span>"+item.diff+"</div>";
+          }else if (item.diff < 0 ){//하락
+            addHtml +="                     <div class='rank_status down'><span class='hidden'>순위 하락</span>"+Math.abs(item.diff)+"</div>";
+          }else if (item.diff > 0 && item.diff == 9999 ){ // 신규
+            addHtml +="                     <div class='rank_status new'><span class='hidden'>신규 순위</span>NEW</div>";
+          }
+          addHtml +="                     </div>";
+          addHtml +="                 </li>";
         });
         addHtml +="                 </ul>";
         addHtml +="                 <div class='hot_keyword_bottom'>";
 
-        let dateStr = getRiseCallYmdStr(response.baseTime);
+        let dateStr = getRiseCallYmdStr(rst.data.resultDocuments[0].reg_DATE);
         addHtml +="                     <p class='info_text font_size_xxs'>"+dateStr+" 기준</p>";
       }
 
       addHtml +="                     </div>";
       addHtml +="                 </div>";
       $("#hotKeywordBox").html(addHtml);
-
-      // UI 초기화 (selectmenu 등)
-      $("#ageSel, #genderSel").on('change', function() {
-        if (this.id === 'ageSel') {
-          ageChange(this.value);
-        } else if (this.id === 'genderSel') {
-          genderChange(this.value);
+      $("#ageSel, #genderSel").selectmenu({
+        change:function(){
+          let exec = this.id == 'ageSel' ? ageChange(this.value) : genderChange(this.value);
         }
       });
-
       $("#ageSel-menu, #genderSel-menu").parent().addClass("type_arw auto_complete_maintain");
     }
   });
@@ -609,3 +684,4 @@ function getRiseCallYmdStr(date){
   let dateTemp = date.split(".");
   return dateTemp[1].trim()+"."+dateTemp[2].trim()+" "+dateTemp[3].trim();
 }
+*/

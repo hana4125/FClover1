@@ -1,7 +1,9 @@
 package hello.fclover.service;
 
-import hello.fclover.domain.*;
-import org.springframework.web.multipart.MultipartFile;
+import hello.fclover.domain.Delivery;
+import hello.fclover.domain.Payment;
+import hello.fclover.domain.Seller;
+import hello.fclover.domain.Settlement;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public interface BackOfficeService {
 
     List<Seller> searchSeller();
 
-    void InsertdeliveryReadyList(Long paymentsNo, String userId);
+    void InsertdeliveryReadyList(Long orderId, String userId);
 
     List<Delivery> deliveryReadyOrderSearch();
 
@@ -24,14 +26,4 @@ public interface BackOfficeService {
     void changeDeliveryDoneStatus(int deliNo);
 
     List<Settlement> sellerSettlementSearch();
-
-    List<Goods> sellerGoodsApprovalSearch();
-
-    void goodsConfirmSuccess(Long goodsNo);
-
-    List<Seller> sellerPendingCheck();
-
-    void updateSellerApproved(Long sellerNo);
-
-    void updateSellerRejected(Long sellerNo);
 }

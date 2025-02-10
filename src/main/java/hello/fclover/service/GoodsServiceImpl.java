@@ -9,7 +9,6 @@ import hello.fclover.mybatis.mapper.GoodsImageMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -64,7 +63,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findCategoryGoodsWishStatus")
     public List<Goods> getGoodsWithWishStatusList(Long memberNo, int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findCategoryGoodsWishStatus(memberNo, cateNo, sort, offset, size);
@@ -81,14 +79,13 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findBestGoodsWishStatus")
+//    @Cacheable(value = "GoodsMapper.findGoodsWishStatus")
     public List<Goods> getBestGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findBestGoodsWishStatus(memberNo, offset, size);
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.findSteadyGoodsWishStatus")
     public List<Goods> getSteadyGoodsWishStatus(Long memberNo, int page, int size) {
         int offset = (page - 1) * size;
         return goodsMapper.findSteadyGoodsWishStatus(memberNo, offset, size);
@@ -106,7 +103,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @Cacheable(value = "GoodsMapper.selectNewItems")
     public List<Goods> getNewItems(Long memberNo, String year, String month, String week, int page, int size) {
         int offset = (page - 1) * size;
         // 최대 100개까지만 조회되도록 offset과 size를 조정
@@ -123,11 +119,6 @@ public class GoodsServiceImpl implements GoodsService {
     public int getTotalNewItemsCount(Long memberNo, String year, String month, String week) {
         int count = goodsMapper.countNewItems(memberNo, year, month, week);
         return Math.min(count, 100); // 최대 100개로 제한
-    }
-
-    @Override
-    public List<Goods> sellerGoodsSearch(Map<String, String> searchKeyword) {
-        return goodsMapper.sellerGoodsSearch(searchKeyword);
     }
 
     private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
@@ -209,6 +200,4 @@ public class GoodsServiceImpl implements GoodsService {
 
         return uuid.toString() + insertDate + extension;
     }
-
-
 }

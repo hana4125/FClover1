@@ -92,7 +92,7 @@
                     <img src="/images/user/profile.png" class="preview" alt="기본 프로필 이미지">
                   </div>
                   <div class="thumb-box border border-2 border-dark-subtle" th:unless="${member.profilePicture == null}">
-                    <img th:src="@{${member.profilePicture}}" class="preview" alt="업로드된 프로필 이미지">
+                    <img th:src="@{|/upload/${member.profilePicture}|}" class="preview" alt="업로드된 프로필 이미지">
                   </div>
                 </td>
                 <td></td>

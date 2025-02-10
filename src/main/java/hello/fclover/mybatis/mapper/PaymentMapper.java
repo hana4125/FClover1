@@ -2,7 +2,6 @@ package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
-import hello.fclover.dto.PaymentGoodsDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;
@@ -16,9 +15,7 @@ public interface PaymentMapper {
 
     Payment findByImpUid(String uid);
 
-    List<PaymentGoodsDTO> searchList(String userId);
+    List<Payment> searchList(String userId);
 
-    List<Payment> findByPaymentDateBetweenAndStatus(String startDate, String endDate, String paymentCompleted);
-
-    PaymentGoodsDTO searchOneOrderDetail(String userId, Long orderId);
+    List<Payment> findByPaymentDateBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, String paymentCompleted);
 }

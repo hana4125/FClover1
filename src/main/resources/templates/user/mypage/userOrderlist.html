@@ -105,7 +105,7 @@
             <div class="tbl_prod_wrap type_myroom" style data-order-commodity-list th:each="list : ${list}">
                 <div class="tbl_myorder-inner" data-order-id="024040779225" >
                 <div class="tbl_order_info">
-                    <span class="order_date" th:text="'주문번호 : ' + ${list.orderId}"></span><!-- 수정 220428 날짜 양식 yyyy.mm.dd 로 수정 -->
+                    <span class="order_date" th:text="'주문번호 : ' + ${list.orderId}">2024.04.14(O24040779225)</span><!-- 수정 220428 날짜 양식 yyyy.mm.dd 로 수정 -->
 <!--                    <a href="/member/myPage/memberOrderListDetail?goodsId=123123&&id=123123456456&&impUid=test123123" class="btn_more_view" data-order-detail-link="N"><span class="text">상세보기</span><span class="ico_arw"></span></a>-->
 
                     <div class="right_area">
@@ -155,7 +155,7 @@
                                     </div>
                                     <div class="prod_info_box size_sm" style="flex-grow: 1;">
                                         <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_info" data-order-commoditylink="" >
-                                            <span class="prod_name" th:text="${list.goodsName}"></span>
+                                            <span class="prod_name">[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml</span>
 
                                         </a>
 
@@ -177,7 +177,7 @@
                             <td>
                         <span class="price">
 
-                            <span class="val" th:text="${#numbers.formatInteger(list.paymentAmount, 0)}"></span>
+                            <span class="val" th:text="${list.paymentAmount}"></span>
                             <span class="unit">원</span>
 
 

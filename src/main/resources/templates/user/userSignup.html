@@ -27,58 +27,6 @@
               location.href = "/";
           })
 
-          let emailCheck = false;
-          let birthdateCheck = false;
-          let phoneNumberCheck = false;
-
-          function validateEmail(email) {
-              const regex = /^[a-zA-Z0-9._%+-]+@(naver\.com|gmail\.com)$/;
-              return regex.test(email);
-          }
-
-          function validateBirthdate(birthdate) {
-              const regex = /^(19[0-9]{2}|20[0-2][0-9]|202[0-4])(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/;
-              return regex.test(birthdate);
-          }
-
-          function validatePhoneNumber(phoneNumber) {
-              const regex = /^010\d{8}$/;
-              return regex.test(phoneNumber);
-          }
-
-          $("#email").keyup(function() {
-              let inputValue = $(this).val();
-              if (validateEmail(inputValue)) {
-                  emailCheck = true;
-                  $("#emailCheck").text("");
-              } else {
-                  emailCheck = false;
-                  $("#emailCheck").text("이메일 형식이 일치하지 않습니다.");
-              }
-          })
-
-          $("#birthdate").keyup(function() {
-              let inputValue = $(this).val();
-              if (validateBirthdate(inputValue)) {
-                  birthdateCheck = true;
-                  $("#birthdateCheck").text("");
-              } else {
-                  birthdateCheck = false;
-                  $("#birthdateCheck").text("생년월일은 8자리 숫자로 입력해야 합니다. (예: 19990101)");
-              }
-          })
-
-          $("#phoneNumber").keyup(function() {
-              let inputValue = $(this).val();
-              if (validatePhoneNumber(inputValue)) {
-                  phoneNumberCheck = true;
-                  $("#phoneNumberCheck").text("");
-              } else {
-                  phoneNumberCheck = false;
-                  $("#phoneNumberCheck").text("휴대폰 번호는 숫자로만 입력해야 합니다.");
-              }
-          })
-
           $("form").submit(function () {
               const memberId = $("#memberId");
               const password = $("#password");
@@ -86,7 +34,6 @@
               const email = $("#email");
               const birthdate = $("#birthdate");
               const phoneNumber = $("#phoneNumber");
-
 
               if (memberId.val().trim() === '') {
                   alert("아이디를 입력하세요");
@@ -123,21 +70,6 @@
                   phoneNumber.focus();
                   return false;
               }
-
-              console.log(emailCheck);
-              console.log(birthdateCheck);
-              console.log(phoneNumberCheck);
-
-              if (!emailCheck) {
-                  alert("이메일 형식을 확인하세요.");
-                  return false;
-              } else if (!birthdateCheck) {
-                  alert("생년월일 형식을 확인하세요.");
-                  return false;
-              } else if (!phoneNumberCheck) {
-                  alert("휴대폰번호 형식을 확인하세요.");
-                  return false;
-              }
           })
       })
   </script>
@@ -148,16 +80,13 @@
     <img id="logo" src="/images/user/fClover.png" alt="메인로고" width="300px" height="80px" class="mb-3">
     <form th:action="@{/member/signupProcess}" method="post">
       <div class="d-flex fw-bold mt-3 mb-3">회원 정보를 입력해 주세요</div>
-      <input type="text" class="form-control mt-3" id="memberId" name="memberId" placeholder="아이디">
-      <input type="password" class="form-control mt-3" id="password" name="password" placeholder="비밀번호">
-      <input type="text" class="form-control mt-3" id="name" name="name" placeholder="이름">
-      <input type="text" class="form-control mt-3" id="email" name="email" placeholder="이메일">
-      <div class="text-start" style="color: red;" id="emailCheck"></div>
-      <input type="text" class="form-control mt-3" id="birthdate" name="birthdate" placeholder="생년월일 (예:19990101)">
-      <div class="text-start" style="color: red;" id="birthdateCheck"></div>
-      <input type="text" class="form-control mt-3" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호 (숫자만 입력)">
-      <div class="text-start" style="color: red;" id="phoneNumberCheck"></div>
-      <div class="d-flex justify-content-start mt-3 mb-5">
+      <input type="text" class="form-control mb-3" id="memberId" name="memberId" placeholder="아이디">
+      <input type="password" class="form-control mb-3" id="password" name="password" placeholder="비밀번호">
+      <input type="text" class="form-control mb-3" id="name" name="name" placeholder="이름">
+      <input type="text" class="form-control mb-3" id="email" name="email" placeholder="이메일">
+      <input type="text" class="form-control mb-3" id="birthdate" name="birthdate" placeholder="생년월일 (예:19990101)">
+      <input type="text" class="form-control mb-3" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호 (예: 010-1234-5678)">
+      <div class="d-flex justify-content-start mb-5">
         <input type="radio" class="btn-check" name="gender" value="male" id="success-outlined" checked>
         <label class="btn btn-outline-success btn-left-rounded" for="success-outlined">남자</label>
         <input type="radio" class="btn-check" name="gender" value="female" id="danger-outlined">

@@ -3,7 +3,7 @@ package hello.fclover.dto;
 import lombok.Data;
 
 @Data
-public class SearchDetailParamDTO {
+public class GoodsSearchParam {
 
     private String cname;           // 상품명
     private String chrcDetail;      // 저자

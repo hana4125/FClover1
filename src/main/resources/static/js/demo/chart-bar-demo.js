@@ -32,13 +32,13 @@ var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["1월28일 월요일", "1월29일 화요일", "1월30일 수요일", "1월31일 목요일", "2월1일 토요일", "2월2일 일요일"],
+    labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [{
       label: "Revenue",
       backgroundColor: "#4e73df",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: [2, 3, 1, 5, 9, 8],
+      data: [4215, 5312, 6251, 7841, 9821, 14984],
     }],
   },
   options: {
@@ -68,12 +68,12 @@ var myBarChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 20,
-          maxTicksLimit: 19,
+          max: 15000,
+          maxTicksLimit: 5,
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return number_format(value) + '명';
+            return '$' + number_format(value);
           }
         },
         gridLines: {

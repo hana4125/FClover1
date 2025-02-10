@@ -12,7 +12,6 @@
   <link href="/css/user/searchBox.css" rel="stylesheet">
   <link href="/css/user/searchResult.css" rel="stylesheet">
 
-  <script th:src="@{/js/search/search_filter.js}"></script>
   <script th:inline="javascript">
     $(function () {
       $("#logo").click(function () {
@@ -31,9 +30,9 @@
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
-
+<script th:src="@{/js/search/search_filter.js}"></script>
 <main class="container_wrapper">
-  <input type="hidden" id="keywordHidden" th:value="${searchResult.keyword}">
+  <input type="hidden" id="keywordHidden" th:value="${keyword}">
   <section id="contents" class="contents_wrap">
     <div class="contents_inner">
       <div class="search_result_top">
@@ -41,215 +40,28 @@
           <h1 class="title_heading">
             <span style="color:#1e5f1e">
               '
-              <span class="search_value" th:text="${searchResult.keyword}"></span>
+              <span class="search_value" th:text="${keyword}"></span>
               '
             </span>
-            <th:block th:if="${searchResult.totalCount > 0 }">
-              <span th:text="'에 대한 ' + ${searchResult.totalCount} + '개의 검색 결과'"></span>
+            <th:block th:if="${totalCount > 0 }">
+              <span th:text="'에 대한 ' + ${totalCount} + '개의 검색 결과'"></span>
             </th:block>
-            <th:block th:if="${searchResult.totalCount == 0 || searchResult.totalCount == null}">
+            <th:block th:if="${totalCount == 0 || totalCount == null}">
               <span th:text="'상품 검색 결과가 없습니다.'"></span>
             </th:block>
           </h1>
         </div>
-        <!-- 연관 검색어 영역 -->
-        <div class="related_keyword_wrap" th:if="${!#lists.isEmpty(searchResult.searchResults)}">
-          <p>연관 검색어 추가 예정</p>
+        <div class="search_result_wrap" th:if="${#lists.isEmpty(searchResults)}">
+          <p>검색 결과가 없습니다.</p>
         </div>
-
-        <div class="search_result_wrap" th:if="${!#lists.isEmpty(searchResult.searchResults)}">
-
+        <div class="search_result_wrap" th:if="${!#lists.isEmpty(searchResults)}">
           <!-- 필터 영역 -->
           <div class="filter_area">
-            <div class="title_wrap title_size_def">
-              <p class="title_heading">필터</p>
-              <div class="right_area">
-                <button type="button" class="btn_reset">
-                  <span class="ico_reset"></span>
-                  <span class="text">초기화</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 필터 공통 리스트 영역 -->
-            <div class="filter_integrate_box" id="category_filter_box">
-              <ul class="filter_list">
-                <!-- 카테고리 필터 -->
-                <li class="menu_item item_depth1 active" id="category_filter_li">
-                  <button type="button" class="btn_filter_depth1 active" id="category_filter_button">
-                    <span class="text">카테고리</span>
-                  </button>
-                  <div class="filter_cont_box">
-                    <ul class="filter_list depth2 active">
-                      <!-- 각 카테고리는 ajax에서 받아온 카테고리 목록을 바탕으로 생성하기 -->
-                      <!-- 예시 -->
-                      <li class="menu_item item_depth2" th:each="category : ${searchResult.categoryList}">
-                        <button type="button" class="btn_category" th:value="${category.getKey().cateNo}"
-                                th:text="${category.getKey().cateName + ' (' + category.getValue() + ')'}">
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- 검색조건 영역 (depth1 기본 active 상태로 열림) -->
-            <div class="filter_list_box" style="display: block">
-              <ul class="filter_list">
-                <li class="menu_item item_depth1 active">
-                  <button type="button" class="btn_filter_depth1 active">
-                    <span class="text">검색조건</span>
-                  </button>
-                  <div class="filter_cont_box">
-                    <ul class="filter_list depth2 active">
-                      <li class="menu_item item_depth2">
-              <span class="form_chk">
-                <input id="search_condition_cname" name="searchCondition" type="checkbox">
-                <label for="search_condition_cname">상품명</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_chk">
-                <input id="search_condition_chrc" name="searchCondition" type="checkbox">
-                <label for="search_condition_chrc">저자/역자</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_chk">
-                <input id="search_condition_pbcm" name="searchCondition" type="checkbox">
-                <label for="search_condition_pbcm">출판사</label>
-              </span>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- 가격 필터 영역 -->
-            <div class="filter_list_box" style="display: block">
-              <ul class="filter_list">
-                <li class="menu_item item_depth1">
-                  <button type="button" class="btn_filter_depth1">
-                    <span class="text">가격</span>
-                  </button>
-                  <div class="filter_cont_box" style="display: none;">
-                    <ul class="filter_list depth2">
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterPrice_01" type="radio" name="filterPrice" value="0~1">
-                <label for="filterPrice_01">~1만원</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterPrice_02" type="radio" name="filterPrice" value="1~3">
-                <label for="filterPrice_02">1만원~3만원</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterPrice_03" type="radio" name="filterPrice" value="3~10">
-                <label for="filterPrice_03">3만원~10만원</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterPrice_04" type="radio" name="filterPrice" value="10~99999999">
-                <label for="filterPrice_04">10만원~</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-                        <div class="price_range_wrap">
-                          <div class="col_box">
-                            <input type="text" class="form_ip" name="saprminFilter" id="saprminFilter" maxlength="8"
-                                   placeholder="최저 금액" onkeyup="inputNumberFormat(this)">
-                            <span class="gap">~</span>
-                          </div>
-                          <div class="col_box">
-                            <div class="input_btn_box">
-                              <input type="text" class="form_ip" name="saprmaxFilter" id="saprmaxFilter" maxlength="8"
-                                     placeholder="최대 금액" onkeyup="inputNumberFormat(this)">
-                              <button type="button" class="btn_sm btn_line_primary" onclick="searchFilterSaprText()">
-                                <span class="text">적용</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- 발행일 필터 영역 -->
-            <div class="filter_list_box" style="display: block">
-              <ul class="filter_list">
-                <li class="menu_item item_depth1">
-                  <button type="button" class="btn_filter_depth1">
-                    <span class="text">발행일</span>
-                  </button>
-                  <div class="filter_cont_box" style="display: none;">
-                    <ul class="filter_list depth2">
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterRlseDate_ALL" type="radio" name="filterRlseDateRdo" value="" checked>
-                <label for="filterRlseDate_ALL">전체</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterRlseDate_3M" type="radio" name="filterRlseDateRdo" value="3M">
-                <label for="filterRlseDate_3M">3개월 이내</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterRlseDate_6M" type="radio" name="filterRlseDateRdo" value="6M">
-                <label for="filterRlseDate_6M">6개월 이내</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterRlseDate_1Y" type="radio" name="filterRlseDateRdo" value="1Y">
-                <label for="filterRlseDate_1Y">1년 이내</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterRlseDate_3Y" type="radio" name="filterRlseDateRdo" value="3Y">
-                <label for="filterRlseDate_3Y">3년 이내</label>
-              </span>
-                      </li>
-                      <li class="menu_item item_depth2">
-              <span class="form_rdo">
-                <input id="filterRlseDate_5Y" type="radio" name="filterRlseDateRdo" value="5Y">
-                <label for="filterRlseDate_5Y">5년 이내</label>
-              </span>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- 결과 내 재검색 영역 -->
-            <div class="filter_search_box form_search_box">
-              <div class="form_ip_search">
-                <input type="search" name="reKeyword" id="reKeyword" class="form_ip" placeholder="결과 내 재검색"
-                       autocomplete="off">
-                <button type="button" class="btn_clear"><span class="hidden">초기화</span></button>
-                <button type="button" class="btn_search"><span class="hidden">검색</span></button>
-              </div>
-            </div>
+            <p> 필터 추가 예정 </p>
           </div>
           <!-- 결과 영역 -->
-          <div class="result_area">
-            <div class="list_result_wrap d-flex justify-content-between align-items-center mb-3">
-              <p class="result_count">전체 <b style="color:#1e5f1e" th:text="${searchResult.totalCount}"></b>건</p>
-
+          <div class="container w-75 mt-5">
+            <div class="d-flex justify-content-end align-items-center mb-3">
               <!-- 장바구니, 찜 버튼 -->
 
               <!--    <div class="icon ms-auto mb-4">-->
@@ -282,7 +94,7 @@
             </div>
 
             <div class="book-items mt-4">
-              <ul class="prod_list" th:each="goods : ${searchResult.searchResults}">
+              <ul class="prod_list" th:each="goods : ${searchResults}">
                 <!-- goods 리스트를 반복하여 출력 -->
                 <li class="prod_item d-flex justify-content-between align-items-start">
                   <div class="prod_area d-flex align-items-start mb-5">
@@ -292,13 +104,13 @@
                       <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                       <div>
 
-                        <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
-                           class="show-detail">
-                          <div class="img-box">
-                            <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                                        : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
-                          </div>
-                        </a>
+                      <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
+                         class="show-detail">
+                        <div class="img-box">
+                          <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
+                                        : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
+                        </div>
+                      </a>
                       </div>
                       <div class="item-info ms-3">
 
@@ -331,8 +143,7 @@
                               <span class="prod_publish">출판사 없음</span>
                             </th:block>
                             <span class="gap"> · </span>
-                            <span class="date"
-                                  th:text="${#temporals.format(goods.goodsCreateAt, 'yyyy년 MM월 dd일')}"></span>
+                            <span class="date" th:text="${#temporals.format(goods.goodsCreateAt, 'yyyy년 MM월 dd일')}"></span>
                           </div>
 
                           <!-- TODO : 할인 기능 추가할 시 변경 필요 -->
@@ -364,37 +175,34 @@
               </ul>
               <hr>
               <!-- 페이지네이션 -->
-              <nav th:if="${searchResult.totalPages > 0}" aria-label="Page navigation example">
+              <nav th:if="${totalPages > 0}" aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                   <!-- 이전 페이지 버튼 -->
-                  <li th:classappend="${searchResult.currentPage == 1} ? 'disabled' : ''">
-                    <a class="page-link" href="#" th:attr="data-page=${searchResult.currentPage - 1}"
-                       th:if="${searchResult.currentPage > 1}">&lt;</a>
+                  <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                    <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}"
+                       th:if="${currentPage > 1}">&lt;</a>
                   </li>
 
                   <!-- 페이지 번호 -->
-                  <li th:each="i : ${#numbers.sequence(searchResult.startPage, searchResult.endPage)}"
-                      th:classappend="${searchResult.currentPage == i} ? 'active' : ''">
+                  <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                      th:classappend="${currentPage == i} ? 'active' : ''">
                     <a class="page-link" href="#" th:attr="data-page=${i}" th:text="${i}"></a>
                   </li>
 
                   <!-- 다음 페이지 버튼 -->
-                  <li th:classappend="${searchResult.currentPage == searchResult.totalPages} ? 'disabled' : ''">
-                    <a class="page-link" href="#" th:attr="data-page=${searchResult.currentPage + 1}"
-                       th:if="${searchResult.currentPage < searchResult.totalPages}">&gt;</a>
+                  <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                    <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}"
+                       th:if="${currentPage < totalPages}">&gt;</a>
                   </li>
                 </ul>
               </nav>
             </div>
           </div>
         </div>
-
-        <div class="search_result_wrap" th:if="${#lists.isEmpty(searchResult.searchResults)}">
-          <p>검색 결과가 없습니다.</p>
-        </div>
       </div>
     </div>
   </section>
 </main>
+
 </body>
 </html>

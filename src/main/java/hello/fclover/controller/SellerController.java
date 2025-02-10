@@ -1,35 +1,33 @@
 package hello.fclover.controller;
 
 
-import hello.fclover.domain.*;
+import hello.fclover.domain.Category;
+import hello.fclover.domain.Goods;
+import hello.fclover.domain.Seller;
 import hello.fclover.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.math.BigInteger;
 import java.security.Principal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @Slf4j
 @Controller
+
 @RequiredArgsConstructor
 @RequestMapping(value = "/seller")
 public class SellerController {
@@ -40,7 +38,6 @@ public class SellerController {
     private final CartService cartService;
     private final PasswordEncoder passwordEncoder;
     private final CategoryService categoryService;
-    private final BackOfficeService backOfficeService;
 
     @ModelAttribute("seller")
     public Seller addSellerToModel(Principal principal) {
@@ -59,7 +56,6 @@ public class SellerController {
         return "seller/sellerAddSingleProduct";
     }
 
-    //단일 상품등록 프로세스
     @PostMapping(value = "/addSingleProductProcess", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String addSingleProductProcess(@RequestPart("goods") Goods goods,
                                           @RequestPart("goodsImages") List<MultipartFile> images,
@@ -76,7 +72,6 @@ public class SellerController {
         String businessNumber = seller.getBusinessNumber();
 
         System.out.println("goods:" + goods);
-
         goodsService.goodsSingleInsert(goods, images, businessNumber);
         return "redirect:/seller/main";
     }
@@ -89,6 +84,7 @@ public class SellerController {
         return "seller/sellerProductDetail";
     }
 
+
     @GetMapping("/main")
     public String signup(Principal principal) {
 
@@ -98,8 +94,6 @@ public class SellerController {
 
         return "seller/sellerMain";
     }
-
-
 
     @GetMapping("/signup")
     public String sellerSignupForm() {
@@ -144,13 +138,7 @@ public class SellerController {
 
     //판매자 일정산 페이지
     @GetMapping("/sellerDaySettlement")
-    public String sellerDaySettlement(Principal principal, Model model) {
-        System.out.println("principal = " + principal.getName());
-        List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
-        model.addAttribute("daySettlement", daySettlement);
-
-        System.out.println("daySettlement = " + daySettlement);
-
+    public String sellerDaySettlement() {
         return "seller/sellerDaySettlement";
     }
 
@@ -159,91 +147,4 @@ public class SellerController {
     public String sellerMonthSettlement() {
         return "seller/sellerMonthSettlement";
     }
-
-    @ResponseBody
-    @PostMapping("/pendingCheck")
-    public Seller pendingCheck(@RequestBody Map<String, String> data) {
-        String sellerId = data.get("sellerId");
-        String password = data.get("password");
-
-        Seller seller = sellerService.findSellerById(sellerId);
-
-        if (seller == null) {
-            return null;
-        }
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        if (!passwordEncoder.matches(password, seller.getPassword())) {
-            return null;
-        }
-
-        log.info(seller.toString());
-        return seller;
-    }
-
-    @PostMapping("/SearchGoodsProcess")
-    @ResponseBody
-    public ResponseEntity<?> searchGoodsProcess(@RequestParam Map<String, String> params,
-                                                Principal principal) {
-        System.out.println("params = " + params);
-
-        params.get("cateNo");
-        List<Goods> goodsList = goodsService.sellerGoodsSearch(params);
-        System.out.println("goodsList = " + goodsList);
-        return ResponseEntity.ok(goodsList);
-    }
-
-    //구매자 리스트 조회
-    @GetMapping(value = "/buyerList")
-    public ModelAndView getBuyerList(
-            Principal principal,
-            @RequestParam(value = "n", defaultValue = "1") int page,
-            @RequestParam(value = "search_word", required = false) String searchWord,
-            @RequestParam(value = "size", defaultValue = "10") int pagesize,
-            HttpServletRequest request) {
-
-        ModelAndView mnv = new ModelAndView();
-
-        System.out.println("principal = " + principal.getName());
-        log.info("principal = " + principal.getName());
-
-        String sellerId = principal.getName();
-        Long sellerNo = sellerService.getselectNo(sellerId);
-
-        System.out.println("sellerno = " +sellerNo);
-        log.info("sellerno=",sellerNo);
-
-        // 전체 구매자 주문 목록 개수 가져오기
-        int totalcount = sellerService.getListCount(searchWord,sellerNo);
-
-        // 현재 페이지에 해당하는 구매자 리스트 가져오기
-        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, pagesize,sellerNo);
-
-        // PaginationResult 사용
-        PaginationResult result = new PaginationResult(page, pagesize, totalcount);
-
-        if(orderList.isEmpty()) {
-            mnv.addObject("message", "구매자 주문 정보가 없습니다.");
-        }
-
-        mnv.setViewName("seller/sellerBuyerList");
-        mnv.addObject("orderList", orderList);
-        mnv.addObject("search_word", searchWord);
-        mnv.addObject("searchlistcount", totalcount);
-        mnv.addObject("size", pagesize);
-
-        // 페이지네이션 데이터 추가
-        mnv.addObject("startpage", result.getStartpage());
-        mnv.addObject("endpage", result.getEndpage());
-        mnv.addObject("maxpage", result.getMaxpage());
-        mnv.addObject("totalcount", totalcount);
-        mnv.addObject("pagesize", pagesize);
-        mnv.addObject("page", page);
-        mnv.addObject("n", page);  // 템플릿에서 사용하는 변수명 맞추기
-
-        return mnv;
-    }
-
 }
-

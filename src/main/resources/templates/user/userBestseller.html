@@ -11,7 +11,6 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="/css/user/home.css">
     <link rel="stylesheet" href="/css/user/searchBox.css">
-    <link rel="stylesheet" href="/css/user/category.css">
     <script th:inline="javascript">
         $(function () {
             $("#logo").click(function () {
@@ -27,19 +26,15 @@
             })
 
             $(".category-item").click(function () {
-                location.href = "/goods/category/{no}";
+                location.href = "/member/category/{no}";
             })
 
             $(".best").click(function () {
-                location.href = "/goods/bestSeller";
-            })
-
-            $(".steady").click(function () {
-                location.href = "/goods/steadySeller";
+                location.href = "/member/bestSeller";
             })
 
             $(".new").click(function () {
-                location.href = "/goods/newItems";
+                location.href = "/member/newItems";
             })
 
             $(".show-detail").click(function () {
@@ -202,7 +197,7 @@
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
-<div class="bg-success" style="background: #226b24 !important;">
+<div class="bg-success">
     <div class="container w-75">
         <div class="header-menu mt-4 d-flex align-items-center">
             <button class="btn btn-light me-3" id="category">
@@ -213,29 +208,50 @@
         </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Noto Sans KR;margin-right:40px;font-size:18px; color: #ffffff;font-family:Roboto;">전체도서</a>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
-            <a href="#" class="steady ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
-            <a href="#" class="new ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
+            <a href="#" class="best ps-5 pe-5">베스트</a>
+            <a href="#" class="new ps-5 pe-5">신상품</a>
         </div>
     </div>
 </div>
 <div id="categoryView">
-    <div th:replace="~{fragment/category :: category}"></div>
+    <h4 class="text-center">카테고리</h4><br>
+    <div class="category-list">
+        <ul class="list-unstyled">
+            <!-- categoryList의 각 요소를 반복하여 출력 -->
+            <li th:each="category : ${categoryList}">
+                <!-- 카테고리 이름 출력 -->
+                <a th:href="@{/member/category/{no}(no=${category.cateNo})}"
+                   th:text="${category.cateName}"
+                   class="category-item"></a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div class="container w-75 mt-5">
     <div class="row">
+        <!-- 사이드바 -->
+<!--        <aside class="col-md-3 aside_wrap sub_category">-->
+<!--            <h4 class="title_heading mb-3" th:text="${category?.cateName}"></h4>-->
+<!--            <div class="category-list">-->
+<!--                <ul class="list-unstyled">-->
+<!--                    &lt;!&ndash; categoryList의 각 요소를 반복하여 출력 &ndash;&gt;-->
+<!--                    <li th:each="category : ${categoryList}">-->
+<!--                        &lt;!&ndash; 카테고리 이름 출력 &ndash;&gt;-->
+<!--                        <a th:href="@{/member/category/{no}(no=${category.cateNo})}"-->
+<!--                           th:text="${category.cateName}"-->
+<!--                           class="category-item"></a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </aside>-->
         <div class="col-md-9">
             <div class="d-flex justify-content-end align-items-center mb-3">
+                <!-- 장바구니, 찜 버튼 -->
+                <!--            <div class="icon ms-auto mb-4">-->
+                <!--              <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
+                <!--              <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
+                <!--            </div>-->
 
                 <!-- 드롭다운 -->
                 <div class="dropdown me-2">
@@ -257,15 +273,15 @@
                 <ul class="list-unstyled">
                     <li th:each="goods : ${bestGoodsList}">
                         <div class="category-list d-flex align-items-start mb-5">
-<!--                            <input type="checkbox" class="item-checkbox mt-1 ms-1"-->
-<!--                                   style="width: 18px; height: 18px;">-->
+                            <input type="checkbox" class="item-checkbox mt-1 ms-1"
+                                   style="width: 18px; height: 18px;">
                             <div class="book-item mt-1">
                                 <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                                 <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                    class="show-detail">
                                     <div class="img-box">
                                         <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                                        : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
+                                        : '/images/user/book/item1.png'}" style="width:200px; height:280px;"/>
                                     </div>
                                 </a>
                                 <div class="item-info">
@@ -276,10 +292,6 @@
                                     </a>
                                     <br>
                                     <span class="item-author" th:text="${goods.goodsWriter}"></span>
-                                    <div class="prod_price">
-                                        <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
-                                        <span class="unit">원&nbsp;</span>
-                                    </div>
                                 </div>
                             </div>
                             <div class="icon ms-auto mb-4">
@@ -326,6 +338,5 @@
         </div>
     </div>
 </div>
-<div th:replace="~{fragment/footer :: footer}"></div>
 </body>
 </html>

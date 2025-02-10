@@ -1,17 +1,13 @@
 package hello.fclover.service;
 
-import hello.fclover.domain.Member;
-import hello.fclover.dto.SearchDetailParamDTO;
-import hello.fclover.dto.SearchParamDTO;
-import hello.fclover.dto.SearchResponseDTO;
+import hello.fclover.dto.GoodsSearchParam;
+import java.util.Map;
 
 public interface SearchService {
 
     int countByKeyword(String keyword);
 
-    SearchResponseDTO searchByKeyword(String keyword, String sessionId, Member member);
+    Map<String, Object> searchByKeyword(String keyword, String sort, int offset, int size);
 
-    SearchResponseDTO searchDetail(SearchDetailParamDTO searchDetailParamDTO);
-
-    SearchResponseDTO refineResult(SearchParamDTO searchParamDTO);
+    Map<String, Object> searchDetail(GoodsSearchParam goodsSearchParam, String sort, int offset, int size);
 }

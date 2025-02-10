@@ -1,16 +1,10 @@
 package hello.fclover.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Seller {
 
     private Long sellerNo;                // `id` (auto incremented primary key)
@@ -24,5 +18,5 @@ public class Seller {
     private String admissionAt;     // `admisson_at` (varchar(200))
     private LocalDateTime createAt;     // `create_at` (timestamp)
     private LocalDateTime updatedAt;    // `updated_at` (timestamp)
-    private String permission;
+
 }
