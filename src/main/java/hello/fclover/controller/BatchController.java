@@ -17,8 +17,8 @@ import java.security.Principal;
 @RestController
 public class BatchController {
 
-    @Autowired
-    private JobLauncher jobLauncher;
+//    @Autowired
+//    private JobLauncher jobLauncher;
 
 //    @Autowired
 //    private Job importMemberJob;
