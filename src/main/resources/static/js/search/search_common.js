@@ -22,6 +22,10 @@ $(function () {
     location.href = "/myPage";
   })
 
+  $(".category-item").click(function () {
+    location.href = "/goods/category/{no}";
+  })
+
   $(".show-detail").click(function () {
     location.href = "/goods/GoodsDetail/{no}";
   })
@@ -58,6 +62,30 @@ $(function () {
 
   $(".new").click(function () {
     location.href = "/goods/newItems";
+  })
+
+  // 카테고리 버튼 동작
+  $(function () {
+    $("#category").click(function () {
+      const category = $(this).find(".category");
+      const closeIcon = $(this).find(".close-icon");
+
+      if (category.hasClass("open")) {
+        // 햄버거 버튼으로 복귀
+        category.removeClass("open");
+        closeIcon.addClass("d-none");
+        category.removeClass("d-none");
+        $(this).css("background-color", "white");
+        $("#categoryView").hide(); // 카테고리 전체보기 숨기기
+      } else {
+        // X 버튼으로 전환
+        category.addClass("open");
+        closeIcon.removeClass("d-none");
+        category.addClass("d-none");
+        $(this).css("background-color", "black");
+        $("#categoryView").show(); // 카테고리 전체보기 보이기
+      }
+    })
   })
 
   const $searchBar = $("#searchBarToggle");

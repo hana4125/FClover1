@@ -135,10 +135,6 @@
     LIMIT #{offset}, #{size}
   </select>
 
-
-  <!-- 키워드 검색 -->
-
-  <!-- 검색 언어 쿼리 분기 조건 -->
   <sql id="whereLanguageProperty">
     <choose>
       <when test="language == 'ko'">
@@ -159,7 +155,6 @@
     <include refid="whereLanguageProperty"/>
   </select>
 
-  <!-- 키워드 검색 카테고리별 개수 조회 -->
   <select id="countCategoryByKeyword" resultType="hello.fclover.dto.CategoryCountDTO">
     SELECT cate_no AS cateNo, COUNT(*) AS count
     FROM goods g
@@ -167,7 +162,7 @@
     GROUP BY cate_no
   </select>
 
-  <!-- 키워드 검색 상품 리스트 -->
+  <!-- 키워드로 상품 검색 및 페이지네이션 & 정렬 -->
   <select id="findGoodsByKeyword" parameterType="map" resultType="hello.fclover.domain.Goods">
     SELECT
     g.goods_no AS goodsNo,
@@ -195,8 +190,6 @@
     </choose>
     LIMIT #{offset}, #{size}
   </select>
-
-  <!-- 상세 검색 -->
 
   <sql id="goodsWhereClause">
     <where>
@@ -257,8 +250,6 @@
 
     LIMIT #{offset}, #{size}
   </select>
-
-  <!-- 더미데이터 삽입 쿼리 -->
 
   <!-- DB 데이터 존재 확인 -->
   <select id="countAll" resultType="long">
@@ -334,23 +325,8 @@
     </where>
   </select>
 
-  <!-- 정렬 필터링 조회 쿼리 -->
 
-  <!-- 검색 언어 쿼리 분기 조건 -->
-  <sql id="whereLanguagePropertyParam">
-    <choose>
-      <when test="language == 'ko'">
-        AND MATCH(g.goods_name, g.goods_writer, g.company_name, g.goods_content)
-        AGAINST(#{processedKeyword} IN BOOLEAN MODE)
-      </when>
-      <otherwise>
-        AND MATCH(g.goods_text_en)
-        AGAINST (CONCAT('+', #{processedKeyword}, '*') IN BOOLEAN MODE)
-      </otherwise>
-    </choose>
-  </sql>
-
-  <!-- 정렬 및 필터링시 카테고리별 개수 조회 -->
+  <!-- 정렬시 카테고리 세기 -->
   <select id="countCategoryByParam" parameterType="hello.fclover.dto.SearchParamDTO" resultType="hello.fclover.dto.CategoryCountDTO">
     <choose>
       <!-- 조건: cname, chrc, pbcm 값이 모두 없을 경우 -->
@@ -358,7 +334,6 @@
         SELECT cate_no AS cateNo, COUNT(*) AS count
         FROM goods g
         <where>
-          <include refid="whereLanguagePropertyParam"/>
           <!-- 추가 조건 -->
           <if test="cateNo != null and cateNo != 0">
             AND g.cate_no = #{cateNo}
@@ -434,7 +409,6 @@
         SELECT COUNT(*)
         FROM goods g
         <where>
-          <include refid="whereLanguagePropertyParam"/>
           <!-- 추가 조건 -->
           <if test="cateNo != null and cateNo != 0">
             AND g.cate_no = #{cateNo}
@@ -520,7 +494,6 @@
         FROM goods g
         LEFT JOIN stock st ON g.goods_no = st.goods_no
         <where>
-          <include refid="whereLanguagePropertyParam"/>
           <!-- 추가 조건 -->
           <if test="cateNo != null and cateNo != 0">
             AND g.cate_no = #{cateNo}
@@ -618,9 +591,6 @@
       </otherwise>
     </choose>
   </select>
-
-
-
 
     <select id="sellerGoodsSearch">
         select g.goods_no, c.cate_name, g.goods_name, g.goods_content, g.goods_price, g.goods_writer, g.writer_content,
