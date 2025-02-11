@@ -256,11 +256,11 @@
       <artifactId>spring-batch-core</artifactId>
       <version>5.2.1</version>
     </dependency>
-    <dependency>
+<!--     <dependency>
       <groupId>org.redisson</groupId>
       <artifactId>redisson-spring-boot-starter</artifactId>
       <version>3.23.2</version> <!-- 최신 버전으로 수정 가능 -->
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
