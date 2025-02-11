@@ -11,6 +11,7 @@ spring:
           google:
             client-id: ENC(82l93H2j8225rAfGelL3UcCrsZtUqlIXZ3QE/WPWnzs1aRS0s7H3rV4ow7RU0E/Id+BGVAcvqUYCTS7ZDPZQyUwgIdliVmtGC4vpSMTVBgDrj2AJdBJYtQDL4LVgInCqbrVjuzmLfQEGmp4I4h1U0g==)
             client-secret: ENC(J5KOkZtFtzsVYcJGz7uSPVm20txWwIGRUA2AzAg2nyipjFzOPkPfDGznNQ/qp2hXZ/UToo4zdlWJLPqXp2y0sbRZ6kOZzjZ7qStpEHV3HE4=)
+            redirect-uri: http://ec2-54-180-48-208.ap-northeast-2.compute.amazonaws.com:5000/login/oauth2/code/google
             scope:
               - profile
               - email
