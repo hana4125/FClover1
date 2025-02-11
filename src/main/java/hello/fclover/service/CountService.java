@@ -9,8 +9,6 @@ public interface CountService {
 
     int countByKeyword(SearchKeywordDTO processedKeyword);
 
-    int countByParam(SearchParamDTO searchParamDTO);
-
     Map<Category, Integer> getCategoryCount(SearchKeywordDTO processedKeyword);
 
     Map<Category, Integer> getCategoryCount(SearchParamDTO searchParamDTO);

@@ -29,14 +29,8 @@ public class CountServiceImpl implements CountService {
     @Override
     @Cacheable(cacheNames = "keywordCountCache", key = "#processedKeyword.keyword")
     public int countByKeyword(SearchKeywordDTO processedKeyword) {
-        log.info("DB 에서 countByKeyword 호출: {}", processedKeyword);
+        log.info("DB에서 countByKeyword 호출: {}", processedKeyword);
         return goodsMapper.countGoodsByKeyword(processedKeyword);
-    }
-
-    @Override
-    public int countByParam(SearchParamDTO searchParamDTO) {
-        log.info("DB 에서 countByParam 호출: {}", searchParamDTO.getProcessedKeyword());
-        return goodsMapper.countSearchByParam(searchParamDTO);
     }
 
     @Override
