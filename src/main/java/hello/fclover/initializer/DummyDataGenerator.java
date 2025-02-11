@@ -8,13 +8,11 @@ import hello.fclover.mybatis.mapper.NoticeMapper;
 import jakarta.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -144,21 +142,36 @@ public class DummyDataGenerator {
 
         // 공지사항 제목 템플릿
         String[] noticeTemplates = {
-                "[공지사항] 서비스 점검 안내",
-                "[공지사항] 개인정보처리방침 개정 안내",
+                "[공지사항] 시스템 점검 안내",
+                "[공지사항] 개인정보 처리방침 변경 안내",
                 "[공지사항] 시스템 업데이트 안내",
-                "[공지사항] 이용약관 변경 안내"
+                "[공지사항] 이용약관 개정 안내",
+                "[공지사항] 택배 배송지연 지역 안내",
+                "[공지사항] 마일리지 통합 포인트 전환 안내",
+                "[공지사항] 마케팅 정보 수신동의 확인 안내",
+                "[공지사항] 네잎클로버 리워드 혜택 변경 안내",
+                "[공지사항] **카드 서비스 종료 안내",
+                "[공지사항] 상품권 서비스점검에 따른 사용제한 안내"
         };
 
         // 이벤트 제목 템플릿
         String[] eventTemplates = {
                 "[이벤트] 신규 회원 특별 이벤트",
-                "[이벤트] 여름 맞이 특별 이벤트",
-                "[이벤트] 가입 감사 이벤트",
-                "[이벤트] 겨울 시즌 특별 이벤트"
+                "[이벤트] *월 출석 이벤트",
+                "[이벤트] 네잎클로버 적립금 혜택",
+                "[이벤트] 2만원 이상 무료배송 이벤트",
+                "[이벤트] 첫결제 혜택 이벤트",
+                "[이벤트] 리뷰 이벤트",
+                "[이벤트] 추천도서 이벤트",
+                "[이벤트] 작가와의 만남 이벤트",
+                "[이벤트] 수험서/참고서 브랜드전",
+                "[이벤트] 나만의 베스트셀러"
         };
 
-        for (int i = 0; i < 50; i++) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate now = LocalDate.now();
+
+        for (int i = 0; i < 500; i++) {
             Notice notice = new Notice();
 
             // 공지사항과 이벤트 중 랜덤 선택
@@ -169,10 +182,13 @@ public class DummyDataGenerator {
                 title = eventTemplates[faker.random().nextInt(eventTemplates.length)];
             }
 
+            long randomDays = faker.number().numberBetween(0, 365);
+            LocalDate randomDate = now.minusDays(randomDays);
+            String formattedDate = randomDate.format(formatter);
+
             notice.setNotititle(title);
             notice.setNotiname("admin");
-            String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            notice.setNotidate(today);
+            notice.setNotidate(formattedDate);
 
             try {
                 noticeRepository.save(notice);
