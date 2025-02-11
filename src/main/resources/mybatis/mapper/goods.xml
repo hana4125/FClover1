@@ -23,7 +23,7 @@
   <select id="countGoods" resultType="int">
     SELECT COUNT(*)
     FROM goods
-    WHERE cate_no = #{cate_no}
+    WHERE cate_no = #{cateNo}
   </select>
 
 
@@ -83,7 +83,7 @@
     a.goods_price AS goodsPrice,
     a.goods_writer AS goodsWriter
     FROM goods a
-    JOIN stock s ON a.goods_no = s.goods_no
+    LEFT JOIN stock s ON a.goods_no = s.goods_no
     WHERE
     a.cate_no = #{cateNo}
     ORDER BY
