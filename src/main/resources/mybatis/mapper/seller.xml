@@ -82,5 +82,21 @@
         </where>
     </select>
 
+    <select id="countAllSeller" resultType="int">
+        select COUNT(*)
+        from seller;
+    </select>
 
+<!--    <insert id="insertSellers">-->
+<!--        INSERT INTO seller ()-->
+<!--        VALUE-->
+<!--        <foreach collection="sellers" item="s" separator=",">-->
+<!--            (#{s.sellerId}, #{s.})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <select id="getSellerCompanyName" resultType="hello.fclover.dto.SellerCompanyDTO">
+        select seller_no, company_name
+        from seller
+    </select>
 </mapper>

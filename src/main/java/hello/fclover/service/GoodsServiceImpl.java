@@ -65,7 +65,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        System.out.println("cateNo=" + cateNo + ", page=" + page + ", size=" + size + ", offset=" + offset);
         return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
@@ -148,7 +147,7 @@ public class GoodsServiceImpl implements GoodsService {
         for (MessGoods messGood : messGoods) {
             Goods goods = new Goods();
             GoodsImage goodsImage = new GoodsImage();
-//            try {
+            try {
                 goods.setCateNo(categoryMapper.findCateNo(messGood.getCateName()));
                 goods.setGoodsName(messGood.getGoodsName());
                 goods.setGoodsContent(messGood.getGoodsContent());
@@ -165,44 +164,46 @@ public class GoodsServiceImpl implements GoodsService {
                 goods.setGoodsBookSize(messGood.getGoodsBookSize());
                 goods.setSellerNo(sellerMapper.findSellerNo(messGood.getSellerName()));
                 messGoodsMapper.saveProduct(goods);
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//                continue;
-//            }
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+                continue;
+            }
+            Long insertGoodsNo = goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName());
+            messGood.setGoodsNo(insertGoodsNo);
+            goodsImage.setGoodsNo(insertGoodsNo);
 
-            goodsImage.setGoodsNo(goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName()));
             String mainImage = messGood.getMainImage();
             String imageUrl = getExcelUrl(mainImage);
-//            try {
+            try {
                 if (messGood.getMainImage() != null) {
                     goodsImage.setGoodsImageName(getExcelImageName(messGood.getMainImage()));
                     goodsImage.setGoodsUrl(imageUrl);
                     goodsImage.setIsMain("M");
                     messGoodsMapper.saveProductImage(goodsImage);
                 }
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//                continue;
-//            }
-//            try {
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+                continue;
+            }
+            try {
                 if (messGood.getSubImage1() != null) {
                     goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage1()));
                     goodsImage.setIsMain("S");
                     messGoodsMapper.saveProductImage(goodsImage);
                 }
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//                continue;
-//            }
-//            try{
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+                continue;
+            }
+            try{
             if(messGood.getSubImage2() != null) {
                 goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage2()));
                 goodsImage.setIsMain("S");
                 messGoodsMapper.saveProductImage(goodsImage);
             }
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//            }
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+            }
             goodsInsertSuccess.add(messGood);
         }
         Map<String, Object> resultMap = new HashMap<>();
@@ -212,9 +213,24 @@ public class GoodsServiceImpl implements GoodsService {
         return resultMap;
     }
 
+    @Override
+    public List<Goods> deleteGoods(Long goodsNo) {
+        int deleteResult = goodsMapper.deleteGood(goodsNo);
+        if (deleteResult > 0) {
+
+        }
+        return List.of();
+    }
+
+    //update
+    @Override
+    public Goods getGoodsUpdateFormDetail(Long goodsNo) {
+        return goodsMapper.findGoodsById(goodsNo);
+    }
+
     private String getExcelUrl(String mainImage) {
         int lastIndexOf = mainImage.lastIndexOf("/");
-        return mainImage.substring(0, lastIndexOf + 1);
+        return mainImage.substring(0, lastIndexOf);
     }
 
     private String getExcelImageName(String mainImage) {

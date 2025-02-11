@@ -38,6 +38,7 @@
     <div class="contents_inner">
       <div class="search_result_top">
         <div class="title_wrap title_size_lg">
+          <input type="hidden" id="totalGoodsCount" th:value="${searchResult.totalCount}">
           <h1 class="title_heading">
             <span style="color:#1e5f1e">
               '
@@ -53,9 +54,9 @@
           </h1>
         </div>
         <!-- 연관 검색어 영역 -->
-        <div class="related_keyword_wrap" th:if="${!#lists.isEmpty(searchResult.searchResults)}">
-          <p>연관 검색어 추가 예정</p>
-        </div>
+<!--        <div class="related_keyword_wrap" th:if="${!#lists.isEmpty(searchResult.searchResults)}">-->
+<!--          <p>연관 검색어 추가 예정</p>-->
+<!--        </div>-->
 
         <div class="search_result_wrap" th:if="${!#lists.isEmpty(searchResult.searchResults)}">
 
@@ -75,16 +76,16 @@
             <div class="filter_integrate_box" id="category_filter_box">
               <ul class="filter_list">
                 <!-- 카테고리 필터 -->
-                <li class="menu_item item_depth1 active" id="category_filter_li">
-                  <button type="button" class="btn_filter_depth1 active" id="category_filter_button">
+                <li class="menu_item item_depth1" id="category_filter_li">
+                  <button type="button" class="btn_filter_depth1" id="category_filter_button">
                     <span class="text">카테고리</span>
                   </button>
-                  <div class="filter_cont_box">
-                    <ul class="filter_list depth2 active">
+                  <div class="filter_cont_box" style="display: none;">
+                    <ul class="filter_list depth2">
                       <!-- 각 카테고리는 ajax에서 받아온 카테고리 목록을 바탕으로 생성하기 -->
                       <!-- 예시 -->
                       <li class="menu_item item_depth2" th:each="category : ${searchResult.categoryList}">
-                        <button type="button" class="btn_category" th:value="${category.getKey().cateNo}"
+                        <button type="button" class="btn_category category-item" th:value="${category.getKey().cateNo}"
                                 th:text="${category.getKey().cateName + ' (' + category.getValue() + ')'}">
                         </button>
                       </li>
@@ -105,19 +106,19 @@
                     <ul class="filter_list depth2 active">
                       <li class="menu_item item_depth2">
               <span class="form_chk">
-                <input id="search_condition_cname" name="searchCondition" type="checkbox">
+                <input id="search_condition_cname" name="searchCondition" type="checkbox" value="cname">
                 <label for="search_condition_cname">상품명</label>
               </span>
                       </li>
                       <li class="menu_item item_depth2">
               <span class="form_chk">
-                <input id="search_condition_chrc" name="searchCondition" type="checkbox">
+                <input id="search_condition_chrc" name="searchCondition" type="checkbox" value="chrc">
                 <label for="search_condition_chrc">저자/역자</label>
               </span>
                       </li>
                       <li class="menu_item item_depth2">
               <span class="form_chk">
-                <input id="search_condition_pbcm" name="searchCondition" type="checkbox">
+                <input id="search_condition_pbcm" name="searchCondition" type="checkbox" value="pbcm">
                 <label for="search_condition_pbcm">출판사</label>
               </span>
                       </li>
@@ -171,7 +172,7 @@
                             <div class="input_btn_box">
                               <input type="text" class="form_ip" name="saprmaxFilter" id="saprmaxFilter" maxlength="8"
                                      placeholder="최대 금액" onkeyup="inputNumberFormat(this)">
-                              <button type="button" class="btn_sm btn_line_primary" onclick="searchFilterSaprText()">
+                              <button type="button" id="btnPriceApply" class="btn_sm btn_line_primary">
                                 <span class="text">적용</span>
                               </button>
                             </div>
@@ -282,18 +283,14 @@
             </div>
 
             <div class="book-items mt-4">
-              <ul class="prod_list" th:each="goods : ${searchResult.searchResults}">
+              <ul class="prod_list">
                 <!-- goods 리스트를 반복하여 출력 -->
-                <li class="prod_item d-flex justify-content-between align-items-start">
+                <li class="prod_item d-flex justify-content-between align-items-start" th:each="goods : ${searchResult.searchResults}">
                   <div class="prod_area d-flex align-items-start mb-5">
-                    <input type="checkbox" class="item-checkbox mt-1 ms-1"
-                           style="width: 18px; height: 18px;">
                     <div class="book-item d-flex mt-1 ms-3">
                       <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                       <div>
-
-                        <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
-                           class="show-detail">
+                        <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">
                           <div class="img-box">
                             <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
                                         : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
@@ -364,7 +361,7 @@
               </ul>
               <hr>
               <!-- 페이지네이션 -->
-              <nav th:if="${searchResult.totalPages > 0}" aria-label="Page navigation example">
+              <nav id="pagination" th:if="${searchResult.totalPages > 0}" aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                   <!-- 이전 페이지 버튼 -->
                   <li th:classappend="${searchResult.currentPage == 1} ? 'disabled' : ''">

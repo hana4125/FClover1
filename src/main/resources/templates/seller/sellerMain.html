@@ -35,16 +35,6 @@
         $("#logo").click(function() {
             location.href ="/seller/main";
         })
-      $(".singleProduct").click(function(){
-        location.href = "addSingleProduct"
-      })
-      $(".productList").click(function(){
-        location.href="productDetail"
-      })
-      $(".massProduct").click(function(){
-        location.href="sellerAddMassProduct"
-      })
-
     })
   </script>
 </head>
@@ -114,9 +104,9 @@
           <div class="mb-4">
             <h5 class="fw-bold">상품등록</h5>
             <ul class="list-unstyled">
-              <li><a href="#" class="productList">상품 리스트</a></li>
-              <li><a href="#" class="massProduct">자동등록</a></li>
-              <li><a href="#" class="singleProduct">수동등록</a></li>
+              <li><a href="/seller/productDetail" class="productList">상품 리스트</a></li>
+              <li><a href="/seller/sellerAddMassProduct" class="massProduct">자동등록</a></li>
+              <li><a href="/seller/addSingleProduct" class="singleProduct">수동등록</a></li>
             </ul>
           </div>
         </div>

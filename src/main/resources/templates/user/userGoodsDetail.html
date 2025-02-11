@@ -36,6 +36,44 @@
                 location.href = "";
             })
 
+            // 장바구니 버튼 클릭 시
+            $("#direct").click(function () {
+                // CSRF 토큰
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+
+                const goodsNo = document.getElementById('goodsNo').value;
+                // const goodsNo = $(this).data("id");
+
+                $.ajax({
+                    url: "/cart/cartList",
+                    type: "POST",
+                    // CSRF 토큰 헤더 설정
+                    headers: {[csrfHeader]: csrfToken},
+                    data: {goodsNo: goodsNo},
+                    dataType: "json",
+                    success: function (response) {
+                        // response.status 가 "added" 또는 "updated"
+                        if (response.status === "added") {
+                            const moveConfirm = confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
+                            if (moveConfirm) {
+                                location.href = "/member/cart";
+                            }
+                        } else if (response.status === "updated") {
+                            const moveConfirm = confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?");
+                            if (moveConfirm) {
+                                location.href = "/member/cart";
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        if (status === "parsererror") {
+                            location.href = '/member/login'
+                        }
+                    }
+                });
+            });
             $(".show-plus").click(function (e) {
                 e.preventDefault(); // 기본 동작 방지
                 if ($(".best-title").hasClass("active")) {
@@ -117,7 +155,7 @@
     </script>
 </head>
 <body>
-<input type="hidden" class="goodsNo" th:value="${goods.goodsNo}">
+<input type="hidden" id="goodsNo" class="goodsNo" th:value="${goods.goodsNo}">
 <input type="hidden" class="goodsName" th:value="${goods.goodsName}">
 <input type="hidden" class="goodsPrice" th:value="${goods.goodsPrice}">
 <input type="hidden" class="goodsWriter" th:value="${goods.goodsWriter}">
@@ -125,7 +163,7 @@
 
 <div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
-<div class="bg-success">
+<div class="bg-success" style="background: #226b24 !important;">
     <div class="container w-75">
         <div class="header-menu mt-4 d-flex align-items-center">
             <button class="btn btn-light me-3" id="category">
@@ -139,9 +177,18 @@
             <!--            <a href="#" class="ps-5 pe-5">국내도서</a>-->
             <!--            <a href="#" class="ps-5 pe-5">서양도서</a>-->
             <!--            <a href="#" class="ps-5 pe-5">일본도서</a>-->
-            <a href="#" class="best ps-5 pe-5">베스트</a>
-            <a href="#" class="new ps-5 pe-5">신상품</a>
-            <a href="#" class="ps-5 pe-5">이벤트</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Noto Sans KR;margin-right:40px;font-size:18px; color: #ffffff;font-family:Roboto;">전체도서</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
+            <a href="#" class="steady ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
+            <a href="#" class="new ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
         </div>
     </div>
 </div>
@@ -220,7 +267,7 @@
                         <div class="prod_guide_cont col-md-9">
                             <div class="delivery_guide_text">
                                             <span id="OrderDeliveryType"
-                                                  class="delivery_type">도서 포함 15,000원 이상 무료배송</span>
+                                                  class="delivery_type">50,000원 이상 구매 시 무료배송</span>
                                 <div class="tooltip_wrap type_sm right">
                                     <button type="button" class="btn_tooltip" data-btn-toggle="">
                                         <span class="ico_info"></span>
@@ -233,7 +280,7 @@
                                         <div class="tooltip_contents">
                                             <div class="tooltip_sub_title">국내도서/외국도서</div>
                                             <div class="tooltip_desc">
-                                                도서 포함 15,000원 이상 구매 시 무료배송
+                                                도서 포함 50,000원 이상 구매 시 무료배송
                                                 <br>도서+사은품 또는 도서+사은품+교보Only(교보굿즈)
                                             </div>
                                             <p class="bul_item_asterisk font_size_xxs">15,000원 미만 시 2,500원
@@ -283,33 +330,33 @@
                             </div>
 
 
-                            <div class="prod_guide_row">
-                                <div class="prod_guide_cont">
-                                    <div class="delivery_guide_text"><span
-                                            class="badge_sm badge_pill badge_primary"><span
-                                            class="text">새벽배송</span></span>
+<!--                            <div class="prod_guide_row">-->
+<!--                                <div class="prod_guide_cont">-->
+<!--                                    <div class="delivery_guide_text"><span-->
+<!--                                            class="badge_sm badge_pill badge_primary"><span-->
+<!--                                            class="text">새벽배송</span></span>-->
 
-                                        <span id="OrderEstimatedDate"><span><strong
-                                                class="blue">내일(1/10,금 오전 7시 전) 도착</strong></span></span>
-
-
-                                        <button type="button" class="btn_info_popup" data-role="btn-dialog"
-                                                data-target="#popDeliveryInfo">
-                                            <span class="ico_question"></span>
-                                            <span class="hidden">팝업 열기</span>
-                                        </button>
+<!--                                        <span id="OrderEstimatedDate"><span><strong-->
+<!--                                                class="blue">내일(1/10,금 오전 7시 전) 도착</strong></span></span>-->
 
 
-                                    </div>
-                                </div>
+<!--                                        <button type="button" class="btn_info_popup" data-role="btn-dialog"-->
+<!--                                                data-target="#popDeliveryInfo">-->
+<!--                                            <span class="ico_question"></span>-->
+<!--                                            <span class="hidden">팝업 열기</span>-->
+<!--                                        </button>-->
 
-                            </div>
+
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                            </div>-->
 
 
                             <div class="prod_guide_row">
                                 <div class="prod_guide_cont">
                                     <div class="delivery_guide_text">
-                                        <span class="fc_gray">기본배송지 기준</span>
+<!--                                        <span class="fc_gray">기본배송지 기준</span>-->
                                         <div class="tooltip_wrap type_sm right">
                                             <button type="button" class="btn_tooltip"><span
                                                     class="ico_info"></span><span class="hidden">툴팁열기</span>
@@ -374,40 +421,40 @@
     </div>
 </div>
 <!--끝-->
-<!--    상품상세-->
-<div class="container tab_list_wrap w-75">
-    <div class="sps sps_scroll_fixed tab_list_inner sps--abv sps-abv" data-height-observe="data-height-observe"
-         data-sps-offset="1113" style="">
-        <div class="sps_inner">
-            <ul class="tabs">
-                <li class="tab_item"><a href="#scrollSpyProdDetail" class="tab_link active"><span
-                        class="tab_text">작품 상세</span></a></li>
-                <li class="tab_item"><a href="#scrollSpyProdInfo" class="tab_link">
-                    <span class="tab_text">작가 상세</span></a></li>
-                <li class="tab_item"><a href="#scrollSpyProdReview" class="tab_link"><span
-                        class="tab_text">상품 기본 정보</span></a></li>
-            </ul>
-        </div>
+<!--&lt;!&ndash;    상품상세&ndash;&gt;-->
+<!--<div class="container tab_list_wrap w-75">-->
+<!--    <div class="sps sps_scroll_fixed tab_list_inner sps&#45;&#45;abv sps-abv" data-height-observe="data-height-observe"-->
+<!--         data-sps-offset="1113" style="">-->
+<!--        <div class="sps_inner">-->
+<!--            <ul class="tabs">-->
+<!--                <li class="tab_item"><a href="#scrollSpyProdDetail" class="tab_link active"><span-->
+<!--                        class="tab_text">작품 상세</span></a></li>-->
+<!--                <li class="tab_item"><a href="#scrollSpyProdInfo" class="tab_link">-->
+<!--                    <span class="tab_text">작가 상세</span></a></li>-->
+<!--                <li class="tab_item"><a href="#scrollSpyProdReview" class="tab_link"><span-->
+<!--                        class="tab_text">상품 기본 정보</span></a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
 
-        <div class="sps_observer" style="top:0px;"></div>
-    </div>
-</div>
-<hr>
+<!--        <div class="sps_observer" style="top:0px;"></div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<hr>-->
 <!--상품상세 끝-->
 <!--</div>-->
-<div class="container goodsDetail w-75">
-    <div class="prodDetail-box">
-        <div class="prodDetail-header"> 작품 상세</div>
-        <div class="prodDetail-Content" th:text="${goods.goodsContent}"></div>
-        <div class="DetailLine"></div>
-    </div>
-    <div class="Line"><hr></div>
-    <div class="writerDetail-box">
-        <div class="writerDetail-header">작가 상세</div>
-        <div class="writerDetail-title">"[[${goods.goodsWriter}]]"</div>
-        <div class="writerDetail-Content" th:text="${goods.writerContent}"></div>
-    </div>
-</div>
+<!--<div class="container goodsDetail w-75">-->
+<!--    <div class="prodDetail-box">-->
+<!--        <div class="prodDetail-header"> 작품 상세</div>-->
+<!--        <div class="prodDetail-Content" th:text="${goods.goodsContent}"></div>-->
+<!--        <div class="DetailLine"></div>-->
+<!--    </div>-->
+<!--    <div class="Line"><hr></div>-->
+<!--    <div class="writerDetail-box">-->
+<!--        <div class="writerDetail-header">작가 상세</div>-->
+<!--        <div class="writerDetail-title">"[[${goods.goodsWriter}]]"</div>-->
+<!--        <div class="writerDetail-Content" th:text="${goods.writerContent}"></div>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <br>

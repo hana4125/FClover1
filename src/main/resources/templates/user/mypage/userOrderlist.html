@@ -154,10 +154,10 @@
 
                                     </div>
                                     <div class="prod_info_box size_sm" style="flex-grow: 1;">
-                                        <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_info" data-order-commoditylink="" >
-                                            <span class="prod_name" th:text="${list.goodsName}"></span>
+                                     <a th:href="'/member/myPage/memberOrderListDetail?orderId=' + ${list.orderId}">
+                                         <span class="prod_name" th:text="${list.goodsName}"></span>
+                                     </a>
 
-                                        </a>
 
 
 

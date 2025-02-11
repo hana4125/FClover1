@@ -8,14 +8,11 @@ import hello.fclover.mybatis.mapper.NoticeMapper;
 import jakarta.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,67 +134,68 @@ public class DummyDataGenerator {
         return Stock.builder().build();
     }
 
-//    @PostConstruct
-//    @Profile("dev")
-//    public void generateNoticeData() {
-//
-//        // 기존 데이터 삭제
-//        noticeRepository.deleteAll();
-//
-//        // 공지사항 제목 템플릿
-//        String[] noticeTemplates = {
-//                "[공지사항] 서비스 점검 안내",
-//                "[공지사항] 개인정보처리방침 개정 안내",
-//                "[공지사항] 시스템 업데이트 안내",
-//                "[공지사항] 이용약관 변경 안내",
-//                "[공지사항] 배송지연 일정 안내"
-//        };
-//
-//        // 이벤트 제목 템플릿
-//        String[] eventTemplates = {
-//                "[이벤트] 신규 회원 특별 이벤트",
-//                "[이벤트] 리뷰 이벤트",
-//                "[이벤트] 가입 감사 이벤트",
-//                "[이벤트] 출석 체크 이벤트",
-//                "[이벤트] 무료 배송 쿠폰 이벤트"
-//        };
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//        for (int i = 0; i < 50; i++) {
-//            Notice notice = new Notice();
-//
-//            // 공지사항과 이벤트 중 랜덤 선택
-//            String title;
-//            if (faker.random().nextBoolean()) {
-//                title = noticeTemplates[faker.random().nextInt(noticeTemplates.length)];
-//            } else {
-//                title = eventTemplates[faker.random().nextInt(eventTemplates.length)];
-//            }
-//
-//            notice.setNotititle(title);
-//            notice.setNotiname("admin");
-//
-//            // 최근 1년(365일) 내의 랜덤 날짜 설정
-//            LocalDate randomDate = getRandomDateBetween(LocalDate.now().minusDays(365), LocalDate.now());
-//
-//            notice.setNotidate(randomDate.format(formatter));
-//
-//            try {
-//                noticeRepository.save(notice);
-//                log.info("Dummy notice created: {}", notice);
-//            } catch (Exception e) {
-//                log.error("Failed to create dummy notice", e);
-//            }
-//        }
-//    }
-//
-//    private LocalDate getRandomDateBetween(LocalDate startDate, LocalDate endDate) {
-//        long startEpochDay = startDate.toEpochDay();
-//        long endEpochDay = endDate.toEpochDay();
-//        long randomDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay + 1);
-//
-//        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
-//
-//        return LocalDate.ofEpochDay(randomDay);
-//    }
+    @PostConstruct
+    @Profile("dev")
+    public void generateNoticeData() {
+        // 기존 데이터 삭제
+        noticeRepository.deleteAll();
+
+        // 공지사항 제목 템플릿
+        String[] noticeTemplates = {
+                "[공지사항] 시스템 점검 안내",
+                "[공지사항] 개인정보 처리방침 변경 안내",
+                "[공지사항] 시스템 업데이트 안내",
+                "[공지사항] 이용약관 개정 안내",
+                "[공지사항] 택배 배송지연 지역 안내",
+                "[공지사항] 마일리지 통합 포인트 전환 안내",
+                "[공지사항] 마케팅 정보 수신동의 확인 안내",
+                "[공지사항] 네잎클로버 리워드 혜택 변경 안내",
+                "[공지사항] **카드 서비스 종료 안내",
+                "[공지사항] 상품권 서비스점검에 따른 사용제한 안내"
+        };
+
+        // 이벤트 제목 템플릿
+        String[] eventTemplates = {
+                "[이벤트] 신규 회원 특별 이벤트",
+                "[이벤트] *월 출석 이벤트",
+                "[이벤트] 네잎클로버 적립금 혜택",
+                "[이벤트] 2만원 이상 무료배송 이벤트",
+                "[이벤트] 첫결제 혜택 이벤트",
+                "[이벤트] 리뷰 이벤트",
+                "[이벤트] 추천도서 이벤트",
+                "[이벤트] 작가와의 만남 이벤트",
+                "[이벤트] 수험서/참고서 브랜드전",
+                "[이벤트] 나만의 베스트셀러"
+        };
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate now = LocalDate.now();
+
+        for (int i = 0; i < 500; i++) {
+            Notice notice = new Notice();
+
+            // 공지사항과 이벤트 중 랜덤 선택
+            String title;
+            if (faker.random().nextBoolean()) {
+                title = noticeTemplates[faker.random().nextInt(noticeTemplates.length)];
+            } else {
+                title = eventTemplates[faker.random().nextInt(eventTemplates.length)];
+            }
+
+            long randomDays = faker.number().numberBetween(0, 365);
+            LocalDate randomDate = now.minusDays(randomDays);
+            String formattedDate = randomDate.format(formatter);
+
+            notice.setNotititle(title);
+            notice.setNotiname("admin");
+            notice.setNotidate(formattedDate);
+
+            try {
+                noticeRepository.save(notice);
+                log.info("Dummy notice created: {}", notice);
+            } catch (Exception e) {
+                log.error("Failed to create dummy notice", e);
+            }
+        }
+    }
 }
