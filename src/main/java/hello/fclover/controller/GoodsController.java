@@ -154,6 +154,7 @@ public class GoodsController {
     }
 
     @PostMapping("/addMassProductProcess")
+    @ResponseBody
     public ResponseEntity<Map<String, Object>> handleFileUpload(@RequestParam("file") MultipartFile multipartFile) throws Exception {
         File file = getFile(multipartFile);
 
@@ -174,8 +175,8 @@ public class GoodsController {
 //        long diffTime1 = afterTime1 - beforeTime1; // 두 개의 실행 시간
 //        System.out.println("실행 시간(ms): " + diffTime1); // 세컨드(초 단위 변환)*/
 
-//        return ResponseEntity.ok(resultList);
-        return ResponseEntity.ok(Collections.emptyMap());
+        return ResponseEntity.ok(resultList);
+//        return ResponseEntity.ok(Collections.emptyMap());
     }
 
     private File getFile(MultipartFile file) throws IOException {
@@ -312,5 +313,16 @@ public class GoodsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
+//    @PostMapping("/updateGoods")
+//    public ResponseEntity<String> updateGoods(@RequestPart("goods") Goods goods,
+//                                              @RequestPart(value="goodsImages", required=false) List<MultipartFile> goodsImages) {
+//        // goods 객체 및 첨부파일(goodsImages)을 이용하여 상품 업데이트 로직 수행
+//        try {
+//            goodsService.updateGoods(goods, goodsImages);
+//            return ResponseEntity.ok("상품 업데이트 성공");
+//        } catch(Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("상품 업데이트 실패: " + e.getMessage());
+//        }
+//    }
 }
