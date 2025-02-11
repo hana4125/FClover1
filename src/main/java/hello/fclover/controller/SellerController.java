@@ -205,11 +205,9 @@ public class SellerController {
             @RequestParam(defaultValue = "") String searchField,
             HttpServletRequest request) {
 
-
         ModelAndView mnv = new ModelAndView();
         String sellerId = principal.getName();
         Long sellerNo = sellerService.getselectNo(sellerId);
-
 
         // 전체 구매자 주문 목록 개수 가져오기
         int totalcount = sellerService.getListCount(searchWord, sellerNo, searchField);
@@ -233,8 +231,6 @@ public class SellerController {
         mnv.addObject("totalcount", totalcount);
         mnv.addObject("limit", limit);
         mnv.addObject("page", page);
-
-
         return mnv;
     }
 }

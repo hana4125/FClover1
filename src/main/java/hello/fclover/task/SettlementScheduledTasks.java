@@ -116,6 +116,23 @@ public class SettlementScheduledTasks {
             return result;
     }
 
+    //병렬처리가 아닌 순차처리.
+//    private int processSettlements(Map<Long, BigDecimal> settlementMap, LocalDate paymentDate) {
+//        int result = 0;
+//        try {
+//            // 순차적으로 처리
+//            for (Map.Entry<Long, BigDecimal> entry : settlementMap.entrySet()) {
+//                Settlement settlement = Settlement.create(entry.getKey(), entry.getValue(), paymentDate);
+//                settlementMapper.save(settlement);
+//            }
+//            result++;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return result;
+//    }
+
 
 
 }
