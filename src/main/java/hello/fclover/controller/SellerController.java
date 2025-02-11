@@ -100,7 +100,6 @@ public class SellerController {
     }
 
 
-
     @GetMapping("/signup")
     public String sellerSignupForm() {
         return "seller/sellerSignup";
@@ -198,6 +197,7 @@ public class SellerController {
     @GetMapping("/sellerAddMassProduct")
     public String addMassProduct(Model model, Principal principal) {
         return "seller/sellerAddMassProduct";
+    }
 
     //구매자 리스트 조회
     @GetMapping(value = "/buyerList")
