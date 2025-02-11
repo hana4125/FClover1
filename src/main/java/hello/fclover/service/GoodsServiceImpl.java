@@ -34,7 +34,6 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Value("${cloud.aws.s3.bucket}")
     String bucket;
-
     GoodsImage goodsImage = new GoodsImage();
 
     @Override
@@ -66,7 +65,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getCategoryGoodsList(int cateNo, String sort, int page, int size) {
         int offset = (page - 1) * size;
-        System.out.println("cateNo=" + cateNo + ", page=" + page + ", size=" + size + ", offset=" + offset);
         return goodsMapper.findCategoryGoodsWishStatus(cateNo, sort, offset, size);
     }
 
@@ -93,13 +91,9 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     public void getGoodsDetail(Long goodsNo, Model model) {
-
-        Goods goods = goodsMapper.findGoodsById(goodsNo);
-        model.addAttribute("goods", goods);
-
-        List<String> imageList = getGoodsImages(goodsNo,goodsImage);
+        model.addAttribute("goods", goodsMapper.findGoodsById(goodsNo));
+        List<String> imageList = getGoodsImages(goodsNo, goodsImage);
         model.addAttribute("imageList", imageList);
-
     }
 
     @Override
@@ -131,6 +125,21 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.sellerGoodsSearch(searchKeyword);
     }
 
+
+//    @Transactional
+//    public void saveProduct(InputStream inputStream){
+//        List<MessGoods> data = excelReaderService.readExcelWithXSSF(inputStream);
+    // 1방식 순차처리
+//        data.forEach(messGoodsMapper::saveProduct);
+
+    // 2방식 병렬처리
+//        data.parallelStream().forEach(messGoodsMapper::saveProduct);
+
+
+    //bulkInsertBooks(data);
+    // 병렬 스트림을 사용하여 데이터 삽입
+//    }
+
     @Override
     public Map<String, Object> saveMessproduct(List<MessGoods> messGoods) {
         List<MessGoods> goodsInsertSuccess = new ArrayList<>();
@@ -138,61 +147,63 @@ public class GoodsServiceImpl implements GoodsService {
         for (MessGoods messGood : messGoods) {
             Goods goods = new Goods();
             GoodsImage goodsImage = new GoodsImage();
-//            try {
-            goods.setCateNo(categoryMapper.findCateNo(messGood.getCateName()));
-            goods.setGoodsName(messGood.getGoodsName());
-            goods.setGoodsContent(messGood.getGoodsContent());
-            goods.setGoodsPrice(messGood.getGoodsPrice());
-            goods.setGoodsWriter(messGood.getGoodsWriter());
-            goods.setWriterContent(String.valueOf(messGood.getWriterContent()));
-            goods.setCompanyName(messGood.getSellerName());
-            // 입력 형식에 맞는 DateTimeFormatter 생성
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-            // 문자열을 LocalDate로 파싱
-            goods.setGoodsCreateAt(LocalDate.parse(messGood.getGoodsCreateAt(), formatter));
+            try {
+                goods.setCateNo(categoryMapper.findCateNo(messGood.getCateName()));
+                goods.setGoodsName(messGood.getGoodsName());
+                goods.setGoodsContent(messGood.getGoodsContent());
+                goods.setGoodsPrice(messGood.getGoodsPrice());
+                goods.setGoodsWriter(messGood.getGoodsWriter());
+                goods.setWriterContent(String.valueOf(messGood.getWriterContent()));
+                goods.setCompanyName(messGood.getSellerName());
+                // 입력 형식에 맞는 DateTimeFormatter 생성
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                // 문자열을 LocalDate로 파싱
+                goods.setGoodsCreateAt(LocalDate.parse(messGood.getGoodsCreateAt(), formatter));
 
-            goods.setGoodsPageCount(messGood.getGoodsPageCount());
-            goods.setGoodsBookSize(messGood.getGoodsBookSize());
-            goods.setSellerNo(sellerMapper.findSellerNo(messGood.getSellerName()));
-            messGoodsMapper.saveProduct(goods);
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//                continue;
-//            }
+                goods.setGoodsPageCount(messGood.getGoodsPageCount());
+                goods.setGoodsBookSize(messGood.getGoodsBookSize());
+                goods.setSellerNo(sellerMapper.findSellerNo(messGood.getSellerName()));
+                messGoodsMapper.saveProduct(goods);
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+                continue;
+            }
+            Long insertGoodsNo = goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName());
+            messGood.setGoodsNo(insertGoodsNo);
+            goodsImage.setGoodsNo(insertGoodsNo);
 
-            goodsImage.setGoodsNo(goodsMapper.goodsNoselect(goods.getSellerNo(), goods.getGoodsName()));
             String mainImage = messGood.getMainImage();
-//            String imageUrl = getExcelUrl(mainImage);
-//            try {
-            if (messGood.getMainImage() != null) {
-//                goodsImage.setGoodsImageName(getExcelImageName(messGood.getMainImage()));
-//                goodsImage.setGoodsUrl(imageUrl);
-                goodsImage.setIsMain("M");
-                messGoodsMapper.saveProductImage(goodsImage);
+            String imageUrl = getExcelUrl(mainImage);
+            try {
+                if (messGood.getMainImage() != null) {
+                    goodsImage.setGoodsImageName(getExcelImageName(messGood.getMainImage()));
+                    goodsImage.setGoodsUrl(imageUrl);
+                    goodsImage.setIsMain("M");
+                    messGoodsMapper.saveProductImage(goodsImage);
+                }
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+                continue;
             }
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//                continue;
-//            }
-//            try {
-            if (messGood.getSubImage1() != null) {
-//                goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage1()));
-                goodsImage.setIsMain("S");
-                messGoodsMapper.saveProductImage(goodsImage);
+            try {
+                if (messGood.getSubImage1() != null) {
+                    goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage1()));
+                    goodsImage.setIsMain("S");
+                    messGoodsMapper.saveProductImage(goodsImage);
+                }
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+                continue;
             }
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//                continue;
-//            }
-//            try{
+            try{
             if(messGood.getSubImage2() != null) {
-//                goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage2()));
+                goodsImage.setGoodsImageName(getExcelImageName(messGood.getSubImage2()));
                 goodsImage.setIsMain("S");
                 messGoodsMapper.saveProductImage(goodsImage);
             }
-//            }catch (Exception e) {
-//                goodsInsertFail.add(messGood);
-//            }
+            }catch (Exception e) {
+                goodsInsertFail.add(messGood);
+            }
             goodsInsertSuccess.add(messGood);
         }
         Map<String, Object> resultMap = new HashMap<>();
@@ -219,7 +230,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     private String getExcelUrl(String mainImage) {
         int lastIndexOf = mainImage.lastIndexOf("/");
-        return mainImage.substring(0, lastIndexOf + 1);
+        return mainImage.substring(0, lastIndexOf);
     }
 
     private String getExcelImageName(String mainImage) {
@@ -227,12 +238,9 @@ public class GoodsServiceImpl implements GoodsService {
         return mainImage.substring(lastIndexOf + 1);
     }
 
-
     private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);
-
-        System.out.println("imageNames = " + imageNames);
         //이미지 파일 담을 List
         List<String> images = new ArrayList<>();
         String result = null;
@@ -241,9 +249,7 @@ public class GoodsServiceImpl implements GoodsService {
             String name = imageName.get("goods_image_name");
             String imageUrl = imageName.get("goods_url") + File.separator + name;
 
-
-                images.add(imageUrl);
-
+            images.add(imageUrl);
 
         }
         return images;
