@@ -39,25 +39,11 @@
             })
 
             $(".show-plus-best").click(function () {
-                // e.preventDefault(); // 기본 동작 방지
-                // if ($(".best-title").hasClass("active")) {
-                //     // 베스트셀러 탭이 활성화된 경우
-                    location.href = "/goods/bestSeller";
-                // } else if ($(".steady-title").hasClass("active")) {
-                //     // 스테디셀러 탭이 활성화된 경우
-                //     location.href = "/goods/steadySeller";
-                // }
+                location.href = "/goods/bestSeller";
             });
 
             $(".show-plus-steady").click(function () {
-                // e.preventDefault(); // 기본 동작 방지
-                // if ($(".best-title").hasClass("active")) {
-                //     // 베스트셀러 탭이 활성화된 경우
                 location.href = "/goods/steadySeller";
-                // } else if ($(".steady-title").hasClass("active")) {
-                //     // 스테디셀러 탭이 활성화된 경우
-                //     location.href = "/goods/steadySeller";
-                // }
             });
 
             $(".best").click(function () {
@@ -70,6 +56,14 @@
 
             $(".new").click(function () {
                 location.href = "/goods/newItems";
+            })
+
+            $(".notice").click(function () {
+                location.href = "/inquiry/notice/noti_list";
+            })
+
+            $(".qna").click(function () {
+                location.href = "/inquiry/question";
             })
 
             // 카테고리 버튼 동작
@@ -95,21 +89,6 @@
                     }
                 })
             })
-
-            // 베스트 및 스테디 클릭 이벤트 처리
-            // $("#best").click(function () {
-            //     $(this).addClass("active").siblings(".steady-title").removeClass("active");
-            //     // 베스트 데이터 표시
-            //     $(".best-items").show();
-            //     $(".steady-items").hide();
-            // })
-            //
-            // $("#steady").click(function () {
-            //     $(this).addClass("active").siblings(".best-title").removeClass("active");
-            //     // 스테디 데이터 표시
-            //     $(".steady-items").show();
-            //     $(".best-items").hide();
-            // })
         })
     </script>
 </head>
@@ -127,17 +106,15 @@
                 <span class="close-icon d-none">&times;</span>
             </button>
             <!--            font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;-->
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Noto Sans KR;margin-right:40px;font-size:18px; color: #ffffff;font-family:Roboto;">전체도서</a>
-            <a href="#" class="best ps-5 pe-5"
+            <a class="best ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
-            <a href="#" class="steady ps-5 pe-5"
+            <a class="steady ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
-            <a href="#" class="new ps-5 pe-5"
+            <a class="new ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
-            <a href="#" class="best ps-5 pe-5"
+            <a class="notice ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
-            <a href="#" class="best ps-5 pe-5"
+            <a class="qna ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
         </div>
     </div>
