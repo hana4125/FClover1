@@ -14,5 +14,7 @@ public interface CategoryMapper {
   
     // 카테고리 개수 조회
     int countAll();
+
+    int findCateNo(String cateName);
 }
 

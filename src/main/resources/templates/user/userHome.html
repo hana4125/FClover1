@@ -26,8 +26,8 @@
                 location.href = "/member/cart";
             })
 
-            $("#myPage").click(function () {
-                location.href = "/myPage";
+            $(".myPage").click(function () {
+                location.href = "/member/myPage";
             })
 
             $(".category-item").click(function () {
@@ -237,7 +237,7 @@
                        class="show-detail">
                         <div class="img-box">
                             <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                             : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
+                                        : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
                         </div>
                     </a>
                     <div class="item-info">

@@ -40,7 +40,7 @@ SELECT
     d.deli_date AS deliveryDate
 FROM payments p
          LEFT JOIN delivery d ON p.payments_no = d.payments_no
-         LEFT JOIN goods g ON d.inven_goods_no = g.GOODS_NO
+         LEFT JOIN goods g ON d.stock_no = g.GOODS_NO
          LEFT JOIN member m ON p.user_id = m.member_id
     ORDER BY p.payment_date DESC;
 
@@ -54,7 +54,7 @@ SELECT
     d.deli_date AS deliveryDate
 FROM payments p
           JOIN delivery d ON p.payments_no = d.payments_no
-ORDER BY p.payment_date DESC
+ORDER BY p.payment_date DESC;
 
 -- 2. 1번 결과에 goods 추가
 SELECT
@@ -67,8 +67,8 @@ SELECT
     d.deli_date AS deliveryDate
 FROM payments p
          JOIN delivery d ON p.payments_no = d.payments_no
-         JOIN goods g ON d.inven_goods_no = g.GOODS_NO
-ORDER BY p.payment_date DESC
+         JOIN goods g ON d.stock_no = g.GOODS_NO
+ORDER BY p.payment_date DESC;
 
 -- 3. 2번 결과에 member 추가
 SELECT
