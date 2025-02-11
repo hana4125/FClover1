@@ -24,4 +24,7 @@ public class StockServiceImpl implements StockService {
     public void decrease(int id, int quantity) {
            dao.decrease(quantity);
     }
+
 }
+
+

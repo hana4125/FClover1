@@ -2,7 +2,7 @@ package hello.fclover.mybatis.mapper;
 
 
 import hello.fclover.domain.Seller;
-import hello.fclover.domain.Settlement;
+import hello.fclover.dto.SellerCompanyDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,5 +29,9 @@ public interface SellerMapper {
 
     long getselectNo(String sellerId);
 
+    int countAllSeller();
 
+    void insertSellers(@Param("sellers") List<Seller> sellers);
+
+    List<SellerCompanyDTO> getSellerCompanyName();
 }

@@ -8,22 +8,18 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-import java.security.Principal;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +94,6 @@ public class SellerController {
 
         return "seller/sellerMain";
     }
-
 
 
     @GetMapping("/signup")
@@ -217,13 +212,13 @@ public class SellerController {
 
 
         // 전체 구매자 주문 목록 개수 가져오기
-        int totalcount = sellerService.getListCount(searchWord,sellerNo,searchField);
+        int totalcount = sellerService.getListCount(searchWord, sellerNo, searchField);
         // 현재 페이지에 해당하는 구매자 리스트 가져오기
-        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, limit,sellerNo,searchField);
+        List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, limit, sellerNo, searchField);
 
         PaginationResult result = new PaginationResult(page, limit, totalcount);
 
-        if(orderList.isEmpty()) {
+        if (orderList.isEmpty()) {
             mnv.addObject("message", "구매자 주문 정보가 없습니다.");
         }
 
@@ -243,4 +238,3 @@ public class SellerController {
         return mnv;
     }
 }
-

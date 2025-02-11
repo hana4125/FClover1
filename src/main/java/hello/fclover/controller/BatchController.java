@@ -19,6 +19,15 @@ public class BatchController {
 
 //    @Autowired
 //    private JobLauncher jobLauncher;
+//
+//        @Autowired
+//    private Job importSellerJob;
+
+//    @Autowired
+//    private Job importSellerJob;
+//
+    //    @Autowired
+//    private Job importMemberJob;
 
 //    @Autowired
 //    private Job importMemberJob;

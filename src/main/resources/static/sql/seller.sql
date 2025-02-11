@@ -13,7 +13,7 @@ CREATE TABLE seller
     admission_at    datetime     DEFAULT NULL,
     created_at      datetime     DEFAULT CURRENT_TIMESTAMP,
     updated_at      datetime     DEFAULT NULL,
-    FULLTEXT KEY ft_idx_seller (company_name) WITH PARSER ngram
+    permission      VARCHAR(50)  DEFAULT 'Pending'
 ) ENGINE = InnoDB;
 
 

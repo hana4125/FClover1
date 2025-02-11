@@ -7,8 +7,6 @@ import hello.fclover.dto.SearchResponseDTO;
 
 public interface SearchService {
 
-    int countByKeyword(String keyword);
-
     SearchResponseDTO searchByKeyword(String keyword, String sessionId, Member member);
 
     SearchResponseDTO searchDetail(SearchDetailParamDTO searchDetailParamDTO);

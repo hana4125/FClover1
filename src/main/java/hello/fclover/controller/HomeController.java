@@ -28,6 +28,13 @@ public class HomeController {
     private final MemberService memberService;
     private final SellerService sellerService;
     private final GoodsService goodsService;
+//    private final Job importSellerJob;
+
+//        @Autowired
+//    private JobLauncher jobLauncher;
+////
+//    @Autowired
+//    private Job importSellerJob;
 
     @ModelAttribute("member")
     public Member addMemberToModel(Principal principal) {
@@ -52,10 +59,6 @@ public class HomeController {
     @GetMapping("/")
     public String mainHome(Model model) {
 
-
-
-
-
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
 
@@ -79,11 +82,25 @@ public class HomeController {
             goods.setMainImage(mainImage);
         }
 
+
+
 //        System.out.println("여기 runBatch" );
 //        try {
 //            System.out.println("여기 runbatch try문 내부");
 //
 //            jobLauncher.run(importMemberJob, new JobParameters());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+
+
+//        System.out.println("여기 runBatch" );
+//        try {
+//            System.out.println("여기 runbatch try문 내부");
+//
+//            jobLauncher.run(importSellerJob, new JobParameters());
 //
 //        } catch (Exception e) {
 //            e.printStackTrace();
