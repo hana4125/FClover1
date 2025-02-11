@@ -2,409 +2,636 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
-  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/jquery-3.7.1.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
-  <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/jquery-3.7.1.js"></script>
-  <title>상품 검색 및 리스트</title>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.7.1.js"></script>
+    <title>상품 검색 및 리스트</title>
 
-  <style>
-    .search-section {
-      background-color: #f8f9fa;
-      padding: 20px;
-      border-radius: 5px;
-      margin-bottom: 30px;
-    }
+    <style>
+        .search-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
 
-    .resizer {
-      cursor: col-resize;
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 5px;
-      z-index: 1;
-      pointer-events: all;
-    }
+        .resizer {
+            cursor: col-resize;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            z-index: 1;
+            pointer-events: all;
+        }
 
-    table {
-      table-layout: auto;
-      width: max-content; /* 내용에 맞게 테이블 크기 설정 */
-      border-collapse: collapse;
-    }
+        table {
+            table-layout: auto;
+            width: max-content; /* 내용에 맞게 테이블 크기 설정 */
+            border-collapse: collapse;
+        }
 
-    th, td {
-      border: 1px solid #ccc;
-      text-align: center;
-      vertical-align: middle;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 10em; /* 기본 최대 길이: 10자 */
-    }
+       .content th, .content td {
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 10em; /* 기본 최대 길이: 10자 */
+        }
 
-    th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-      position: relative; /* resizer 위치를 위해 필요 */
-      min-width: 50px; /* 최소 너비 설정 */
-    }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            position: relative; /* resizer 위치를 위해 필요 */
+            min-width: 50px; /* 최소 너비 설정 */
+        }
 
-    /* 테이블을 감싸는 div에 스크롤바 추가 */
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto; /* 가로 스크롤 활성화 */
-      -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
-    }
-  </style>
-  <style>
-      button[type=submit] {
-          all: unset;
-          cursor: pointer;
-      }
+        /* 테이블을 감싸는 div에 스크롤바 추가 */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto; /* 가로 스크롤 활성화 */
+            -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
+        }
 
-      div a {
-          text-decoration: none;
-          color: black;
-          cursor: pointer;
-      }
+        .logout {
+            all: unset;
+            cursor: pointer;
+        }
 
-      div li a:hover {
-          text-decoration: underline;
-          cursor: pointer;
-      }
+        div a {
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+        }
 
-      #logo {
-          width: 300px;
-          height: 66px;
-          cursor: pointer;
-      }
-  </style>
-  <script>
-    $(function() {
-        $("#logo").click(function() {
-            location.href ="/seller/main";
+        div li a:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        #logo {
+            width: 300px;
+            height: 66px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("#logo").click(function () {
+                location.href = "/seller/main";
+            })
         })
-      $(".singleProduct").click(function(){
-        location.href = "addSingleProduct"
-      })
-      $(".productList").click(function(){
-        location.href="productDetail"
-      })
-
-    })
-  </script>
+    </script>
 </head>
 <body>
 <div class="bg-light mb-3">
-  <div class="container w-75">
-    <div class="top-menu d-flex justify-content-end">
-      <th:block th:if="${seller == null}">
-        <a class="pe-2" href="/member/login">로그인</a>
-        <a class="pe-2" href="/member/signup">회원가입</a>
-        <a class="pe-2" href="#">고객센터</a>
-        <a class="pe-2" href="/seller/login">판매자 로그인</a>
-        <a class="pe-2" href="/seller/signup">판매자 가입</a>
-      </th:block>
-      <th:block th:if="${seller != null}">
-        <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
-        <form th:action="@{/seller/logout}" method="post">
-          <button type="submit" class="pe-2">로그아웃</button>
-        </form>
-      </th:block>
+    <div class="container w-75">
+        <div class="top-menu d-flex justify-content-end">
+            <th:block th:if="${seller == null}">
+                <a class="pe-2" href="/member/login">로그인</a>
+                <a class="pe-2" href="/member/signup">회원가입</a>
+                <a class="pe-2" href="#">고객센터</a>
+                <a class="pe-2" href="/seller/login">판매자 로그인</a>
+                <a class="pe-2" href="/seller/signup">판매자 가입</a>
+            </th:block>
+            <th:block th:if="${seller != null}">
+                <a href="/seller/myPage" class="pe-2"><span th:text="${seller.name}"></span>(판매자)님</a>
+                <form th:action="@{/seller/logout}" method="post">
+                    <button type="submit" class="pe-2 logout">로그아웃</button>
+                </form>
+            </th:block>
+        </div>
     </div>
-  </div>
 </div>
 <div class="mt-4">
-  <div class="container w-75">
-    <img src="/images/user/fClover.png" id="logo" width="300px" height="66px" alt="메인로고" class="mb-3">
-  </div>
-  <hr>
-  <div class="container w-75">
-    <div class="d-flex mt-5">
-      <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
-        <div class="bg-primary rounded-3 p-4">
-          <table class="ms-3">
-            <tr>
-              <td><img class="profile" src="/images/user/profile.png" alt="프로필"></td>
-            </tr>
-            <tr>
-              <td>
-                <th:block th:if="${seller != null}">
-                  <span class="fs-4 text-white fw-bold" th:text="${seller.name}"></span><span class="text-white fw-bold">님</span>
-                </th:block>
-                <th:block th:if="${seller == null}">
-                  <span class="ms-2 fs-4 text-white fw-bold">Seller님</span>
-                </th:block>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="container mt-5">
-          <!-- 쇼핑내역 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">결제/정산내역</h5>
-            <ul class="list-unstyled">
-              <li><a href="/seller/sellerDaySettlement">내 정산내역</a></li>
-            </ul>
-          </div>
-
-          <!-- 라이브러리 -->
-          <div class="mb-4">
-            <h5 class="fw-bold">구매고객 리스트</h5>
-            <ul class="list-unstyled">
-              <li><a href="#">구매자 리스트 조회</a></li>
-            </ul>
-          </div>
-
-          <!--회원정보-->
-          <div class="mb-4">
-            <h5 class="fw-bold">상품등록</h5>
-            <ul class="list-unstyled">
-              <li><a href="#" class="productList">상품 리스트</a></li>
-              <li><a href="#" class="autoProduct">자동등록</a></li>
-              <li><a href="#" class="singleProduct">수동등록</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div style="width: 80%; height: 100vh;" >
-        <h5 class="ms-5 fw-bold">상품 검색 및 리스트</h5>
-        <hr class="ms-5 mb-3">
-        <div class="container mt-5 ms-5">
-
-          <!-- 검색 영역 -->
-          <div class="search-section">
-            <form action="/goods/SearchGoodsProcess" method="POST">
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-              <div class="row g-3">
-                <!-- 카테고리 -->
-                <div class="col-md-3">
-                  <label class="form-label">카테고리</label>
-                  <select class="form-select" id="cateNo" name="cateNo">
-                    <option value="">카테고리 선택</option>
-                    <th:block th:each="category : ${categoryList}">
-                      <!-- 카테고리 이름 출력 -->
-                      <option th:value="${category.cateNo}">[[${category.cateName}]]</option>
-                    </th:block>
-                  </select>
+    <div class="container w-75">
+        <img src="/images/user/fClover.png" id="logo" width="300px" height="66px" alt="메인로고" class="mb-3">
+    </div>
+    <hr>
+    <div class="container w-75">
+        <div class="d-flex mt-5">
+            <div class="d-flex flex-column ms-4" style="width: 20%; height: 100vh;">
+                <div class="bg-primary rounded-3 p-4">
+                    <table class="ms-3">
+                        <tr>
+                            <td><img class="profile" src="/images/user/profile.png" alt="프로필"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <th:block th:if="${seller != null}">
+                                    <span class="fs-4 text-white fw-bold" th:text="${seller.name}"></span><span
+                                        class="text-white fw-bold">님</span>
+                                </th:block>
+                                <th:block th:if="${seller == null}">
+                                    <span class="ms-2 fs-4 text-white fw-bold">Seller님</span>
+                                </th:block>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
+                <div class="container mt-5">
+                    <!-- 쇼핑내역 -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold">결제/정산내역</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/seller/sellerDaySettlement">내 정산내역</a></li>
+                        </ul>
+                    </div>
 
-                <!-- 상품명 -->
-                <div class="col-md-3">
-                  <label for="productName" class="form-label">상품명</label>
-                  <input type="text" class="form-control" id="productName" name="productName"
-                         placeholder="상품명을 입력하세요">
+                    <!-- 라이브러리 -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold">구매고객 리스트</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">구매자 리스트 조회</a></li>
+                        </ul>
+                    </div>
+
+                    <!--회원정보-->
+                    <div class="mb-4">
+                        <h5 class="fw-bold">상품등록</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/seller/productDetail" class="productList">상품 리스트</a></li>
+                            <li><a href="/seller/sellerAddMassProduct" class="massProduct">자동등록</a></li>
+                            <li><a href="/seller/addSingleProduct" class="singleProduct">수동등록</a></li>
+                        </ul>
+                    </div>
                 </div>
+            </div>
+            <div class="content" style="width: 80%; height: 100vh;">
+                <h5 class="ms-5 fw-bold">상품 검색 및 리스트</h5>
+                <hr class="ms-5 mb-3">
+                <div class="container mt-5 ms-5">
 
-                <!-- 상품 저자 -->
-                <div class="col-md-3">
-                  <label for="author" class="form-label">상품 저자</label>
-                  <input type="text" class="form-control" id="author" name="author" placeholder="저자명을 입력하세요">
-                </div>
+                    <!-- 검색 영역 -->
+                    <div class="search-section">
+                        <form action="/goods/SearchGoodsProcess" method="POST">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <div class="row g-3">
+                                <!-- 카테고리 -->
+                                <div class="col-md-3">
+                                    <label class="form-label">카테고리</label>
+                                    <select class="form-select" id="cateNo" name="cateNo">
+                                        <option value="">카테고리 선택</option>
+                                        <th:block th:each="category : ${categoryList}">
+                                            <!-- 카테고리 이름 출력 -->
+                                            <option th:value="${category.cateNo}">[[${category.cateName}]]</option>
+                                        </th:block>
+                                    </select>
+                                </div>
 
-                <!-- 출판사 -->
-                <div class="col-md-3">
-                  <label for="publisher" class="form-label">출판사</label>
-                  <input type="text" class="form-control" id="publisher" name="publisher"
-                         th:value="${seller.companyName}" readonly style="background-color: lightgray">
-                  <input type="hidden" class="sellerNo" id="sellerNo" th:value="${seller.sellerNo}">
-                </div>
-              </div>
+                                <!-- 상품명 -->
+                                <div class="col-md-3">
+                                    <label for="productName" class="form-label">상품명</label>
+                                    <input type="text" class="form-control" id="productName" name="productName"
+                                           placeholder="상품명을 입력하세요">
+                                </div>
 
-              <div class="row g-3 mt-2">
-                <!-- 등록일 범위 (시작일) -->
-                <div class="col-md-3">
-                  <label for="startDate" class="form-label">등록일 (시작)</label>
-                  <input type="date" class="form-control" id="startDate" name="startDate">
-                </div>
+                                <!-- 상품 저자 -->
+                                <div class="col-md-3">
+                                    <label for="author" class="form-label">상품 저자</label>
+                                    <input type="text" class="form-control" id="author" name="author"
+                                           placeholder="저자명을 입력하세요">
+                                </div>
 
-                <!-- 등록일 범위 (종료일) -->
-                <div class="col-md-3">
-                  <label for="endDate" class="form-label">등록일 (종료)</label>
-                  <input type="date" class="form-control" id="endDate" name="endDate">
-                </div>
+                                <!-- 출판사 -->
+                                <div class="col-md-3">
+                                    <label for="publisher" class="form-label">출판사</label>
+                                    <input type="text" class="form-control" id="publisher" name="publisher"
+                                           th:value="${seller.companyName}" readonly
+                                           style="background-color: lightgray">
+                                    <input type="hidden" class="sellerNo" id="sellerNo" th:value="${seller.sellerNo}">
+                                </div>
+                            </div>
 
-                <!-- 검색 버튼 -->
-                <div class="col-md-6 d-flex align-items-end justify-content-end">
-                  <button type="submit" class="btn btn-primary me-2 search">
+                            <div class="row g-3 mt-2">
+                                <!-- 등록일 범위 (시작일) -->
+                                <div class="col-md-3">
+                                    <label for="startDate" class="form-label">등록일 (시작)</label>
+                                    <input type="date" class="form-control" id="startDate" name="startDate">
+                                </div>
+
+                                <!-- 등록일 범위 (종료일) -->
+                                <div class="col-md-3">
+                                    <label for="endDate" class="form-label">등록일 (종료)</label>
+                                    <input type="date" class="form-control" id="endDate" name="endDate">
+                                </div>
+
+                                <!-- 검색 버튼 -->
+                                <div class="col-md-6 d-flex align-items-end justify-content-end">
+                                    <button type="submit" class="btn btn-primary me-2 search">
                         <span><img src="../images/seller/search.png" alt="search"
                                    style="width: 16px; height: 16px;"></span>
-                    검색
-                  </button>
-                  <button type="reset" class="btn btn-secondary"><span>
+                                        검색
+                                    </button>
+                                    <button type="reset" class="btn btn-secondary"><span>
                         <img src="../images/seller/reset.png" alt="reset" style="width: 16px; height: 16px;"></span>
-                    초기화
-                  </button>
+                                        초기화
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 검색 결과 리스트 예시 -->
+                    <div class="table-wrapper">
+                        <h4 style="display: inline-block">검색 결과</h4>
+                        <span class="countBox" style="display: none"> (상품 갯수=<span class="searchCount"></span>)</span>
+                        <table class="table table-bordered resizable-table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>수정</th>
+                                <th>삭제</th>
+                                <th>카테고리</th>
+                                <th>상품명</th>
+                                <th>상품 설명</th>
+                                <th>상품 가격</th>
+                                <th>저자</th>
+                                <th>저자 설명</th>
+                                <th>상품 발행일</th>
+                                <th>상품 페이지수</th>
+                                <th>상품 크기</th>
+                                <th>등록 일자</th>
+                                <th>수정 일자</th>
+                            </tr>
+                            </thead>
+                            <!--           단순 예시-->
+                            <tbody class="searchResult">
+                            <tr>
+                                <td colspan="15" class="text-center default">검색 결과가 없습니다.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
-            </form>
-          </div>
 
-          <!-- 검색 결과 리스트 예시 -->
-          <div class="table-wrapper">
-            <h4 style="display: inline-block">검색 결과</h4>
-            <span class="countBox" style="display: none"> (상품 갯수=<span class="searchCount"></span>)</span>
-            <table class="table table-bordered resizable-table">
-              <thead class="table-light">
-              <tr>
-                <th>수정</th>
-                <th>삭제</th>
-                <th>카테고리</th>
-                <th>상품명</th>
-                <th>상품 설명</th>
-                <th>상품 가격</th>
-                <th>저자</th>
-                <th>저자 설명</th>
-                <th>상품 발행일</th>
-                <th>상품 페이지수</th>
-                <th>상품 크기</th>
-                <th>등록 일자</th>
-                <th>수정 일자</th>
-              </tr>
-              </thead>
-              <!--           단순 예시-->
-              <tbody class="searchResult">
-              <tr>
-                <td colspan="15" class="text-center default">검색 결과가 없습니다.</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+
+                <!-- 수정용 모달 (수정 폼) -->
+                <div class="modal fade" id="editGoodsModal" tabindex="-1" aria-labelledby="editGoodsModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <form id="editGoodsForm" enctype="multipart/form-data">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editGoodsModalLabel">상품 수정</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="닫기"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- 여기부터 기존 상품등록 폼의 내용 시작 -->
+                                    <div class="row">
+                                        <!-- 상품 이름 -->
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="editGoodsName" class="form-label">상품 이름</label>
+                                                <input type="text" class="form-control" id="editGoodsName"
+                                                       name="goodsName" required>
+                                            </div>
+                                        </div>
+                                        <!-- 출판사 -->
+                                        <div class="col-md-3 offset-md-2">
+                                            <div class="mb-3">
+                                                <label for="editCompanyName" class="form-label">출판사</label>
+                                                <input type="text" class="form-control" id="editCompanyName"
+                                                       name="companyName"
+                                                       style="background-color:lightgray" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- 상품 가격, 상품 수량, 책 카테고리 -->
+                                        <div class="col-md-2">
+                                            <div class="mb-3">
+                                                <label for="editGoodsPrice" class="form-label">상품 가격 (원)</label>
+                                                <input type="text" class="form-control" id="editGoodsPrice"
+                                                       name="goodsPrice" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 offset-md-1">
+                                            <div class="mb-3">
+                                                <label for="editGoodsCount" class="form-label">상품 수량 (권)</label>
+                                                <input type="number" class="form-control" id="editGoodsCount"
+                                                       name="goodsCount" placeholder="예: 10" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 offset-md-1">
+                                            <div class="mb-3">
+                                                <label for="editCateNo" class="form-label">책 카테고리</label>
+                                                <select class="form-select" id="editCateNo" name="cateNo" required>
+                                                    <option value="">카테고리 선택</option>
+                                                    <!-- Thymeleaf로 카테고리 목록을 넣을 수도 있고, Ajax로 동적으로 채울 수도 있음 -->
+                                                    <th:block th:each="category : ${categoryList}">
+                                                        <option th:value="${category.cateNo}">[[${category.cateName}]]
+                                                        </option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- 상품 상세 설명 -->
+                                        <div class="col-md-9">
+                                            <div class="mb-3">
+                                                <label for="editGoodsContent" class="form-label">상품 상세 설명</label>
+                                                <textarea class="form-control" id="editGoodsContent" name="goodsContent"
+                                                          rows="4" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- 작가 이름 -->
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="editGoodsWriter" class="form-label">작가 이름</label>
+                                                <input type="text" class="form-control" id="editGoodsWriter"
+                                                       name="goodsWriter" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- 작가 설명 -->
+                                        <div class="col-md-9">
+                                            <div class="mb-3">
+                                                <label for="editWriterContent" class="form-label">작가 설명</label>
+                                                <textarea class="form-control" id="editWriterContent"
+                                                          name="writerContent" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- 발행일자 -->
+                                        <div class="col-md-2">
+                                            <div class="mb-3">
+                                                <label for="editGoodsCreateAt" class="form-label">발행일자</label>
+                                                <input type="date" class="form-control" id="editGoodsCreateAt"
+                                                       name="goodsCreateAt" max="9999-12-31" required>
+                                            </div>
+                                        </div>
+                                        <!-- 쪽수 -->
+                                        <div class="col-md-2 offset-md-1">
+                                            <div class="mb-3">
+                                                <label for="editGoodsPageCount" class="form-label">쪽수</label>
+                                                <input type="number" class="form-control" id="editGoodsPageCount"
+                                                       name="goodsPageCount" placeholder="예: 365" required>
+                                            </div>
+                                        </div>
+                                        <!-- 크기 -->
+                                        <div class="col-md-2 offset-md-1">
+                                            <div class="mb-3">
+                                                <label for="editGoodsBookSize" class="form-label">크기 (mm)</label>
+                                                <input type="text" class="form-control" id="editGoodsBookSize"
+                                                       name="goodsBookSize" placeholder="예: 14*21" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 상품 이미지는 생략하거나 별도 처리가 필요하다면 추가 -->
+                                    <!-- 기존 폼의 나머지 요소들을 필요에 따라 포함 -->
+                                    <input type="hidden" id="editGoodsNo" name="goodsNo"> <!-- 수정할 상품 번호 -->
+                                    <!-- 여기까지 기존 폼 내용 끝 -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">수정 저장</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script>
+                    let token = $("meta[name='_csrf']").attr("content");
+                    let header = $("meta[name='_csrf_header']").attr("content");
+
+                    document.querySelectorAll('th').forEach((th) => {
+                        const resizer = document.createElement('span');
+                        resizer.classList.add('resizer');
+                        th.style.position = 'relative'; // 부모 요소 상대 위치
+                        th.appendChild(resizer);
+
+                        let startX, startWidth;
+
+                        resizer.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            startX = e.clientX;
+                            startWidth = th.offsetWidth;
+
+                            const onMouseMove = (moveEvent) => {
+                                const newWidth = startWidth + (moveEvent.clientX - startX);
+                                if (newWidth > 50) { // 최소 너비 제한
+                                    th.style.width = `${newWidth}px`;
+
+                                    // 해당 열의 모든 셀 크기 동기화
+                                    const table = th.closest('table');
+                                    const colIndex = Array.from(th.parentNode.children).indexOf(th);
+
+                                    table.querySelectorAll('tbody tr').forEach((row) => {
+                                        const cell = row.children[colIndex];
+                                        if (cell) {
+                                            cell.style.width = `${newWidth}px`;
+                                            cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
+                                            cell.style.overflow = 'hidden';
+                                            cell.style.textOverflow = 'ellipsis';
+                                            cell.style.whiteSpace = 'nowrap';
+                                        }
+                                    });
+
+                                    // 테이블의 전체 폭 강제 갱신
+                                    const tableWrapper = table.closest('.table-wrapper');
+                                    tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
+                                }
+                            };
+
+                            const onMouseUp = () => {
+                                document.removeEventListener('mousemove', onMouseMove);
+                                document.removeEventListener('mouseup', onMouseUp);
+                            };
+
+                            document.addEventListener('mousemove', onMouseMove);
+                            document.addEventListener('mouseup', onMouseUp);
+                        });
+                    });
+                    $('.search').click(function (event) {
+                        event.preventDefault(); // 폼 제출 기본 동작 방지
+
+                        // 검색 조건 수집
+                        let searchData = {
+                            goodsName: $('#productName').val(),
+                            cateNo: $('#cateNo').val(),
+                            goodsWriter: $('#author').val(),
+                            createStartDate: $('#startDate').val(),
+                            createEndDate: $('#endDate').val(),
+                            sellerNo: $('#sellerNo').val()
+                        };
+                        let isEmpty = true;
+                        for (let key in searchData) {
+                            if (searchData[key] !== '') {
+                                isEmpty = false;
+                                break;
+                            }
+                        }
+                        console.log(isEmpty);
+                        if (isEmpty) {
+                            alert('검색어를 하나 이상 입력해주세요.');
+                            return; // 검색 요청 차단
+                        }
+
+                        // AJAX 요청
+                        $.ajax({
+                            url: '/seller/SearchGoodsProcess', // 백엔드 검색 엔드포인트
+                            type: 'POST',
+                            data: searchData,
+                            dataType: 'json',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader(header, token);
+                            },
+                            success: function (response) {
+                                console.log(response)
+
+                                var goodsCount = response.length;
+                                var html = ""
+                                if (response.length == 0) {
+                                    html = "<tr><td colSpan='15' class='text-center default'>검색 결과가 없습니다.</td> </tr>"
+                                } else {
+                                    $.each(response, function (index, goods) {
+
+                                        html += "<tr class='searchGoodsList_" + goods.goodsNo + "'>"
+                                        html += "<td><button class='btn btn-warning goodUpdate' data-id='" + goods.goodsNo + "'>수정 </button></td>"
+                                        html += "<td><button class='btn btn-danger goodDelete' data-id='" + goods.goodsNo + "'>삭제 </button> </td>"
+                                        html += "<td>" + goods.cateName + "</td>"
+                                        html += "<td>" + goods.goodsName + "</td>"
+                                        html += "<td>" + goods.goodsContent + "</td>"
+                                        html += "<td>" + goods.goodsPrice + "</td>"
+                                        html += "<td>" + goods.goodsWriter + "</td>"
+                                        html += "<td>" + goods.writerContent + "</td>"
+                                        html += "<td>" + goods.goodsCreateAt + "</td>"
+                                        html += "<td>" + goods.goodsPageCount + "</td>"
+                                        html += "<td>" + goods.goodsBookSize + "</td>"
+                                        html += "<td>" + goods.goodsDate + "</td>"
+                                        if (goods.updateAt == null || goods.updateAt == "") {
+                                            html += "<td></td>"
+                                        } else {
+                                            html += "<td>" + goods.updateAt + "</td>"
+                                        }
+                                        html += "</tr>"
+                                    })
+                                    console.log(html)
+                                }
+                                $(".searchResult").html(html);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('검색 중 오류 발생:', error);
+                                $('#searchResults').html('<p>검색 중 오류가 발생했습니다.</p>');
+                            }
+                        });
+                    })
+                    $(".searchResult").on('click', '.goodDelete', function () {
+                        var deleteGoodsNo = $(this).data('id');
+
+                        if (confirm("상품을 삭제하시겠습니까?")) {
+                            $.ajax({
+                                url: '/goods/deleteGoodsProcess',
+                                type: 'post',
+
+                                data: {deleteGoodsNo: deleteGoodsNo},
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader(header, token);
+                                },
+                                success: function (response) {
+                                    alert("삭제 되었습니다.")
+                                    $(".searchGoodsList_" + deleteGoodsNo).remove();
+                                },
+                                error: function (xhr, error) {
+                                    // console.error("에러 내용", xhr.responseText);
+                                    // console.error("Error:", error);
+                                    alert("삭제 실패하였습니다.")
+                                }
+                            })
+                        }
+                    })
+
+                    $(".searchResult").on("click", ".goodUpdate", function () {
+                        var goodsNo = $(this).data("id");
+
+                        // Ajax 요청으로 상품 상세 정보 조회 (GET 방식 예시)
+                        $.ajax({
+                            url: '/goods/getGoodsUpdateDetail',  // 백엔드에서 상품 정보를 반환하는 엔드포인트
+                            type: 'GET',
+                            data: {goodsNo: goodsNo},
+                            dataType: 'json',
+                            success: function (productData) {
+                                // 반환받은 productData를 모달 폼에 채웁니다.
+                                $("#editGoodsNo").val(productData.goodsNo);
+                                $("#editGoodsName").val(productData.goodsName);
+                                $("#editGoodsPrice").val(productData.goodsPrice);
+                                $("#editGoodsCount").val(productData.goodsCount);
+                                $("#editCateNo").val(productData.cateNo);
+                                $("#editGoodsContent").val(productData.goodsContent);
+                                $("#editCompanyName").val(productData.companyName);
+                                $("#editGoodsWriter").val(productData.goodsWriter);
+                                $("#editWriterContent").val(productData.writerContent);
+                                // 상품 등록일(날짜)의 경우 데이터 형식이 맞아야 함 (예: yyyy-MM-dd)
+                                $("#editGoodsCreateAt").val(productData.goodsCreateAt);
+                                $("#editGoodsPageCount").val(productData.goodsPageCount);
+                                $("#editGoodsBookSize").val(productData.goodsBookSize);
+                                // 필요에 따라 추가 필드들도 채워줍니다.
+
+                                // 모달 열기 (Bootstrap 5 모달)
+                                var editModal = new bootstrap.Modal(document.getElementById('editGoodsModal'));
+                                editModal.show();
+                            },
+                            error: function (xhr, status, error) {
+                                alert("상품 정보를 불러오는 중 오류가 발생했습니다: " + error);
+                            }
+                        });
+                    });
+
+                    $("#editGoodsForm").submit(function (event) {
+                        event.preventDefault();
+                        alert("개발 중인 기능입니다.")
+                        // 폼 데이터를 FormData로 준비 (필요시 파일 업로드 등 포함)
+                        // var updateFormData = new FormData(this);
+
+                        // CSRF 토큰 처리 (이미 페이지 상단에 메타 태그가 있다면)
+                        //
+                        // $.ajax({
+                        //   url: '/goods/updateGoodsProcess',  // 백엔드 상품 업데이트 엔드포인트
+                        //   type: 'POST',
+                        //   headers: {
+                        //     [csrfHeader]: csrfToken
+                        //   },
+                        //   data: updateFormData,
+                        //   processData: false,
+                        //   contentType: false,
+                        //   success: function(response) {
+                        //     alert("상품 수정이 성공적으로 완료되었습니다.");
+                        //     // 모달 닫기
+                        //     var modalEl = document.getElementById('editGoodsModal');
+                        //     var modal = bootstrap.Modal.getInstance(modalEl);
+                        //     modal.hide();
+                        //
+                        //     // 목록을 갱신하거나 수정된 데이터를 화면에 반영합니다.
+                        //     // 예: location.reload(); 또는 특정 행 업데이트
+                        //   },
+                        //   error: function(xhr, status, error) {
+                        //     alert("상품 수정 중 오류가 발생했습니다: " + error);
+                        //   }
+                        // });
+                    });
+                </script>
+            </div>
         </div>
-        <script>
-          document.querySelectorAll('th').forEach((th) => {
-            const resizer = document.createElement('span');
-            resizer.classList.add('resizer');
-            th.style.position = 'relative'; // 부모 요소 상대 위치
-            th.appendChild(resizer);
-
-            let startX, startWidth;
-
-            resizer.addEventListener('mousedown', (e) => {
-              e.preventDefault();
-              startX = e.clientX;
-              startWidth = th.offsetWidth;
-
-              const onMouseMove = (moveEvent) => {
-                const newWidth = startWidth + (moveEvent.clientX - startX);
-                if (newWidth > 50) { // 최소 너비 제한
-                  th.style.width = `${newWidth}px`;
-
-                  // 해당 열의 모든 셀 크기 동기화
-                  const table = th.closest('table');
-                  const colIndex = Array.from(th.parentNode.children).indexOf(th);
-
-                  table.querySelectorAll('tbody tr').forEach((row) => {
-                    const cell = row.children[colIndex];
-                    if (cell) {
-                      cell.style.width = `${newWidth}px`;
-                      cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
-                      cell.style.overflow = 'hidden';
-                      cell.style.textOverflow = 'ellipsis';
-                      cell.style.whiteSpace = 'nowrap';
-                    }
-                  });
-
-                  // 테이블의 전체 폭 강제 갱신
-                  const tableWrapper = table.closest('.table-wrapper');
-                  tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
-                }
-              };
-
-              const onMouseUp = () => {
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-              };
-
-              document.addEventListener('mousemove', onMouseMove);
-              document.addEventListener('mouseup', onMouseUp);
-            });
-          });
-          $('.search').click(function (event) {
-            event.preventDefault(); // 폼 제출 기본 동작 방지
-
-            // 검색 조건 수집
-            let searchData = {
-              goodsName: $('#productName').val(),
-              cateNo: $('#cateNo').val(),
-              goodsWriter: $('#author').val(),
-              createStartDate: $('#startDate').val(),
-              createEndDate: $('#endDate').val(),
-              sellerNo: $('#sellerNo').val()
-            };
-            let isEmpty = true;
-            for (let key in searchData) {
-              if (searchData[key] !== '') {
-                isEmpty = false;
-                break;
-              }
-            }
-            console.log(isEmpty);
-            if (isEmpty) {
-              alert('검색어를 하나 이상 입력해주세요.');
-              return; // 검색 요청 차단
-            }
-
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-            // AJAX 요청
-            $.ajax({
-              url: '/seller/SearchGoodsProcess', // 백엔드 검색 엔드포인트
-              type: 'POST',
-              headers: {[csrfHeader]: csrfToken},
-              data: searchData,
-              dataType: 'json',
-              success: function (response) {
-                console.log(response)
-
-                var goodsCount = response.length;
-                var html =""
-                if(response.length == 0) {
-                  html= "<tr><td colSpan='15' className='text-center default'>검색 결과가 없습니다.</td> </tr>"
-                }else {
-                  $.each(response, function(index, goods){
-
-                    html +="<tr>"
-                    html +="<td><button class='btn btn-warning' data-id='" + goods.goodsNo +"'>수정 </button></td>"
-                    html +="<td><button class='btn btn-danger' data-id='" + goods.goodsNo + "'>삭제 </button> </td>"
-                    html += "<td>" + goods.cateName + "</td>"
-                    html += "<td>" + goods.goodsName + "</td>"
-                    html += "<td>" + goods.goodsContent + "</td>"
-                    html += "<td>" + goods.goodsPrice + "</td>"
-                    html += "<td>" + goods.goodsWriter + "</td>"
-                    html += "<td>" + goods.writerContent + "</td>"
-                    html += "<td>" + goods.goodsCreateAt + "</td>"
-                    html += "<td>" + goods.goodsPageCount + "</td>"
-                    html += "<td>" + goods.goodsBookSize + "</td>"
-                    html += "<td>" + goods.goodsDate + "</td>"
-                    if(goods.updateAt == null || goods.updateAt == ""){
-                      html += "<td></td>"
-                    }else{
-                      html += "<td>" + goods.updateAt + "</td>"
-                    }
-                    html += "</tr>"
-                  })
-                  console.log(html)
-                }
-                $(".searchResult").html(html);
-              },
-              error: function (xhr, status, error) {
-                console.error('검색 중 오류 발생:', error);
-                $('#searchResults').html('<p>검색 중 오류가 발생했습니다.</p>');
-              }
-            });
-          })
-        </script>
-      </div>
     </div>
-  </div>
 </div>
 </body>
 </html>

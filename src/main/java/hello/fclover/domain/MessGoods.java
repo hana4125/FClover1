@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessGoods {
+    private Long goodsNo;              // 상품 번호
     private int cateNo;                // 카테고리 번호
     private String goodsName;          // 상품 명
     private String goodsContent;       // 상품 설명
