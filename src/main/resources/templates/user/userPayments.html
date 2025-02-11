@@ -8,6 +8,7 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/user/myPageCoupon.css">
   <script src="/js/jquery-3.7.1.js"></script>
   <!-- 포트원 결제 -->
   <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
@@ -56,16 +57,25 @@
           <br>
           <br>
           <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
-        <div class="mt-2">배송지 정보 : </div>
-        <div class="mt-2">배송 요청사항 : </div>
-        <div  class="mt-2">공동현관 출입방법 : </div>
-          <div  class="mt-2">* 기본배송정보로 설정된 내용이 배송정보로 자동입력됩니다.</div>
+              <div th:if="${defaultAddress == null}" class="mt-2">
+                  <b>기본배송지 정보를 설정해주세요.</b>
+              </div>
+              <div th:unless="${defaultAddress == null}">
+              <div class="mt-2"><b>배송지 정보</b></div>
+              <br>
+              <div class="mt-2">배송지명 : <span th:text="${defaultAddress.addressName}"></span> </div>
+              <div class="mt-2">받는 분 : <span th:text="${defaultAddress.recipientName}"></span> </div>
+              <div  class="mt-2">휴대전화 : <span th:text="${defaultAddress.phoneNumber}"></span></div>
+              <div  class="mt-2">주소 : <span th:text="${defaultAddress.address}"></span></div>
+                  <br>
+                  <div  class="mt-2">* 기본배송정보로 설정된 내용이 배송정보로 자동입력됩니다.</div>
+              </div>
           </div>
           <br>
           <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
-        <div  class="mt-2">총 주문상품 :
+        <div  class="mt-2"><b>총 주문상품 :
            <span class="quantity" th:text="${quantity}"></span>
-            개</div>
+            개</b></div>
               <br>
 <!--        <div  class="mt-2">-->
 <!--            <img src="	https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/9791188331796.jpg" alt="책이미지">-->
@@ -76,8 +86,26 @@
 <!--        </div>-->
           <div class="order-container" style="display: flex; align-items: center;">
               <!-- 책 이미지 (왼쪽) -->
-              <img src="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/9791188331796.jpg" alt="책이미지" style="width: 150px; height: auto; margin-right: 20px;">
-              <img th:src="${mainImage != null ? mainImage.goodsUrl + '/' + mainImage.goodsImageName : '/images/user/book/item1.png'}" width="130px" height="180px" alt="상품이미지"/>
+<!--              <img src="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/9791188331796.jpg" alt="책이미지" style="width: 150px; height: auto; margin-right: 20px;">-->
+
+              <th:block th:if="${imageList.size == 0 }">
+                  <li class="swiper-slide not_goods_image" style="width: 380px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
+                      <img src="../../images/user/no_image_icon.png" alt="notGoodsImage"  class="notGoodsImage">
+                  </li>
+              </th:block>
+              <th:block th:if="${imageList.size > 0 }">
+                  <th:block th:each="image : ${imageList}">
+<!--                      <li class="prod_thumb_item swiper-slide swiper-slide-visible swiper-slide-active"-->
+<!--                          style="width: 380px; opacity: 1; transform: translate3d(0px, 0px, 0px);">-->
+
+                          <div class="blur_img_wrap portrait">
+                              <!-- 이미지 리스트를 반복하여 출력 -->
+                              <img th:src="${image}" alt="Goods Image"  class="goodsImage" width="200" height="300">
+                          </div>
+<!--                      </li>-->
+                  </th:block>
+              </th:block>
+<!--              <img th:src="${mainImage != null ? mainImage.goodsUrl + '/' + mainImage.goodsImageName : '/images/user/book/item1.png'}" width="130px" height="180px" alt="상품이미지"/>-->
               <!-- 텍스트 내용 (오른쪽) -->
               <div>
                   <div class="mt-2">
@@ -94,8 +122,35 @@
           </div>
           <br>
           <div class="border rounded-3" style="border-width: 2px 2px 2px 2px !important; padding: 20px;">
-        <div  class="mt-2">할인쿠폰 : </div>
-        <div  class="mt-2">사용가능한 쿠폰이 없습니다.</div>
+<!--        <div  class="mt-2">할인쿠폰 : </div>-->
+<!--        <div  class="mt-2">사용가능한 쿠폰이 없습니다.</div>-->
+              <div class="mt-2">
+                 <b> <h3>할인쿠폰 ( 보유한 쿠폰이 자동적용됩니다 )</h3></b>
+                  <br>
+              </div>
+
+              <div class="mt-2">
+                  <div th:if="${#lists.isEmpty(coupons)}">사용가능한 쿠폰이 없습니다.</div>
+                  <div th:if="${not #lists.isEmpty(coupons)}" th:each="coupon : ${coupons}">
+                      <li class="coupon_item">
+                          <div class="coupon_inner">
+                                <span class="left_box">
+                                <span class="coupon_logo">
+                                <img src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/img_coupon_logo_kyobo@2x.png" alt="KYOBO 교보문고">
+                                </span>
+                                <span class="coupon_val">1,000<span class="unit">원</span></span>
+                                </span>
+                              <span class="right_box"></span>
+                          </div>
+                      </li>
+                      <br><br>
+                          <span>쿠폰명 : <span th:text="${coupon.couponName}">쿠폰 이름</span></span><br>
+                          <span>쿠폰 금액 : <span th:text="${coupon.couponAmount}">쿠폰 금액</span>원</span><br>
+                          <span>쿠폰 만료일 : <span th:text="${coupon.couponExpire.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy년 MM월 dd일 HH시 mm분 ss초'))}">만료일</span></span><br>
+
+
+                  </div>
+              </div>
       </div>
       </div>
 
@@ -105,21 +160,26 @@
         <div class="d-flex justify-content-between">
 <!--          <p>상품명: <span th:text="${goods.goodsName}"></span></p>-->
           <p>상품 금액</p>
-<!--          <span th:text="${goods.goodsPrice}"></span>원-->
+          <span><span th:text="${goods.goodsPrice}"></span>원</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>배송비</p>
           <span>3000원</span>
         </div>
+          <div th:if="${not #lists.isEmpty(coupons)}" th:each="coupon : ${coupons}">
         <div class="d-flex justify-content-between">
-          <p>쿠폰할인</p>
-          <span>0원</span>
+
+                <p>쿠폰할인</p>
+                <span> -<span th:text="${coupon.couponAmount}">0원</span>원</span>
+            </div>
         </div>
         <hr>
-        <div class="d-flex justify-content-between">
+          <div th:if="${not #lists.isEmpty(coupons)}" th:each="coupon : ${coupons}">
+            <div class="d-flex justify-content-between">
           <p>최종 결제 금액</p>
-          <span><span class="totalPrice" th:text="${goodsPrice}+3000"></span> 원</span>
+          <span><span class="totalPrice" th:text="${goodsPrice}+3000-${coupon.couponAmount}"></span> 원</span>
         </div>
+          </div>
         <button class="btn btn-primary form-control mt-3" id="payment-button">결제하기</button>
         <script type="text/javascript" th:src="@{/js/payment.js}"></script>
       </div>
