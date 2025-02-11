@@ -7,9 +7,9 @@
   <insert id="goodsInsertText">
     insert into goods
     (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, goods_create_at,
-     goods_date, goods_pageCount, goods_bookSize, writer_content, permission)
+     goods_date, goods_pageCount, goods_bookSize, company_name, writer_content, permission)
     values (#{sellerNo}, #{cateNo}, #{goodsName}, #{goodsContent}, #{goodsPrice}, #{goodsWriter}, #{goodsCreateAt},
-            current_date, #{goodsPageCount}, #{goodsBookSize}, #{writerContent}, '승인대기중')
+            current_date, #{goodsPageCount}, #{goodsBookSize}, #{companyName}, #{writerContent}, '승인대기중')
   </insert>
 
   <select id="goodsNoselect">
@@ -74,7 +74,7 @@
   </select>
 
 
-  <!-- 찜 상태를 포함한 해당 카테고리 상품 조회 -->
+  <!-- 해당 카테고리 상품 조회 -->
   <select id="findCategoryGoodsWishStatus" resultType="hello.fclover.domain.Goods">
     SELECT
     a.goods_no AS goodsNo,
@@ -82,7 +82,6 @@
     a.goods_name AS goodsName,
     a.goods_price AS goodsPrice,
     a.goods_writer AS goodsWriter
-
     FROM goods a
     JOIN stock s ON a.goods_no = s.goods_no
     WHERE
@@ -136,37 +135,30 @@
     LIMIT #{offset}, #{size}
   </select>
 
+  <sql id="whereLanguageProperty">
+    <choose>
+      <when test="language == 'ko'">
+        WHERE MATCH(g.goods_name, g.goods_writer, g.company_name, g.goods_content)
+        AGAINST(#{keyword} IN BOOLEAN MODE)
+      </when>
+      <otherwise>
+        WHERE MATCH(g.goods_text_en)
+        AGAINST (CONCAT('+', #{keyword}, '*') IN BOOLEAN MODE)
+      </otherwise>
+    </choose>
+  </sql>
+
   <!-- 키워드 검색 총 개수 조회-->
   <select id="countGoodsByKeyword" resultType="int">
     SELECT COUNT(*)
-    FROM (SELECT g.goods_no
-          FROM goods g
-          WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-                      AGAINST(#{keyword} IN BOOLEAN MODE)
-
-          UNION
-
-          SELECT g.goods_no
-          FROM goods g
-          LEFT JOIN seller s ON g.seller_no = s.seller_no
-          WHERE MATCH(s.company_name)
-                      AGAINST(#{keyword} IN BOOLEAN MODE)) result
+    FROM goods g
+    <include refid="whereLanguageProperty"/>
   </select>
 
   <select id="countCategoryByKeyword" resultType="hello.fclover.dto.CategoryCountDTO">
     SELECT cate_no AS cateNo, COUNT(*) AS count
-    FROM (
-           SELECT g.goods_no, g.cate_no
-           FROM goods g
-           WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-                       AGAINST(#{keyword} IN BOOLEAN MODE)
-           UNION
-           SELECT g.goods_no, g.cate_no
-           FROM goods g
-                  LEFT JOIN seller s ON g.seller_no = s.seller_no
-           WHERE MATCH(s.company_name)
-                       AGAINST(#{keyword} IN BOOLEAN MODE)
-         ) result
+    FROM goods g
+    <include refid="whereLanguageProperty"/>
     GROUP BY cate_no
   </select>
 
@@ -180,28 +172,13 @@
     g.goods_content AS goodsContent,
     g.goods_price AS goodsPrice,
     g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
+    g.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
     (st.initial_stock - st.product_stock) AS goodsCount
-    FROM (
-    SELECT *
-    FROM (
-    SELECT g.*
     FROM goods g
-    WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-
-    UNION ALL
-
-    SELECT g.*
-    FROM goods g
-    JOIN seller s ON g.seller_no = s.seller_no
-    WHERE MATCH(s.company_name)
-    AGAINST (#{keyword} IN BOOLEAN MODE)
-    ) AS union_result
-    ) g
     LEFT JOIN stock st ON g.goods_no = st.goods_no
-    LEFT JOIN seller s ON g.seller_no = s.seller_no
+
+    <include refid="whereLanguageProperty"/>
 
     ORDER BY
     <choose>
@@ -223,7 +200,7 @@
         AND MATCH(g.goods_writer) AGAINST (#{writer} IN BOOLEAN MODE)
       </if>
       <if test="companyName != null and companyName != ''">
-        AND MATCH(s.company_name) AGAINST (#{companyName} IN BOOLEAN MODE)
+        AND MATCH(g.company_name) AGAINST (#{companyName} IN BOOLEAN MODE)
       </if>
       <if test="cate != null and cate != 0">
         AND g.cate_no = #{cate}
@@ -240,6 +217,7 @@
   <!-- 상세 검색 개수 쿼리 -->
   <select id="countGoodsByParam" parameterType="map" resultType="int">
     SELECT COUNT(*)
+    FROM goods g
     <include refid="goodsWhereClause"/>
   </select>
 
@@ -253,12 +231,11 @@
     g.goods_content AS goodsContent,
     g.goods_price AS goodsPrice,
     g.goods_writer AS goodsWriter,
-    s.company_name AS companyName,
+    g.company_name AS companyName,
     g.goods_create_at AS goodsCreateAt,
     (st.initial_stock - st.product_stock) AS goodsCount
     FROM goods g
     LEFT JOIN stock st ON g.goods_no = st.goods_no
-    LEFT JOIN seller s ON g.seller_no = s.seller_no
     <include refid="goodsWhereClause"/>
 
     <!-- 정렬 조건 분기 처리 -->
@@ -283,11 +260,11 @@
   <!-- 데이터 Batch 삽입 -->
   <insert id="insertGoods">
     INSERT INTO goods (seller_no, cate_no, goods_name, goods_content, goods_price, goods_writer, writer_content,
-    goods_create_at, goods_pagecount, goods_booksize)
+    goods_create_at, goods_pagecount, goods_booksize, company_name)
     VALUES
     <foreach collection="goods" item="g" separator=",">
       (#{g.sellerNo},#{g.cateNo},#{g.goodsName},#{g.goodsContent},#{g.goodsPrice},#{g.goodsWriter},#{g.writerContent},
-      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize})
+      #{g.goodsCreateAt},#{g.goodsPageCount},#{g.goodsBookSize}, #{g.companyName})
     </foreach>
   </insert>
 
@@ -334,19 +311,171 @@
   <!-- 신상품 총 개수 조회 -->
   <select id="countNewItems" resultType="int">
     SELECT COUNT(*) FROM goods
-    WHERE 1=1
     <!-- 일자별 필터 -->
-    <if test="year != null and year != ''">
-      AND YEAR(goods_create_at) = #{year}
-    </if>
-    <if test="month != null and month != ''">
-      AND MONTH(goods_create_at) = #{month}
-    </if>
-    <if test="week != null and week != ''">
-      AND WEEK(goods_create_at) = #{week}
-    </if>
+    <where>
+      <if test="year != null and year != ''">
+        AND YEAR(goods_create_at) = #{year}
+      </if>
+      <if test="month != null and month != ''">
+        AND MONTH(goods_create_at) = #{month}
+      </if>
+      <if test="week != null and week != ''">
+        AND WEEK(goods_create_at) = #{week}
+      </if>
+    </where>
   </select>
 
+
+  <!-- 정렬시 카테고리 세기 -->
+  <select id="countCategoryByParam" parameterType="hello.fclover.dto.SearchParamDTO" resultType="hello.fclover.dto.CategoryCountDTO">
+    <choose>
+      <!-- 조건: cname, chrc, pbcm 값이 모두 없을 경우 -->
+      <when test="(cname == null or cname == '') and (chrc == null or chrc == '') and (pbcm == null or pbcm == '')">
+        SELECT cate_no AS cateNo, COUNT(*) AS count
+        FROM goods g
+        <where>
+          <!-- 추가 조건 -->
+          <if test="cateNo != null and cateNo != 0">
+            AND g.cate_no = #{cateNo}
+          </if>
+          <if test="saprMin != null and saprMax != null">
+            AND g.goods_price BETWEEN #{saprMin} AND #{saprMax}
+          </if>
+          <if test="rlseDate == '3M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '6M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '1Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '3Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '5Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
+          </if>
+        </where>
+        GROUP BY cate_no
+      </when>
+
+      <!-- 조건: cname, chrc, pbcm 중 하나라도 값이 있을 경우 -->
+      <otherwise>
+        SELECT cate_no AS cateNo, COUNT(*) AS count
+        FROM goods g
+        <where>
+          <if test="cname != null and cname != ''">
+            AND MATCH(g.goods_name) AGAINST (#{cname} IN BOOLEAN MODE)
+          </if>
+          <if test="chrc != null and chrc != ''">
+            AND MATCH(g.goods_writer) AGAINST (#{chrc} IN BOOLEAN MODE)
+          </if>
+          <if test="pbcm != null and pbcm != ''">
+            AND MATCH(g.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
+          </if>
+          <if test="cateNo != null and cateNo != 0">
+            AND g.cate_no = #{cateNo}
+          </if>
+          <if test="saprMin != null and saprMax != null">
+            AND g.goods_price BETWEEN #{saprMin} AND #{saprMax}
+          </if>
+          <if test="rlseDate == '3M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '6M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '1Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '3Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '5Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
+          </if>
+        </where>
+        GROUP BY cate_no
+      </otherwise>
+    </choose>
+  </select>
+
+  <!-- 필터링 결과 개수 조회 쿼리-->
+  <select id="countSearchByParam" parameterType="hello.fclover.dto.SearchParamDTO" resultType="int">
+    <choose>
+      <!-- 조건: cname, chrc, pbcm 값이 모두 없을 경우 -->
+      <when test="(cname == null or cname == '') and (chrc == null or chrc == '') and (pbcm == null or pbcm == '')">
+        SELECT COUNT(*)
+        FROM goods g
+        <where>
+          <!-- 추가 조건 -->
+          <if test="cateNo != null and cateNo != 0">
+            AND g.cate_no = #{cateNo}
+          </if>
+          <if test="saprMin != null and saprMax != null">
+            AND g.goods_price BETWEEN #{saprMin} AND #{saprMax}
+          </if>
+          <if test="rlseDate == '3M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '6M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '1Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '3Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '5Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
+          </if>
+        </where>
+      </when>
+
+      <!-- 조건: cname, chrc, pbcm 중 하나라도 값이 있을 경우 -->
+      <otherwise>
+        SELECT COUNT(*)
+        FROM goods g
+        <where>
+          <if test="cname != null and cname != ''">
+            AND MATCH(g.goods_name) AGAINST (#{cname} IN BOOLEAN MODE)
+          </if>
+          <if test="chrc != null and chrc != ''">
+            AND MATCH(g.goods_writer) AGAINST (#{chrc} IN BOOLEAN MODE)
+          </if>
+          <if test="pbcm != null and pbcm != ''">
+            AND MATCH(g.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
+          </if>
+          <if test="cateNo != null and cateNo != 0">
+            AND g.cate_no = #{cateNo}
+          </if>
+          <if test="saprMin != null and saprMax != null">
+            AND g.goods_price BETWEEN #{saprMin} AND #{saprMax}
+          </if>
+          <if test="rlseDate == '3M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '6M'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '1Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '3Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) AND CURRENT_DATE
+          </if>
+          <if test="rlseDate == '5Y'">
+            AND g.goods_create_at BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 5 YEAR) AND CURRENT_DATE
+          </if>
+        </where>
+      </otherwise>
+    </choose>
+  </select>
+
+
+  <!-- 파라미터 기반 검색(필터, 정렬, 재검색) -->
   <select id="searchByParam" parameterType="hello.fclover.dto.SearchParamDTO" resultType="hello.fclover.domain.Goods">
     <choose>
       <!-- 조건: cname, chrc, pbcm 값이 모두 없을 경우 -->
@@ -359,28 +488,11 @@
         g.goods_content AS goodsContent,
         g.goods_price AS goodsPrice,
         g.goods_writer AS goodsWriter,
-        s.company_name AS companyName,
+        g.company_name AS companyName,
         g.goods_create_at AS goodsCreateAt,
         (st.initial_stock - st.product_stock) AS goodsCount
-        FROM (
-        SELECT *
-        FROM (
-        SELECT g.*
         FROM goods g
-        WHERE MATCH(g.goods_name, g.goods_writer, g.goods_content)
-        AGAINST (#{keyword} IN BOOLEAN MODE)
-
-        UNION ALL
-
-        SELECT g.*
-        FROM goods g
-        JOIN seller s ON g.seller_no = s.seller_no
-        WHERE MATCH(s.company_name)
-        AGAINST (#{keyword} IN BOOLEAN MODE)
-        ) AS union_result
-        ) g
         LEFT JOIN stock st ON g.goods_no = st.goods_no
-        LEFT JOIN seller s ON g.seller_no = s.seller_no
         <where>
           <!-- 추가 조건 -->
           <if test="cateNo != null and cateNo != 0">
@@ -428,12 +540,11 @@
         g.goods_content AS goodsContent,
         g.goods_price AS goodsPrice,
         g.goods_writer AS goodsWriter,
-        s.company_name AS companyName,
+        g.company_name AS companyName,
         g.goods_create_at AS goodsCreateAt,
         (st.initial_stock - st.product_stock) AS goodsCount
         FROM goods g
         LEFT JOIN stock st ON g.goods_no = st.goods_no
-        LEFT JOIN seller s ON g.seller_no = s.seller_no
         <where>
           <if test="cname != null and cname != ''">
             AND MATCH(g.goods_name) AGAINST (#{cname} IN BOOLEAN MODE)
@@ -442,7 +553,7 @@
             AND MATCH(g.goods_writer) AGAINST (#{chrc} IN BOOLEAN MODE)
           </if>
           <if test="pbcm != null and pbcm != ''">
-            AND MATCH(s.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
+            AND MATCH(g.company_name) AGAINST (#{pbcm} IN BOOLEAN MODE)
           </if>
           <if test="cateNo != null and cateNo != 0">
             AND g.cate_no = #{cateNo}
@@ -505,4 +616,8 @@
         </if>
         order by g.goods_name desc
     </select>
+
+  <delete id="deleteGood">
+    delete from goods where goods_no = #{goodsNo}
+  </delete>
 </mapper>

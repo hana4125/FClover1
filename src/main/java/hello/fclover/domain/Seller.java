@@ -25,4 +25,5 @@ public class Seller {
     private LocalDateTime createAt;     // `create_at` (timestamp)
     private LocalDateTime updatedAt;    // `updated_at` (timestamp)
     private String permission;
+
 }

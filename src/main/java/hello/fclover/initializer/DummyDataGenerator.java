@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,67 +136,50 @@ public class DummyDataGenerator {
         return Stock.builder().build();
     }
 
-//    @PostConstruct
-//    @Profile("dev")
-//    public void generateNoticeData() {
-//
-//        // 기존 데이터 삭제
-//        noticeRepository.deleteAll();
-//
-//        // 공지사항 제목 템플릿
-//        String[] noticeTemplates = {
-//                "[공지사항] 서비스 점검 안내",
-//                "[공지사항] 개인정보처리방침 개정 안내",
-//                "[공지사항] 시스템 업데이트 안내",
-//                "[공지사항] 이용약관 변경 안내",
-//                "[공지사항] 배송지연 일정 안내"
-//        };
-//
-//        // 이벤트 제목 템플릿
-//        String[] eventTemplates = {
-//                "[이벤트] 신규 회원 특별 이벤트",
-//                "[이벤트] 리뷰 이벤트",
-//                "[이벤트] 가입 감사 이벤트",
-//                "[이벤트] 출석 체크 이벤트",
-//                "[이벤트] 무료 배송 쿠폰 이벤트"
-//        };
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//        for (int i = 0; i < 50; i++) {
-//            Notice notice = new Notice();
-//
-//            // 공지사항과 이벤트 중 랜덤 선택
-//            String title;
-//            if (faker.random().nextBoolean()) {
-//                title = noticeTemplates[faker.random().nextInt(noticeTemplates.length)];
-//            } else {
-//                title = eventTemplates[faker.random().nextInt(eventTemplates.length)];
-//            }
-//
-//            notice.setNotititle(title);
-//            notice.setNotiname("admin");
-//
-//            // 최근 1년(365일) 내의 랜덤 날짜 설정
-//            LocalDate randomDate = getRandomDateBetween(LocalDate.now().minusDays(365), LocalDate.now());
-//
-//            notice.setNotidate(randomDate.format(formatter));
-//
-//            try {
-//                noticeRepository.save(notice);
-//                log.info("Dummy notice created: {}", notice);
-//            } catch (Exception e) {
-//                log.error("Failed to create dummy notice", e);
-//            }
-//        }
-//    }
-//
-//    private LocalDate getRandomDateBetween(LocalDate startDate, LocalDate endDate) {
-//        long startEpochDay = startDate.toEpochDay();
-//        long endEpochDay = endDate.toEpochDay();
-//        long randomDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay + 1);
-//
-//        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
-//
-//        return LocalDate.ofEpochDay(randomDay);
-//    }
+    @PostConstruct
+    @Profile("dev")
+    public void generateNoticeData() {
+        // 기존 데이터 삭제
+        noticeRepository.deleteAll();
+
+        // 공지사항 제목 템플릿
+        String[] noticeTemplates = {
+                "[공지사항] 서비스 점검 안내",
+                "[공지사항] 개인정보처리방침 개정 안내",
+                "[공지사항] 시스템 업데이트 안내",
+                "[공지사항] 이용약관 변경 안내"
+        };
+
+        // 이벤트 제목 템플릿
+        String[] eventTemplates = {
+                "[이벤트] 신규 회원 특별 이벤트",
+                "[이벤트] 여름 맞이 특별 이벤트",
+                "[이벤트] 가입 감사 이벤트",
+                "[이벤트] 겨울 시즌 특별 이벤트"
+        };
+
+        for (int i = 0; i < 50; i++) {
+            Notice notice = new Notice();
+
+            // 공지사항과 이벤트 중 랜덤 선택
+            String title;
+            if (faker.random().nextBoolean()) {
+                title = noticeTemplates[faker.random().nextInt(noticeTemplates.length)];
+            } else {
+                title = eventTemplates[faker.random().nextInt(eventTemplates.length)];
+            }
+
+            notice.setNotititle(title);
+            notice.setNotiname("admin");
+            String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            notice.setNotidate(today);
+
+            try {
+                noticeRepository.save(notice);
+                log.info("Dummy notice created: {}", notice);
+            } catch (Exception e) {
+                log.error("Failed to create dummy notice", e);
+            }
+        }
+    }
 }

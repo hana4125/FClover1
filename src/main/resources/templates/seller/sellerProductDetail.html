@@ -3,6 +3,8 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Title</title>
   <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
   <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
@@ -277,7 +279,132 @@
             </table>
           </div>
         </div>
+
+
+        <!-- 수정용 모달 (수정 폼) -->
+        <div class="modal fade" id="editGoodsModal" tabindex="-1" aria-labelledby="editGoodsModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <form id="editGoodsForm" enctype="multipart/form-data">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editGoodsModalLabel">상품 수정</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                </div>
+                <div class="modal-body">
+                  <!-- 여기부터 기존 상품등록 폼의 내용 시작 -->
+                  <div class="row">
+                    <!-- 상품 이름 -->
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label for="editGoodsName" class="form-label">상품 이름</label>
+                        <input type="text" class="form-control" id="editGoodsName" name="goodsName" required>
+                      </div>
+                    </div>
+                    <!-- 출판사 -->
+                    <div class="col-md-3 offset-md-2">
+                      <div class="mb-3">
+                        <label for="editCompanyName" class="form-label">출판사</label>
+                        <input type="text" class="form-control" id="editCompanyName" name="companyName"
+                               style="background-color:lightgray" readonly>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- 상품 가격, 상품 수량, 책 카테고리 -->
+                    <div class="col-md-2">
+                      <div class="mb-3">
+                        <label for="editGoodsPrice" class="form-label">상품 가격 (원)</label>
+                        <input type="text" class="form-control" id="editGoodsPrice" name="goodsPrice" required>
+                      </div>
+                    </div>
+                    <div class="col-md-2 offset-md-1">
+                      <div class="mb-3">
+                        <label for="editGoodsCount" class="form-label">상품 수량 (권)</label>
+                        <input type="number" class="form-control" id="editGoodsCount" name="goodsCount" placeholder="예: 10" required>
+                      </div>
+                    </div>
+                    <div class="col-md-2 offset-md-1">
+                      <div class="mb-3">
+                        <label for="editCateNo" class="form-label">책 카테고리</label>
+                        <select class="form-select" id="editCateNo" name="cateNo" required>
+                          <option value="">카테고리 선택</option>
+                          <!-- Thymeleaf로 카테고리 목록을 넣을 수도 있고, Ajax로 동적으로 채울 수도 있음 -->
+                          <th:block th:each="category : ${categoryList}">
+                            <option th:value="${category.cateNo}">[[${category.cateName}]]</option>
+                          </th:block>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- 상품 상세 설명 -->
+                    <div class="col-md-9">
+                      <div class="mb-3">
+                        <label for="editGoodsContent" class="form-label">상품 상세 설명</label>
+                        <textarea class="form-control" id="editGoodsContent" name="goodsContent" rows="4" required></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- 작가 이름 -->
+                    <div class="col-md-3">
+                      <div class="mb-3">
+                        <label for="editGoodsWriter" class="form-label">작가 이름</label>
+                        <input type="text" class="form-control" id="editGoodsWriter" name="goodsWriter" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- 작가 설명 -->
+                    <div class="col-md-9">
+                      <div class="mb-3">
+                        <label for="editWriterContent" class="form-label">작가 설명</label>
+                        <textarea class="form-control" id="editWriterContent" name="writerContent" rows="3" required></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- 발행일자 -->
+                    <div class="col-md-2">
+                      <div class="mb-3">
+                        <label for="editGoodsCreateAt" class="form-label">발행일자</label>
+                        <input type="date" class="form-control" id="editGoodsCreateAt" name="goodsCreateAt" max="9999-12-31" required>
+                      </div>
+                    </div>
+                    <!-- 쪽수 -->
+                    <div class="col-md-2 offset-md-1">
+                      <div class="mb-3">
+                        <label for="editGoodsPageCount" class="form-label">쪽수</label>
+                        <input type="number" class="form-control" id="editGoodsPageCount" name="goodsPageCount" placeholder="예: 365" required>
+                      </div>
+                    </div>
+                    <!-- 크기 -->
+                    <div class="col-md-2 offset-md-1">
+                      <div class="mb-3">
+                        <label for="editGoodsBookSize" class="form-label">크기 (mm)</label>
+                        <input type="text" class="form-control" id="editGoodsBookSize" name="goodsBookSize" placeholder="예: 14*21" required>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 상품 이미지는 생략하거나 별도 처리가 필요하다면 추가 -->
+                  <!-- 기존 폼의 나머지 요소들을 필요에 따라 포함 -->
+                  <input type="hidden" id="editGoodsNo" name="goodsNo"> <!-- 수정할 상품 번호 -->
+                  <!-- 여기까지 기존 폼 내용 끝 -->
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">수정 저장</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+
         <script>
+          let token = $("meta[name='_csrf']").attr("content");
+          let header = $("meta[name='_csrf_header']").attr("content");
+
           document.querySelectorAll('th').forEach((th) => {
             const resizer = document.createElement('span');
             resizer.classList.add('resizer');
@@ -351,29 +478,28 @@
               return; // 검색 요청 차단
             }
 
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
             // AJAX 요청
             $.ajax({
               url: '/seller/SearchGoodsProcess', // 백엔드 검색 엔드포인트
               type: 'POST',
-              headers: {[csrfHeader]: csrfToken},
               data: searchData,
               dataType: 'json',
+              beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+              },
               success: function (response) {
                 console.log(response)
 
                 var goodsCount = response.length;
                 var html =""
                 if(response.length == 0) {
-                  html= "<tr><td colSpan='15' className='text-center default'>검색 결과가 없습니다.</td> </tr>"
+                  html= "<tr><td colSpan='15' class='text-center default'>검색 결과가 없습니다.</td> </tr>"
                 }else {
                   $.each(response, function(index, goods){
 
-                    html +="<tr>"
-                    html +="<td><button class='btn btn-warning' data-id='" + goods.goodsNo +"'>수정 </button></td>"
-                    html +="<td><button class='btn btn-danger' data-id='" + goods.goodsNo + "'>삭제 </button> </td>"
+                    html +="<tr class='searchGoodsList_" + goods.goodsNo + "'>"
+                    html +="<td><button class='btn btn-warning goodUpdate' data-id='" + goods.goodsNo +"'>수정 </button></td>"
+                    html +="<td><button class='btn btn-danger goodDelete' data-id='" + goods.goodsNo + "'>삭제 </button> </td>"
                     html += "<td>" + goods.cateName + "</td>"
                     html += "<td>" + goods.goodsName + "</td>"
                     html += "<td>" + goods.goodsContent + "</td>"
@@ -401,6 +527,99 @@
               }
             });
           })
+          $(".searchResult").on('click', '.goodDelete', function(){
+            var deleteGoodsNo = $(this).data('id');
+
+            if(confirm("상품을 삭제하시겠습니까?")) {
+              $.ajax({
+                url: '/goods/deleteGoodsProcess',
+                type: 'post',
+
+                data: {deleteGoodsNo: deleteGoodsNo},
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader(header, token);
+                },
+                success: function (response) {
+                  alert("삭제 되었습니다.")
+                  $(".searchGoodsList_" + deleteGoodsNo).remove();
+                },
+                error: function(xhr, error){
+                  // console.error("에러 내용", xhr.responseText);
+                  // console.error("Error:", error);
+                  alert("삭제 실패하였습니다.")
+                }
+              })
+            }
+          })
+
+          $(".searchResult").on("click", ".goodUpdate", function(){
+            var goodsNo = $(this).data("id");
+
+            // Ajax 요청으로 상품 상세 정보 조회 (GET 방식 예시)
+            $.ajax({
+              url: '/goods/getGoodsUpdateDetail',  // 백엔드에서 상품 정보를 반환하는 엔드포인트
+              type: 'GET',
+              data: { goodsNo: goodsNo },
+              dataType: 'json',
+              success: function(productData) {
+                // 반환받은 productData를 모달 폼에 채웁니다.
+                $("#editGoodsNo").val(productData.goodsNo);
+                $("#editGoodsName").val(productData.goodsName);
+                $("#editGoodsPrice").val(productData.goodsPrice);
+                $("#editGoodsCount").val(productData.goodsCount);
+                $("#editCateNo").val(productData.cateNo);
+                $("#editGoodsContent").val(productData.goodsContent);
+                $("#editCompanyName").val(productData.companyName);
+                $("#editGoodsWriter").val(productData.goodsWriter);
+                $("#editWriterContent").val(productData.writerContent);
+                // 상품 등록일(날짜)의 경우 데이터 형식이 맞아야 함 (예: yyyy-MM-dd)
+                $("#editGoodsCreateAt").val(productData.goodsCreateAt);
+                $("#editGoodsPageCount").val(productData.goodsPageCount);
+                $("#editGoodsBookSize").val(productData.goodsBookSize);
+                // 필요에 따라 추가 필드들도 채워줍니다.
+
+                // 모달 열기 (Bootstrap 5 모달)
+                var editModal = new bootstrap.Modal(document.getElementById('editGoodsModal'));
+                editModal.show();
+              },
+              error: function(xhr, status, error) {
+                alert("상품 정보를 불러오는 중 오류가 발생했습니다: " + error);
+              }
+            });
+          });
+
+          $("#editGoodsForm").submit(function(event) {
+            event.preventDefault();
+            alert("개발 중인 기능입니다.")
+            // 폼 데이터를 FormData로 준비 (필요시 파일 업로드 등 포함)
+            // var updateFormData = new FormData(this);
+
+            // CSRF 토큰 처리 (이미 페이지 상단에 메타 태그가 있다면)
+            //
+            // $.ajax({
+            //   url: '/goods/updateGoodsProcess',  // 백엔드 상품 업데이트 엔드포인트
+            //   type: 'POST',
+            //   headers: {
+            //     [csrfHeader]: csrfToken
+            //   },
+            //   data: updateFormData,
+            //   processData: false,
+            //   contentType: false,
+            //   success: function(response) {
+            //     alert("상품 수정이 성공적으로 완료되었습니다.");
+            //     // 모달 닫기
+            //     var modalEl = document.getElementById('editGoodsModal');
+            //     var modal = bootstrap.Modal.getInstance(modalEl);
+            //     modal.hide();
+            //
+            //     // 목록을 갱신하거나 수정된 데이터를 화면에 반영합니다.
+            //     // 예: location.reload(); 또는 특정 행 업데이트
+            //   },
+            //   error: function(xhr, status, error) {
+            //     alert("상품 수정 중 오류가 발생했습니다: " + error);
+            //   }
+            // });
+          });
         </script>
       </div>
     </div>

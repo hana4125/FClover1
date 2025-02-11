@@ -3,6 +3,8 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Title</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
     <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
@@ -193,6 +195,7 @@
                     goodsCount: $("#goodsCount").val(),
                     cateNo: $("#cateNo").val(),
                     goodsContent: $("#goodsContent").val(),
+                    companyName: $("#companyName").val(),
                     goodsWriter: $("#goodsWriter").val(),
                     writerContent: $("#writerContent").val(),
                     goodsCreateAt: $("#goodsCreateAt").val(),
@@ -342,9 +345,9 @@
                         <!-- 출판사 -->
                         <div class="col-md-3 offset-md-2">
                             <div class="mb-3">
-                                <label for="sellerCompany" class="form-label">출판사</label>
+                                <label for="companyName" class="form-label">출판사</label>
                                 <!--                    출판사는 판매자 member db에서 가져오는 걸로 수정해야함-->
-                                <input type="text" class="form-control" id="sellerCompany" name="sellerCompany"
+                                <input type="text" class="form-control" id="companyName" name="companyName"
                                        style="background-color:lightgray" th:value="${seller.companyName}" readonly>
                             </div>
                         </div>
@@ -436,7 +439,7 @@
                         <!-- 크기 -->
                         <div class="col-md-2 offset-md-1">
                             <div class="mb-3">
-                                <label for="goodsBookSize" class="form-label">크기 (cm)</label>
+                                <label for="goodsBookSize" class="form-label">크기 (mm)</label>
                                 <input type="text" class="form-control" id="goodsBookSize" name="goodsBookSize"
                                        placeholder="예: 14*21"
                                        required>
