@@ -8,6 +8,9 @@ public class SearchParamDTO {
     // 검색 키워드
     private String keyword;
 
+    private String processedKeyword;
+    private String language;
+
     // 검색 필터 관련 파라미터
     private int cateNo;
 
