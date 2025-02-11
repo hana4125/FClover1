@@ -13,18 +13,18 @@ public class SearchResponseDTO {
     private String keyword;
     private int totalCount;
     private List<Goods> searchResults;
-    private int minPrice;
-    private int maxPrice;
+    private Integer minPrice;
+    private Integer maxPrice;
 
     // 필터 관련 정보
     private Map<Category, Integer> categoryList;
 
     // 페이징 관련 정보
     private String sort;
-    private int currentPage;
+    private int currentPage = 1;
     private int totalPages;
-    private int size;
-    private int startPage;
-    private int endPage;
+    private int size = 20;
+    private int startPage = 1;
+    private int endPage = 10;
 
 }

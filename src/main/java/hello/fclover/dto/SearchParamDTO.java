@@ -15,8 +15,8 @@ public class SearchParamDTO {
     private String chrc;
     private String pbcm;
 
-    private int saprMin;
-    private int saprMax;
+    private Integer saprMin;
+    private Integer saprMax;
 
     private String rlseDate;
     private String reKeyword;
