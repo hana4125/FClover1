@@ -17,6 +17,7 @@ import hello.fclover.service.GoodsService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.WishService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -293,4 +294,23 @@ public class GoodsController {
 
         return "/user/userNewItems";
     }
+
+    @PostMapping("deleteGoodsProcess")
+    @ResponseBody
+    public ResponseEntity<List<String>> deleteGoodsProcess(@RequestParam("deleteGoodsNo") Long goodsNo) {
+        List<Goods> goodsList = goodsService.deleteGoods(goodsNo);
+
+        return ResponseEntity.ok(Collections.emptyList());
+    }
+
+    @GetMapping("getGoodsUpdateDetail")
+    public ResponseEntity<Goods> getGoodsDetail(@RequestParam("goodsNo") Long goodsNo) {
+        Goods goods = goodsService.getGoodsUpdateFormDetail(goodsNo);
+        if (goods != null) {
+            return ResponseEntity.ok(goods);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 }

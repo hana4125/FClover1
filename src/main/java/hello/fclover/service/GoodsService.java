@@ -43,5 +43,9 @@ public interface GoodsService {
 //    public void saveProduct(InputStream inputStream);
 
  Map<String, Object> saveMessproduct(List<MessGoods> messGoods);
+
+ List<Goods> deleteGoods(Long goodsNo);
+
+ Goods getGoodsUpdateFormDetail(Long goodsNo);
 }
 

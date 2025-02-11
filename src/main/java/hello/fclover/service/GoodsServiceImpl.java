@@ -211,6 +211,21 @@ public class GoodsServiceImpl implements GoodsService {
         return resultMap;
     }
 
+    @Override
+    public List<Goods> deleteGoods(Long goodsNo) {
+        int deleteResult = goodsMapper.deleteGood(goodsNo);
+        if (deleteResult > 0) {
+
+        }
+        return List.of();
+    }
+
+    //update
+    @Override
+    public Goods getGoodsUpdateFormDetail(Long goodsNo) {
+        return goodsMapper.findGoodsById(goodsNo);
+    }
+
     private String getExcelUrl(String mainImage) {
         int lastIndexOf = mainImage.lastIndexOf("/");
         return mainImage.substring(0, lastIndexOf + 1);

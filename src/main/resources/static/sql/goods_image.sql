@@ -29,3 +29,16 @@ FROM goods_image
 WHERE goods_no = 500003
   AND is_main = 'M';
 
+SELECT
+    constraint_name
+FROM
+    information_schema.key_column_usage
+WHERE
+    table_schema = 'masterDB2' -- 데이터베이스 이름
+  AND table_name = 'goods_image'
+  AND column_name = 'goods_no';
+
+ALTER TABLE goods_image
+    ADD CONSTRAINT fk_goods
+        FOREIGN KEY (goods_no) REFERENCES goods(goods_no)
+            ON DELETE CASCADE;

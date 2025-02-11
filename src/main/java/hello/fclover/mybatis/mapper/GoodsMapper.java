@@ -90,4 +90,5 @@ public interface GoodsMapper {
 
     List<Goods> searchByParam(SearchParamDTO searchParamDTO);
 
+    int deleteGood(Long goodsNo);
 }
