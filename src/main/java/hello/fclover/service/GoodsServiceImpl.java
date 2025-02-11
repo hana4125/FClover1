@@ -202,6 +202,32 @@ public class GoodsServiceImpl implements GoodsService {
         return resultMap;
     }
 
+    @Override
+    public List<Goods> deleteGoods(Long goodsNo) {
+        int deleteResult = goodsMapper.deleteGood(goodsNo);
+        if (deleteResult > 0) {
+
+        }
+        return List.of();
+    }
+
+    //update
+    @Override
+    public Goods getGoodsUpdateFormDetail(Long goodsNo) {
+        return goodsMapper.findGoodsById(goodsNo);
+    }
+
+    private String getExcelUrl(String mainImage) {
+        int lastIndexOf = mainImage.lastIndexOf("/");
+        return mainImage.substring(0, lastIndexOf + 1);
+    }
+
+    private String getExcelImageName(String mainImage) {
+        int lastIndexOf = mainImage.lastIndexOf("/");
+        return mainImage.substring(lastIndexOf + 1);
+    }
+
+
     private List<String> getGoodsImages(Long goodsNo, GoodsImage goodsImage) {
         //상품 번호에 맞는 이미지들 이름 가져오기
         List<Map<String, String>> imageNames = imageMapper.findAllGoodsImage(goodsNo);

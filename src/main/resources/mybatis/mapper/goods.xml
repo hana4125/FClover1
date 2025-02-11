@@ -616,4 +616,8 @@
         </if>
         order by g.goods_name desc
     </select>
+
+  <delete id="deleteGood">
+    delete from goods where goods_no = #{goodsNo}
+  </delete>
 </mapper>
