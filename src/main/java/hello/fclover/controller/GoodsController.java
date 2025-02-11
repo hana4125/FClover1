@@ -139,7 +139,7 @@ public class GoodsController {
                              @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                              @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                              Model model) {
-        return prepareSellerPage(member, page, size, model, "/user/userBestseller");
+        return prepareSellerPage(member, page, size, model, "user/userBestseller");
     }
 
     @PostMapping("/addMassProductProcess")
@@ -196,7 +196,7 @@ public class GoodsController {
                                @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                                Model model) {
-        return prepareSellerPage(member, page, size, model, "/user/userSteadyseller");
+        return prepareSellerPage(member, page, size, model, "user/userSteadyseller");
     }
 
     private String prepareSellerPage(Member member, int page, int size, Model model, String viewName) {
@@ -282,7 +282,7 @@ public class GoodsController {
         model.addAttribute("month", month);
         model.addAttribute("week", week);
 
-        return "/user/userNewItems";
+        return "user/userNewItems";
     }
 
     @PostMapping("deleteGoodsProcess")
