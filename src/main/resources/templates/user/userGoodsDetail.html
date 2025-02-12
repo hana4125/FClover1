@@ -36,6 +36,15 @@
                 location.href = "";
             })
 
+            $('.tabs a.tab_link').click(function(e) {
+                e.preventDefault();  // 기본 동작(해시 추가) 차단
+                var target = $(this).attr('href');  // 예: "#scrollSpyProdDetail"
+                // 대상 요소로 부드럽게 스크롤
+                $('html, body').animate({
+                    scrollTop: $(target).offset().top
+                }, 300);
+            });
+
             // 장바구니 버튼 클릭 시
             $("#direct").click(function () {
                 // CSRF 토큰
