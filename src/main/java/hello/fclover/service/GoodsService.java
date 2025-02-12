@@ -47,5 +47,7 @@ public interface GoodsService {
  List<Goods> deleteGoods(Long goodsNo);
 
  Goods getGoodsUpdateFormDetail(Long goodsNo);
+
+    int updateGoods(Goods goods);
 }
 

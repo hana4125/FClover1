@@ -421,9 +421,10 @@
             <ul class="tabs">
                 <li class="tab_item"><a href="#scrollSpyProdDetail" class="tab_link active"><span
                         class="tab_text">작품 상세</span></a></li>
-                <li class="tab_item"><a href="#scrollSpyProdInfo" class="tab_link">
+
+                <li class="tab_item"><a href="#scrollSpyWriterInfo" class="tab_link">
                     <span class="tab_text">작가 상세</span></a></li>
-                <li class="tab_item"><a href="#scrollSpyProdReview" class="tab_link"><span
+                <li class="tab_item"><a href="#scrollSpyProdInfo" class="tab_link"><span
                         class="tab_text">상품 기본 정보</span></a></li>
             </ul>
         </div>
@@ -433,18 +434,25 @@
 </div>
 <hr>
 <!--상품상세 끝-->
-<!--</div>-->
+</div>
 <div class="container goodsDetail w-75">
     <div class="prodDetail-box">
-        <div class="prodDetail-header"> 작품 상세</div>
+        <div class="prodDetail-header" id="scrollSpyProdDetail"> 상품 소개</div>
         <div class="prodDetail-Content" th:text="${goods.goodsContent}"></div>
         <div class="DetailLine"></div>
     </div>
     <div class="Line"><hr></div>
     <div class="writerDetail-box">
-        <div class="writerDetail-header">작가 상세</div>
+        <div class="writerDetail-header" id="scrollSpyWriterInfo">작가 상세</div>
         <div class="writerDetail-title">"[[${goods.goodsWriter}]]"</div>
         <div class="writerDetail-Content" th:text="${goods.writerContent}"></div>
+    </div>
+    <div class="Line"><hr></div>
+    <div class="productDetail-box">
+        <div class="productDetail-header" id="scrollSpyProdInfo">상품 기본 정보</div>
+        <div id="goodscreateat">상품 출간일 : <span class="productDetail-Content" th:text="${goods.goodsCreateAt}"></span></div>
+        <div id="goodspagecount">상품 페이지 수 : <span class="productDetail-Content" th:text="${goods.goodsPageCount}"></span></div>
+        <div id="goodsbooksize">상품 기본 크기 : <span class="productDetail-Content" th:text="${goods.goodsBookSize}"></span></div>
     </div>
 </div>
 

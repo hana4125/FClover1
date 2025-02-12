@@ -58,14 +58,6 @@
                 location.href = "/goods/newItems";
             })
 
-            $(".notice").click(function () {
-                location.href = "/inquiry/notice/noti_list";
-            })
-
-            $(".qna").click(function () {
-                location.href = "/inquiry/question";
-            })
-
             // 카테고리 버튼 동작
             $(function () {
                 $("#category").click(function () {
@@ -89,6 +81,21 @@
                     }
                 })
             })
+
+            // 베스트 및 스테디 클릭 이벤트 처리
+            // $("#best").click(function () {
+            //     $(this).addClass("active").siblings(".steady-title").removeClass("active");
+            //     // 베스트 데이터 표시
+            //     $(".best-items").show();
+            //     $(".steady-items").hide();
+            // })
+            //
+            // $("#steady").click(function () {
+            //     $(this).addClass("active").siblings(".best-title").removeClass("active");
+            //     // 스테디 데이터 표시
+            //     $(".steady-items").show();
+            //     $(".best-items").hide();
+            // })
         })
     </script>
 </head>
@@ -96,29 +103,31 @@
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="bg-success" style="background: #226b24 !important;">
     <div class="container w-75">
-        <div class="header-menu mt-4 d-flex align-items-center">
+        <div class="header-menu mt-4 d-flex justify-content-between align-items-center">
             <button class="btn btn-light me-3" id="category">
-        <span class="category d-flex flex-column justify-content-center align-items-center">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </span>
+                <span class="category d-flex flex-column justify-content-center align-items-center">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-            <!--            font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei UI", "Malgun Gothic", sans-serif;-->
-            <a class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
-            <a class="steady ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
-            <a class="new ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
-            <a class="notice ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
-            <a class="qna ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
+
+            <!-- 메뉴 항목들 -->
+            <a href="#" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:'Hiragino Maru Gothic ProN'; font-size:18px; color: #ffffff; font-family:Roboto;">베스트셀러</a>
+            <a href="#" class="steady ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">스테디셀러</a>
+            <a href="#" class="new ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">이달의 신상책</a>
+            <a href="/inquiry/notice/noti_list" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">공지사항</a>
+            <a href="/inquiry/question" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">QNA</a>
         </div>
     </div>
 </div>
+
 <!-- 카테고리 전체보기 -->
 <div id="categoryView">
     <div th:replace="~{fragment/category :: category}"></div>
