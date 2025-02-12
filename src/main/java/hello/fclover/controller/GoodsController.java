@@ -50,13 +50,25 @@ public class GoodsController {
 
 
     @GetMapping("/GoodsDetail/{no}")
-    public String goodsDetail(Model model, @PathVariable("no") Long goodsNo) {
+    public String goodsDetail(Model model, @ModelAttribute("member") Member member, @PathVariable("no") Long goodsNo) {
         goodsService.getGoodsDetail(goodsNo, model);
         System.out.println("model = " + model.getAttribute("imageList"));
 
         // 카테고리 데이터 가져오기
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 찜 목록(회원이 찜한 상품 번호 목록) 조회
+        if (memberNo != null) {
+            List<Long> wishlist = wishService.getWishlistGoodsNos(memberNo);
+            model.addAttribute("wishlist", wishlist);
+        }
 
         return "user/userGoodsDetail";
     }

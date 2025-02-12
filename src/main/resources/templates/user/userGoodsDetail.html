@@ -84,6 +84,39 @@
 
             })
 
+            $(function () {
+                // 찜 버튼 클릭 시
+                $(".heart").click(function () {
+                    // CSRF 토큰
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    const goodsNo = $(this).data("id");
+                    const heartIcon = $(this);
+
+                    $.ajax({
+                        url: "/wish/wishlist",
+                        type: "POST",
+                        headers: {[csrfHeader]: csrfToken}, // CSRF 사용시 헤더에 추가
+                        data: {goodsNo: goodsNo},
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.status === "added") {
+                                alert("찜 설정 되었습니다.");
+                                heartIcon.attr("src", "/images/user/redHeart.png");
+                            } else if (response.status === "removed") {
+                                alert("찜 해제 되었습니다.");
+                                heartIcon.attr("src", "/images/user/heart.png");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            if (status === "parsererror") {
+                                location.href = '/member/login'
+                            }
+                        }
+                    });
+                });
+            });
 
             // 카테고리 버튼 동작
             $(function () {
@@ -351,9 +384,13 @@
 
                     <div id="prodBuyWrap" class="btn_wrap overlap single"
                          style="display: flex; justify-content: flex-start; gap: 10px;">
-                        <button type="button" class="btn_wish size_lg mobonWish" style="padding: 0px 10px;">
-                            <span class="ico_wish"></span><span class="hidden">찜하기</span>
-                        </button>
+                        <img th:src="${(wishlist != null and #lists.contains(wishlist, goods.goodsNo))
+                                    ? '/images/user/redHeart.png'
+                                    : '/images/user/heart.png'}"
+                             class="heart me-2"
+                             th:data-id="${goods.goodsNo}"
+                             width="36" height="36"
+                             alt="찜">
                         <a href="#" id="direct" type="button" class="btn_lg btn_line_primary"
                            style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 40px; padding: 0; border-radius: 5px; background-color: transparent; border: 2px solid #5055b1; color : #5055b1;font-size: 14px;">
                             <span class="text" style="display: inline-block; text-align: center;">장바구니</span>
