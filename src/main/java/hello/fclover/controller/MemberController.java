@@ -278,7 +278,7 @@ public class MemberController {
     @GetMapping("/myPage/info")
     public String myPageInfo() {
 
-        return "/user/mypage/userMyPageInfo";
+        return "user/mypage/userMyPageInfo";
     }
 
     @GetMapping("/myPage/info/modify")
