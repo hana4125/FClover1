@@ -278,7 +278,7 @@ public class MemberController {
     @GetMapping("/myPage/info")
     public String myPageInfo() {
 
-        return "/user/mypage/userMyPageInfo";
+        return "user/mypage/userMyPageInfo";
     }
 
     @GetMapping("/myPage/info/modify")
@@ -472,16 +472,13 @@ public class MemberController {
 
 
     //마이페이지 주문/배송 조회
-    @GetMapping("/myPage/Delivery")
+    @GetMapping("/myPage/orderDelivery")
     public String myPageOrderDelivery(Principal principal, Model model) {
         List<PaymentGoodsDTO> payment = paymentService.searchList(principal.getName());
 
-
-        //payments 테이블의 godosNo 기반으로 한 goodsname 넘겨주어야 함
-
-        log.info("principal = " + principal.getName());
-        log.info("여기는 controller : payment = " + payment);
         model.addAttribute("list", payment);
+        //상품 이미지에 대한 값 넘겨주어야 함. goods_image테이블.
+
         return "user/mypage/userOrderlist";
     }
 
@@ -490,7 +487,6 @@ public class MemberController {
     @GetMapping("/myPage/memberOrderListDetail")
     public String OrderListDetail(@RequestParam("orderId") Long orderId, Model model,Principal principal) {
         PaymentGoodsDTO payment = paymentService.searchOneOrderDetail(principal.getName(),orderId);
-        log.info("======================>여기는 컨트롤러(/memberOrderListDetail) : orderId = " + orderId);
 
         model.addAttribute("list", payment);
         model.addAttribute("orderId", orderId);

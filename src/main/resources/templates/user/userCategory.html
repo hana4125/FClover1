@@ -42,6 +42,14 @@
                 location.href = "/goods/newItems";
             })
 
+            $(".notice").click(function () {
+                location.href = "/inquiry/notice/noti_list";
+            })
+
+            $(".qna").click(function () {
+                location.href = "/inquiry/question";
+            })
+
             $(".show-detail").click(function () {
                 location.href = "/goods/GoodsDetail/{no}";
             })
@@ -235,7 +243,7 @@
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
-<div class="bg-success">
+<div class="bg-success" style="background: #226b24 !important;">
     <div class="container w-75">
         <div class="header-menu mt-4 d-flex align-items-center">
             <button class="btn btn-light me-3" id="category">
@@ -246,17 +254,15 @@
         </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Noto Sans KR;margin-right:40px;font-size:18px; color: #ffffff;font-family:Roboto;">전체도서</a>
-            <a href="#" class="best ps-5 pe-5"
+            <a class="best ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
-            <a href="#" class="steady ps-5 pe-5"
+            <a class="steady ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
-            <a href="#" class="new ps-5 pe-5"
+            <a class="new ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
-            <a href="#" class="best ps-5 pe-5"
+            <a class="notice ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
-            <a href="#" class="best ps-5 pe-5"
+            <a class="qna ps-5 pe-5"
                style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
         </div>
     </div>
@@ -284,11 +290,6 @@
         </aside>
         <div class="col-md-9">
             <div class="d-flex justify-content-end align-items-center mb-3">
-                <!-- 장바구니, 찜 버튼 -->
-                <!--            <div class="icon ms-auto mb-4">-->
-                <!--              <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
-                <!--              <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
-                <!--            </div>-->
 
                 <!-- 드롭다운 -->
                 <div class="dropdown me-2">

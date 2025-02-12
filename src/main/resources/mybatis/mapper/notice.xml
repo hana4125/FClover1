@@ -78,6 +78,42 @@
         </where>
     </select>
 
+
+    <!--<select id="getSearchList" parameterType="map" resultType="hello.fclover.domain.Notice">
+        SELECT noti_No as notiNo,
+        noti_Title as notiTitle,
+        noti_Name as notiName,
+        noti_Content as notiContent,
+        noti_Date as notiDate
+        FROM notice
+        <where>
+            <if test="category != null and category != '전체'">
+                MATCH(noti_Title) AGAINST(#{category} IN BOOLEAN MODE)
+            </if>
+            <if test="search_word != null and search_word != ''">
+                <if test="category != null and category != '전체'">
+                    AND
+                </if>
+                MATCH(noti_Title) AGAINST(#{search_word} IN BOOLEAN MODE)
+            </if>
+        </where>
+        ORDER BY noti_Date DESC
+        LIMIT #{start}, #{limit}
+    </select>
+    <select id="getSearchListCount" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM notice
+        <where>
+            <if test="category != null and category != '전체'">
+                MATCH(noti_Title) AGAINST(#{category} IN BOOLEAN MODE)
+            </if>
+            <if test="search_word != null">
+                AND MATCH(noti_Title) AGAINST(#{search_word} IN BOOLEAN MODE)
+            </if>
+        </where>
+    </select>-->
+
+
     <delete id="deleteAll">
         DELETE FROM notice;
     </delete>

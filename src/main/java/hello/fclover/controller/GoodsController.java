@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 @Controller
 @RequestMapping("/goods")
 @RequiredArgsConstructor
@@ -50,9 +49,26 @@ public class GoodsController {
 
 
     @GetMapping("/GoodsDetail/{no}")
-    public String goodsDetail(Model model, @PathVariable("no") Long goodsNo) {
+    public String goodsDetail(Model model, @ModelAttribute("member") Member member, @PathVariable("no") Long goodsNo) {
         goodsService.getGoodsDetail(goodsNo, model);
         System.out.println("model = " + model.getAttribute("imageList"));
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
+        // 회원 번호 가져오기
+        Long memberNo = null;
+        if (member != null) {
+            memberNo = member.getMemberNo();
+        }
+
+        // 찜 목록(회원이 찜한 상품 번호 목록) 조회
+        if (memberNo != null) {
+            List<Long> wishlist = wishService.getWishlistGoodsNos(memberNo);
+            model.addAttribute("wishlist", wishlist);
+        }
+
         return "user/userGoodsDetail";
     }
    /* @PostMapping("/SearchGoodsProcess")
@@ -131,7 +147,7 @@ public class GoodsController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
-        return "/user/userCategory"; // 카테고리 상세 페이지
+        return "user/userCategory"; // 카테고리 상세 페이지
     }
 
     @GetMapping("/bestSeller")
@@ -139,7 +155,7 @@ public class GoodsController {
                              @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                              @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                              Model model) {
-        return prepareSellerPage(member, page, size, model, "/user/userBestseller");
+        return prepareSellerPage(member, page, size, model, "user/userBestseller");
     }
 
     @PostMapping("/addMassProductProcess")
@@ -196,7 +212,7 @@ public class GoodsController {
                                @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                                Model model) {
-        return prepareSellerPage(member, page, size, model, "/user/userSteadyseller");
+        return prepareSellerPage(member, page, size, model, "user/userSteadyseller");
     }
 
     private String prepareSellerPage(Member member, int page, int size, Model model, String viewName) {
@@ -282,36 +298,8 @@ public class GoodsController {
         model.addAttribute("month", month);
         model.addAttribute("week", week);
 
-        return "/user/userNewItems";
+        return "user/userNewItems";
     }
 
-    @PostMapping("deleteGoodsProcess")
-    @ResponseBody
-    public ResponseEntity<List<String>> deleteGoodsProcess(@RequestParam("deleteGoodsNo") Long goodsNo) {
-        List<Goods> goodsList = goodsService.deleteGoods(goodsNo);
 
-        return ResponseEntity.ok(Collections.emptyList());
-    }
-
-    @GetMapping("getGoodsUpdateDetail")
-    public ResponseEntity<Goods> getGoodsDetail(@RequestParam("goodsNo") Long goodsNo) {
-        Goods goods = goodsService.getGoodsUpdateFormDetail(goodsNo);
-        if (goods != null) {
-            return ResponseEntity.ok(goods);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-//    @PostMapping("/updateGoods")
-//    public ResponseEntity<String> updateGoods(@RequestPart("goods") Goods goods,
-//                                              @RequestPart(value="goodsImages", required=false) List<MultipartFile> goodsImages) {
-//        // goods 객체 및 첨부파일(goodsImages)을 이용하여 상품 업데이트 로직 수행
-//        try {
-//            goodsService.updateGoods(goods, goodsImages);
-//            return ResponseEntity.ok("상품 업데이트 성공");
-//        } catch(Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("상품 업데이트 실패: " + e.getMessage());
-//        }
-//    }
 }
