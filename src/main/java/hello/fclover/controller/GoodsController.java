@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 @Controller
 @RequestMapping("/goods")
 @RequiredArgsConstructor
@@ -285,33 +284,5 @@ public class GoodsController {
         return "/user/userNewItems";
     }
 
-    @PostMapping("deleteGoodsProcess")
-    @ResponseBody
-    public ResponseEntity<List<String>> deleteGoodsProcess(@RequestParam("deleteGoodsNo") Long goodsNo) {
-        List<Goods> goodsList = goodsService.deleteGoods(goodsNo);
 
-        return ResponseEntity.ok(Collections.emptyList());
-    }
-
-    @GetMapping("getGoodsUpdateDetail")
-    public ResponseEntity<Goods> getGoodsDetail(@RequestParam("goodsNo") Long goodsNo) {
-        Goods goods = goodsService.getGoodsUpdateFormDetail(goodsNo);
-        if (goods != null) {
-            return ResponseEntity.ok(goods);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-//    @PostMapping("/updateGoods")
-//    public ResponseEntity<String> updateGoods(@RequestPart("goods") Goods goods,
-//                                              @RequestPart(value="goodsImages", required=false) List<MultipartFile> goodsImages) {
-//        // goods 객체 및 첨부파일(goodsImages)을 이용하여 상품 업데이트 로직 수행
-//        try {
-//            goodsService.updateGoods(goods, goodsImages);
-//            return ResponseEntity.ok("상품 업데이트 성공");
-//        } catch(Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("상품 업데이트 실패: " + e.getMessage());
-//        }
-//    }
 }

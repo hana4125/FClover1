@@ -40,7 +40,7 @@
             border-collapse: collapse;
         }
 
-       .content th, .content td {
+        .content th, .content td {
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: middle;
@@ -305,6 +305,8 @@
                                                 <input type="text" class="form-control" id="editCompanyName"
                                                        name="companyName"
                                                        style="background-color:lightgray" readonly>
+                                                <input type="text" class="form=control" id="editSellerNo"
+                                                       name="sellerNo" style="display:none">
                                             </div>
                                         </div>
                                     </div>
@@ -317,13 +319,7 @@
                                                        name="goodsPrice" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 offset-md-1">
-                                            <div class="mb-3">
-                                                <label for="editGoodsCount" class="form-label">상품 수량 (권)</label>
-                                                <input type="number" class="form-control" id="editGoodsCount"
-                                                       name="goodsCount" placeholder="예: 10" required>
-                                            </div>
-                                        </div>
+
                                         <div class="col-md-2 offset-md-1">
                                             <div class="mb-3">
                                                 <label for="editCateNo" class="form-label">책 카테고리</label>
@@ -407,227 +403,228 @@
                         </div>
                     </div>
                 </div>
-
-
                 <script>
-                    let token = $("meta[name='_csrf']").attr("content");
-                    let header = $("meta[name='_csrf_header']").attr("content");
+                    $(function () {
+                        let token = $("meta[name='_csrf']").attr("content");
+                        let header = $("meta[name='_csrf_header']").attr("content");
 
-                    document.querySelectorAll('th').forEach((th) => {
-                        const resizer = document.createElement('span');
-                        resizer.classList.add('resizer');
-                        th.style.position = 'relative'; // 부모 요소 상대 위치
-                        th.appendChild(resizer);
+                        document.querySelectorAll('th').forEach((th) => {
+                            const resizer = document.createElement('span');
+                            resizer.classList.add('resizer');
+                            th.style.position = 'relative'; // 부모 요소 상대 위치
+                            th.appendChild(resizer);
 
-                        let startX, startWidth;
+                            let startX, startWidth;
 
-                        resizer.addEventListener('mousedown', (e) => {
-                            e.preventDefault();
-                            startX = e.clientX;
-                            startWidth = th.offsetWidth;
+                            resizer.addEventListener('mousedown', (e) => {
+                                e.preventDefault();
+                                startX = e.clientX;
+                                startWidth = th.offsetWidth;
 
-                            const onMouseMove = (moveEvent) => {
-                                const newWidth = startWidth + (moveEvent.clientX - startX);
-                                if (newWidth > 50) { // 최소 너비 제한
-                                    th.style.width = `${newWidth}px`;
+                                const onMouseMove = (moveEvent) => {
+                                    const newWidth = startWidth + (moveEvent.clientX - startX);
+                                    if (newWidth > 50) { // 최소 너비 제한
+                                        th.style.width = `${newWidth}px`;
 
-                                    // 해당 열의 모든 셀 크기 동기화
-                                    const table = th.closest('table');
-                                    const colIndex = Array.from(th.parentNode.children).indexOf(th);
+                                        // 해당 열의 모든 셀 크기 동기화
+                                        const table = th.closest('table');
+                                        const colIndex = Array.from(th.parentNode.children).indexOf(th);
 
-                                    table.querySelectorAll('tbody tr').forEach((row) => {
-                                        const cell = row.children[colIndex];
-                                        if (cell) {
-                                            cell.style.width = `${newWidth}px`;
-                                            cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
-                                            cell.style.overflow = 'hidden';
-                                            cell.style.textOverflow = 'ellipsis';
-                                            cell.style.whiteSpace = 'nowrap';
-                                        }
-                                    });
+                                        table.querySelectorAll('tbody tr').forEach((row) => {
+                                            const cell = row.children[colIndex];
+                                            if (cell) {
+                                                cell.style.width = `${newWidth}px`;
+                                                cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
+                                                cell.style.overflow = 'hidden';
+                                                cell.style.textOverflow = 'ellipsis';
+                                                cell.style.whiteSpace = 'nowrap';
+                                            }
+                                        });
 
-                                    // 테이블의 전체 폭 강제 갱신
-                                    const tableWrapper = table.closest('.table-wrapper');
-                                    tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
-                                }
-                            };
+                                        // 테이블의 전체 폭 강제 갱신
+                                        const tableWrapper = table.closest('.table-wrapper');
+                                        tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
+                                    }
+                                };
 
-                            const onMouseUp = () => {
-                                document.removeEventListener('mousemove', onMouseMove);
-                                document.removeEventListener('mouseup', onMouseUp);
-                            };
+                                const onMouseUp = () => {
+                                    document.removeEventListener('mousemove', onMouseMove);
+                                    document.removeEventListener('mouseup', onMouseUp);
+                                };
 
-                            document.addEventListener('mousemove', onMouseMove);
-                            document.addEventListener('mouseup', onMouseUp);
+                                document.addEventListener('mousemove', onMouseMove);
+                                document.addEventListener('mouseup', onMouseUp);
+                            });
                         });
-                    });
-                    $('.search').click(function (event) {
-                        event.preventDefault(); // 폼 제출 기본 동작 방지
+                        $('.search').click(function (event) {
+                            event.preventDefault(); // 폼 제출 기본 동작 방지
 
-                        // 검색 조건 수집
-                        let searchData = {
-                            goodsName: $('#productName').val(),
-                            cateNo: $('#cateNo').val(),
-                            goodsWriter: $('#author').val(),
-                            createStartDate: $('#startDate').val(),
-                            createEndDate: $('#endDate').val(),
-                            sellerNo: $('#sellerNo').val()
-                        };
-                        let isEmpty = true;
-                        for (let key in searchData) {
-                            if (searchData[key] !== '') {
-                                isEmpty = false;
-                                break;
-                            }
-                        }
-                        console.log(isEmpty);
-                        if (isEmpty) {
-                            alert('검색어를 하나 이상 입력해주세요.');
-                            return; // 검색 요청 차단
-                        }
-
-                        // AJAX 요청
-                        $.ajax({
-                            url: '/seller/SearchGoodsProcess', // 백엔드 검색 엔드포인트
-                            type: 'POST',
-                            data: searchData,
-                            dataType: 'json',
-                            beforeSend: function (xhr) {
-                                xhr.setRequestHeader(header, token);
-                            },
-                            success: function (response) {
-                                console.log(response)
-
-                                var goodsCount = response.length;
-                                var html = ""
-                                if (response.length == 0) {
-                                    html = "<tr><td colSpan='15' class='text-center default'>검색 결과가 없습니다.</td> </tr>"
-                                } else {
-                                    $.each(response, function (index, goods) {
-
-                                        html += "<tr class='searchGoodsList_" + goods.goodsNo + "'>"
-                                        html += "<td><button class='btn btn-warning goodUpdate' data-id='" + goods.goodsNo + "'>수정 </button></td>"
-                                        html += "<td><button class='btn btn-danger goodDelete' data-id='" + goods.goodsNo + "'>삭제 </button> </td>"
-                                        html += "<td>" + goods.cateName + "</td>"
-                                        html += "<td>" + goods.goodsName + "</td>"
-                                        html += "<td>" + goods.goodsContent + "</td>"
-                                        html += "<td>" + goods.goodsPrice + "</td>"
-                                        html += "<td>" + goods.goodsWriter + "</td>"
-                                        html += "<td>" + goods.writerContent + "</td>"
-                                        html += "<td>" + goods.goodsCreateAt + "</td>"
-                                        html += "<td>" + goods.goodsPageCount + "</td>"
-                                        html += "<td>" + goods.goodsBookSize + "</td>"
-                                        html += "<td>" + goods.goodsDate + "</td>"
-                                        if (goods.updateAt == null || goods.updateAt == "") {
-                                            html += "<td></td>"
-                                        } else {
-                                            html += "<td>" + goods.updateAt + "</td>"
-                                        }
-                                        html += "</tr>"
-                                    })
-                                    console.log(html)
+                            // 검색 조건 수집
+                            let searchData = {
+                                goodsName: $('#productName').val(),
+                                cateNo: $('#cateNo').val(),
+                                goodsWriter: $('#author').val(),
+                                createStartDate: $('#startDate').val(),
+                                createEndDate: $('#endDate').val(),
+                                sellerNo: $('#sellerNo').val()
+                            };
+                            let isEmpty = true;
+                            for (let key in searchData) {
+                                if (searchData[key] !== '') {
+                                    isEmpty = false;
+                                    break;
                                 }
-                                $(".searchResult").html(html);
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('검색 중 오류 발생:', error);
-                                $('#searchResults').html('<p>검색 중 오류가 발생했습니다.</p>');
                             }
-                        });
-                    })
-                    $(".searchResult").on('click', '.goodDelete', function () {
-                        var deleteGoodsNo = $(this).data('id');
+                            console.log(isEmpty);
+                            if (isEmpty) {
+                                alert('검색어를 하나 이상 입력해주세요.');
+                                return; // 검색 요청 차단
+                            }
 
-                        if (confirm("상품을 삭제하시겠습니까?")) {
+                            // AJAX 요청
                             $.ajax({
-                                url: '/goods/deleteGoodsProcess',
-                                type: 'post',
-
-                                data: {deleteGoodsNo: deleteGoodsNo},
+                                url: '/seller/SearchGoodsProcess', // 백엔드 검색 엔드포인트
+                                type: 'POST',
+                                data: searchData,
+                                dataType: 'json',
                                 beforeSend: function (xhr) {
                                     xhr.setRequestHeader(header, token);
                                 },
                                 success: function (response) {
-                                    alert("삭제 되었습니다.")
-                                    $(".searchGoodsList_" + deleteGoodsNo).remove();
+                                    console.log(response)
+
+                                    var goodsCount = response.length;
+                                    var html = ""
+                                    if (response.length == 0) {
+                                        html = "<tr><td colSpan='15' class='text-center default'>검색 결과가 없습니다.</td> </tr>"
+                                    } else {
+                                        $.each(response, function (index, goods) {
+
+                                            html += "<tr class='searchGoodsList_" + goods.goodsNo + "'>"
+                                            html += "<td><button class='btn btn-warning goodUpdate' data-id='" + goods.goodsNo + "'>수정 </button></td>"
+                                            html += "<td><button class='btn btn-danger goodDelete' data-id='" + goods.goodsNo + "'>삭제 </button> </td>"
+                                            html += "<td>" + goods.cateName + "</td>"
+                                            html += "<td>" + goods.goodsName + "</td>"
+                                            html += "<td>" + goods.goodsContent + "</td>"
+                                            html += "<td>" + goods.goodsPrice + "</td>"
+                                            html += "<td>" + goods.goodsWriter + "</td>"
+                                            html += "<td>" + goods.writerContent + "</td>"
+                                            html += "<td>" + goods.goodsCreateAt + "</td>"
+                                            html += "<td>" + goods.goodsPageCount + "</td>"
+                                            html += "<td>" + goods.goodsBookSize + "</td>"
+                                            html += "<td>" + goods.goodsDate + "</td>"
+                                            if (goods.updateAt == null || goods.updateAt == "") {
+                                                html += "<td></td>"
+                                            } else {
+                                                html += "<td>" + goods.updateAt + "</td>"
+                                            }
+                                            html += "</tr>"
+                                        })
+                                        console.log(html)
+                                    }
+                                    $(".searchResult").html(html);
                                 },
-                                error: function (xhr, error) {
-                                    // console.error("에러 내용", xhr.responseText);
-                                    // console.error("Error:", error);
-                                    alert("삭제 실패하였습니다.")
+                                error: function (xhr, status, error) {
+                                    console.error('검색 중 오류 발생:', error);
+                                    $('#searchResults').html('<p>검색 중 오류가 발생했습니다.</p>');
                                 }
-                            })
-                        }
-                    })
+                            });
+                        })
+                        $(".searchResult").on('click', '.goodDelete', function () {
+                            var deleteGoodsNo = $(this).data('id');
 
-                    $(".searchResult").on("click", ".goodUpdate", function () {
-                        var goodsNo = $(this).data("id");
+                            if (confirm("상품을 삭제하시겠습니까?")) {
+                                $.ajax({
+                                    url: '/seller/deleteGoodsProcess',
+                                    type: 'post',
 
-                        // Ajax 요청으로 상품 상세 정보 조회 (GET 방식 예시)
-                        $.ajax({
-                            url: '/goods/getGoodsUpdateDetail',  // 백엔드에서 상품 정보를 반환하는 엔드포인트
-                            type: 'GET',
-                            data: {goodsNo: goodsNo},
-                            dataType: 'json',
-                            success: function (productData) {
-                                // 반환받은 productData를 모달 폼에 채웁니다.
-                                $("#editGoodsNo").val(productData.goodsNo);
-                                $("#editGoodsName").val(productData.goodsName);
-                                $("#editGoodsPrice").val(productData.goodsPrice);
-                                $("#editGoodsCount").val(productData.goodsCount);
-                                $("#editCateNo").val(productData.cateNo);
-                                $("#editGoodsContent").val(productData.goodsContent);
-                                $("#editCompanyName").val(productData.companyName);
-                                $("#editGoodsWriter").val(productData.goodsWriter);
-                                $("#editWriterContent").val(productData.writerContent);
-                                // 상품 등록일(날짜)의 경우 데이터 형식이 맞아야 함 (예: yyyy-MM-dd)
-                                $("#editGoodsCreateAt").val(productData.goodsCreateAt);
-                                $("#editGoodsPageCount").val(productData.goodsPageCount);
-                                $("#editGoodsBookSize").val(productData.goodsBookSize);
-                                // 필요에 따라 추가 필드들도 채워줍니다.
-
-                                // 모달 열기 (Bootstrap 5 모달)
-                                var editModal = new bootstrap.Modal(document.getElementById('editGoodsModal'));
-                                editModal.show();
-                            },
-                            error: function (xhr, status, error) {
-                                alert("상품 정보를 불러오는 중 오류가 발생했습니다: " + error);
+                                    data: {deleteGoodsNo: deleteGoodsNo},
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader(header, token);
+                                    },
+                                    success: function (response) {
+                                        alert("삭제 되었습니다.")
+                                        $(".searchGoodsList_" + deleteGoodsNo).remove();
+                                    },
+                                    error: function (xhr, error) {
+                                        // console.error("에러 내용", xhr.responseText);
+                                        // console.error("Error:", error);
+                                        alert("삭제 실패하였습니다.")
+                                    }
+                                })
                             }
+                        })
+
+                        $(".searchResult").on("click", ".goodUpdate", function () {
+                            var goodsNo = $(this).data("id");
+
+
+                            $.ajax({
+                                url: '/seller/getGoodsUpdateDetail',  // 백엔드에서 상품 정보를 반환하는 엔드포인트
+                                type: 'GET',
+                                data: {goodsNo: goodsNo},
+                                dataType: 'json',
+                                success: function (productData) {
+                                    // 반환받은 productData를 모달 폼에 채웁니다.
+                                    $("#editGoodsNo").val(productData.goodsNo);
+                                    $("#editGoodsName").val(productData.goodsName);
+                                    $("#editGoodsPrice").val(productData.goodsPrice);
+                                    $("#editGoodsCount").val(productData.goodsCount);
+                                    $("#editCateNo").val(productData.cateNo);
+                                    $("#editGoodsContent").val(productData.goodsContent);
+                                    $("#editCompanyName").val(productData.companyName);
+                                    $("#editSellerNo").val(productData.sellerNo);
+                                    $("#editGoodsWriter").val(productData.goodsWriter);
+                                    $("#editWriterContent").val(productData.writerContent);
+                                    // 상품 등록일(날짜)의 경우 데이터 형식이 맞아야 함 (예: yyyy-MM-dd)
+                                    $("#editGoodsCreateAt").val(productData.goodsCreateAt);
+                                    $("#editGoodsPageCount").val(productData.goodsPageCount);
+                                    $("#editGoodsBookSize").val(productData.goodsBookSize);
+                                    // 필요에 따라 추가 필드들도 채워줍니다.
+
+                                    // 모달 열기 (Bootstrap 5 모달)
+                                    var editModal = new bootstrap.Modal(document.getElementById('editGoodsModal'));
+                                    editModal.show();
+                                },
+                                error: function (xhr, status, error) {
+                                    alert("상품 정보를 불러오는 중 오류가 발생했습니다: " + error);
+                                }
+                            });
                         });
-                    });
 
-                    $("#editGoodsForm").submit(function (event) {
-                        event.preventDefault();
-                        alert("개발 중인 기능입니다.")
-                        // 폼 데이터를 FormData로 준비 (필요시 파일 업로드 등 포함)
-                        // var updateFormData = new FormData(this);
+                        $("#editGoodsForm").submit(function (event) {
+                            event.preventDefault();
 
-                        // CSRF 토큰 처리 (이미 페이지 상단에 메타 태그가 있다면)
-                        //
-                        // $.ajax({
-                        //   url: '/goods/updateGoodsProcess',  // 백엔드 상품 업데이트 엔드포인트
-                        //   type: 'POST',
-                        //   headers: {
-                        //     [csrfHeader]: csrfToken
-                        //   },
-                        //   data: updateFormData,
-                        //   processData: false,
-                        //   contentType: false,
-                        //   success: function(response) {
-                        //     alert("상품 수정이 성공적으로 완료되었습니다.");
-                        //     // 모달 닫기
-                        //     var modalEl = document.getElementById('editGoodsModal');
-                        //     var modal = bootstrap.Modal.getInstance(modalEl);
-                        //     modal.hide();
-                        //
-                        //     // 목록을 갱신하거나 수정된 데이터를 화면에 반영합니다.
-                        //     // 예: location.reload(); 또는 특정 행 업데이트
-                        //   },
-                        //   error: function(xhr, status, error) {
-                        //     alert("상품 수정 중 오류가 발생했습니다: " + error);
-                        //   }
-                        // });
-                    });
+                            //폼 데이터를 FormData로 준비
+                            var updateFormData = new FormData(this);
+
+
+                            $.ajax({
+                                url: '/seller/updateGoodsProcess',  // 백엔드 상품 업데이트 엔드포인트
+                                type: 'POST',
+
+                                data: updateFormData,
+                                processData: false,
+                                contentType: false,
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader(header, token);
+                                },
+                                success: function (response) {
+                                    alert("상품 수정이 성공적으로 완료되었습니다.");
+                                    // 모달 닫기
+                                    var modalEl = document.getElementById('editGoodsModal');
+                                    var modal = bootstrap.Modal.getInstance(modalEl);
+                                    modal.hide();
+
+                                    // 목록을 갱신하거나 수정된 데이터를 화면에 반영합니다.
+                                    // 예: location.reload(); 또는 특정 행 업데이트
+                                },
+                                error: function (xhr, status, error) {
+                                    alert("상품 수정 중 오류가 발생했습니다: " + error);
+                                }
+                            });
+                        });
+                    })
                 </script>
             </div>
         </div>
