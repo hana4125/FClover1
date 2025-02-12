@@ -8,6 +8,9 @@ public class SearchParamDTO {
     // 검색 키워드
     private String keyword;
 
+    private String processedKeyword;
+    private String language;
+
     // 검색 필터 관련 파라미터
     private int cateNo;
 
@@ -15,8 +18,8 @@ public class SearchParamDTO {
     private String chrc;
     private String pbcm;
 
-    private int saprMin;
-    private int saprMax;
+    private Integer saprMin;
+    private Integer saprMax;
 
     private String rlseDate;
     private String reKeyword;

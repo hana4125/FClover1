@@ -23,7 +23,7 @@ public class Goods {
     private String companyName;        // 출판사 이름
     private String writerContent;      // 저자 설명
     private LocalDate goodsCreateAt;   // 상품 발행일
-//    private int goodsCount;            // 상품 총 판매수량
+    private int goodsCount;            // 상품 총 판매수량
     private LocalDateTime goodsDate;   // 상품 등록일
     private int goodsPageCount;        // 상품 페이지 수
     private String goodsBookSize;      // 상품 크기

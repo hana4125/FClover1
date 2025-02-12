@@ -314,7 +314,7 @@ public class InquirycenterController {
             mv.setViewName("error/error");
             mv.addObject("message", "Question not found.");
         } else {
-            mv.setViewName("user/userQnaDetail");
+            mv.setViewName("user/userQNADetail");
             mv.addObject("questiondata", question);
         }
         return mv;
