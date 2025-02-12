@@ -484,8 +484,7 @@ function getRcntKeywordList(recentSch) {
     addHtml += "                                          <div class='right_area'>";
     addHtml += "                                              <span class='date'>"
         + recentWrd[1] + "</span>";
-    addHtml += "                                              <a href='javascript:removeKeyword('"
-        + i + "');'>";
+    addHtml += "                                              <a href=\"javascript:removeKeyword('"+i+"');\">";
     addHtml += "                                                   <button type='button' class='btn_keyword_del'><span class='hidden'>이 검색어 삭제</span></button>";
     addHtml += "                                              </a> ";
     addHtml += "                                          </div>";

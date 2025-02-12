@@ -59,11 +59,6 @@
         }
     </style>
     <link rel="stylesheet" href="/css/user/header.css">
-    <script th:inline="javascript">
-        $(function () {
-
-      });
-    </script>
     <script th:src="@{/js/search/search_common.js}"></script>
     <script th:src="@{/js/search/search_auto.js}"></script>
     <div class="bg-light mb-3">
@@ -153,7 +148,7 @@
             <div class="util_area">
               <div class="util_button_area">
                 <!-- TODO : 주소 설정해야 함 -->
-                <a class="btn-sm" th:href="@{#}">도움말</a>
+                <a class="btn-sm" th:href="@{/inquiry/notice/noti_list}">고객센터</a>
                 <a class="btn-sm" th:href="@{/search/searchDetail}">상세검색</a>
               </div>
               <button type="button" class="button_layer_close" id="close_search_auto"><span class="text">닫기</span></button>
