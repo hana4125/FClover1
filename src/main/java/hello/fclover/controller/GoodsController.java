@@ -52,6 +52,11 @@ public class GoodsController {
     public String goodsDetail(Model model, @PathVariable("no") Long goodsNo) {
         goodsService.getGoodsDetail(goodsNo, model);
         System.out.println("model = " + model.getAttribute("imageList"));
+
+        // 카테고리 데이터 가져오기
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
+
         return "user/userGoodsDetail";
     }
    /* @PostMapping("/SearchGoodsProcess")
@@ -130,7 +135,7 @@ public class GoodsController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
-        return "/user/userCategory"; // 카테고리 상세 페이지
+        return "user/userCategory"; // 카테고리 상세 페이지
     }
 
     @GetMapping("/bestSeller")
@@ -138,7 +143,7 @@ public class GoodsController {
                              @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                              @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                              Model model) {
-        return prepareSellerPage(member, page, size, model, "/user/userBestseller");
+        return prepareSellerPage(member, page, size, model, "user/userBestseller");
     }
 
     @PostMapping("/addMassProductProcess")
@@ -194,7 +199,7 @@ public class GoodsController {
                                @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                @RequestParam(value = "size", required = false, defaultValue = "20") int size,
                                Model model) {
-        return prepareSellerPage(member, page, size, model, "/user/userSteadyseller");
+        return prepareSellerPage(member, page, size, model, "user/userSteadyseller");
     }
 
     private String prepareSellerPage(Member member, int page, int size, Model model, String viewName) {
@@ -280,6 +285,6 @@ public class GoodsController {
         model.addAttribute("month", month);
         model.addAttribute("week", week);
 
-        return "/user/userNewItems";
+        return "user/userNewItems";
     }
 }
