@@ -228,6 +228,11 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.findGoodsById(goodsNo);
     }
 
+    @Override
+    public int updateGoods(Goods goods) {
+        return goodsMapper.updateGoods(goods);
+    }
+
     private String getExcelUrl(String mainImage) {
         int lastIndexOf = mainImage.lastIndexOf("/");
         return mainImage.substring(0, lastIndexOf);

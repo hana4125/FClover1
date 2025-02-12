@@ -650,4 +650,11 @@
   <delete id="deleteGood">
     delete from goods where goods_no = #{goodsNo}
   </delete>
+
+  <update id="updateGoods">
+    update goods set seller_no =#{sellerNo}, cate_no= #{cateNo}, goods_name=#{goodsName}, goods_content=#{goodsContent},
+                     goods_price=#{goodsPrice}, goods_writer=#{goodsWriter}, goods_create_at=#{goodsCreateAt},
+                     goods_pageCount=#{goodsPageCount}, goods_bookSize=#{goodsBookSize}, writer_content=#{writerContent}, update_at= current_date
+                 where goods_no=#{goodsNo}
+  </update>
 </mapper>
