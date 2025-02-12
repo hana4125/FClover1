@@ -131,7 +131,7 @@ public class GoodsController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("sort", sort);
         model.addAttribute("size", size);
-        return "/user/userCategory"; // 카테고리 상세 페이지
+        return "user/userCategory"; // 카테고리 상세 페이지
     }
 
     @GetMapping("/bestSeller")
