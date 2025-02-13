@@ -156,12 +156,6 @@
                     return false;
                 }
 
-                if (!$.isNumeric($("#goodsCount").val())) {
-                    alert("상품 수량을 정확히 입력하세요.");
-                    $("#goodsCount").focus();
-                    return false;
-                }
-
                 if ($("#goodsContent").val().trim() == "") {
                     alert("상품 상세 설명을 작성하세요.");
                     $("#goodsContent").focus();
@@ -209,7 +203,6 @@
                 const goodsData = {
                     goodsName: $("#goodsName").val(),
                     goodsPrice: $("#goodsPrice").val(),
-                    goodsCount: $("#goodsCount").val(),
                     cateNo: $("#cateNo").val(),
                     goodsContent: $("#goodsContent").val(),
                     companyName: $("#companyName").val(),
