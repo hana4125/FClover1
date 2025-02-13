@@ -99,4 +99,10 @@
         select seller_no, company_name
         from seller
     </select>
+
+    <select id="getSellerId">
+        select seller_no
+        from seller
+        where seller_id=#{sellerName}
+    </select>
 </mapper>

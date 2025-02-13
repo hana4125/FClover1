@@ -143,7 +143,7 @@ public class SellerController {
     @GetMapping("/sellerDaySettlement")
     public String sellerDaySettlement(Principal principal, Model model) {
         System.out.println("principal = " + principal.getName());
-        List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
+        List<Settlement> daySettlement = sellerService.searchDaySettlement(principal.getName());
         model.addAttribute("daySettlement", daySettlement);
 
         System.out.println("daySettlement = " + daySettlement);
