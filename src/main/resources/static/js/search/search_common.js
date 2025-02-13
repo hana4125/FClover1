@@ -99,7 +99,7 @@ $(function () {
   });
 
   // 닫기 버튼 클릭 시 드롭다운 닫기
-  $(".close-dropdown").on("click", function () {
+  $(".button_layer_close").on("click", function () {
     const dropdownInstance = bootstrap.Dropdown.getInstance($dropdown[0]);
     if (dropdownInstance) {
       dropdownInstance.hide();
