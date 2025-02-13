@@ -364,6 +364,7 @@
         </div>
     </div>
 </div>
+<div th:replace="~{fragment/footer :: footer}"></div>
 <script>
     $(function () {
         let token = $("meta[name='_csrf']").attr("content");
@@ -629,5 +630,6 @@
         });
     })
 </script>
+
 </body>
 </html>
