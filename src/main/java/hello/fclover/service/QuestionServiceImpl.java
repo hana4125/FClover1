@@ -124,14 +124,14 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             int result = dao.deleteQuestion(qno);
             log.info("deleteQuestion 결과: {}", result);
+            if (result == 0) {
+                throw new RuntimeException("삭제할 데이터가 없습니다.");
+            }
             return result;
-        }catch (Exception e){
-            log.error("질문 삭제 중 오류 발생 - qno: {}", qno);
-            log.error("예외 종류: {}", e.getClass().getName());
-            log.error("예외 메시지: {}", e.getMessage());
-            log.error("상세 스택트레이스: ", e);
+        } catch (Exception e) {
+            log.error("질문 삭제 중 오류 발생 - qno: {}", qno, e);
+            throw new RuntimeException("질문 삭제 중 오류가 발생했습니다.", e);
         }
-        return 0;
     }
 
     //문의 수정

@@ -142,18 +142,10 @@ public class InquirycenterController {
                                Principal principal) {
         Integer notino = body.get("num");
 
-        // 관리자 권한 체크
-        if (principal == null || !principal.getName().equals("admin")) {
-            rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
-            return "redirect:/inquiry/notice/detail?notino=" + notino;
-        }
         int result = noticeService.deleteNotice(notino);
         if (result > 0) {
-            rattr.addFlashAttribute("successMessage", "공지사항이 삭제되었습니다.");
-
             return "redirect:/inquiry/notice/noti_list";
         } else {
-            rattr.addFlashAttribute("errorMessage", "삭제 실패");
             return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
     }
@@ -223,23 +215,28 @@ public class InquirycenterController {
     @PostMapping(value = "/question/plus")
     public String noticeAdd(
             Question question,
-            @RequestParam(value = "qnaImage", required = false) MultipartFile multipartFile) throws Exception {
+            @RequestParam(value = "qnaImage", required = false) MultipartFile multipartFile,
+            @RequestHeader(value = "referer", required = false) String beforeURL)
+            throws Exception {
 
         // 요청이 들어왔는지 확인
         System.out.println("noticeAdd 요청 도착");
 
-        if (multipartFile != null) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
             System.out.println("파일 이름: " + multipartFile.getOriginalFilename());
             System.out.println("파일 크기: " + multipartFile.getSize());
-        } else {
-            System.out.println("qnaImage 파일이 포함되지 않음");
-        }
-
-        if (multipartFile != null && !multipartFile.isEmpty()) {
             String fileDBName = questionService.saveFile(multipartFile);
             question.setQfile(fileDBName);
+        }else if(!question.getUploadfilename().isEmpty()){
+            question.setQfile(question.getUploadfilename());
         }
-        questionService.insertQuestion(question);
+
+        if (beforeURL != null && beforeURL.contains("write")) {
+            questionService.insertQuestion(question);
+        } else {
+            questionService.modifyQuestion(question);
+        }
+
         return "redirect:/inquiry/question/detail?qno=" + question.getQno();
     }
 
@@ -349,21 +346,14 @@ public class InquirycenterController {
     @PostMapping(value = "/question/delete")
     public String deleteQuestion(@RequestBody Map<String, Integer> body,
                                  RedirectAttributes rattr,
-                                 Principal principal) {
+                                 Authentication authentication) {
         int qno = body.get("num");
 
-        // 관리자 권한 체크
-        if (!principal.getName().equals("admin")) {
-            rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
-            return "redirect:/inquiry/question/detail?qno=" + qno;
-        }
         int result = questionService.deleteQuestion(qno);
         log.debug("삭제 결과 - qno: {}, result: {}", qno, result);
         if (result > 0) {
-            rattr.addFlashAttribute("successMessage", "문의사항이 삭제되었습니다.");
             return "redirect:/inquiry/question";
         } else {
-            rattr.addFlashAttribute("errorMessage", "삭제 실패");
             return "redirect:/inquiry/question/detail?qno=" + qno;
         }
     }

@@ -106,8 +106,9 @@
           <div class="right_area"></div>
           <hr>
         </div>
-        <form th:action="@{/inquiry/question/plus}" method="post" name="boardform">
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${qdata.qno}"/>
+        <form th:action="@{/inquiry/question/plus}" method="post" name="boardform" enctype="multipart/form-data">
+          <input type="hidden" th:name="qno" th:value="${qdata.qno}"/>
+          <input type="hidden" th:name="uploadfilename" th:value="${qdata.qfile}"/>
           <!--문의하기 전체 영역-->
           <div class="tbl_row_wrap" id="inquiryForm">
             <table class="tbl_row">
@@ -193,7 +194,7 @@
                   <span class="file_item_box">
                       <span class="attach_img_box">
                         <span class="attach_img_view">
-                          <img src="" id="attach_img">
+                          <img th:src="${qdata.qfile}" id="attach_img">
                         </span>
 <!--                        <button class="btn_remove_img" type="button"></button>-->
                         <input type="file" name="qnaImage" id="qnaImage" style="display: none" th:value="${qdata.qfile}">
