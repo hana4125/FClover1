@@ -277,7 +277,7 @@
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="submit-btn" data-imp-uid="${row.deliNo}" style="border: 1px solid grey">운송장 등록</button>`;
+                    return `<button class="submit-btn" data-imp-uid="${row.deliNo}" data-payments-no="${row.paymentsNo}" style="border: 1px solid grey">운송장 등록</button>`;
                   }
                 }
               ]
@@ -287,19 +287,18 @@
           // 운송장 등록 버튼 클릭 이벤트
           $(document).on('click', '.submit-btn', async function() {
             const deliveryNum = prompt("운송장 번호를 입력해주세요(숫자만 입력가능합니다.)");
-
-
             const deliNo = $(this).data('imp-uid');
+            const paymentsNo = $(this).data('payments-no');
 
-            const response = await fetch(`/bo/delivery/trackingNumberClick`, {
-              method: 'POST',
+            const response = await fetch(`/bo/delivery/trackingNumberClick?deliNo=${deliNo}&paymentsNo=${paymentsNo}`, {
+              method: 'GET',
               headers: {
                 'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                deliNo : deliNo,
-                deliveryNum: deliveryNum,
-              })
+              }
+              // body: JSON.stringify({
+              //   deliNo : deliNo,
+              //   deliveryNum: deliveryNum,
+              // })
 
 
             });

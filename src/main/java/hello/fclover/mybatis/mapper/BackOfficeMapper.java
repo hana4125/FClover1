@@ -1,6 +1,7 @@
 package hello.fclover.mybatis.mapper;
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public interface BackOfficeMapper {
 
     void insertDeliveryReadyList(Long paymentsNo, String userId, String status);
 
-    List<Delivery> deliveryReadyOrderSearch();
+    List<PaymentDeliveryDTO> deliveryReadyOrderSearch();
 
-    void insertTrackingNumber(int deliNo, int deliNum, String deliCompany,String deliStatus);
+    void insertTrackingNumber(Long deliNo, Payment payment, String deliStatus);
 
     List<Delivery> deliveryInTransitOrderSearch();
 

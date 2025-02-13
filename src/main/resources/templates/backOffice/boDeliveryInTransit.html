@@ -218,10 +218,9 @@
           <thead>
           <tr>
             <th>DELIVERY ID</th>
-            <th>ORDER ID</th>
-            <th>USER ID</th>
+            <th>PAYMENTS NO</th>
             <th>DELIVERY STATUS</th>
-            <th>CREATED AT</th>
+            <th>DELI DATE</th>
             <th>Actions</th> <!-- 결제 취소 버튼을 위한 열 추가 -->
           </tr>
           </thead>
@@ -263,14 +262,13 @@
               },
               "columns": [
                 { "data": "deliNo" },
-                { "data": "orderId" },
-                { "data": "userId" },
+                { "data": "paymentsNo" },
                 { "data": "deliStatus" },
-                { "data": "createdAt" },
+                { "data": "deliDate" },
                 {
                   "data": null, // null로 설정하여 커스텀 데이터를 추가할 수 있도록 함
                   "render": function(data, type, row) {
-                    return `<button class="deliveryDone-btn" data-deliNo="${row.deliNo}" style="border: 1px solid grey">배송완료</button>`;
+                    return `<button class="deliveryDone-btn" data-deli-no="${row.deliNo}" style="border: 1px solid grey">배송완료</button>`;
                   }
                 }
               ]
@@ -279,12 +277,12 @@
 
           // 배송 취소 버튼 클릭 이벤트
           $(document).on('click', '.deliveryDone-btn', async function() {
-            const deliNo = $(this).data('deliNo');
+            const deliNo = $(this).data('deli-no');
             const response = await fetch(`/bo/delivery/DoneClick?deliNo=${deliNo}`, {
               method: 'GET',
-              headers: {
-                'Content-Type': 'application/json'
-              }
+              // headers: {
+              //   'Content-Type': 'application/json'
+              // }
             });
 
             if (response.ok) {

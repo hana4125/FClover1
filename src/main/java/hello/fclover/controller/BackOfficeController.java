@@ -2,12 +2,14 @@ package hello.fclover.controller;
 
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import hello.fclover.service.BackOfficeService;
 import hello.fclover.service.MemberService;
 import hello.fclover.service.SellerService;
 import hello.fclover.task.SettlementScheduledTasks;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -97,8 +99,8 @@ public class BackOfficeController {
     //배송준비중 데이터 비동기처리
     @GetMapping("/deliveryReadyAsync")
     @ResponseBody
-    public List<Delivery> deliveryReadyAsync() {
-        List<Delivery> list = backOfficeService.deliveryReadyOrderSearch();
+    public List<PaymentDeliveryDTO> deliveryReadyAsync() {
+        List<PaymentDeliveryDTO> list = backOfficeService.deliveryReadyOrderSearch();
         log.info("=======>여기는 controller(/deliveryReadyAsync) : " + list);
         return list;
     }
@@ -188,22 +190,29 @@ public class BackOfficeController {
     }
 
     //운송장번호 등록
-    @PostMapping("/delivery/trackingNumberClick")
+    @GetMapping("/delivery/trackingNumberClick")
     @ResponseBody
-    public ResponseEntity<?> trackingNumberSubmit(@RequestBody Map<String,Object> requestBody) {
+    public ResponseEntity<?> trackingNumberSubmit(@RequestParam Long deliNo,@RequestParam Long paymentsNo,Model model) {
 
         System.out.println("================>여기는 트래킹넘버 컨트롤러 ");
 
-        String deliNo = requestBody.get("deliNo").toString();
-        String deliNum = requestBody.get("deliveryNum").toString();
+//        String deliNo = requestBody.get("deliNo").toString();
+//        String deliNum = requestBody.get("deliveryNum").toString();
         String deliCompany = "CJ대한통운";
         String deliStatus = "배송중";
 
 
-        backOfficeService.insertTrackingNumber(Integer.valueOf(deliNo),Integer.valueOf(deliNum),deliCompany,deliStatus);
+        // 트래킹 넘버 정보를 서비스에 전달 (insertTrackingNumber 메서드에 전달)
+        try {
+            backOfficeService.insertTrackingNumber(deliNo, paymentsNo, deliCompany, deliStatus);
+            return ResponseEntity.ok().body("운송장 정보가 성공적으로 등록되었습니다.");
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("잘못된 숫자 형식입니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
 
-
-        return ResponseEntity.ok().body("운송장 정보가 성공적으로 등록되었습니다.");
 
     }
 
@@ -220,9 +229,11 @@ public class BackOfficeController {
     //배송중 페이지에서 [배송완료] 버튼 눌렀을 시
     @GetMapping("/delivery/DoneClick")
     @ResponseBody
-    public ResponseEntity<?> deliveryInTransitClick(@RequestBody int deliNo) {
+    public ResponseEntity<?> deliveryInTransitClick(@RequestParam int deliNo) {
         backOfficeService.changeDeliveryDoneStatus(deliNo);
         return ResponseEntity.ok().body("배송완료상태로 변경완료되었습니다.");
+
+
     }
 
 
