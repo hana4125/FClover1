@@ -148,8 +148,14 @@
             <div class="util_area">
               <div class="util_button_area">
                 <!-- TODO : 주소 설정해야 함 -->
-                <a class="btn-sm" th:href="@{/inquiry/notice/noti_list}">고객센터</a>
-                <a class="btn-sm" th:href="@{/search/searchDetail}">상세검색</a>
+                <a class="btn_xs" th:href="@{/inquiry/notice/noti_list}">
+                  <span class="ico_link"></span>
+                  <span class="text">고객센터</span>
+                </a>
+                <a class="btn_xs" th:href="@{/search/searchDetail}">
+                  <span class="ico_search"></span>
+                  <span class="text">상세검색</span>
+                </a>
               </div>
               <button type="button" class="button_layer_close" id="close_search_auto"><span class="text">닫기</span></button>
             </div>

@@ -568,7 +568,7 @@ function riseCall(age, gender) {
       addHtml += "                            </div>";
       addHtml += "                            <!-- //form_sel -->"
       addHtml += "                            <div class='form_sel type_arw' data-class='type_arw'>";
-      addHtml += "                                <select title='성별기준 정렬' id='genderSel'>";
+      addHtml += "                                <select title='성별기준 정렬' id='genderSel' class='ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget'>";
       addHtml += "                                    <option value='ALL'>전성별</option>";
       if (gender == 'M') {
         addHtml += "                                 <option value='M' selected>남성</option>";
