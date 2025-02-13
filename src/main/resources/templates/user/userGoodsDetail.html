@@ -36,6 +36,54 @@
                 location.href = "";
             })
 
+
+            $('.tabs a.tab_link').click(function(e) {
+                e.preventDefault();  // 기본 동작(해시 추가) 차단
+                var target = $(this).attr('href');  // 예: "#scrollSpyProdDetail"
+                // 대상 요소로 부드럽게 스크롤
+                $('html, body').animate({
+                    scrollTop: $(target).offset().top
+                }, 300);
+            });
+
+            // 장바구니 버튼 클릭 시
+            $("#direct").click(function () {
+                // CSRF 토큰
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+
+                const goodsNo = document.getElementById('goodsNo').value;
+                // const goodsNo = $(this).data("id");
+
+                $.ajax({
+                    url: "/cart/cartList",
+                    type: "POST",
+                    // CSRF 토큰 헤더 설정
+                    headers: {[csrfHeader]: csrfToken},
+                    data: {goodsNo: goodsNo},
+                    dataType: "json",
+                    success: function (response) {
+                        // response.status 가 "added" 또는 "updated"
+                        if (response.status === "added") {
+                            const moveConfirm = confirm("상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
+                            if (moveConfirm) {
+                                location.href = "/member/cart";
+                            }
+                        } else if (response.status === "updated") {
+                            const moveConfirm = confirm("장바구니에 이미 담은 상품이 있어 수량이 추가 되었습니다. 장바구니로 이동하시겠습니까?");
+                            if (moveConfirm) {
+                                location.href = "/member/cart";
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        if (status === "parsererror") {
+                            location.href = '/member/login'
+                        }
+                    }
+                });
+            });
             $(".show-plus").click(function (e) {
                 e.preventDefault(); // 기본 동작 방지
                 if ($(".best-title").hasClass("active")) {
