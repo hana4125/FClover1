@@ -59,6 +59,21 @@
         }
     </style>
     <link rel="stylesheet" href="/css/user/header.css">
+    <script>
+      $(function() {
+          $("#logo").click(function () {
+              location.href = "/";
+          })
+
+          $("#cart").click(function () {
+              location.href = "/member/cart";
+          })
+
+          $(".myPage").click(function () {
+              location.href = "/member/myPage";
+          })
+      })
+    </script>
     <script th:src="@{/js/search/search_common.js}"></script>
     <script th:src="@{/js/search/search_auto.js}"></script>
     <div class="bg-light mb-3">
