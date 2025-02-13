@@ -82,8 +82,19 @@
         WHERE q_no = #{qno}
     </select>
 
-<!-- 기간 조회 -->
+    <update id="modifyQuestion" parameterType="Question">
+        UPDATE qna
+        SET q_type = #{qtype},
+            q_title = #{qtitle},
+            q_content = #{qcontent},
+            q_file = #{qfile},
+            response_phone = #{responsephone},
+            response_email = #{responseemail}
+        WHERE
+            q_no = #{qno}
+    </update>
 
+<!-- 기간 조회 -->
     <!-- 기간 조회를 위한 쿼리 -->
     <select id="findByDateBetween" resultType="hello.fclover.domain.Question">
         SELECT *

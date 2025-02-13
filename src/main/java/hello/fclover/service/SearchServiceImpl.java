@@ -4,6 +4,7 @@ import hello.fclover.domain.Category;
 import hello.fclover.domain.Goods;
 import hello.fclover.domain.GoodsImage;
 import hello.fclover.domain.Member;
+import hello.fclover.dto.PopularKeywordResponseDTO;
 import hello.fclover.dto.SearchDetailParamDTO;
 import hello.fclover.dto.SearchKeywordDTO;
 import hello.fclover.dto.SearchLogDTO;
@@ -16,17 +17,24 @@ import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
@@ -43,6 +51,7 @@ public class SearchServiceImpl implements SearchService {
     private final GoodsService goodsService;
     private final CountService countService;
     private final SearchLogMapper searchLogMapper;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Qualifier("asyncExecutor")
     private final Executor asyncExecutor;
@@ -315,6 +324,35 @@ public class SearchServiceImpl implements SearchService {
         result.setCategoryList(sortedCategoryMap);
 
         return result;
+    }
+
+    // 인기 검색어 조회 서비스
+    @Override
+    public PopularKeywordResponseDTO getPopularKeywords(String gender, String ageRange, int limit) {
+
+        // Redis Key 구성
+        String redisKey = "popular:" + gender + ":" + ageRange;
+
+        // Redis Sorted Set 에서 점수가 높은 순으로 상위 limit 개 항목 조회
+        Set<TypedTuple<String>> resultSet = redisTemplate.opsForZSet()
+                .reverseRangeWithScores(redisKey, 0, limit - 1);
+
+        // 조회 결과를 Keyword 리스트로 변환
+        List<String> keywords = (resultSet != null)
+                ? resultSet.stream()
+                .map(ZSetOperations.TypedTuple::getValue)
+                .collect(Collectors.toList())
+                : new ArrayList<>();
+
+        // 기준 시각 (예: 현재 시각)을 "yyyy.MM.DD.HH:mm" 형식으로 포맷
+        // (day-of-month는 소문자 dd를 사용합니다. 예: "2025.03.15.14:30")
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm");
+        // KST 기준의 현재 시간을 가져옴
+        ZonedDateTime nowKst = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+                .withMinute(0).withSecond(0).withNano(0);
+        String baseTime = nowKst.format(formatter);
+
+        return new PopularKeywordResponseDTO(keywords, baseTime);
     }
 
     // 검색 로그 삽입 로직

@@ -126,10 +126,19 @@ $(function () {
   });
 
   $(".buy-now-btn").click(function () {
-    const goodsNo = $(this).data("id");
+    let goodsNo = document.querySelector(".goodsNo").value;
+    let goodsName = document.querySelector(".goodsName").value;
+    let goodsPrice = document.querySelector(".goodsPrice").value;
+    let goodsWriter = document.querySelector(".goodsWriter").value;
+    let quantity = 1;  // 수량 가져오기
 
-    // 바로구매 페이지로 이동
-    location.href = `/payments?goodsNo=${goodsNo}`;
+
+    // URL에 값 붙여서 이동
+    location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+        "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+        "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+        "&quantity=" + encodeURIComponent(quantity) +
+        "&goodsNo=" +   encodeURIComponent(goodsNo) ;
   })
 
   /**
@@ -476,7 +485,7 @@ $(function () {
   }
 
   // 재검색 영역: 검색 버튼 클릭 시 처리 (재검색어를 쿼리스트링에 추가)
-  $(".filter_search_box .btn_search").on("click", function(e) {
+  $(".filter_search_box .btn_ip_search").on("click", function(e) {
     e.preventDefault();
     const reKeyword = $("#reKeyword").val().trim();
     // 재검색어 쿼리 파라미터 업데이트 (빈 문자열이면 삭제)
@@ -503,4 +512,65 @@ function comma(str) {
 function uncomma(str) {
   str = String(str);
   return str.replace(/[^\d]+/g, '');
+}
+
+function setSearchInput(wrap, input) {
+  wrap = wrap || '.form_ip_search';
+  input = input || '.form_ip';
+
+  var searchWrap,
+      searchIp,
+      clearBtn;
+
+  if ($(wrap).length > 0) {
+    $(wrap).each(function () {
+      searchWrap = $(this);
+      searchIp = $(this).find(input);
+      clearBtn = $(this).find('.btn_ip_clear');
+      // console.log(searchIp);
+
+      if (searchIp.length > 0) {
+        if (searchIp.val().length > 0) searchWrap.addClass('value');
+
+        clearBtn.off('click').on('click', function () {
+          searchWrap = $(this).closest(wrap);
+          searchWrap.find(input).val('').focus();
+          searchWrap.removeClass('value');
+
+        })
+
+        searchIp.data('placeholder', searchIp.attr('placeholder'));
+        searchIp.on({
+          'propertychange change input paste': function () {
+            searchWrap = $(this).closest(wrap);
+            if ($(this).val().length > 0) {
+              searchWrap.addClass('value');
+            } else {
+              searchWrap.removeClass('value');
+            }
+          },
+          'focusin': function () {
+            searchWrap = $(this).closest(wrap);
+
+            if (searchIp.hasClass('ip_gnb_search')) {
+              searchIp.attr('placeholder', '');
+            }
+
+            if (!searchWrap.hasClass('focus')) searchWrap.addClass('focus');
+          },
+          'focusout': function () {
+            searchWrap = $(this).closest(wrap);
+
+            if (searchIp.hasClass('ip_gnb_search')) {
+              searchIp.attr('placeholder', searchIp.data('placeholder'));
+            }
+
+            if (searchWrap.hasClass('focus')) searchWrap.removeClass('focus');
+          }
+        });
+      }
+    });
+
+  }
+
 }

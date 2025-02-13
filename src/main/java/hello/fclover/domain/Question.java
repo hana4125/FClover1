@@ -22,7 +22,7 @@ public class Question {
     private int qreref;
     private int qrelev;
     private int qreseq;
-    private MultipartFile uploadfile;
+    private String uploadfilename = "";
 
     private int cno;
     private String ccontent;
@@ -40,4 +40,6 @@ public class Question {
     public Object getQalert() {
         return this.qalert;
     }
+
+
 }
