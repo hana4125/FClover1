@@ -43,4 +43,5 @@ public interface QuestionService {
     Question getQuestionById(int qno);
 
     int modifyQuestion(Question question);
+
 }
