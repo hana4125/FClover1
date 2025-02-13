@@ -3,6 +3,7 @@ package hello.fclover.controller;
 import hello.fclover.domain.*;
 import hello.fclover.dto.CartDTO;
 import hello.fclover.dto.PaymentGoodsDTO;
+import hello.fclover.dto.PaymentGoodsImageDTO;
 import hello.fclover.dto.WishDTO;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
@@ -443,10 +444,11 @@ public class MemberController {
         Long memberNo = memberService.getmemberNo(principal.getName());
         AddressBook defaultAddress =memberService.getDefaultAddress(memberNo);
         model.addAttribute("defaultAddress", defaultAddress);
-
+        Goods goods = goodsService.findGoodsByNo(goodsNo);
         goodsService.getGoodsDetail(goodsNo, model);
         model.getAttribute("imageList");
 
+        model.addAttribute("goods", goods);
         model.addAttribute("username", principal.getName());
         model.addAttribute("goodsName", goodsName);
         model.addAttribute("goodsPrice", goodsPrice);
@@ -474,7 +476,9 @@ public class MemberController {
     //마이페이지 주문/배송 조회
     @GetMapping("/myPage/orderDelivery")
     public String myPageOrderDelivery(Principal principal, Model model) {
-        List<PaymentGoodsDTO> payment = paymentService.searchList(principal.getName());
+//        List<PaymentGoodsDTO> payment = paymentService.searchList(principal.getName());
+        List<PaymentGoodsImageDTO> payment = paymentService.searchPaymentGoodsImage(principal.getName());
+
 
         model.addAttribute("list", payment);
         //상품 이미지에 대한 값 넘겨주어야 함. goods_image테이블.
@@ -486,7 +490,9 @@ public class MemberController {
     //마이페이지 주문/배송조회 상세보기
     @GetMapping("/myPage/memberOrderListDetail")
     public String OrderListDetail(@RequestParam("orderId") Long orderId, Model model,Principal principal) {
-        PaymentGoodsDTO payment = paymentService.searchOneOrderDetail(principal.getName(),orderId);
+//        PaymentGoodsDTO payment = paymentService.searchOneOrderDetail(principal.getName(),orderId);
+        PaymentGoodsImageDTO payment = paymentService.searchOneOrderPaymentGoodsImage(principal.getName(),orderId);
+
 
         model.addAttribute("list", payment);
         model.addAttribute("orderId", orderId);

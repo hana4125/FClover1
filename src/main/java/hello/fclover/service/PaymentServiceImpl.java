@@ -3,6 +3,7 @@ package hello.fclover.service;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
 import hello.fclover.dto.PaymentGoodsDTO;
+import hello.fclover.dto.PaymentGoodsImageDTO;
 import hello.fclover.mybatis.mapper.PaymentMapper;
 import hello.fclover.util.PaymentClient;
 import lombok.RequiredArgsConstructor;
@@ -108,5 +109,19 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentGoodsDTO paymentGoodsList =  dao.searchOneOrderDetail(userId,orderId);
 
         return paymentGoodsList;
+    }
+
+    @Override
+    public List<PaymentGoodsImageDTO> searchPaymentGoodsImage(String userId) {
+        List<PaymentGoodsImageDTO> paymentGoodsImageList =  dao.searchPaymentGoodsImageList(userId);
+
+        return paymentGoodsImageList;
+    }
+
+    @Override
+    public PaymentGoodsImageDTO searchOneOrderPaymentGoodsImage(String userId, Long orderId) {
+        PaymentGoodsImageDTO paymentGoodsImageList = dao.searchOneOrderPaymentGoodsImage(userId,orderId);
+
+        return paymentGoodsImageList;
     }
 }
