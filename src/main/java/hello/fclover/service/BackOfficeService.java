@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -13,9 +14,9 @@ public interface BackOfficeService {
 
     void InsertdeliveryReadyList(Long paymentsNo, String userId);
 
-    List<Delivery> deliveryReadyOrderSearch();
+    List<PaymentDeliveryDTO> deliveryReadyOrderSearch();
 
-    void insertTrackingNumber(int deliNo, int deliveryNum, String deliveryCompany,String deliStatus);
+    void insertTrackingNumber(Long deliNo, Long paymentsNo, String deliveryCompany,String deliStatus);
 
     List<Delivery> deliveryInTransitOrderSearch();
 

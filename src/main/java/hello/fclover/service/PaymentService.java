@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import hello.fclover.dto.PaymentGoodsDTO;
 import hello.fclover.dto.PaymentGoodsImageDTO;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,12 @@ public interface PaymentService {
     List<PaymentGoodsImageDTO> searchPaymentGoodsImage(String name);
 
     PaymentGoodsImageDTO searchOneOrderPaymentGoodsImage(String name, Long orderId);
+
+    List<PaymentDeliveryDTO> searchPaymentDeliveryById(String userId);
+
+    int countDeliveryStatusCase1(String name);
+
+    int countDeliveryStatusCase2(String name);
+
+    int countDeliveryStatusCase3(String name);
 }

@@ -61,19 +61,19 @@
                     <!-- 수정 220428 리스트 목록 수정 -->
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-preparation="" th:text="${#lists.size(list)}"></span>
+                            <span class="history_val" data-order-summary-preparation="" th:text="${case1Count}"></span>
                             <span class="history_desc">준비중</span>
                         </button>
                     </div>
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-delivery="">0</span>
+                            <span class="history_val" data-order-summary-delivery="" th:text="${case2Count}">0</span>
                             <span class="history_desc">배송중</span>
                         </button>
                     </div>
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-delivery-finish="">0</span>
+                            <span class="history_val" data-order-summary-delivery-finish="" th:text="${case3Count}" >0</span>
                             <span class="history_desc">배송완료</span>
                         </button>
                     </div>

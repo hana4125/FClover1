@@ -2,6 +2,7 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import hello.fclover.dto.PaymentGoodsDTO;
 import hello.fclover.dto.PaymentGoodsImageDTO;
 import hello.fclover.mybatis.mapper.PaymentMapper;
@@ -123,5 +124,27 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentGoodsImageDTO paymentGoodsImageList = dao.searchOneOrderPaymentGoodsImage(userId,orderId);
 
         return paymentGoodsImageList;
+    }
+
+    @Override
+    public List<PaymentDeliveryDTO> searchPaymentDeliveryById(String userId) {
+        List<PaymentDeliveryDTO> pdDTO =dao.searchPaymentDeliveryById(userId);
+
+        return pdDTO;
+    }
+
+    @Override
+    public int countDeliveryStatusCase1(String userId) {
+        return paymentMapper.countDeliveryStatusCase1(userId);
+    }
+
+    @Override
+    public int countDeliveryStatusCase2(String userId) {
+        return paymentMapper.countDeliveryStatusCase2(userId);
+    }
+
+    @Override
+    public int countDeliveryStatusCase3(String userId) {
+        return paymentMapper.countDeliveryStatusCase3(userId);
     }
 }

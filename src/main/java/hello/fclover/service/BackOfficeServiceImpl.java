@@ -2,7 +2,9 @@ package hello.fclover.service;
 
 
 import hello.fclover.domain.*;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import hello.fclover.mybatis.mapper.BackOfficeMapper;
+import hello.fclover.mybatis.mapper.PaymentMapper;
 import hello.fclover.mybatis.mapper.SellerMapper;
 import hello.fclover.mybatis.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class BackOfficeServiceImpl implements BackOfficeService {
 
     private final BackOfficeMapper dao;
+    private final PaymentMapper paymentMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -44,20 +47,24 @@ public class BackOfficeServiceImpl implements BackOfficeService {
     }
 
     @Override
-    public List<Delivery> deliveryReadyOrderSearch() {
-            List<Delivery> deliveries = dao.deliveryReadyOrderSearch();
+    public List<PaymentDeliveryDTO> deliveryReadyOrderSearch() {
+            List<PaymentDeliveryDTO> deliveries = dao.deliveryReadyOrderSearch();
         return deliveries;
     }
 
     @Override
-    public void insertTrackingNumber(int deliNo, int deliveryNum, String deliveryCompany,String deliStatus) {
+    public void insertTrackingNumber(Long deliNo, Long paymentsNo, String deliveryCompany,String deliStatus) {
+//        dao.
+
+        Payment payment = paymentMapper.searchByPaymentsNo(paymentsNo);
+
 
 //        System.out.println("deliNo = " + deliNo);
 //        System.out.println("deliveryNum = " + deliveryNum);
 //        System.out.println("deliveryCompany = " + deliveryCompany);
 
         //배송번호에 대한 운송장 정보 저장
-        dao.insertTrackingNumber(deliNo,deliveryNum,deliveryCompany,deliStatus);
+        dao.insertTrackingNumber(deliNo,payment,deliStatus);
 
 
         //

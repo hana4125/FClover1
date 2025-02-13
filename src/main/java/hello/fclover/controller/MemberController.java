@@ -1,10 +1,7 @@
 package hello.fclover.controller;
 
 import hello.fclover.domain.*;
-import hello.fclover.dto.CartDTO;
-import hello.fclover.dto.PaymentGoodsDTO;
-import hello.fclover.dto.PaymentGoodsImageDTO;
-import hello.fclover.dto.WishDTO;
+import hello.fclover.dto.*;
 import hello.fclover.mail.EmailMessage;
 import hello.fclover.mail.EmailService;
 import hello.fclover.service.*;
@@ -477,9 +474,21 @@ public class MemberController {
     @GetMapping("/myPage/orderDelivery")
     public String myPageOrderDelivery(Principal principal, Model model) {
 //        List<PaymentGoodsDTO> payment = paymentService.searchList(principal.getName());
+// 마이바티스 서비스 호출을 통해 각 케이스에 해당하는 카운트 가져오기
+        int case1Count = paymentService.countDeliveryStatusCase1(principal.getName());
+        int case2Count = paymentService.countDeliveryStatusCase2(principal.getName());
+        int case3Count = paymentService.countDeliveryStatusCase3(principal.getName());
+
+        // 카운트 값을 모델에 추가
+        model.addAttribute("case1Count", case1Count);
+        model.addAttribute("case2Count", case2Count);
+        model.addAttribute("case3Count", case3Count);
+
+//        List<PaymentDeliveryDTO> pdDTO = paymentService.searchPaymentDeliveryById(principal.getName());
+
         List<PaymentGoodsImageDTO> payment = paymentService.searchPaymentGoodsImage(principal.getName());
 
-
+//        model.addAttribute("paymentDeliveryList",pdDTO);
         model.addAttribute("list", payment);
         //상품 이미지에 대한 값 넘겨주어야 함. goods_image테이블.
 
