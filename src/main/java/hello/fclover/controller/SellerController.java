@@ -214,6 +214,9 @@ public class SellerController {
         // 현재 페이지에 해당하는 구매자 리스트 가져오기
         List<Map<String, Object>> orderList = sellerService.getListDetail(page, searchWord, limit, sellerNo, searchField);
 
+        if (totalcount == 0 && page > 1) {
+            page = 1;
+        }
         PaginationResult result = new PaginationResult(page, limit, totalcount);
 
         if (orderList.isEmpty()) {

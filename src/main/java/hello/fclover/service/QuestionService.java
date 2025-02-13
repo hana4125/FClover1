@@ -39,4 +39,8 @@ public interface QuestionService {
     int TotalCount();
 
     int deleteQuestion(int qno);
+
+    Question getQuestionById(int qno);
+
+    int modifyQuestion(Question question);
 }

@@ -37,4 +37,6 @@ public interface QuestionMapper {
     List<Question> findAll(HashMap<String, Object> map);
 
     int deleteQuestion(int qno);
+
+    public int modifyQuestion(Question question);
 }
