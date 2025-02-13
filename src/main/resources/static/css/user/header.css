@@ -96,6 +96,7 @@
 .auto_complete_wrap .search_content_wrap .keyword_contents_area .hot_keyword_box {
   flex: 0 auto;
   width: 300px;
+  margin: 0 36px;
 }
 .auto_complete_wrap .search_content_wrap .keyword_contents_area .hot_keyword_box .hot_keyword_list_wrap {
   display: -webkit-box;
@@ -546,7 +547,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: 15px 15px;
-  background-image: url("../images/common/ink/btn_delete@2x.png");
+  background-image: url("../../images/common/ink/btn_delete@2x.png");
   vertical-align: top;
 }
 .recent_keyword_box .recent_keyword_list_wrap .recent_keyword_list .recent_keyword_item ~ .recent_keyword_item {
@@ -661,4 +662,23 @@
   padding: 0;
   border: none;
   border-radius: 0;
+}
+
+.item_group {
+  display: flex;       /* 내부 요소들을 가로로 정렬 */
+  gap: 8px;           /* 요소 간 간격 추가 (선택 사항) */
+  align-items: center; /* 세로 정렬을 중앙으로 맞춤 */
+}
+
+.auto_complete_wrap .search_content_wrap .util_area .util_button_area .ico_search {
+  width: 16px;
+  height: 16px;
+  background: url("../../images/common/ink/search_16.png") center no-repeat;
+  background-size: 16px 16px;
+}
+.auto_complete_wrap .search_content_wrap .util_area .util_button_area .ico_link {
+  width: 16px;
+  height: 16px;
+  background: url("../../images/common/ink/link_16.png") center no-repeat;
+  background-size: 16px 16px;
 }
