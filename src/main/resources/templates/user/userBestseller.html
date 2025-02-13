@@ -215,10 +215,23 @@
 
         $(function () {
             $(".buy-now-btn").click(function () {
-                const goodsNo = $(this).data("id");
+
+                    // 값 가져오기
+                    var goodsNo = document.querySelector('.goodsNo').value;
+                    var goodsName = document.querySelector('.goodsName').value;
+                    var goodsPrice = document.querySelector('.goodsPrice').value;
+                    var goodsWriter = document.querySelector('.goodsWriter').value;
+                    var quantity = 1;
+
+                    // 쿼리 스트링 생성
+                    var queryString = "goodsNo=" + encodeURIComponent(goodsNo) +
+                    "&goodsName=" + encodeURIComponent(goodsName) +
+                    "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+                    "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+                        "&quantity=" + encodeURIComponent(quantity);
 
                 // 바로구매 페이지로 이동
-                location.href = `/payments?goodsNo=${goodsNo}`;
+                location.href = `/member/memberPay?`+queryString;
             })
         })
     </script>
@@ -283,6 +296,18 @@
                 <div class="book-items mt-4">
                     <ul class="list-unstyled">
                         <li th:each="goods : ${bestGoodsList}">
+
+                            <input type="hidden" th:value="${goods.goodsNo}" class="goodsNo">
+                            <input type="hidden" th:value="${goods.goodsName}" class="goodsName">
+                            <input type="hidden" th:value="${goods.goodsPrice}" class="goodsPrice">
+                            <input type="hidden" th:value="${goods.goodsWriter}" class="goodsWriter">
+
+<!--                            @RequestParam String goodsName,-->
+<!--                            @RequestParam int goodsPrice,-->
+<!--                            @RequestParam String goodsWriter,-->
+<!--                            @RequestParam int quantity, -->
+<!--                            @RequestParam Long goodsNo-->
+<!--                            -->
                             <div class="category-list d-flex align-items-start mb-5">
                                 <div class="book-item mt-1">
                                     <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->

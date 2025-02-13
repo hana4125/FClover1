@@ -46,6 +46,7 @@
 </head>
 <body>
 <input type="hidden" th:value="${goodsNo}" class="goodsNo">
+<input type="hidden" th:value="${goods.sellerNo}" class="sellerNo">
 <div id="username" th:text="${username}" hidden></div>
 <div th:replace="~{fragment/header :: header}"></div>
 <div class="mt-4 border-top">
@@ -166,19 +167,32 @@
           <p>배송비</p>
           <span>3000원</span>
         </div>
-          <div th:if="${not #lists.isEmpty(coupons)}" th:each="coupon : ${coupons}">
-        <div class="d-flex justify-content-between">
+          <div th:if="${#lists.isEmpty(coupons)}">
+             <div class="d-flex justify-content-between">
 
                 <p>쿠폰할인</p>
-                <span> -<span th:text="${coupon.couponAmount}">0원</span>원</span>
+                <span> -<span>0</span>원</span>
             </div>
         </div>
+          <div th:if="${not #lists.isEmpty(coupons)}">
+              <div class="d-flex justify-content-between">
+
+                  <p>쿠폰할인</p>
+                  <span> -<span th:text="${coupon.couponAmount}"></span>원</span>
+              </div>
+          </div>
         <hr>
-          <div th:if="${not #lists.isEmpty(coupons)}" th:each="coupon : ${coupons}">
+          <div th:if="${#lists.isEmpty(coupons)}">
             <div class="d-flex justify-content-between">
-          <p>최종 결제 금액</p>
-          <span><span class="totalPrice" th:text="${goodsPrice}+3000-${coupon.couponAmount}"></span> 원</span>
-        </div>
+             <p>최종 결제 금액</p>
+            <span><span class="totalPrice" th:text="${goodsPrice}+3000"></span> 원</span>
+                </div>
+          </div>
+          <div th:if="${not #lists.isEmpty(coupons)}" th:each="coupon : ${coupons}">
+              <div class="d-flex justify-content-between">
+                  <p>최종 결제 금액</p>
+                  <span><span class="totalPrice" th:text="${goodsPrice}+3000-${coupon.couponAmount}"></span> 원</span>
+              </div>
           </div>
         <button class="btn btn-primary form-control mt-3" id="payment-button">결제하기</button>
         <script type="text/javascript" th:src="@{/js/payment.js}"></script>

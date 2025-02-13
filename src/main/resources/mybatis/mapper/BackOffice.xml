@@ -3,6 +3,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="hello.fclover.mybatis.mapper.BackOfficeMapper">
+    <resultMap id="paymentResultMap" type="Payment">
+        <!-- 다른 컬럼들은 그대로 두고, seller_id를 sellerNo로 매핑 -->
+        <result column="seller_id" property="sellerNo"/>
+        <result column="payments_no" property="paymentsNo"/>
+        <result column="user_id" property="userId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="payment_quantity" property="quantity"/>
+        <result column="goods_no" property="goodsNo"/>
+        <result column="payment_amount" property="paymentAmount"/>
+        <result column="imp_uid" property="impUid"/>
+        <result column="payment_method" property="paymentMethod"/>
+        <result column="merchant_uid" property="merchantUid"/>
+        <result column="pg_provider" property="pgProvider"/>
+        <result column="pg_type" property="pgType"/>
+        <result column="pg_tid" property="pgTid"/>
+        <result column="status" property="status"/>
+        <result column="card_name" property="cardName"/>
+        <result column="card_number" property="cardNumber"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
     <select id="searchOrder">
         select * from payments
     </select>
@@ -28,7 +49,7 @@
         d.deli_no,
         d.deli_status,
         d.deli_date
-    FROM payments p right outer JOIN delivery d ON p.payments_no = d.payments_no
+    FROM payments p inner join delivery d ON p.payments_no = d.payments_no
     WHERE d.deli_status='배송준비중'
 
 
@@ -37,16 +58,16 @@
     </select>
 
     <update id="insertTrackingNumber">
-        update delivery set deli_num=#{deliNum}, deli_company = #{deliCompany}, deli_status=#{deliStatus}
+        update delivery set  payments_no=#{payment.paymentsNo} , deli_status='배송중'
         where deli_no = #{deliNo}
     </update>
 
     <select id="deliveryInTransitOrderSearch">
-        select deli_no,order_id,user_id,deli_status,created_at from delivery where deli_status='배송중'
+        select deli_no,payments_no,deli_status,deli_date from delivery where deli_status='배송중'
     </select>
 
     <select id="deliveryDoneSearch">
-        select deli_no,order_id,user_id,deli_status,created_at from delivery where deli_status='배송완료'
+        select deli_no,payments_no,deli_status,deli_date from delivery where deli_status='배송완료'
     </select>
     <update id="changeDeliveryDoneStatus">
         update delivery set deli_status=#{deliStatus}

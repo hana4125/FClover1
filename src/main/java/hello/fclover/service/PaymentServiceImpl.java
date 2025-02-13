@@ -2,7 +2,9 @@ package hello.fclover.service;
 
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
+import hello.fclover.dto.PaymentDeliveryDTO;
 import hello.fclover.dto.PaymentGoodsDTO;
+import hello.fclover.dto.PaymentGoodsImageDTO;
 import hello.fclover.mybatis.mapper.PaymentMapper;
 import hello.fclover.util.PaymentClient;
 import lombok.RequiredArgsConstructor;
@@ -108,5 +110,41 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentGoodsDTO paymentGoodsList =  dao.searchOneOrderDetail(userId,orderId);
 
         return paymentGoodsList;
+    }
+
+    @Override
+    public List<PaymentGoodsImageDTO> searchPaymentGoodsImage(String userId) {
+        List<PaymentGoodsImageDTO> paymentGoodsImageList =  dao.searchPaymentGoodsImageList(userId);
+
+        return paymentGoodsImageList;
+    }
+
+    @Override
+    public PaymentGoodsImageDTO searchOneOrderPaymentGoodsImage(String userId, Long orderId) {
+        PaymentGoodsImageDTO paymentGoodsImageList = dao.searchOneOrderPaymentGoodsImage(userId,orderId);
+
+        return paymentGoodsImageList;
+    }
+
+    @Override
+    public List<PaymentDeliveryDTO> searchPaymentDeliveryById(String userId) {
+        List<PaymentDeliveryDTO> pdDTO =dao.searchPaymentDeliveryById(userId);
+
+        return pdDTO;
+    }
+
+    @Override
+    public int countDeliveryStatusCase1(String userId) {
+        return paymentMapper.countDeliveryStatusCase1(userId);
+    }
+
+    @Override
+    public int countDeliveryStatusCase2(String userId) {
+        return paymentMapper.countDeliveryStatusCase2(userId);
+    }
+
+    @Override
+    public int countDeliveryStatusCase3(String userId) {
+        return paymentMapper.countDeliveryStatusCase3(userId);
     }
 }

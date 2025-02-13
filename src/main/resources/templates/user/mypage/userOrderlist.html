@@ -61,19 +61,19 @@
                     <!-- 수정 220428 리스트 목록 수정 -->
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-preparation="" th:text="${#lists.size(list)}"></span>
+                            <span class="history_val" data-order-summary-preparation="" th:text="${case1Count}"></span>
                             <span class="history_desc">준비중</span>
                         </button>
                     </div>
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-delivery="">0</span>
+                            <span class="history_val" data-order-summary-delivery="" th:text="${case2Count}">0</span>
                             <span class="history_desc">배송중</span>
                         </button>
                     </div>
                     <div class="order_history_box">
                         <button type="button" class="btn_filter_history">
-                            <span class="history_val" data-order-summary-delivery-finish="">0</span>
+                            <span class="history_val" data-order-summary-delivery-finish="" th:text="${case3Count}" >0</span>
                             <span class="history_desc">배송완료</span>
                         </button>
                     </div>
@@ -146,7 +146,8 @@
                                         <a href="https://product.kyobobook.co.kr/detail/S000201372723" class="prod_link" data-order-commoditylink="">
 
                                     <span class="img_box">
-                                        <img src="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg" alt="[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml"><!-- 수정 220428 단일태그 닫기 추가 -->
+<!--                                        <img src="https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/5200000000214.jpg" alt="[교보문고굿즈]The Scent of PAGE : 디퓨저 100ml">&lt;!&ndash; 수정 220428 단일태그 닫기 추가 &ndash;&gt;-->
+                                             <img th:src="${list.goodsUrl} + '/' +${list.goodsImageName}" th:alt="${list.goodsName}"><!-- 수정 220428 단일태그 닫기 추가 -->
                                     </span>
 
                                         </a>

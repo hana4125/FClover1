@@ -4,6 +4,7 @@ var totalPrice = $(".totalPrice").text();
 var goodsName = $(".goodsName").text();
 var quantity = $(".quantity").text();
 var goodsNo = $(".goodsNo").val();
+var sellerNo = $(".sellerNo").val();
 
 // const useremail = "as02268@naver.com"
 const username=document.getElementById("username").innerText;
@@ -59,7 +60,7 @@ function paymentProcess() {
                 if (rsp.success) { //결제 성공시
 
                     // 필요한 데이터를 추가
-                    rsp.partnerId = 12345;  // partnerId 값 설정 (필요시 동적으로 가져올 수 있음)
+                    rsp.partnerId = sellerNo;  // partnerId 값 설정 (필요시 동적으로 가져올 수 있음)
                     rsp.userId = `${username}`;     // userId 값 설정 (현재 로그인한 사용자 정보로 설정 가능)
                     rsp.orderId = "12341234" + generateMerchantUid();   // orderId 값 설정 (주문 관련 정보로 설정 가능)
                     rsp.paymentDate = new Date().toISOString().split('T')[0];  // paymentDate를 현재 날짜로 설정 (yyyy-mm-dd 형식)
