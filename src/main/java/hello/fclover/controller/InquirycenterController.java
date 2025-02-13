@@ -140,10 +140,10 @@ public class InquirycenterController {
     public String deleteNotice(@RequestBody Map<String, Integer> body,
                                RedirectAttributes rattr,
                                Principal principal) {
-        int notino = body.get("num");
+        Integer notino = body.get("num");
 
         // 관리자 권한 체크
-        if (!principal.getName().equals("admin")) {
+        if (principal == null || !principal.getName().equals("admin")) {
             rattr.addFlashAttribute("errorMessage", "삭제 권한이 없습니다.");
             return "redirect:/inquiry/notice/detail?notino=" + notino;
         }
@@ -320,6 +320,30 @@ public class InquirycenterController {
         return mv;
     }
 
+    //문의사항 수정
+    @GetMapping("/question/modifyView")
+    public ModelAndView QModifyView(
+            @RequestParam("num") int qno,
+            ModelAndView mv,
+            HttpServletRequest request) {
+        Question question = questionService.getQuestionById(qno);
+
+        if (question == null) {
+            mv.setViewName("error/error");
+            mv.addObject("url",request.getRequestURL());
+            mv.addObject("message","수정 실패입니다.");
+        }else {
+            mv.addObject("qdata", question);
+            mv.setViewName("user/userQNAModify");
+        }
+        return mv;
+    }
+
+    @PostMapping("/question/modifyAction")
+    public String updateQuestion(@ModelAttribute Question question) {
+        questionService.modifyQuestion(question);
+        return "redirect:/inquiry/question/detail?num=" + question.getQno();
+    }
 
     //문의사항 삭제
     @PostMapping(value = "/question/delete")

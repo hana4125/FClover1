@@ -134,6 +134,17 @@ public class QuestionServiceImpl implements QuestionService {
         return 0;
     }
 
+    //문의 수정
+    @Override
+    public Question getQuestionById(int qno) {
+        return dao.findByQno(qno);
+    }
+
+    @Override
+    public int modifyQuestion(Question question) {
+        return dao.modifyQuestion(question);
+    }
+
     //댓글 목록 가져오기
     @Override
     public List<Question> getCommentList(int q_no, int page) {

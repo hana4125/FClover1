@@ -99,22 +99,22 @@ public class NoticeServiceImpl implements NoticeService {
         map.put("limit", limit);
         return dao.getSearchList(map);
     }
-
+    //공지사항 삭제
     @Override
     public int deleteNotice(int notino) {
         try {
             int result = dao.deleteNotice(notino);
-            log.error("Delete attempt - notino: {}, rows affected: {}", notino, result);
+            log.error("deleteNotice 결과: {}",result);
             return result;
         } catch (Exception e) {
-            log.error("Delete failed - notino: {}, error: {}", notino, e.getMessage());
+            log.error("Delete failed - notino: {}, error: {}", notino);
             return 0;
         }
     }
 
     @Override
     public Notice getNoticeById(int notino) {
-        return dao.findById((long) notino)
+        return dao.findById(notino)
                 .orElseThrow(() -> new RuntimeException("Notice not found"));
     }
     @Override
