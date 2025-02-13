@@ -97,7 +97,7 @@
                     <div class="mb-4">
                         <h5 class="fw-bold">결제/정산내역</h5>
                         <ul class="list-unstyled">
-                            <li><a href="/seller/sellerDaySettlement">일 정산내역</a></li>
+                            <li><a href="/seller/sellerDaySettlement">내 정산내역</a></li>
                         </ul>
                     </div>
 
@@ -139,7 +139,9 @@
 <!--                </div>-->
 
                 <div class="container ms-5">
+
 <!--                     <div class="order-header">구매자 주문 목록</div> -->
+
 
                     <div class="search-container">
                         <form method="get" action="/seller/buyerList">
@@ -204,6 +206,6 @@
         </div>
     </div>
 </div>
-
+<div th:replace="~{fragment/footer :: footer}"></div>
 </body>
 </html>
