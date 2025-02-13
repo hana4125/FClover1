@@ -77,7 +77,7 @@
               <ul class="filter_list">
                 <!-- 카테고리 필터 -->
                 <li class="menu_item item_depth1" id="category_filter_li">
-                  <button type="button" class="btn_filter_depth1" id="category_filter_button">
+                  <button type="button" class="btn_filter_depth1 btn btn-light" id="category_filter_button">
                     <span class="text">카테고리</span>
                   </button>
                   <div class="filter_cont_box" style="display: none;">
@@ -99,7 +99,7 @@
             <div class="filter_list_box" style="display: block">
               <ul class="filter_list">
                 <li class="menu_item item_depth1 active">
-                  <button type="button" class="btn_filter_depth1 active">
+                  <button type="button" class="btn_filter_depth1 btn btn-light active">
                     <span class="text">검색조건</span>
                   </button>
                   <div class="filter_cont_box">
@@ -132,7 +132,7 @@
             <div class="filter_list_box" style="display: block">
               <ul class="filter_list">
                 <li class="menu_item item_depth1">
-                  <button type="button" class="btn_filter_depth1">
+                  <button type="button" class="btn_filter_depth1 btn btn-light">
                     <span class="text">가격</span>
                   </button>
                   <div class="filter_cont_box" style="display: none;">
@@ -189,7 +189,7 @@
             <div class="filter_list_box" style="display: block">
               <ul class="filter_list">
                 <li class="menu_item item_depth1">
-                  <button type="button" class="btn_filter_depth1">
+                  <button type="button" class="btn_filter_depth1 btn btn-light">
                     <span class="text">발행일</span>
                   </button>
                   <div class="filter_cont_box" style="display: none;">
@@ -241,8 +241,8 @@
               <div class="form_ip_search">
                 <input type="search" name="reKeyword" id="reKeyword" class="form_ip" placeholder="결과 내 재검색"
                        autocomplete="off">
-                <button type="button" class="btn_clear"><span class="hidden">초기화</span></button>
-                <button type="button" class="btn_search"><span class="hidden">검색</span></button>
+                <button type="button" class="btn_ip_clear"><span class="hidden">초기화</span></button>
+                <button type="button" class="btn_ip_search"><span class="hidden">검색</span></button>
               </div>
             </div>
           </div>
@@ -288,6 +288,10 @@
                 <li class="prod_item d-flex justify-content-between align-items-start" th:each="goods : ${searchResult.searchResults}">
                   <div class="prod_area d-flex align-items-start mb-5">
                     <div class="book-item d-flex mt-1 ms-3">
+                      <input type="hidden" class="goodsNo" th:value="${goods.goodsNo}">
+                      <input type="hidden" class="goodsName" th:value="${goods.goodsName}">
+                      <input type="hidden" class="goodsPrice" th:value="${goods.goodsPrice}">
+                      <input type="hidden" class="goodsWriter" th:value="${goods.goodsWriter}">
                       <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                       <div>
                         <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}" class="show-detail">

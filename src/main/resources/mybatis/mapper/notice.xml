@@ -113,11 +113,6 @@
         </where>
     </select>-->
 
-
-    <delete id="deleteAll">
-        DELETE FROM notice;
-    </delete>
-
     <insert id="save" parameterType="hello.fclover.domain.Notice">
         <selectKey resultType="int" order="BEFORE" keyProperty="notino" keyColumn="noti_no">
             select IFNULL(max(noti_no), 0) + 1 from notice
@@ -152,10 +147,13 @@
             noti_no = #{notino}
     </update>
 
+    <delete id="deleteAll">
+        DELETE FROM notice;
+    </delete>
+
     <delete id="deleteNotice" parameterType="int">
-        <if test="_parameter != null">
-            DELETE FROM notice WHERE noti_no = #{notino}
-        </if>
+            DELETE FROM notice
+            WHERE noti_no = #{notino}
     </delete>
 
 </mapper>

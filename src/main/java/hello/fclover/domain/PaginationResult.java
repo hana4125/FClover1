@@ -1,37 +1,45 @@
 package hello.fclover.domain;
 
 public class PaginationResult {
+    private int page;
+    private int limit;
+    private int totalcount;
     private int maxpage;
     private int startpage;
     private int endpage;
-
+    private final int pageLimit = 10;
 
     public PaginationResult(int page, int limit, int listcount) {
-        //총 페이지 수
-        int maxpage = (listcount + limit - 1) / limit;
-        //현재 페이지에 보여줄 시작 페이지 수
-        int startpage = ((page - 1) / 10) * 10 +1;
-        //현재 페이지에 보여줄 마지막 페이지 수
-        int endpage = startpage + 10 -1;
+        this.page = page;
+        this.limit = limit;
+        this.totalcount = listcount;
 
-        if(endpage > maxpage)
-            endpage = maxpage;
+        if (listcount == 0) {
+            // 데이터가 없는 경우
+            this.maxpage = 1;
+            this.startpage = 1;
+            this.endpage = 1;
+        } else {
+            // 데이터가 있는 경우
+            this.maxpage = (int) Math.ceil((double) listcount / limit);
+            this.startpage = ((page - 1) / pageLimit) * pageLimit + 1;
+            this.endpage = startpage + pageLimit - 1;
 
-        this.maxpage = maxpage;
-        this.startpage = startpage;
-        this.endpage = endpage;
-
+            if (this.endpage > this.maxpage) {
+                this.endpage = this.maxpage;
+            }
+        }
     }
 
-    public Object getMaxpage() {
+    public int getMaxpage() {
         return maxpage;
     }
 
-    public Object getStartpage() {
+    public int getStartpage() {
         return startpage;
     }
 
-    public Object getEndpage() {
+    public int getEndpage() {
         return endpage;
     }
 }
