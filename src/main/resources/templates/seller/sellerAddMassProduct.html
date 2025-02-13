@@ -144,7 +144,7 @@
                     <div class="mb-4">
                         <h5 class="fw-bold">구매고객 리스트</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">구매자 리스트 조회</a></li>
+                            <li><a href="/seller/buyerList">구매자 리스트 조회</a></li>
                         </ul>
                     </div>
 
@@ -364,6 +364,7 @@
         </div>
     </div>
 </div>
+<div th:replace="~{fragment/footer :: footer}"></div>
 <script>
     $(function () {
         let token = $("meta[name='_csrf']").attr("content");
@@ -629,5 +630,6 @@
         });
     })
 </script>
+
 </body>
 </html>

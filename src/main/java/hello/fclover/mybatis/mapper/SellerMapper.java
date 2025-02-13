@@ -34,4 +34,6 @@ public interface SellerMapper {
     void insertSellers(@Param("sellers") List<Seller> sellers);
 
     List<SellerCompanyDTO> getSellerCompanyName();
+
+    Long getSellerId(String sellerName);
 }
