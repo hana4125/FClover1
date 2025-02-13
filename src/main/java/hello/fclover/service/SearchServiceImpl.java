@@ -9,7 +9,6 @@ import hello.fclover.dto.SearchKeywordDTO;
 import hello.fclover.dto.SearchLogDTO;
 import hello.fclover.dto.SearchParamDTO;
 import hello.fclover.dto.SearchResponseDTO;
-import hello.fclover.mybatis.mapper.CategoryMapper;
 import hello.fclover.mybatis.mapper.GoodsMapper;
 import hello.fclover.mybatis.mapper.SearchLogMapper;
 import hello.fclover.util.KeywordPreprocessor;
@@ -43,7 +42,6 @@ public class SearchServiceImpl implements SearchService {
     private final GoodsMapper goodsMapper;
     private final GoodsService goodsService;
     private final CountService countService;
-    private final CategoryMapper categoryMapper;
     private final SearchLogMapper searchLogMapper;
 
     @Qualifier("asyncExecutor")

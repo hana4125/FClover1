@@ -22,6 +22,7 @@ public class SellerServiceImpl implements SellerService {
 
     private final SellerMapper dao;
     private final SettlementMapper settlementMapper;
+    private final SellerMapper sellerMapper;
 
     public static Settlement create(Long partnerId, BigDecimal totalAmount, LocalDate paymentDate) {
         Settlement settlement = new Settlement();
@@ -71,8 +72,9 @@ public class SellerServiceImpl implements SellerService {
 
 
     @Override
-    public List<Settlement> searchDaySettlement(Long partnerId) {
+    public List<Settlement> searchDaySettlement(String sellerName) {
 
+        Long partnerId = sellerMapper.getSellerId(sellerName);
         List<Settlement> settlements = settlementMapper.searchDaySettlement(partnerId);
 
         return settlements;
