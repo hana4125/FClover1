@@ -3,6 +3,7 @@ package hello.fclover.service;
 import hello.fclover.domain.Payment;
 import hello.fclover.domain.PaymentReq;
 import hello.fclover.dto.PaymentGoodsDTO;
+import hello.fclover.dto.PaymentGoodsImageDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,4 +26,8 @@ public interface PaymentService {
     boolean isConnectionSuccessful(HttpURLConnection connection);
 
     PaymentGoodsDTO searchOneOrderDetail(String name, Long orderId);
+
+    List<PaymentGoodsImageDTO> searchPaymentGoodsImage(String name);
+
+    PaymentGoodsImageDTO searchOneOrderPaymentGoodsImage(String name, Long orderId);
 }

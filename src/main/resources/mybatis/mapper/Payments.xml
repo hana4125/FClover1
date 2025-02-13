@@ -62,11 +62,51 @@
                  INNER JOIN goods g ON p.goods_no = g.goods_no
         WHERE p.user_id = #{userId}
     </select>
-    <select id="findByPaymentDateBetweenAndStatus">
-                SELECT payments_no,seller_id,user_id,order_id,payment_quantity,goods_no,payment_amount,imp_uid,payment_method,merchant_uid,pg_provider,pg_type,pg_tid,status,card_name,card_number,created_at,updated_at
-                FROM payments
-                WHERE payment_date BETWEEN #{startDate} AND #{endDate} AND status=#{paymentCompleted}
+    <resultMap id="paymentResultMap" type="Payment">
+        <!-- 다른 컬럼들은 그대로 두고, seller_id를 sellerNo로 매핑 -->
+        <result column="seller_id" property="sellerNo"/>
+        <result column="payments_no" property="paymentsNo"/>
+        <result column="user_id" property="userId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="payment_quantity" property="quantity"/>
+        <result column="goods_no" property="goodsNo"/>
+        <result column="payment_amount" property="paymentAmount"/>
+        <result column="imp_uid" property="impUid"/>
+        <result column="payment_method" property="paymentMethod"/>
+        <result column="merchant_uid" property="merchantUid"/>
+        <result column="pg_provider" property="pgProvider"/>
+        <result column="pg_type" property="pgType"/>
+        <result column="pg_tid" property="pgTid"/>
+        <result column="status" property="status"/>
+        <result column="card_name" property="cardName"/>
+        <result column="card_number" property="cardNumber"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
 
+    <select id="findByPaymentDateBetweenAndStatus" resultMap="paymentResultMap">
+        SELECT
+        payments_no,
+        seller_id,  <!-- seller_id는 그대로 두고 -->
+        user_id,
+        order_id,
+        payment_quantity,
+        goods_no,
+        payment_amount,
+        imp_uid,
+        payment_method,
+        merchant_uid,
+        pg_provider,
+        pg_type,
+        pg_tid,
+        status,
+        card_name,
+        card_number,
+        created_at,
+        updated_at
+        FROM payments
+        WHERE payment_date BETWEEN #{startDate} AND #{endDate}
+        AND status = #{paymentCompleted}
     </select>
     <select id="searchOneOrderDetail" resultType="hello.fclover.dto.PaymentGoodsDTO">
         SELECT
@@ -110,6 +150,101 @@
             g.permission
         FROM payments p
                  INNER JOIN goods g ON p.goods_no = g.goods_no
+        WHERE p.user_id = #{userId} and p.order_id = #{orderId}
+    </select>
+        <select id="searchPaymentGoodsImageList" resultType="hello.fclover.dto.PaymentGoodsImageDTO">
+            SELECT
+                p.payments_no,           -- 결제 ID
+                p.seller_id,            -- 파트너 ID
+                p.user_id,               -- 사용자 ID
+                p.order_id,              -- 주문 ID
+                p.payment_quantity,      -- 주문 수량
+                p.goods_no,              -- 상품 번호
+                p.payment_amount,        -- 결제 금액
+                p.payment_date,          -- 결제 일자
+                p.imp_uid,               -- 결제 고유 ID
+                p.payment_method,        -- 결제 방식
+                p.merchant_uid,          -- 가맹점 고유 ID
+                p.pg_provider,           -- PG 제공업체
+                p.pg_type,               -- PG 유형
+                p.pg_tid,                -- PG 거래 고유 ID
+                p.status,                -- 결제 상태
+                p.card_name,             -- 카드 이름
+                p.card_number,           -- 카드 번호
+                p.created_at,            -- 생성일
+                p.updated_at,            -- 업데이트일
+
+                g.seller_no,             -- 판매자 번호
+                g.cate_no,               -- 카테고리 번호
+                g.goods_name,            -- 상품 명
+                g.goods_content,         -- 상품 설명
+                g.goods_price,           -- 상품 가격
+                g.goods_writer,          -- 상품 저자
+                g.writer_content,        -- 저자 설명
+                g.goods_create_at,       -- 상품 발행일
+                g.goods_date,            -- 상품 등록일
+                g.goods_pagecount,       -- 상품 페이지 수
+                g.goods_booksize,        -- 상품 크기
+                g.update_at,             -- 상품 수정일
+                g.permission,            -- 권한
+                gi.image_no,             -- 이미지 키
+                gi.goods_image_name,     -- 이미지 이름
+                gi.goods_url,            -- 이미지 저장 path
+                gi.is_main               -- 대표이미지 설정
+            FROM payments p
+                     INNER JOIN goods g ON p.goods_no = g.goods_no
+                      inner join goods_image gi ON g.goods_no = gi.goods_no AND gi.is_main = 'M' -- 대표 이미지 가져오기 (이미지 테이블이 있다고 가정)
+            WHERE p.user_id = #{userId}
+
+
+    </select>
+    <select id="searchOneOrderPaymentGoodsImage">
+        SELECT
+            p.payments_no,
+            p.seller_id,
+            p.user_id,
+            p.order_id,
+            p.payment_quantity,
+            p.goods_no,
+            p.payment_amount,
+            p.payment_date,
+            p.imp_uid,
+            p.payment_method,
+            p.merchant_uid,
+            p.pg_provider,
+            p.pg_type,
+            p.pg_tid,
+            p.status,
+            p.card_name,
+            p.card_number,
+            p.created_at,
+            p.updated_at,
+
+            g.seller_no,
+            g.cate_no,
+            g.goods_name,
+            g.goods_content,
+            g.goods_price,
+            g.goods_writer,
+#             g.company_name,
+            g.writer_content,
+            g.goods_create_at,
+            g.goods_date,
+            g.goods_pagecount,
+            g.goods_booksize,
+            g.update_at,
+#             g.cate_name,
+#             g.wish_status,
+#             g.row_num,
+#             g.main_image,
+            g.permission,
+            gi.image_no,             -- 이미지 키
+                gi.goods_image_name,     -- 이미지 이름
+            gi.goods_url,            -- 이미지 저장 path
+            gi.is_main               -- 대표이미지 설정
+        FROM payments p
+                 INNER JOIN goods g ON p.goods_no = g.goods_no
+                 inner join goods_image gi ON g.goods_no = gi.goods_no AND gi.is_main = 'M'
         WHERE p.user_id = #{userId} and p.order_id = #{orderId}
     </select>
 </mapper>
