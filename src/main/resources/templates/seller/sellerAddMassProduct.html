@@ -10,7 +10,7 @@
     <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery-3.7.1.js"></script>
     <style>
-       .content th, .content td {
+        .content th, .content td {
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: middle;
@@ -144,7 +144,7 @@
                     <div class="mb-4">
                         <h5 class="fw-bold">구매고객 리스트</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">구매자 리스트 조회</a></li>
+                            <li><a href="/seller/buyerList">구매자 리스트 조회</a></li>
                         </ul>
                     </div>
 
@@ -266,6 +266,8 @@
                                 <input type="text" class="form-control" id="editCompanyName"
                                        name="companyName"
                                        style="background-color:lightgray" readonly>
+                                <input type="text" class="form=control" id="editSellerNo"
+                                       name="sellerNo" style="display:none">
                             </div>
                         </div>
                     </div>
@@ -278,13 +280,7 @@
                                        name="goodsPrice" required>
                             </div>
                         </div>
-                        <div class="col-md-2 offset-md-1">
-                            <div class="mb-3">
-                                <label for="editGoodsCount" class="form-label">상품 수량 (권)</label>
-                                <input type="number" class="form-control" id="editGoodsCount"
-                                       name="goodsCount" placeholder="예: 10" required>
-                            </div>
-                        </div>
+
                         <div class="col-md-2 offset-md-1">
                             <div class="mb-3">
                                 <label for="editCateNo" class="form-label">책 카테고리</label>
@@ -368,242 +364,272 @@
         </div>
     </div>
 </div>
+<div th:replace="~{fragment/footer :: footer}"></div>
 <script>
-    // CSRF 토큰 처리
-    const csrfToken = $('meta[name="_csrf"]').attr("content");
-    const csrfHeader = $('meta[name="_csrf_header"]').attr("content");
+    $(function () {
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
 
-    document.querySelectorAll('th').forEach((th) => {
-        const resizer = document.createElement('span');
-        resizer.classList.add('resizer');
-        th.style.position = 'relative'; // 부모 요소 상대 위치
-        th.appendChild(resizer);
 
-        let startX, startWidth;
+        document.querySelectorAll('th').forEach((th) => {
+            const resizer = document.createElement('span');
+            resizer.classList.add('resizer');
+            th.style.position = 'relative'; // 부모 요소 상대 위치
+            th.appendChild(resizer);
 
-        resizer.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            startX = e.clientX;
-            startWidth = th.offsetWidth;
+            let startX, startWidth;
 
-            const onMouseMove = (moveEvent) => {
-                const newWidth = startWidth + (moveEvent.clientX - startX);
-                if (newWidth > 50) { // 최소 너비 제한
-                    th.style.width = `${newWidth}px`;
+            resizer.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startX = e.clientX;
+                startWidth = th.offsetWidth;
 
-                    // 해당 열의 모든 셀 크기 동기화
-                    const table = th.closest('table');
-                    const colIndex = Array.from(th.parentNode.children).indexOf(th);
+                const onMouseMove = (moveEvent) => {
+                    const newWidth = startWidth + (moveEvent.clientX - startX);
+                    if (newWidth > 50) { // 최소 너비 제한
+                        th.style.width = `${newWidth}px`;
 
-                    table.querySelectorAll('tbody tr').forEach((row) => {
-                        const cell = row.children[colIndex];
-                        if (cell) {
-                            cell.style.width = `${newWidth}px`;
-                            cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
-                            cell.style.overflow = 'hidden';
-                            cell.style.textOverflow = 'ellipsis';
-                            cell.style.whiteSpace = 'nowrap';
-                        }
-                    });
+                        // 해당 열의 모든 셀 크기 동기화
+                        const table = th.closest('table');
+                        const colIndex = Array.from(th.parentNode.children).indexOf(th);
 
-                    // 테이블의 전체 폭 강제 갱신
-                    const tableWrapper = table.closest('.table-wrapper');
-                    tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
-                }
-            };
+                        table.querySelectorAll('tbody tr').forEach((row) => {
+                            const cell = row.children[colIndex];
+                            if (cell) {
+                                cell.style.width = `${newWidth}px`;
+                                cell.style.maxWidth = `${newWidth}px`; // 최대 크기 동기화
+                                cell.style.overflow = 'hidden';
+                                cell.style.textOverflow = 'ellipsis';
+                                cell.style.whiteSpace = 'nowrap';
+                            }
+                        });
 
-            const onMouseUp = () => {
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-            };
+                        // 테이블의 전체 폭 강제 갱신
+                        const tableWrapper = table.closest('.table-wrapper');
+                        tableWrapper.scrollLeft = tableWrapper.scrollLeft; // 스크롤 상태 유지
+                    }
+                };
 
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
+                const onMouseUp = () => {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
         });
-    });
-    $(document).ready(function () {
-        $("#uploadForm").submit(function (event) {
+        $(document).ready(function () {
+            $("#uploadForm").submit(function (event) {
+                event.preventDefault();
+
+                let formData = new FormData();
+                let fileInput = $("#file")[0].files[0];
+
+
+                if (!fileInput) {
+                    alert("파일을 선택하세요.");
+                    return;
+                }
+
+                formData.append("file", fileInput);
+
+
+                $.ajax({
+                    //url: "/upload-excel",
+                    url: "/goods/addMassProductProcess",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (data) {
+                        // 각 배열의 건수를 계산
+                        var successCount = data.goodsInsertSuccess ? data.goodsInsertSuccess.length : 0;
+                        var failCount = data.goodsInsertFail ? data.goodsInsertFail.length : 0;
+
+                        alert("성공 : " + successCount + ", 실패 : " + failCount)
+                        // 결과 건수를 uploadResult 영역에 표시
+                        $(".uploadResultSuccess").html(
+                            "<p>상품 삽입 성공 건수: " + successCount + "</p>"
+                        );
+
+                        // messGoods 데이터를 테이블에 렌더링
+                        renderTable(data.goodsInsertSuccess);
+                        if (failCount > 0) {
+                            $("#failResult").show();
+                            $(".uploadResultFail").html(
+                                "<p>상품 삽입 실패 건수: " + failCount + "</p>"
+                            );
+                            renderTable(data.goodsInsertFail);
+                        } else {
+                            $("#failResult").hide();
+                        }
+                    },
+                    error: function () {
+                        alert("파일 업로드 실패");
+                    }
+                });
+            });
+
+            function renderTable(data) {
+                $("#table-body").empty();
+
+                if (data.length === 0) {
+                    $("#table-body").append("<tr><td colspan='100%'>데이터 없음</td></tr>");
+                    return;
+                }
+
+                // // 헤더 생성
+                // let headerRow = $("<tr>");
+                // data[0].forEach(function (column) {
+                //   headerRow.append($("<th>").text(column));
+                // });
+                // $("#table-header").append(headerRow);
+
+                // 바디 생성
+                data.forEach(function (item) {
+
+
+                    let rowData = $("<tr>");
+
+                    // 수정 버튼을 담은 <td> 생성
+                    let editButton = $("<button>")
+                        .addClass("btn btn-warning")
+                        .attr("data-id", item.goodsNo)
+                        .attr("id", "goodsUpdate")
+                        .text("수정");
+                    // 삭제 버튼을 담은 <td> 생성
+                    let deleteButton = $("<button>")
+                        .addClass("btn btn-danger")
+                        .attr("data-id", item.goodsNo)
+                        .attr("id", "goodsDelete")
+                        .text("삭제");
+
+                    // 각 버튼을 별도의 <td>에 추가하고 행 앞에 추가합니다.
+                    rowData.append($("<td>").append(editButton));
+                    rowData.append($("<td>").append(deleteButton));
+
+                    // 아래의 필드명은 MessGoods 객체의 속성명과 일치해야 합니다.
+                    rowData.append($("<td>").text(item.cateName));          // 카테고리
+                    rowData.append($("<td>").text(item.goodsName));           // 상품명
+                    rowData.append($("<td>").text(item.goodsContent));        // 상품 설명
+                    rowData.append($("<td>").text(item.goodsPrice));          // 상품 가격
+                    rowData.append($("<td>").text(item.goodsWriter));         // 저자
+                    rowData.append($("<td>").text(item.writerContent));       // 저자 설명
+                    rowData.append($("<td>").text(item.goodsCreateAt));       // 상품 발행일
+                    rowData.append($("<td>").text(item.goodsPageCount));      // 상품 페이지수
+                    rowData.append($("<td>").text(item.goodsBookSize));       // 상품 크기
+                    rowData.append($("<td>").text(item.sellerName));          // 출판사(또는 판매자)
+                    rowData.append($("<td>").text(item.mainImage));           // 대표 이미지 URL
+                    rowData.append($("<td>").text(item.subImage1));           // 1번째 추가 이미지 URL
+                    rowData.append($("<td>").text(item.subImage2));           // 2번째 추가 이미지 URL
+
+                    $("#table-body").append(rowData);
+                });
+            }
+
+// 수정 버튼 클릭 이벤트 처리
+            $("#table-body").on("click", "#goodsUpdate", function () {
+                var goodsNo = $(this).data("id");
+
+                // Ajax 요청으로 상품 상세 정보 조회 (GET 방식 예시)
+                $.ajax({
+                    url: '/seller/getGoodsUpdateDetail',  // 백엔드에서 상품 정보를 반환하는 엔드포인트
+                    type: 'GET',
+                    data: {goodsNo: goodsNo},
+                    dataType: 'json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (productData) {
+                        // 반환받은 productData를 모달 폼에 채웁니다.
+                        $("#editGoodsNo").val(productData.goodsNo);
+                        $("#editGoodsName").val(productData.goodsName);
+                        $("#editGoodsPrice").val(productData.goodsPrice);
+                        $("#editGoodsCount").val(productData.goodsCount);
+                        $("#editCateNo").val(productData.cateNo);
+                        $("#editGoodsContent").val(productData.goodsContent);
+                        $("#editCompanyName").val(productData.companyName);
+                        $("#editSellerNo").val(productData.sellerNo);
+                        $("#editGoodsWriter").val(productData.goodsWriter);
+                        $("#editWriterContent").val(productData.writerContent);
+                        // 상품 등록일(날짜)의 경우 데이터 형식이 맞아야 함 (예: yyyy-MM-dd)
+                        $("#editGoodsCreateAt").val(productData.goodsCreateAt);
+                        $("#editGoodsPageCount").val(productData.goodsPageCount);
+                        $("#editGoodsBookSize").val(productData.goodsBookSize);
+                        // 필요에 따라 추가 필드들도 채워줍니다.
+
+                        // 모달 열기 (Bootstrap 5 모달)
+                        var editModal = new bootstrap.Modal(document.getElementById('editGoodsModal'));
+                        editModal.show();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("상품 정보를 불러오는 중 오류가 발생했습니다: " + error);
+                    }
+                });
+            });
+        });
+
+        $("#table-body").on('click', '#goodsDelete', function () {
+            var deleteGoodsNo = $(this).data('id');
+
+            if (confirm("상품을 삭제하시겠습니까?")) {
+                $.ajax({
+                    url: '/seller/deleteGoodsProcess',
+                    type: 'post',
+                    data: {deleteGoodsNo: deleteGoodsNo},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (response) {
+                        $(this).closest("tr").remove();
+                        alert("삭제 되었습니다.")
+                    },
+                    error: function (xhr, error) {
+                        // console.error("에러 내용", xhr.responseText);
+                        // console.error("Error:", error);
+                        alert("삭제 실패하였습니다.")
+                    }
+                })
+            }
+        })
+
+        $("#editGoodsForm").submit(function (event) {
             event.preventDefault();
 
-            let formData = new FormData();
-            let fileInput = $("#file")[0].files[0];
-
-
-            if (!fileInput) {
-                alert("파일을 선택하세요.");
-                return;
-            }
-
-            formData.append("file", fileInput);
-
+            //폼 데이터를 FormData로 준비
+            var updateFormData = new FormData(this);
 
 
             $.ajax({
-                //url: "/upload-excel",
-                url: "/goods/addMassProductProcess",
-                type: "POST",
-                headers: {
-                    [csrfHeader]: csrfToken
+                url: '/seller/updateGoodsProcess',  // 백엔드 상품 업데이트 엔드포인트
+                type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
                 },
-                data: formData,
+                data: updateFormData,
                 processData: false,
                 contentType: false,
-                success: function (data) {
-                    // 각 배열의 건수를 계산
-                    var successCount = data.goodsInsertSuccess ? data.goodsInsertSuccess.length : 0;
-                    var failCount = data.goodsInsertFail ? data.goodsInsertFail.length : 0;
+                success: function (response) {
+                    alert("상품 수정이 성공적으로 완료되었습니다.");
+                    // 모달 닫기
+                    var modalEl = document.getElementById('editGoodsModal');
+                    var modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
 
-                    alert("성공 : " + successCount + ", 실패 : " + failCount)
-                    // 결과 건수를 uploadResult 영역에 표시
-                    $(".uploadResultSuccess").html(
-                        "<p>상품 삽입 성공 건수: " + successCount + "</p>"
-                    );
-
-                    // messGoods 데이터를 테이블에 렌더링
-                    renderTable(data.goodsInsertSuccess);
-                    if(failCount > 0){
-                        $("#failResult").show();
-                        $(".uploadResultFail").html(
-                        "<p>상품 삽입 실패 건수: " + failCount + "</p>"
-                        );
-                        renderTable(data.goodsInsertFail);
-                    }else{
-                        $("#failResult").hide();
-                    }
-                },
-                error: function () {
-                    alert("파일 업로드 실패");
-                }
-            });
-        });
-
-        function renderTable(data) {
-            console.log(data)
-            $("#table-body").empty();
-
-            if (data.length === 0) {
-                $("#table-body").append("<tr><td colspan='100%'>데이터 없음</td></tr>");
-                return;
-            }
-
-            // // 헤더 생성
-            // let headerRow = $("<tr>");
-            // data[0].forEach(function (column) {
-            //   headerRow.append($("<th>").text(column));
-            // });
-            // $("#table-header").append(headerRow);
-
-            // 바디 생성
-            data.forEach(function (item) {
-
-
-                let rowData = $("<tr>");
-
-                // 수정 버튼을 담은 <td> 생성
-                let editButton = $("<button>")
-                    .addClass("btn btn-warning")
-                    .attr("data-id", item.goodsNo)
-                    .attr("id", "goodsUpdate")
-                    .text("수정");
-                // 삭제 버튼을 담은 <td> 생성
-                let deleteButton = $("<button>")
-                    .addClass("btn btn-danger")
-                    .attr("data-id", item.goodsNo)
-                    .attr("id", "goodsDelete")
-                    .text("삭제");
-
-                // 각 버튼을 별도의 <td>에 추가하고 행 앞에 추가합니다.
-                rowData.append($("<td>").append(editButton));
-                rowData.append($("<td>").append(deleteButton));
-
-                // 아래의 필드명은 MessGoods 객체의 속성명과 일치해야 합니다.
-                rowData.append($("<td>").text(item.cateName));          // 카테고리
-                rowData.append($("<td>").text(item.goodsName));           // 상품명
-                rowData.append($("<td>").text(item.goodsContent));        // 상품 설명
-                rowData.append($("<td>").text(item.goodsPrice));          // 상품 가격
-                rowData.append($("<td>").text(item.goodsWriter));         // 저자
-                rowData.append($("<td>").text(item.writerContent));       // 저자 설명
-                rowData.append($("<td>").text(item.goodsCreateAt));       // 상품 발행일
-                rowData.append($("<td>").text(item.goodsPageCount));      // 상품 페이지수
-                rowData.append($("<td>").text(item.goodsBookSize));       // 상품 크기
-                rowData.append($("<td>").text(item.sellerName));          // 출판사(또는 판매자)
-                rowData.append($("<td>").text(item.mainImage));           // 대표 이미지 URL
-                rowData.append($("<td>").text(item.subImage1));           // 1번째 추가 이미지 URL
-                rowData.append($("<td>").text(item.subImage2));           // 2번째 추가 이미지 URL
-
-                $("#table-body").append(rowData);
-            });
-        }
-
-        // 이벤트 위임을 사용하여 삭제 버튼 클릭 시 행 삭제
-
-
-// 수정 버튼 클릭 이벤트 처리 (예시로 alert를 띄움)
-// 필요에 따라 수정 로직(예: 모달창 열기, 폼에 데이터 채우기 등)으로 대체하세요.
-        $("#table-body").on("click", "#goodsUpdate", function () {
-            var goodsNo = $(this).data("id");
-
-            // Ajax 요청으로 상품 상세 정보 조회 (GET 방식 예시)
-            $.ajax({
-                url: '/goods/getGoodsUpdateDetail',  // 백엔드에서 상품 정보를 반환하는 엔드포인트
-                type: 'GET',
-                data: {goodsNo: goodsNo},
-                dataType: 'json',
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                success: function (productData) {
-                    // 반환받은 productData를 모달 폼에 채웁니다.
-                    $("#editGoodsNo").val(productData.goodsNo);
-                    $("#editGoodsName").val(productData.goodsName);
-                    $("#editGoodsPrice").val(productData.goodsPrice);
-                    $("#editGoodsCount").val(productData.goodsCount);
-                    $("#editCateNo").val(productData.cateNo);
-                    $("#editGoodsContent").val(productData.goodsContent);
-                    $("#editCompanyName").val(productData.companyName);
-                    $("#editGoodsWriter").val(productData.goodsWriter);
-                    $("#editWriterContent").val(productData.writerContent);
-                    // 상품 등록일(날짜)의 경우 데이터 형식이 맞아야 함 (예: yyyy-MM-dd)
-                    $("#editGoodsCreateAt").val(productData.goodsCreateAt);
-                    $("#editGoodsPageCount").val(productData.goodsPageCount);
-                    $("#editGoodsBookSize").val(productData.goodsBookSize);
-                    // 필요에 따라 추가 필드들도 채워줍니다.
-
-                    // 모달 열기 (Bootstrap 5 모달)
-                    var editModal = new bootstrap.Modal(document.getElementById('editGoodsModal'));
-                    editModal.show();
+                    // 목록을 갱신하거나 수정된 데이터를 화면에 반영합니다.
+                    // 예: location.reload(); 또는 특정 행 업데이트
                 },
                 error: function (xhr, status, error) {
-                    alert("상품 정보를 불러오는 중 오류가 발생했습니다: " + error);
+                    alert("상품 수정 중 오류가 발생했습니다: " + error);
                 }
             });
         });
-    });
-
-    $("#table-body").on('click', '#goodsDelete', function () {
-        var deleteGoodsNo = $(this).data('id');
-
-        if (confirm("상품을 삭제하시겠습니까?")) {
-            $.ajax({
-                url: '/goods/deleteGoodsProcess',
-                type: 'post',
-                data: {deleteGoodsNo: deleteGoodsNo},
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                success: function (response) {
-                    $(this).closest("tr").remove();
-                    alert("삭제 되었습니다.")
-                },
-                error: function (xhr, error) {
-                    // console.error("에러 내용", xhr.responseText);
-                    // console.error("Error:", error);
-                    alert("삭제 실패하였습니다.")
-                }
-            })
-        }
     })
-
 </script>
+
 </body>
 </html>

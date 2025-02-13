@@ -254,11 +254,11 @@ public class InquirycenterController {
 
         if (result > 0) {  // 댓글 추가 성공
             Question question = questionService.getQuestionDetail(qno);
-            log.info("문의글 정보: {}", question);
+//            log.info("문의글 정보: {}", question);
 
             // 알림 요청이 있고 이메일이 있는 경우에만 발송
             if (Boolean.TRUE.equals(question.getQalert()) && question.getResponseemail() != null) {
-                log.info("이메일 발송 시작: {}", question.getResponseemail());
+//                log.info("이메일 발송 시작: {}", question.getResponseemail());
 
                 EmailMessage emailMessage = EmailMessage.builder()
                         .to(question.getResponseemail())

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -141,7 +143,7 @@ public class SellerController {
     @GetMapping("/sellerDaySettlement")
     public String sellerDaySettlement(Principal principal, Model model) {
         System.out.println("principal = " + principal.getName());
-        List<Settlement> daySettlement = sellerService.searchDaySettlement(Long.valueOf(principal.getName()));
+        List<Settlement> daySettlement = sellerService.searchDaySettlement(principal.getName());
         model.addAttribute("daySettlement", daySettlement);
 
         System.out.println("daySettlement = " + daySettlement);
@@ -192,6 +194,8 @@ public class SellerController {
 
     @GetMapping("/sellerAddMassProduct")
     public String addMassProduct(Model model, Principal principal) {
+        List<Category> categoryList = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
         return "seller/sellerAddMassProduct";
     }
 
@@ -235,5 +239,35 @@ public class SellerController {
         mnv.addObject("limit", limit);
         mnv.addObject("page", page);
         return mnv;
+    }
+
+    @PostMapping("deleteGoodsProcess")
+    @ResponseBody
+    public ResponseEntity<List<String>> deleteGoodsProcess(@RequestParam("deleteGoodsNo") Long goodsNo) {
+        List<Goods> goodsList = goodsService.deleteGoods(goodsNo);
+
+        return ResponseEntity.ok(Collections.emptyList());
+    }
+
+    @GetMapping("getGoodsUpdateDetail")
+    public ResponseEntity<Goods> getGoodsDetail(@RequestParam("goodsNo") Long goodsNo) {
+        Goods goods = goodsService.getGoodsUpdateFormDetail(goodsNo);
+        System.out.println("goods데이터 = " + goods);
+        if (goods != null) {
+            return ResponseEntity.ok(goods);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/updateGoodsProcess")
+    public ResponseEntity<String> updateGoods(Goods goods) {
+        System.out.println("goods = " + goods);
+        int result = goodsService.updateGoods(goods);
+        if (result > 0) {
+            return ResponseEntity.ok("상품 업데이트 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

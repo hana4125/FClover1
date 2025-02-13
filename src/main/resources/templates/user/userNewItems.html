@@ -42,6 +42,14 @@
                 location.href = "/goods/newItems";
             })
 
+            $(".notice").click(function () {
+                location.href = "/inquiry/notice/noti_list";
+            })
+
+            $(".qna").click(function () {
+                location.href = "/inquiry/question";
+            })
+
             $(".show-detail").click(function () {
                 location.href = "/goods/GoodsDetail/{no}";
             })
@@ -249,29 +257,29 @@
 </head>
 <body>
 <div th:replace="~{fragment/header :: header}"></div>
-<div class="bg-success">
+<div class="bg-success" style="background: #226b24 !important;">
     <div class="container w-75">
-        <div class="header-menu mt-4 d-flex align-items-center">
+        <div class="header-menu mt-4 d-flex justify-content-between align-items-center">
             <button class="btn btn-light me-3" id="category">
-        <span class="category d-flex flex-column justify-content-center align-items-center">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </span>
+                <span class="category d-flex flex-column justify-content-center align-items-center">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </span>
                 <span class="close-icon d-none">&times;</span>
             </button>
+
+            <!-- 메뉴 항목들 -->
             <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Noto Sans KR;margin-right:40px;font-size:18px; color: #ffffff;font-family:Roboto;">전체도서</a>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">베스트셀러</a>
+               style="font-weight: 700; font-family:'Hiragino Maru Gothic ProN'; font-size:18px; color: #ffffff; font-family:Roboto;">베스트셀러</a>
             <a href="#" class="steady ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">스테디셀러</a>
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">스테디셀러</a>
             <a href="#" class="new ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">신상품</a>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;margin-right:40px;font-size:18px;color: #ffffff;font-family:Roboto;">공지사항</a>
-            <a href="#" class="best ps-5 pe-5"
-               style="font-weight: 700; font-family:Malgun Gothic;font-size:18px;color: #ffffff;font-family:Roboto;">QNA</a>
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">이달의 신상책</a>
+            <a href="/inquiry/notice/noti_list" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">공지사항</a>
+            <a href="/inquiry/question" class="best ps-5 pe-5"
+               style="font-weight: 700; font-family:Malgun Gothic; font-size:18px; color: #ffffff; font-family:Roboto;">QNA</a>
         </div>
     </div>
 </div>
@@ -280,162 +288,166 @@
     <div th:replace="~{fragment/category :: category}"></div>
 </div>
 
-<div class="container w-75 mt-5">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="d-flex justify-content-end align-items-center mb-3">
-                <!-- 장바구니, 찜 버튼 -->
-                <!--            <div class="icon ms-auto mb-4">-->
-                <!--              <img src="/img/user/heart.png" class="me-2" width="36" height="36" alt="찜">-->
-                <!--              <img src="/img/user/cart.png" class="me-2" width="36" height="36" alt="장바구니">-->
-                <!--            </div>-->
+<br>
+<div class="d-flex">
+    <!-- 신상품 제목 영역 -->
+    <div class="title" style="margin-left: 220px;margin-right: 150px;">
+        <br><br><br>
+        <span style="font-family: Malgun Gothic,sans-serif; font-size: 30px;color: #1e5f1e;"><b>New Arrivals</b></span>
+    </div>
 
-                <!-- 드롭다운 -->
-                <!-- 기간별보기 드롭다운 그룹 -->
-                <div class="d-flex">
-                    <!-- 일자별 보기 드롭다운 -->
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            연도 선택
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownYear">
-                            <li><a class="dropdown-year" href="#" data-year="2025">2025년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2024">2024년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2023">2023년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2022">2022년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2021">2021년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2020">2020년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2019">2019년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2018">2018년</a></li>
-                            <li><a class="dropdown-year" href="#" data-year="2017">2017년</a></li>
-                        </ul>
+    <!-- 오른쪽 콘텐츠 영역 -->
+    <div class="container w-75 mt-3 content-area">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="d-flex justify-content-end align-items-center mb-3">
+                    <!-- 드롭다운 -->
+                    <!-- 기간별보기 드롭다운 그룹 -->
+                    <div class="d-flex">
+                        <!-- 연도 선택 -->
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                연도 선택
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownYear">
+                                <li><a class="dropdown-year" href="#" data-year="2025">2025년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2024">2024년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2023">2023년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2022">2022년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2021">2021년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2020">2020년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2019">2019년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2018">2018년</a></li>
+                                <li><a class="dropdown-year" href="#" data-year="2017">2017년</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- 월 선택 -->
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                월 선택
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMonth">
+                                <li><a class="dropdown-month" href="#" data-month="1">1월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="2">2월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="3">3월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="4">4월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="5">5월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="6">6월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="7">7월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="8">8월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="9">9월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="10">10월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="11">11월</a></li>
+                                <li><a class="dropdown-month" href="#" data-month="12">12월</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- 주 선택 -->
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownWeek"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                주 선택
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownWeek">
+                                <li><a class="dropdown-week" href="#" data-week="1">1주</a></li>
+                                <li><a class="dropdown-week" href="#" data-week="2">2주</a></li>
+                                <li><a class="dropdown-week" href="#" data-week="3">3주</a></li>
+                                <li><a class="dropdown-week" href="#" data-week="4">4주</a></li>
+                                <li><a class="dropdown-week" href="#" data-week="5">5주</a></li>
+                                <li><a class="dropdown-week" href="#" data-week="6">6주</a></li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth"
+                    <!-- 페이지당 보기 드롭다운 -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                            월 선택
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMonth">
-                            <li><a class="dropdown-month" href="#" data-month="1">1월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="2">2월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="3">3월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="4">4월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="5">5월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="6">6월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="7">7월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="8">8월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="9">9월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="10">10월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="11">11월</a></li>
-                            <li><a class="dropdown-month" href="#" data-month="12">12월</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownWeek"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            주 선택
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownWeek">
-                            <li><a class="dropdown-week" href="#" data-week="1">1주</a></li>
-                            <li><a class="dropdown-week" href="#" data-week="2">2주</a></li>
-                            <li><a class="dropdown-week" href="#" data-week="3">3주</a></li>
-                            <li><a class="dropdown-week" href="#" data-week="4">4주</a></li>
-                            <li><a class="dropdown-week" href="#" data-week="5">5주</a></li>
-                            <li><a class="dropdown-week" href="#" data-week="6">6주</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownView">
+                            <li><a class="dropdown-view" href="#" data-size="20">20개씩 보기</a></li>
+                            <li><a class="dropdown-view" href="#" data-size="50">50개씩 보기</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="dropdown">
-                    <!-- 페이지당 보기 -->
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownView"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownView">
-                        <li><a class="dropdown-view" href="#" data-size="20">20개씩 보기</a></li>
-                        <li><a class="dropdown-view" href="#" data-size="50">50개씩 보기</a></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- 전체 선택 체크박스 -->
-<!--                        <input type="checkbox" id="selectAll" class="all-checkbox me-1"-->
-<!--                               style="width: 20px; height: 20px; vertical-align: middle;">-->
-<!--                        <label for="selectAll" style="vertical-align: middle;">전체 선택</label>-->
-            <div class="book-items mt-4">
-                <ul class="list-unstyled">
-                    <li th:each="goods : ${goodsList}">
-                        <div class="category-list d-flex align-items-start mb-5">
-<!--                            <input type="checkbox" class="item-checkbox mt-1 ms-1"-->
-<!--                                   style="width: 18px; height: 18px;">-->
-                            <div class="book-item mt-1">
-                                <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
-                                <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
-                                   class="show-detail">
-                                    <div class="img-box">
-                                        <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
-                                        : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
-                                    </div>
-                                </a>
-                                <div class="item-info">
-                                    <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+                <!-- 상품 리스트 -->
+                <div class="book-items mt-4">
+                    <ul class="list-unstyled">
+                        <li th:each="goods : ${goodsList}">
+                            <div class="category-list d-flex align-items-start mb-5">
+                                <div class="book-item mt-1">
+                                    <!-- 상품 이미지 클릭 시 상세 페이지 이동 -->
                                     <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
                                        class="show-detail">
-                                        <span class="item-name" th:text="${goods.goodsName}"></span>
+                                        <div class="img-box">
+                                            <img th:src="${goods.mainImage != null ? goods.mainImage.goodsUrl + '/' + goods.mainImage.goodsImageName
+                                                : '/images/user/book/img.png'}" style="width:200px; height:280px;"/>
+                                        </div>
                                     </a>
-                                    <br>
-                                    <span class="item-author" th:text="${goods.goodsWriter}"></span>
-                                    <div class="prod_price">
-                                        <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
-                                        <span class="unit">원&nbsp;</span>
+                                    <div class="item-info">
+                                        <!-- 상품 이름 클릭 시 상세 페이지 이동 -->
+                                        <a th:href="@{/goods/GoodsDetail/{no}(no=${goods.goodsNo})}"
+                                           class="show-detail">
+                                            <span class="item-name" th:text="${goods.goodsName}"></span>
+                                        </a>
+                                        <br>
+                                        <span class="item-author" th:text="${goods.goodsWriter}"></span>
+                                        <div class="prod_price">
+                                            <span class="val" th:text="${#numbers.formatInteger(goods.goodsPrice, 3, 'COMMA')}"></span>
+                                            <span class="unit">원&nbsp;</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="icon ms-auto mb-4">
+                                    <!-- 찜 상태에 따른 하트 아이콘 -->
+                                    <img th:src="${goods.wishStatus == 'Y'} ? '/images/user/redHeart.png' : '/images/user/heart.png'"
+                                         class="heart me-2"
+                                         th:data-id="${goods.goodsNo}"
+                                         width="36"
+                                         height="36"
+                                         alt="찜">
+                                    <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
+                                         width="36" height="36" alt="장바구니">
+                                </div>
+                                <!-- 바로구매 버튼 -->
+                                <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
+                                </button>
                             </div>
-                            <div class="icon ms-auto mb-4">
-                                <!-- 찜 상태에 따른 하트 아이콘 -->
-                                <img th:src="${goods.wishStatus == 'Y'} ? '/images/user/redHeart.png' : '/images/user/heart.png'"
-                                     class="heart me-2"
-                                     th:data-id="${goods.goodsNo}"
-                                     width="36"
-                                     height="36"
-                                     alt="찜">
-                                <img src="/images/user/cart.png" class="cart me-2" th:data-id="${goods.goodsNo}"
-                                     width="36" height="36" alt="장바구니">
-                            </div>
-                            <!-- 바로구매 버튼 -->
-                            <button class="btn btn-primary buy-now-btn" th:data-id="${goods.goodsNo}">바로구매
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-                <hr>
-                <!-- 페이지네이션 -->
-                <nav th:if="${totalPages > 0}" aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <!-- 이전 페이지 버튼 -->
-                        <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                            <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}"
-                               th:if="${currentPage > 1}">&lt;</a>
-                        </li>
-
-                        <!-- 페이지 번호 -->
-                        <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-                            th:classappend="${currentPage == i} ? 'active' : ''">
-                            <a class="page-link" href="#" th:attr="data-page=${i}" th:text="${i}"></a>
-                        </li>
-
-                        <!-- 다음 페이지 버튼 -->
-                        <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-                            <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}"
-                               th:if="${currentPage < totalPages}">&gt;</a>
                         </li>
                     </ul>
-                </nav>
+                    <hr>
+
+                    <!-- 페이지네이션 -->
+                    <nav th:if="${totalPages > 0}" aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <!-- 이전 페이지 버튼 -->
+                            <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                <a class="page-link" href="#" th:attr="data-page=${currentPage - 1}"
+                                   th:if="${currentPage > 1}">&lt;</a>
+                            </li>
+
+                            <!-- 페이지 번호 -->
+                            <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                th:classappend="${currentPage == i} ? 'active' : ''">
+                                <a class="page-link" href="#" th:attr="data-page=${i}" th:text="${i}"></a>
+                            </li>
+
+                            <!-- 다음 페이지 버튼 -->
+                            <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                                <a class="page-link" href="#" th:attr="data-page=${currentPage + 1}"
+                                   th:if="${currentPage < totalPages}">&gt;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<div th:replace="~{fragment/footer :: footer}"></div>
 </body>
 </html>

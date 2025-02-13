@@ -51,7 +51,7 @@ public class SettlementScheduledTasks {
         LocalDateTime startDate = yesterday.atStartOfDay();
         LocalDateTime endDate = yesterday.atTime(LocalTime.of(23,59,59));
 
-        System.out.println("======>정산 스케쥴링 실행 ");
+        log.info("======>정산 스케쥴링 실행 ");
         //기간에 해당하는 결제내역 조회 및 집계
         Map<Long, BigDecimal> settlementMap = getSettlementMap(startDate, endDate);
 
