@@ -126,10 +126,19 @@ $(function () {
   });
 
   $(".buy-now-btn").click(function () {
-    const goodsNo = $(this).data("id");
+    let goodsNo = document.querySelector(".goodsNo").value;
+    let goodsName = document.querySelector(".goodsName").value;
+    let goodsPrice = document.querySelector(".goodsPrice").value;
+    let goodsWriter = document.querySelector(".goodsWriter").value;
+    let quantity = 1;  // 수량 가져오기
 
-    // 바로구매 페이지로 이동
-    location.href = `/payments?goodsNo=${goodsNo}`;
+
+    // URL에 값 붙여서 이동
+    location.href = "/member/memberPay?goodsName=" + encodeURIComponent(goodsName) +
+        "&goodsPrice=" + encodeURIComponent(goodsPrice) +
+        "&goodsWriter=" + encodeURIComponent(goodsWriter) +
+        "&quantity=" + encodeURIComponent(quantity) +
+        "&goodsNo=" +   encodeURIComponent(goodsNo) ;
   })
 
   /**
