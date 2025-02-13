@@ -1,6 +1,7 @@
 package hello.fclover.service;
 
 import hello.fclover.domain.Member;
+import hello.fclover.dto.PopularKeywordResponseDTO;
 import hello.fclover.dto.SearchDetailParamDTO;
 import hello.fclover.dto.SearchParamDTO;
 import hello.fclover.dto.SearchResponseDTO;
@@ -12,4 +13,6 @@ public interface SearchService {
     SearchResponseDTO searchDetail(SearchDetailParamDTO searchDetailParamDTO);
 
     SearchResponseDTO refineResult(SearchParamDTO searchParamDTO);
+
+    PopularKeywordResponseDTO getPopularKeywords(String gender, String ageRange, int limit);
 }
