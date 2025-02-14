@@ -238,6 +238,7 @@ public class SellerController {
         mnv.addObject("totalcount", totalcount);
         mnv.addObject("limit", limit);
         mnv.addObject("page", page);
+
         return mnv;
     }
 

@@ -258,7 +258,7 @@
                      RIGHT JOIN payments p
                           ON d.payments_no = p.payments_no
             WHERE d.deli_status IS NULL
-              AND p.status = 'paid'
+              AND p.status = 'paid' AND p.user_id=#{userId}
         </select>
 
         <!-- 2. deli_status가 배송중 또는 배송준비중이고, payment_status가 'paid'인 경우 -->
@@ -268,7 +268,7 @@
                      JOIN payments p
                           ON d.payments_no = p.payments_no
             WHERE d.deli_status IN ('배송중', '배송준비중')
-              AND p.status = 'paid'
+              AND p.status = 'paid' AND p.user_id=#{userId}
         </select>
 
         <!-- 3. deli_status가 배송완료이고, payment_status가 'paid'인 경우 -->
@@ -278,7 +278,7 @@
                      JOIN payments p
                           ON d.payments_no = p.payments_no
             WHERE d.deli_status = '배송완료'
-              AND p.status = 'paid'
+              AND p.status = 'paid' AND p.user_id=#{userId}
         </select>
 
 
