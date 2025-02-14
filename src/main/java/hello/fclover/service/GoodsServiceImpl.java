@@ -279,7 +279,7 @@ public class GoodsServiceImpl implements GoodsService {
                 objectMetadata.setContentType(image.getContentType());
                 objectMetadata.setContentLength(image.getSize());
                 objectMetadata.setHeader("filename", image.getOriginalFilename());
-                amazonS3.putObject(new PutObjectRequest(bucket, imageSaveFolder + File.separator + imageDBName, image.getInputStream(), objectMetadata));
+                amazonS3.putObject(new PutObjectRequest(bucket, imageSaveFolder + "/" + imageDBName, image.getInputStream(), objectMetadata));
 
                 imageUrl = getS3Url(imageDBName) + imageSaveFolder;
 
